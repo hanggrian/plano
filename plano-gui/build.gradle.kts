@@ -2,6 +2,7 @@ group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 plugins {
+    application
     kotlin("jvm")
     dokka
     bintray
@@ -16,7 +17,14 @@ sourceSets {
 val configuration = configurations.register("ktlint")
 
 dependencies {
+    compile(project(":$RELEASE_ARTIFACT"))
     compile(kotlin("stdlib", VERSION_KOTLIN))
+
+    compile(controlsFx())
+    compile(jfoenix())
+    compile(ktfx())
+    compile(ktfx("controlsfx"))
+    compile(ktfx("jfoenix"))
 
     testCompile(kotlin("test", VERSION_KOTLIN))
     testCompile(junit())
@@ -64,7 +72,7 @@ publish {
 
     userOrg = RELEASE_USER
     groupId = RELEASE_GROUP
-    artifactId = RELEASE_ARTIFACT
+    artifactId = "$RELEASE_ARTIFACT-gui"
     publishVersion = RELEASE_VERSION
     desc = RELEASE_DESC
     website = RELEASE_WEB
