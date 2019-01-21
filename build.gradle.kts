@@ -5,6 +5,7 @@ buildscript {
     dependencies {
         classpath(kotlin("gradle-plugin", VERSION_KOTLIN))
         classpath(dokka())
+        classpath(hendraanggrian("generating", "r-gradle-plugin", VERSION_R))
         classpath(gitPublish())
         classpath(bintray())
         classpath(bintrayRelease())

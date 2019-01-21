@@ -1,0 +1,31 @@
+* {
+    -accent: #1e88e5;
+    -accent-light: #6ab7ff;
+    -accent-dark: #005cb2;
+
+    -dark: rgba(0.0, 0.0, 0.0, 0.54);
+}
+
+.root {
+    -fx-accent: -accent;
+    -fx-focus-color: -accent;
+    -fx-default-button: -accent;
+    -fx-background-color: white;
+}
+
+.jfx-radio-button {
+    -jfx-selected-color: -accent;
+}
+
+.jfx-tool-bar HBox {
+    -fx-alignment: center;
+}
+
+.jfx-text-field {
+    -jfx-focus-color: -accent;
+    -fx-prompt-text-fill: -dark;
+}
+
+.jfx-button .jfx-rippler {
+    -jfx-rippler-fill: -accent;
+}

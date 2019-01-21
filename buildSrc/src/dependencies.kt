@@ -9,12 +9,18 @@ fun DependencyHandler.kotlinx(
 fun DependencyHandler.dokka() = "org.jetbrains.dokka:dokka-gradle-plugin:$VERSION_DOKKA"
 inline val PluginDependenciesSpec.dokka get() = id("org.jetbrains.dokka")
 
-fun DependencyHandler.ktfx(module: String? = null) =
-    "com.hendraanggrian.ktfx:ktfx${module?.let { "-$it" }.orEmpty()}:$VERSION_KTFX"
+fun DependencyHandler.hendraanggrian(
+    repository: String,
+    module: String = repository,
+    version: String
+) = "com.hendraanggrian.$repository:$module:$version"
 
 fun DependencyHandler.controlsFx() = "org.controlsfx:controlsfx:$VERSION_CONTROLSFX"
 
 fun DependencyHandler.jfoenix() = "com.jfoenix:jfoenix:$VERSION_JFOENIX"
+
+fun DependencyHandler.apache(module: String, version: String) =
+    "org.apache.${module.split("-")[0]}:$module:$version"
 
 fun DependencyHandler.testFx(module: String) = "org.testfx:testfx-$module:$VERSION_TESTFX"
 
