@@ -1,12 +1,16 @@
-package com.hendraanggrian.plano.gui
+package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.R
-import com.hendraanggrian.plano.gui.control.DoubleField
-import com.hendraanggrian.plano.gui.control.Toolbar
+import com.hendraanggrian.plano.control.DoubleField
+import com.hendraanggrian.plano.control.Toolbar
+import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXTabPane
 import javafx.application.Application
+import javafx.geometry.HPos
+import javafx.geometry.Orientation
 import javafx.geometry.Side
 import javafx.scene.control.Button
 import javafx.scene.control.RadioButton
+import javafx.scene.control.Tab
 import javafx.scene.control.TextField
 import javafx.scene.control.ToggleGroup
 import javafx.scene.image.ImageView
@@ -26,16 +30,17 @@ import ktfx.layouts.gridPane
 import ktfx.layouts.hbox
 import ktfx.layouts.label
 import ktfx.layouts.menu
+import ktfx.layouts.pane
 import ktfx.layouts.scene
-import ktfx.layouts.scrollPane
+import ktfx.layouts.separator
 import ktfx.layouts.separatorMenuItem
 
-class PlanoApplication : Application() {
+class PlanoApplication2 : Application() {
 
     companion object {
 
         @JvmStatic
-        fun main(args: Array<String>) = launchApplication<PlanoApplication>(*args)
+        fun main(args: Array<String>) = launchApplication<PlanoApplication2>(*args)
     }
 
     lateinit var printSizeRadio: RadioButton
@@ -51,9 +56,11 @@ class PlanoApplication : Application() {
     val maxPrintWidthField = DoubleField()
     val maxPrintHeightField = DoubleField()
 
+    val tabPane = JFXTabPane()
+
     override fun start(primaryStage: Stage) {
         primaryStage.scene = scene {
-            stylesheets += PlanoApplication::class.java.getResource(R.style.css_plano).toExternalForm()
+            stylesheets += PlanoApplication2::class.java.getResource(R.style.css_plano).toExternalForm()
             hbox {
                 gridPane {
                     paddingAll = 20
@@ -125,11 +132,21 @@ class PlanoApplication : Application() {
                     } row row col 1
                     maxPrintHeightField.apply {
                         visibleProperty().bind(pieceSizeRadio.selectedProperty())
-                    }() row row col 2
-                }
-                scrollPane {
+                    }() row row++ col 2
 
-                } hpriority Priority.ALWAYS
+                    pane() row row++ col 0 colSpans 4 vpriority Priority.ALWAYS
+
+                    jfxButton("Calculate") {
+                        styleClass += "raised"
+                        maxWidth = Double.MAX_VALUE
+                        buttonType = JFXButton.ButtonType.RAISED
+                        onAction {
+                            tabPane.tabs += Tab()
+                        }
+                    } row row col 0 colSpans 4 halign HPos.CENTER
+                }
+                separator(Orientation.VERTICAL)
+                tabPane() hpriority Priority.ALWAYS
             }
         }
         primaryStage.show()

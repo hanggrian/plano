@@ -7,8 +7,6 @@ buildscript {
         classpath(dokka())
         classpath(hendraanggrian("generating", "r-gradle-plugin", VERSION_R))
         classpath(gitPublish())
-        classpath(bintray())
-        classpath(bintrayRelease())
     }
 }
 

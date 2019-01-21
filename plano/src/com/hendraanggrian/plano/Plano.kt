@@ -1,20 +1,31 @@
 package com.hendraanggrian.plano
 
+import javafx.geometry.Point2D
+
 object Plano {
 
-    fun getPrintSizes() {
-
+    fun getPrintPoints() {
     }
 
-    fun getPrintSizes(
+    fun getPrintPoints(
         planoWidth: Double,
         planoHeight: Double,
         printWidth: Double,
         printHeight: Double,
         trim: Double = 0.0
-    ): List<Size> {
-        val pcs1 = calculatePrintingSizes(planoWidth, planoHeight, printWidth + trim, printHeight + trim)
-        val pcs2 = calculatePrintingSizes(planoWidth, planoHeight, printHeight + trim, printWidth + trim)
+    ): List<Point2D> {
+        val pcs1 = calculatePrintPoints(
+            planoWidth,
+            planoHeight,
+            printWidth + trim,
+            printHeight + trim
+        )
+        val pcs2 = calculatePrintPoints(
+            planoWidth,
+            planoHeight,
+            printHeight + trim,
+            printWidth + trim
+        )
         return when {
             pcs1.size > pcs2.size -> {
                 println("possible 1 chosen")
@@ -27,14 +38,14 @@ object Plano {
         }
     }
 
-    private fun calculatePrintingSizes(
+    private fun calculatePrintPoints(
         planoWidth: Double,
         planoHeight: Double,
         printWidth: Double,
         printHeight: Double
-    ): List<Size> {
+    ): List<Point2D> {
         println("=================")
-        val pieces = mutableListOf<Size>()
+        val pieces = mutableListOf<Point2D>()
         val columns = (planoWidth / printWidth).toInt()
         val rows = (planoHeight / printHeight).toInt()
         println("columns: $columns")
@@ -43,7 +54,7 @@ object Plano {
             val x = column * printWidth
             for (row in 0 until rows) {
                 val y = row * printHeight
-                pieces += Size(x, y, printWidth, printHeight)
+                pieces += Point2D(x, y)
             }
         }
 
@@ -60,12 +71,12 @@ object Plano {
         if (rightLeftovers > bottomLeftovers) {
             val x = printWidth * columns
             for (leftover in 0 until rightLeftovers) {
-                pieces += Size(x, leftover * printHeight, printWidth, printHeight)
+                pieces += Point2D(x, leftover * printHeight)
             }
         } else {
             val y = printHeight * columns
             for (leftover in 0 until bottomLeftovers) {
-                pieces += Size(leftover * printWidth, y, printWidth, printHeight)
+                pieces += Point2D(leftover * printWidth, y)
             }
         }
 

@@ -1,4 +1,4 @@
-package com.hendraanggrian.plano.gui.control
+package com.hendraanggrian.plano.control
 
 import com.jfoenix.controls.JFXTextField
 import javafx.geometry.Pos
