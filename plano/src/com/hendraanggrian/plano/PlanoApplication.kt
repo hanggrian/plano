@@ -4,37 +4,33 @@ import com.hendraanggrian.plano.control.DoubleField
 import com.hendraanggrian.plano.control.Toolbar
 import com.jfoenix.controls.JFXButton
 import javafx.application.Application
+import javafx.beans.binding.Bindings.`when`
 import javafx.geometry.HPos
 import javafx.geometry.Orientation
-import javafx.geometry.Side
 import javafx.scene.Node
-import javafx.scene.control.Button
-import javafx.scene.control.RadioButton
-import javafx.scene.control.TextField
-import javafx.scene.control.ToggleGroup
+import javafx.scene.control.Tooltip
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Priority
-import javafx.scene.shape.Circle
 import javafx.stage.Stage
-import ktfx.bindings.buildBinding
+import ktfx.bindings.buildBooleanBinding
+import ktfx.bindings.otherwise
+import ktfx.bindings.then
+import ktfx.boolean
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.coroutines.onAction
-import ktfx.jfoenix.jfxButton
 import ktfx.jfoenix.jfxMasonryPane
-import ktfx.jfoenix.jfxRadioButton
 import ktfx.launchApplication
-import ktfx.layouts.LayoutMarker
-import ktfx.layouts.NodeInvokable
-import ktfx.layouts.contextMenu
 import ktfx.layouts.gridPane
 import ktfx.layouts.hbox
+import ktfx.layouts.imageView
 import ktfx.layouts.label
-import ktfx.layouts.menu
+import ktfx.layouts.region
 import ktfx.layouts.scene
 import ktfx.layouts.separator
-import ktfx.layouts.separatorMenuItem
+import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
+import ktfx.windows.setMinSize
 
 class PlanoApplication : Application() {
 
@@ -44,8 +40,7 @@ class PlanoApplication : Application() {
         fun main(args: Array<String>) = launchApplication<PlanoApplication>(*args)
     }
 
-    lateinit var printSizeRadio: RadioButton
-    lateinit var pieceSizeRadio: RadioButton
+    private val isPrintSizeMode = boolean(true)
 
     val planoWidthField = DoubleField()
     val planoHeightField = DoubleField()
@@ -58,32 +53,69 @@ class PlanoApplication : Application() {
     val maxPrintHeightField = DoubleField()
 
     override fun start(primaryStage: Stage) {
+        primaryStage.setMinSize(600.0, 400.0)
         primaryStage.scene = scene {
-            stylesheets += PlanoApplication::class.java.getResource(R.style.css_plano).toExternalForm()
-            hbox {
-                vbox {
-                    Toolbar().apply {
-                        leftItems {
-                            label("Plano")
+            stylesheets.addAll(
+                PlanoApplication::class.java.getResource(R.style.css_plano).toExternalForm(),
+                PlanoApplication::class.java.getResource(R.style.css_plano_font).toExternalForm()
+            )
+            vbox {
+                Toolbar().apply {
+                    leftItems {
+                        imageView(R.image.ic_launcher)
+                        region { prefWidth = 12.0 }
+                        label("Plano") {
+                            styleClass += "display"
                         }
-                    }()
-                    separator()
+                    }
+                    rightItems {
+                        roundButton(24.0, R.image.ic_refresh) {
+                            tooltip("Reset")
+                            onAction {
+                                planoWidthField.clear()
+                                planoHeightField.clear()
+                                printPieceWidthField.clear()
+                                printPieceHeightField.clear()
+                                trimField.clear()
+                                maxPrintWidthField.clear()
+                                maxPrintHeightField.clear()
+                            }
+                        }
+                        roundButton(24.0, R.image.ic_print_size) {
+                            graphicProperty().bind(
+                                `when`(isPrintSizeMode)
+                                    then ImageView(R.image.ic_print_size)
+                                    otherwise ImageView((R.image.ic_piece_size))
+                            )
+                            tooltipProperty().bind(
+                                `when`(isPrintSizeMode)
+                                    then Tooltip("Print size mode")
+                                    otherwise Tooltip("Piece size mode")
+                            )
+                            onAction {
+                                isPrintSizeMode.set(!isPrintSizeMode.value)
+                            }
+                        }
+                        roundButton(24.0, R.image.ic_settings) {
+                            tooltip("Settings")
+                        }
+                    }
+                }()
+                separator()
+                hbox {
                     gridPane {
                         paddingAll = 20
                         gap = 10
                         var row = 0
 
-                        val radioGroup = ToggleGroup()
-                        printSizeRadio = jfxRadioButton("From print size") {
-                            graphic = ImageView(R.image.ic_print_size)
-                            toggleGroup = radioGroup
-                            isSelected = true
+                        label {
+                            styleClass.addAll("accent", "bold")
+                            textProperty().bind(
+                                `when`(isPrintSizeMode)
+                                    then "Mode 1"
+                                    otherwise "Mode 2"
+                            )
                         } row row++ col 0 colSpans 5
-                        pieceSizeRadio = jfxRadioButton("From piece size") {
-                            graphic = ImageView(R.image.ic_piece_size)
-                            toggleGroup = radioGroup
-                        } row row++ col 0 colSpans 5
-                        row++
 
                         label("Plano size") row row col 0
                         planoWidthField() row row col 1
@@ -92,12 +124,11 @@ class PlanoApplication : Application() {
                         moreButton(planoWidthField, planoHeightField) row row++ col 4
 
                         label {
-                            textProperty().bind(buildBinding(printSizeRadio.selectedProperty()) {
-                                when {
-                                    printSizeRadio.isSelected -> "Print size"
-                                    else -> "Piece size"
-                                }
-                            })
+                            textProperty().bind(
+                                `when`(isPrintSizeMode)
+                                    then "Print size"
+                                    otherwise "Piece size"
+                            )
                         } row row col 0
                         printPieceWidthField() row row col 1
                         label("x") row row col 2
@@ -108,8 +139,8 @@ class PlanoApplication : Application() {
                         trimField() row row++ col 1
 
                         val init: Node.() -> Unit = {
-                            visibleProperty().bind(pieceSizeRadio.selectedProperty())
-                            managedProperty().bind(pieceSizeRadio.selectedProperty())
+                            visibleProperty().bind(!isPrintSizeMode)
+                            managedProperty().bind(!isPrintSizeMode)
                         }
                         label("Max print size") {
                             init()
@@ -126,55 +157,44 @@ class PlanoApplication : Application() {
                         moreButton(maxPrintWidthField, maxPrintHeightField) {
                             init()
                         } row row++ col 4
-                        row++
 
-                        jfxButton("Calculate") {
+                        row++
+                        row++
+                        roundButton(24.0, R.image.ic_send) {
                             styleClass += "raised"
-                            maxWidth = Double.MAX_VALUE
                             buttonType = JFXButton.ButtonType.RAISED
-                            prefHeight = 42.0
+                            prefHeight = 24.0
+                            disableProperty().bind(buildBooleanBinding(
+                                isPrintSizeMode,
+                                planoWidthField.textProperty(),
+                                planoHeightField.textProperty(),
+                                printPieceWidthField.textProperty(),
+                                printPieceHeightField.textProperty(),
+                                maxPrintWidthField.textProperty(),
+                                maxPrintHeightField.textProperty()
+                            ) {
+                                when {
+                                    planoWidthField.value <= 0.0 || planoHeightField.value <= 0.0 -> true
+                                    printPieceWidthField.value <= 0.0 || printPieceHeightField.value <= 0.0 -> true
+                                    else -> when {
+                                        !isPrintSizeMode.value -> when {
+                                            maxPrintWidthField.value <= 0.0 || maxPrintWidthField.value <= 0.0 -> true
+                                            else -> false
+                                        }
+                                        else -> false
+                                    }
+                                }
+                            })
                             onAction {
                             }
-                        } row row col 0 colSpans 5 halign HPos.CENTER
-                    } vpriority Priority.ALWAYS
-                }
-                separator(Orientation.VERTICAL)
-                jfxMasonryPane {
-                } hpriority Priority.ALWAYS
+                        } row row col 0 colSpans 5 halign HPos.RIGHT
+                    }
+                    separator(Orientation.VERTICAL)
+                    jfxMasonryPane {
+                    } hpriority Priority.ALWAYS
+                } vpriority Priority.ALWAYS
             }
         }
         primaryStage.show()
-    }
-
-    private fun NodeInvokable.moreButton(
-        widthField: TextField,
-        heightField: TextField,
-        init: ((@LayoutMarker JFXButton).() -> Unit)? = null
-    ): Button = jfxButton(graphic = ImageView(R.image.ic_more)) {
-        init?.invoke(this)
-        val r = 16.0
-        shape = Circle(r)
-        setMinSize(2 * r, 2 * r)
-        setMaxSize(2 * r, 2 * r)
-        val contextMenu = contextMenu {
-            menu("A ...") {
-
-            }
-            menu("B ...") {
-
-            }
-            separatorMenuItem()
-            "65 x 90" {
-                onAction {
-                    widthField.text = "65"
-                    heightField.text = "90"
-                }
-            }
-        }
-        onAction {
-            if (!contextMenu.isShowing) {
-                contextMenu.show(this@jfxButton, Side.RIGHT, 0.0, 0.0)
-            }
-        }
     }
 }

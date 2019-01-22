@@ -29,4 +29,6 @@ class DoubleField : JFXTextField() {
             }
         }
     }
+
+    val value: Double get() = text.toDoubleOrNull() ?: 0.0
 }

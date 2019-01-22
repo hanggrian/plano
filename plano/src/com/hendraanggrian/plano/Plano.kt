@@ -14,26 +14,26 @@ object Plano {
         printHeight: Double,
         trim: Double = 0.0
     ): List<Point2D> {
-        val pcs1 = calculatePrintPoints(
+        val points1 = calculatePrintPoints(
             planoWidth,
             planoHeight,
             printWidth + trim,
             printHeight + trim
         )
-        val pcs2 = calculatePrintPoints(
+        val points2 = calculatePrintPoints(
             planoWidth,
             planoHeight,
             printHeight + trim,
             printWidth + trim
         )
         return when {
-            pcs1.size > pcs2.size -> {
+            points1.size > points2.size -> {
                 println("possible 1 chosen")
-                pcs1
+                points1
             }
             else -> {
                 println("possible 2 chosen")
-                pcs2
+                points2
             }
         }
     }
@@ -45,7 +45,7 @@ object Plano {
         printHeight: Double
     ): List<Point2D> {
         println("=================")
-        val pieces = mutableListOf<Point2D>()
+        val points = mutableListOf<Point2D>()
         val columns = (planoWidth / printWidth).toInt()
         val rows = (planoHeight / printHeight).toInt()
         println("columns: $columns")
@@ -54,7 +54,7 @@ object Plano {
             val x = column * printWidth
             for (row in 0 until rows) {
                 val y = row * printHeight
-                pieces += Point2D(x, y)
+                points += Point2D(x, y)
             }
         }
 
@@ -71,15 +71,15 @@ object Plano {
         if (rightLeftovers > bottomLeftovers) {
             val x = printWidth * columns
             for (leftover in 0 until rightLeftovers) {
-                pieces += Point2D(x, leftover * printHeight)
+                points += Point2D(x, leftover * printHeight)
             }
         } else {
             val y = printHeight * columns
             for (leftover in 0 until bottomLeftovers) {
-                pieces += Point2D(leftover * printWidth, y)
+                points += Point2D(leftover * printWidth, y)
             }
         }
 
-        return pieces
+        return points
     }
 }

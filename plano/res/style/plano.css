@@ -1,5 +1,5 @@
 * {
-    -accent: #1e88e5;
+    -accent: #ffb300;
     -accent-light: #6ab7ff;
     -accent-dark: #005cb2;
 
@@ -13,14 +13,18 @@
     -fx-background-color: white;
 }
 
+.label {
+    -fx-font-family: "Roboto";
+}
+
 .jfx-radio-button {
     -jfx-selected-color: -accent;
 }
 
 .jfx-tool-bar {
     -fx-pref-height: 64.0;
+    -fx-padding: 0 20 0 20;
 }
-
 .jfx-tool-bar HBox {
     -fx-alignment: center;
 }

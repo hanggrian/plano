@@ -9,6 +9,8 @@ plugins {
     id("com.hendraanggrian.generating.r")
 }
 
+application.mainClassName = "$RELEASE_GROUP.PlanoApplication"
+
 sourceSets {
     getByName("main") {
         java.srcDir("src")
