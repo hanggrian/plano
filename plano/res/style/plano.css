@@ -17,6 +17,10 @@
     -jfx-selected-color: -accent;
 }
 
+.jfx-tool-bar {
+    -fx-pref-height: 64.0;
+}
+
 .jfx-tool-bar HBox {
     -fx-alignment: center;
 }
