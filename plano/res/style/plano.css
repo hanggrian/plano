@@ -17,6 +17,14 @@
     -fx-font-family: "Roboto";
 }
 
+.jfx-dialog-overlay-pane {
+    -fx-background-color: -dark;
+}
+
+.jfx-drawer-overlay-pane {
+    -fx-background-color: -dark;
+}
+
 .jfx-radio-button {
     -jfx-selected-color: -accent;
 }

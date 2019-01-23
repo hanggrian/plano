@@ -7,6 +7,7 @@ plugins {
     dokka
     idea
     id("com.hendraanggrian.generating.r")
+    id("com.hendraanggrian.generating.buildconfig")
 }
 
 application.mainClassName = "$RELEASE_GROUP.PlanoApplication"
@@ -24,11 +25,8 @@ val configuration = configurations.register("ktlint")
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
 
-    implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
-    implementation(controlsFx())
     implementation(jfoenix())
     implementation(hendraanggrian("ktfx", version = VERSION_KTFX))
-    implementation(hendraanggrian("ktfx", "ktfx-controlsfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
@@ -65,6 +63,12 @@ tasks {
 
     named<com.hendraanggrian.generating.r.RTask>("generateR") {
         resourcesDirectory = file("res")
+    }
+
+    named<com.hendraanggrian.generating.buildconfig.BuildConfigTask>("generateBuildConfig") {
+        appName = "Plano"
+        debug = RELEASE_DEBUG
+        website = RELEASE_WEBSITE
     }
 
     named<org.jetbrains.dokka.gradle.DokkaTask>("dokka") {
