@@ -1,6 +1,7 @@
 package com.hendraanggrian.plano
 
 import javafx.geometry.Point2D
+import javafx.geometry.Rectangle2D
 
 object Plano {
 
@@ -13,7 +14,7 @@ object Plano {
         printWidth: Double,
         printHeight: Double,
         trim: Double = 0.0
-    ): List<Point2D> {
+    ): List<Rectangle2D> {
         val points1 = calculatePrintPoints(
             sheetWidth,
             sheetHeight,
@@ -29,11 +30,11 @@ object Plano {
         return when {
             points1.size > points2.size -> {
                 println("possible 1 chosen")
-                points1
+                points1.map { Rectangle2D(it.x, it.y, printWidth + trim, printHeight + trim) }
             }
             else -> {
                 println("possible 2 chosen")
-                points2
+                points2.map { Rectangle2D(it.x, it.y, printHeight + trim, printWidth + trim) }
             }
         }
     }
