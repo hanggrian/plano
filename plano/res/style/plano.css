@@ -17,6 +17,10 @@
     -fx-font-family: "Roboto";
 }
 
+.scroll-pane {
+    -fx-background: white;
+}
+
 .jfx-dialog-overlay-pane {
     -fx-background-color: -dark;
 }
