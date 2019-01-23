@@ -15,7 +15,7 @@ class DoubleField : JFXTextField() {
     }
 
     init {
-        prefWidth = 50.0
+        prefWidth = 40.0
         alignment = Pos.CENTER
         textFormatter = TextFormatter<TextFormatter.Change?>(UnaryOperator<TextFormatter.Change?> { change ->
             when {

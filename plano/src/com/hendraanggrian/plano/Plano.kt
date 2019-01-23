@@ -8,21 +8,21 @@ object Plano {
     }
 
     fun getPrintPoints(
-        planoWidth: Double,
-        planoHeight: Double,
+        sheetWidth: Double,
+        sheetHeight: Double,
         printWidth: Double,
         printHeight: Double,
         trim: Double = 0.0
     ): List<Point2D> {
         val points1 = calculatePrintPoints(
-            planoWidth,
-            planoHeight,
+            sheetWidth,
+            sheetHeight,
             printWidth + trim,
             printHeight + trim
         )
         val points2 = calculatePrintPoints(
-            planoWidth,
-            planoHeight,
+            sheetWidth,
+            sheetHeight,
             printHeight + trim,
             printWidth + trim
         )
@@ -39,15 +39,15 @@ object Plano {
     }
 
     private fun calculatePrintPoints(
-        planoWidth: Double,
-        planoHeight: Double,
+        sheetWidth: Double,
+        sheetHeight: Double,
         printWidth: Double,
         printHeight: Double
     ): List<Point2D> {
         println("=================")
         val points = mutableListOf<Point2D>()
-        val columns = (planoWidth / printWidth).toInt()
-        val rows = (planoHeight / printHeight).toInt()
+        val columns = (sheetWidth / printWidth).toInt()
+        val rows = (sheetHeight / printHeight).toInt()
         println("columns: $columns")
         println("rows: $rows")
         for (column in 0 until columns) {
@@ -59,12 +59,12 @@ object Plano {
         }
 
         var rightLeftovers = 0
-        val widthLeftover = planoWidth - printWidth * columns
+        val widthLeftover = sheetWidth - printWidth * columns
         if (widthLeftover >= printHeight) {
             rightLeftovers = (widthLeftover / printHeight).toInt()
         }
         var bottomLeftovers = 0
-        val heightLeftover = planoHeight - printHeight * rows
+        val heightLeftover = sheetHeight - printHeight * rows
         if (heightLeftover >= printWidth) {
             bottomLeftovers = (heightLeftover / printWidth).toInt()
         }
