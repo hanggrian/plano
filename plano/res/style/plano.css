@@ -22,7 +22,9 @@
 }
 
 .jfx-tool-bar {
+    -fx-min-height: 64.0;
     -fx-pref-height: 64.0;
+    -fx-max-height: 64.0;
     -fx-padding: 0 20 0 20;
 }
 .jfx-tool-bar HBox {

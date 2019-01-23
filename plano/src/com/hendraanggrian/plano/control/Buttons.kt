@@ -1,5 +1,6 @@
-package com.hendraanggrian.plano
+package com.hendraanggrian.plano.control
 
+import com.hendraanggrian.plano.R
 import com.jfoenix.controls.JFXButton
 import javafx.geometry.Side
 import javafx.scene.control.Button
