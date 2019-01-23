@@ -61,12 +61,12 @@ object Plano {
         var rightLeftovers = 0
         val widthLeftover = sheetWidth - printWidth * columns
         if (columns > 0 && widthLeftover >= printHeight) {
-            rightLeftovers = (widthLeftover / printHeight).toInt()
+            rightLeftovers = (sheetHeight / printWidth).toInt()
         }
         var bottomLeftovers = 0
         val heightLeftover = sheetHeight - printHeight * rows
         if (rows > 0 && heightLeftover >= printWidth) {
-            bottomLeftovers = (heightLeftover / printWidth).toInt()
+            bottomLeftovers = (sheetWidth / printHeight).toInt()
         }
         if (BuildConfig.DEBUG) {
             println("rightLeftovers: $rightLeftovers")
@@ -75,12 +75,12 @@ object Plano {
         if (rightLeftovers > bottomLeftovers) {
             val x = printWidth * columns
             for (leftover in 0 until rightLeftovers) {
-                rectangles += Rectangle2D(x, leftover * printHeight, printHeight, printWidth)
+                rectangles += Rectangle2D(x, leftover * printWidth, printHeight, printWidth)
             }
         } else if (bottomLeftovers > rightLeftovers) {
             val y = printHeight * columns
             for (leftover in 0 until bottomLeftovers) {
-                rectangles += Rectangle2D(leftover * printWidth, y, printHeight, printWidth)
+                rectangles += Rectangle2D(leftover * printHeight, y, printHeight, printWidth)
             }
         }
 

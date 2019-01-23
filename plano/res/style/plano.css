@@ -21,6 +21,16 @@
     -fx-background: white;
 }
 
+.jfx-snackbar-content {
+    -fx-background-color: #323232;
+}
+.jfx-snackbar-toast {
+    -fx-text-fill: white;
+}
+.jfx-snackbar-action {
+    -fx-text-fill: -accent;
+}
+
 .jfx-dialog-overlay-pane {
     -fx-background-color: -dark;
 }

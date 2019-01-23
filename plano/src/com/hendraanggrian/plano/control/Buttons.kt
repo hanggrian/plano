@@ -55,10 +55,8 @@ fun NodeInvokable.morePaperButton(
     paperMenuItem(65, 100, widthField, heightField)
     paperMenuItem(79, 109, widthField, heightField)
     separatorMenuItem()
-    menu("Stickers") {
-        paperMenuItem(70, 108, widthField, heightField, "Cromo")
-        paperMenuItem(86, 106, widthField, heightField, "Vinyl")
-    }
+    paperMenuItem(70, 108, widthField, heightField)
+    paperMenuItem(86, 106, widthField, heightField)
 }
 
 fun NodeInvokable.moreButton(

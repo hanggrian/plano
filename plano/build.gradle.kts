@@ -25,6 +25,7 @@ val configuration = configurations.register("ktlint")
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
 
+    implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
     implementation(jfoenix())
     implementation(hendraanggrian("ktfx", version = VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
@@ -63,10 +64,14 @@ tasks {
 
     named<com.hendraanggrian.generating.r.RTask>("generateR") {
         resourcesDirectory = file("res")
+        configureProperties {
+            readResourceBundle = true
+        }
     }
 
     named<com.hendraanggrian.generating.buildconfig.BuildConfigTask>("generateBuildConfig") {
         appName = "Plano"
+        artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
         website = RELEASE_WEBSITE
     }

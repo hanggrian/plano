@@ -1,15 +1,19 @@
 package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.control.AboutDialog
 import com.hendraanggrian.plano.control.DoubleField
 import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.border
 import com.hendraanggrian.plano.control.moreButton
 import com.hendraanggrian.plano.control.morePaperButton
 import com.hendraanggrian.plano.control.roundButton
+import com.hendraanggrian.plano.dialog.AboutDialog
+import com.hendraanggrian.plano.dialog.TextDialog
+import com.hendraanggrian.plano.io.Preferences
+import com.hendraanggrian.plano.io.ResultFile
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXMasonryPane
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.beans.binding.Bindings
 import javafx.geometry.HPos
 import javafx.geometry.Side
@@ -23,6 +27,11 @@ import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.stage.Stage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.javafx.JavaFx
+import kotlinx.coroutines.launch
 import ktfx.bindings.buildBooleanBinding
 import ktfx.bindings.eq
 import ktfx.bindings.minus
@@ -34,8 +43,10 @@ import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.coroutines.listener
 import ktfx.coroutines.onAction
+import ktfx.coroutines.snapshot
 import ktfx.double
 import ktfx.jfoenix.jfxMasonryPane
+import ktfx.jfoenix.jfxSnackbar
 import ktfx.launchApplication
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
@@ -58,11 +69,19 @@ import ktfx.layouts.textFlow
 import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.runLater
+import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
+import java.awt.Desktop
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.ResourceBundle
+import javax.imageio.ImageIO
 
-class PlanoApplication : Application() {
+class PlanoApplication : Application(), Resources {
 
     companion object {
+
+        const val DURATION_DEFAULT = 3000L
 
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
@@ -110,7 +129,16 @@ class PlanoApplication : Application() {
     lateinit var sendButton: Button
     lateinit var outputPane: JFXMasonryPane
 
+    lateinit var preferences: Preferences
+    override lateinit var resources: ResourceBundle
+
+    override fun init() {
+        preferences = Preferences()
+        resources = Language.ofFullCode(preferences.getString(Preferences.LANGUAGE)).toResourcesBundle()
+    }
+
     override fun start(stage: Stage) {
+        println(DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm").format(LocalDateTime.now()))
         stage.title = BuildConfig.NAME
         stage.setMinSize(700.0, 400.0)
         stage.scene = scene {
@@ -128,12 +156,12 @@ class PlanoApplication : Application() {
                         }
                         rightItems {
                             roundButton(24.0, R.image.ic_refresh) {
-                                tooltip("Reset")
+                                tooltip(getString(R.string.reset))
                                 onAction { outputPane.children.clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
                             roundButton(24.0, R.image.ic_fullscreen) {
-                                tooltip("Toggle scale")
+                                tooltip(getString(R.string.toggle_scale))
                                 graphicProperty().bind(
                                     Bindings.`when`(scale eq SCALE_SMALL)
                                         then ImageView(R.image.ic_fullscreen)
@@ -149,15 +177,31 @@ class PlanoApplication : Application() {
                                 }
                             }
                             roundButton(24.0, R.image.ic_settings) {
-                                tooltip("Settings")
+                                tooltip(getString(R.string.settings))
                                 contextMenu {
-                                    menu("Language") {
+                                    menu(getString(R.string.language)) {
                                         val group = ToggleGroup()
-                                        radioMenuItem("English") { toggleGroup = group }
-                                        radioMenuItem("Bahasa Indonesia") { toggleGroup = group }
+                                        Language.values().forEach { language ->
+                                            radioMenuItem(language.toLocale().displayLanguage) {
+                                                toggleGroup = group
+                                                isSelected = language.fullCode ==
+                                                    preferences.getString(Preferences.LANGUAGE)
+                                                onAction {
+                                                    preferences.setString(Preferences.LANGUAGE, language.fullCode)
+                                                    preferences.save()
+                                                    TextDialog(this@PlanoApplication, this@stackPane)
+                                                        .apply { setOnDialogClosed { Platform.exit() } }
+                                                        .show()
+                                                }
+                                            }
+                                        }
                                     }
                                     separatorMenuItem()
-                                    "About" { onAction { AboutDialog(this@stackPane).show() } }
+                                    (getString(R.string.about)) {
+                                        onAction {
+                                            AboutDialog(this@PlanoApplication, this@stackPane).show()
+                                        }
+                                    }
                                 }
                                 onAction {
                                     if (!contextMenu.isShowing) {
@@ -174,25 +218,25 @@ class PlanoApplication : Application() {
                             gap = 10
                             var row = 0
 
-                            text("Calculate how many print sizes fit in a sheet size") {
+                            text(getString(R.string._desc)) {
                                 wrappingWidth = 200.0
                             } row row++ col 0 colSpans 6
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
-                            label("Sheet size") row row col 1
+                            label(getString(R.string.sheet_size)) row row col 1
                             sheetWidthField() row row col 2
                             label("x") row row col 3
                             sheetHeightField() row row col 4
                             morePaperButton(sheetWidthField, sheetHeightField) row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
-                            label("Print size") row row col 1
+                            label(getString(R.string.print_size)) row row col 1
                             printWidthField() row row col 2
                             label("x") row row col 3
                             printHeightField() row row col 4
                             morePaperButton(printWidthField, printHeightField) row row++ col 5
 
-                            label("Trim") row row col 1
+                            label(getString(R.string.trim)) row row col 1
                             trimField() row row++ col 2
 
                             row++
@@ -250,11 +294,30 @@ class PlanoApplication : Application() {
                                                 "${rectangles.size}pcs " { styleClass += "bold" }
                                                 "${printWidthField.text}x${printHeightField.text}"()
                                             } row 1 col 2
-                                            moreButton {
-                                                "Remove" { onAction { outputPane.children -= this@pane } }
-                                                separatorMenuItem()
-                                                "Save" {
+                                            lateinit var moreButton: Button
+                                            moreButton = moreButton {
+                                                (getString(R.string.save)) {
+                                                    onAction {
+                                                        moreButton.isVisible = false
+                                                        val file = ResultFile()
+                                                        @Suppress("LABEL_NAME_CLASH") this@gridPane.snapshot {
+                                                            ImageIO.write(it.image.toSwingImage(), "png", file)
+                                                        }
+                                                        GlobalScope.launch(Dispatchers.JavaFx) {
+                                                            delay(500)
+                                                            moreButton.isVisible = true
+                                                            this@vbox.jfxSnackbar(
+                                                                getString(R.string._save_desc).format(file.name),
+                                                                DURATION_DEFAULT,
+                                                                getString(R.string.open)
+                                                            ) {
+                                                                Desktop.getDesktop().open(file)
+                                                            }
+                                                        }
+                                                    }
                                                 }
+                                                separatorMenuItem()
+                                                (getString(R.string.remove)) { onAction { outputPane.children -= this@pane } }
                                             } row 2 col 1 colSpans 2
                                         }
                                     }
@@ -271,7 +334,7 @@ class PlanoApplication : Application() {
                                 }
                             } anchorAll 0
                             borderPane {
-                                label("No content")
+                                label(getString(R.string.no_content))
                                 visibleProperty().bind(outputPane.children.isEmptyBinding)
                                 managedProperty().bind(outputPane.children.isEmptyBinding)
                             } anchorAll 0
