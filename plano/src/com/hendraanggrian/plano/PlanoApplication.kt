@@ -88,6 +88,7 @@ class PlanoApplication : Application(), Resources {
 
         val COLOR_YELLOW: Color = Color.web("#ffb300")
         val COLOR_RED: Color = Color.web("#f08077")
+        val COLOR_BORDER: Color = Color.web("#c8c8c8")
 
         @JvmStatic
         fun main(args: Array<String>) = launchApplication<PlanoApplication>(*args)
@@ -187,7 +188,7 @@ class PlanoApplication : Application(), Resources {
                                                 isSelected = language.fullCode ==
                                                     preferences.getString(Preferences.LANGUAGE)
                                                 onAction {
-                                                    preferences.setString(Preferences.LANGUAGE, language.fullCode)
+                                                    preferences[Preferences.LANGUAGE] = language.fullCode
                                                     preferences.save()
                                                     TextDialog(this@PlanoApplication, this@stackPane)
                                                         .apply { setOnDialogClosed { Platform.exit() } }
@@ -213,7 +214,7 @@ class PlanoApplication : Application(), Resources {
                     }()
                     hbox {
                         gridPane {
-                            border(Color.web("#c8c8c8"))
+                            border(COLOR_BORDER)
                             paddingAll = 20
                             gap = 10
                             var row = 0
@@ -224,20 +225,30 @@ class PlanoApplication : Application(), Resources {
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                             label(getString(R.string.sheet_size)) row row col 1
-                            sheetWidthField() row row col 2
+                            sheetWidthField.apply {
+                                text = preferences.getString(Preferences.SHEET_WIDTH)
+                            }() row row col 2
                             label("x") row row col 3
-                            sheetHeightField() row row col 4
-                            morePaperButton(sheetWidthField, sheetHeightField) row row++ col 5
+                            sheetHeightField.apply {
+                                text = preferences.getString(Preferences.SHEET_HEIGHT)
+                            }() row row col 4
+                            morePaperButton(this@PlanoApplication, sheetWidthField, sheetHeightField) row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
                             label(getString(R.string.print_size)) row row col 1
-                            printWidthField() row row col 2
+                            printWidthField.apply {
+                                text = preferences.getString(Preferences.PRINT_WIDTH)
+                            }() row row col 2
                             label("x") row row col 3
-                            printHeightField() row row col 4
-                            morePaperButton(printWidthField, printHeightField) row row++ col 5
+                            printHeightField.apply {
+                                text = preferences.getString(Preferences.PRINT_HEIGHT)
+                            }() row row col 4
+                            morePaperButton(this@PlanoApplication, printWidthField, printHeightField) row row++ col 5
 
                             label(getString(R.string.trim)) row row col 1
-                            trimField() row row++ col 2
+                            trimField.apply {
+                                text = preferences.getString(Preferences.TRIM)
+                            }() row row++ col 2
 
                             row++
                             row++
@@ -257,11 +268,18 @@ class PlanoApplication : Application(), Resources {
                                     }
                                 })
                                 onAction {
+                                    preferences[Preferences.SHEET_WIDTH] = sheetWidthField.value
+                                    preferences[Preferences.SHEET_HEIGHT] = sheetHeightField.value
+                                    preferences[Preferences.PRINT_WIDTH] = printWidthField.value
+                                    preferences[Preferences.PRINT_HEIGHT] = printHeightField.value
+                                    preferences[Preferences.TRIM] = trimField.value
+                                    preferences.save()
+
                                     outputPane.children += ktfx.layouts.pane {
                                         gridPane {
                                             paddingAll = 10
                                             gap = 10
-                                            val rectangles = Plano.getPrintRectangles(
+                                            val rectangles = Plano.getPrintSizes(
                                                 sheetWidthField.value,
                                                 sheetHeightField.value,
                                                 printWidthField.value,
@@ -321,6 +339,8 @@ class PlanoApplication : Application(), Resources {
                                             } row 2 col 1 colSpans 2
                                         }
                                     }
+                                    outputPane.clearLayout()
+                                    outputPane.requestLayout()
                                 }
                             } row row col 0 colSpans 6 halign HPos.RIGHT
                         }

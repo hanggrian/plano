@@ -4,7 +4,7 @@ import javafx.geometry.Rectangle2D
 
 object Plano {
 
-    fun getPrintRectangles(
+    fun getPrintSizes(
         sheetWidth: Double,
         sheetHeight: Double,
         printWidth: Double,

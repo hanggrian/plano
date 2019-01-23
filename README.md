@@ -7,6 +7,10 @@ Efficient paper size calculator.
 
 ![demo][demo]
 
+Download
+--------
+Go to [releases][releases] to download Plano.
+
 License
 -------
     Copyright 2019 Hendra Anggrian
@@ -24,3 +28,4 @@ License
     limitations under the License.
     
 [demo]: /art/demo.png
+[releases]: https://github.com/hendraanggrian/plano/releases

@@ -28,6 +28,8 @@ fun DependencyHandler.truth() = "com.google.truth:truth:$VERSION_TRUTH"
 
 fun DependencyHandler.junit() = "junit:junit:$VERSION_JUNIT"
 
+fun DependencyHandler.shadow() = "com.github.jengelman.gradle.plugins:shadow:$VERSION_SHADOW"
+
 fun DependencyHandler.gitPublish() = "org.ajoberstar:gradle-git-publish:$VERSION_GIT_PUBLISH"
 inline val PluginDependenciesSpec.`git-publish` get() = id("org.ajoberstar.git-publish")
 

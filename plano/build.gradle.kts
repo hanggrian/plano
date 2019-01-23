@@ -8,6 +8,8 @@ plugins {
     idea
     id("com.hendraanggrian.generating.r")
     id("com.hendraanggrian.generating.buildconfig")
+    id("com.hendraanggrian.packr")
+    id("com.github.johnrengelman.shadow")
 }
 
 application.mainClassName = "$RELEASE_GROUP.PlanoApplication"
@@ -70,7 +72,7 @@ tasks {
     }
 
     named<com.hendraanggrian.generating.buildconfig.BuildConfigTask>("generateBuildConfig") {
-        appName = "Plano"
+        appName = RELEASE_NAME
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
         website = RELEASE_WEBSITE
@@ -80,4 +82,29 @@ tasks {
         outputDirectory = "$buildDir/docs"
         doFirst { file(outputDirectory).deleteRecursively() }
     }
+
+    named<Jar>("jar") {
+        manifest {
+            attributes(mapOf("Main-Class" to application.mainClassName))
+        }
+    }
+}
+
+packr {
+    mainClass = application.mainClassName
+    executable = RELEASE_ARTIFACT
+    classpath("$buildDir/install/$RELEASE_ARTIFACT/lib")
+    resources("$projectDir/res")
+    vmArgs("Xmx2G")
+    macOS {
+        name = "$RELEASE_NAME.app"
+        icon = "${rootProject.projectDir}/art/$RELEASE_ARTIFACT.icns"
+        bundleId = RELEASE_GROUP
+    }
+    windows64 {
+        name = RELEASE_NAME
+        jdk = "/Users/hendraanggrian/Desktop/jdk1.8.0_182"
+    }
+    verbose = true
+    openOnDone = true
 }
