@@ -4,6 +4,7 @@
     package="com.hendraanggrian.plano">
 
     <application
+        android:name=".PlanoApplication"
         android:allowBackup="false"
         android:label="OpenPSS"
         android:supportsRtl="true"
