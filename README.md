@@ -1,6 +1,3 @@
-[![build](https://travis-ci.com/hendraanggrian/plano.svg)](https://travis-ci.com/hendraanggrian/plano)
-[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-
 Plano
 =====
 Efficient paper size calculator.

@@ -30,10 +30,6 @@ fun DependencyHandler.hendraanggrian(
     version: String
 ) = "com.hendraanggrian.$repository:$module:$version"
 
-fun DependencyHandler.controlsFx() = "org.controlsfx:controlsfx:$VERSION_CONTROLSFX"
-
-fun DependencyHandler.jfoenix() = "com.jfoenix:jfoenix:$VERSION_JFOENIX"
-
 fun DependencyHandler.apache(module: String, version: String) =
     "org.apache.${module.split("-")[0]}:$module:$version"
 
