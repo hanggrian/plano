@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano.dialog
 
 import com.hendraanggrian.plano.BuildConfig
-import com.hendraanggrian.plano.R
+import com.hendraanggrian.plano.R2
 import com.hendraanggrian.plano.Resources
 import javafx.scene.layout.StackPane
 import ktfx.coroutines.onAction
@@ -17,15 +17,15 @@ class AboutDialog(resources: Resources, container: StackPane) : Dialog(resources
     override fun _VBox.onCreateContent() {
         label("${BuildConfig.NAME} ${BuildConfig.VERSION}") { styleClass.addAll("bold", "display") }
         textFlow {
-            getString(R.string._about_title1)()
+            getString(R2.string._about_title1)()
             newLine()
-            getString(R.string._about_title2_1)()
-            hyperlink(getString(R.string._about_title2_2)) {
+            getString(R2.string._about_title2_1)()
+            hyperlink(getString(R2.string._about_title2_2)) {
                 onAction {
                     Desktop.getDesktop().browse(URI(BuildConfig.WEBSITE))
                 }
             }
-            getString(R.string._about_title2_3)()
+            getString(R2.string._about_title2_3)()
         }
     }
 }

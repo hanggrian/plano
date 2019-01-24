@@ -1,6 +1,7 @@
 package com.hendraanggrian.plano.control
 
 import com.hendraanggrian.plano.R
+import com.hendraanggrian.plano.R2
 import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXButton
 import javafx.geometry.Side
@@ -24,7 +25,7 @@ fun NodeInvokable.morePaperButton(
     widthField: TextField,
     heightField: TextField
 ): Button = moreButton {
-    menu(resources.getString(R.string.a_series)) {
+    menu(resources.getString(R2.string.a_series)) {
         paperMenuItem(118.9, 84.1, widthField, heightField, "A0")
         paperMenuItem(84.1, 59.4, widthField, heightField, "A1")
         paperMenuItem(59.4, 42, widthField, heightField, "A2")
@@ -37,7 +38,7 @@ fun NodeInvokable.morePaperButton(
         paperMenuItem(5.2, 3.7, widthField, heightField, "A9")
         paperMenuItem(3.7, 2.6, widthField, heightField, "A10")
     }
-    menu(resources.getString(R.string.b_series)) {
+    menu(resources.getString(R2.string.b_series)) {
         paperMenuItem(141.4, 100, widthField, heightField, "B0")
         paperMenuItem(100, 70.7, widthField, heightField, "B1")
         paperMenuItem(70.7, 50, widthField, heightField, "B2")

@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano.dialog
 
-import com.hendraanggrian.plano.R
+import com.hendraanggrian.plano.R2
 import com.hendraanggrian.plano.Resources
 import javafx.scene.layout.StackPane
 import ktfx.controls.paddingAll
@@ -20,7 +20,7 @@ abstract class Dialog(resources: Resources, container: StackPane) :
             paddingAll = 20
             onCreateContent()
             buttonBar {
-                jfxButton(getString(R.string.close)) {
+                jfxButton(getString(R2.string.close)) {
                     styleClass.addAll("flat", "bold")
                     onAction {
                         close()

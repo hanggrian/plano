@@ -6,8 +6,23 @@ fun DependencyHandler.kotlinx(
     version: String? = null
 ) = "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" } ?: ""}"
 
-fun DependencyHandler.dokka() = "org.jetbrains.dokka:dokka-gradle-plugin:$VERSION_DOKKA"
-inline val PluginDependenciesSpec.dokka get() = id("org.jetbrains.dokka")
+fun DependencyHandler.dokka(module: String? = null) =
+    "org.jetbrains.dokka:dokka-${module.wrap { "$it-" }}gradle-plugin:$VERSION_DOKKA"
+
+fun PluginDependenciesSpec.dokka(module: String? = null) =
+    id("org.jetbrains.dokka${module.wrap { "-$it" }}")
+
+fun DependencyHandler.android() = "com.android.tools.build:gradle:$VERSION_ANDROID_PLUGIN"
+fun PluginDependenciesSpec.android(submodule: String) = id("com.android.$submodule")
+
+fun DependencyHandler.androidx(
+    repository: String,
+    module: String = repository,
+    version: String = VERSION_ANDROIDX
+): String = "androidx.$repository:$module:$version"
+
+fun DependencyHandler.material(version: String = VERSION_ANDROIDX) =
+    "com.google.android.material:material:$version"
 
 fun DependencyHandler.hendraanggrian(
     repository: String,
@@ -37,3 +52,5 @@ fun DependencyHandler.ktlint(module: String? = null) = when (module) {
     null -> "com.github.shyiko:ktlint:$VERSION_KTLINT"
     else -> "com.github.shyiko.ktlint:ktlint-$module:$VERSION_KTLINT"
 }
+
+private fun String?.wrap(wrapper: (String) -> String) = this?.let(wrapper).orEmpty()

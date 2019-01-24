@@ -1,7 +1,5 @@
 package com.hendraanggrian.plano
 
-import javafx.geometry.Rectangle2D
-
 object Plano {
 
     fun getPrintSizes(
@@ -10,40 +8,40 @@ object Plano {
         printWidth: Double,
         printHeight: Double,
         trim: Double = 0.0
-    ): List<Rectangle2D> {
-        val rectangles1 = calculatePrintPoints(
+    ): List<PrintSize> {
+        val sizes1 = calculatePrintSizes(
             sheetWidth,
             sheetHeight,
             printWidth + trim,
             printHeight + trim
         )
-        val rectangles2 = calculatePrintPoints(
+        val sizes2 = calculatePrintSizes(
             sheetWidth,
             sheetHeight,
             printHeight + trim,
             printWidth + trim
         )
         return when {
-            rectangles1.size >= rectangles2.size -> {
+            sizes1.size >= sizes2.size -> {
                 if (BuildConfig.DEBUG) println("Choice 1 chosen")
-                rectangles1
+                sizes1
             }
             else -> {
                 if (BuildConfig.DEBUG) println("Choice 2 chosen")
-                rectangles2
+                sizes2
             }
         }
     }
 
-    private fun calculatePrintPoints(
+    private fun calculatePrintSizes(
         sheetWidth: Double,
         sheetHeight: Double,
         printWidth: Double,
         printHeight: Double
-    ): List<Rectangle2D> {
+    ): List<PrintSize> {
         if (BuildConfig.DEBUG) println("----- ${sheetWidth}x$sheetHeight - ${printWidth}x$printHeight -----")
 
-        val rectangles = mutableListOf<Rectangle2D>()
+        val sizes = mutableListOf<PrintSize>()
         val columns = (sheetWidth / printWidth).toInt()
         val rows = (sheetHeight / printHeight).toInt()
         if (BuildConfig.DEBUG) {
@@ -54,7 +52,7 @@ object Plano {
             val x = column * printWidth
             for (row in 0 until rows) {
                 val y = row * printHeight
-                rectangles += Rectangle2D(x, y, printWidth, printHeight)
+                sizes += PrintSize(x, y, printWidth, printHeight)
             }
         }
 
@@ -75,15 +73,15 @@ object Plano {
         if (rightLeftovers > bottomLeftovers) {
             val x = printWidth * columns
             for (leftover in 0 until rightLeftovers) {
-                rectangles += Rectangle2D(x, leftover * printWidth, printHeight, printWidth)
+                sizes += PrintSize(x, leftover * printWidth, printHeight, printWidth)
             }
         } else if (bottomLeftovers > rightLeftovers) {
             val y = printHeight * columns
             for (leftover in 0 until bottomLeftovers) {
-                rectangles += Rectangle2D(leftover * printHeight, y, printHeight, printWidth)
+                sizes += PrintSize(leftover * printHeight, y, printHeight, printWidth)
             }
         }
 
-        return rectangles
+        return sizes
     }
 }

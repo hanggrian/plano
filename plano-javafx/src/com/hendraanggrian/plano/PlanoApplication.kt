@@ -72,8 +72,6 @@ import ktfx.runLater
 import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
 import java.awt.Desktop
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.ResourceBundle
 import javax.imageio.ImageIO
 
@@ -139,7 +137,6 @@ class PlanoApplication : Application(), Resources {
     }
 
     override fun start(stage: Stage) {
-        println(DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm").format(LocalDateTime.now()))
         stage.title = BuildConfig.NAME
         stage.setMinSize(700.0, 400.0)
         stage.scene = scene {
@@ -157,12 +154,12 @@ class PlanoApplication : Application(), Resources {
                         }
                         rightItems {
                             roundButton(24.0, R.image.ic_refresh) {
-                                tooltip(getString(R.string.reset))
+                                tooltip(getString(R2.string.reset))
                                 onAction { outputPane.children.clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
                             roundButton(24.0, R.image.ic_fullscreen) {
-                                tooltip(getString(R.string.toggle_scale))
+                                tooltip(getString(R2.string.toggle_scale))
                                 graphicProperty().bind(
                                     Bindings.`when`(scale eq SCALE_SMALL)
                                         then ImageView(R.image.ic_fullscreen)
@@ -178,9 +175,9 @@ class PlanoApplication : Application(), Resources {
                                 }
                             }
                             roundButton(24.0, R.image.ic_settings) {
-                                tooltip(getString(R.string.settings))
+                                tooltip(getString(R2.string.settings))
                                 contextMenu {
-                                    menu(getString(R.string.language)) {
+                                    menu(getString(R2.string.language)) {
                                         val group = ToggleGroup()
                                         Language.values().forEach { language ->
                                             radioMenuItem(language.toLocale().displayLanguage) {
@@ -198,7 +195,7 @@ class PlanoApplication : Application(), Resources {
                                         }
                                     }
                                     separatorMenuItem()
-                                    (getString(R.string.about)) {
+                                    (getString(R2.string.about)) {
                                         onAction {
                                             AboutDialog(this@PlanoApplication, this@stackPane).show()
                                         }
@@ -219,12 +216,12 @@ class PlanoApplication : Application(), Resources {
                             gap = 10
                             var row = 0
 
-                            text(getString(R.string._desc)) {
+                            text(getString(R2.string._desc)) {
                                 wrappingWidth = 200.0
                             } row row++ col 0 colSpans 6
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
-                            label(getString(R.string.sheet_size)) row row col 1
+                            label(getString(R2.string.sheet_size)) row row col 1
                             sheetWidthField.apply {
                                 text = preferences.getString(Preferences.SHEET_WIDTH)
                             }() row row col 2
@@ -235,7 +232,7 @@ class PlanoApplication : Application(), Resources {
                             morePaperButton(this@PlanoApplication, sheetWidthField, sheetHeightField) row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
-                            label(getString(R.string.print_size)) row row col 1
+                            label(getString(R2.string.print_size)) row row col 1
                             printWidthField.apply {
                                 text = preferences.getString(Preferences.PRINT_WIDTH)
                             }() row row col 2
@@ -245,7 +242,7 @@ class PlanoApplication : Application(), Resources {
                             }() row row col 4
                             morePaperButton(this@PlanoApplication, printWidthField, printHeightField) row row++ col 5
 
-                            label(getString(R.string.trim)) row row col 1
+                            label(getString(R2.string.trim)) row row col 1
                             trimField.apply {
                                 text = preferences.getString(Preferences.TRIM)
                             }() row row++ col 2
@@ -279,7 +276,7 @@ class PlanoApplication : Application(), Resources {
                                         gridPane {
                                             paddingAll = 10
                                             gap = 10
-                                            val rectangles = Plano.getPrintSizes(
+                                            val printSizes = Plano.getPrintSizes(
                                                 sheetWidthField.value,
                                                 sheetHeightField.value,
                                                 printWidthField.value,
@@ -293,13 +290,13 @@ class PlanoApplication : Application(), Resources {
                                                     prefHeightProperty().bind(sheetHeightField.value * scale)
                                                 }
 
-                                                rectangles.forEach { rect ->
+                                                printSizes.forEach { size ->
                                                     pane {
-                                                        prefWidthProperty().bind(rect.width * scale)
-                                                        prefHeightProperty().bind(rect.height * scale)
+                                                        prefWidthProperty().bind(size.width * scale)
+                                                        prefHeightProperty().bind(size.height * scale)
                                                         border(COLOR_RED, 3)
-                                                        userData = rect.minX to rect.minY
-                                                    } anchorLeft rect.minX * scale.value anchorTop rect.minY * scale.value
+                                                        userData = size.x to size.y
+                                                    } anchorLeft size.x * scale.value anchorTop size.y * scale.value
                                                 }
                                             } row 0 rowSpans 3 col 0
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
@@ -309,12 +306,12 @@ class PlanoApplication : Application(), Resources {
                                             } row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
-                                                "${rectangles.size}pcs " { styleClass += "bold" }
+                                                "${printSizes.size}pcs " { styleClass += "bold" }
                                                 "${printWidthField.text}x${printHeightField.text}"()
                                             } row 1 col 2
                                             lateinit var moreButton: Button
                                             moreButton = moreButton {
-                                                (getString(R.string.save)) {
+                                                (getString(R2.string.save)) {
                                                     onAction {
                                                         moreButton.isVisible = false
                                                         val file = ResultFile()
@@ -325,9 +322,9 @@ class PlanoApplication : Application(), Resources {
                                                             delay(500)
                                                             moreButton.isVisible = true
                                                             this@vbox.jfxSnackbar(
-                                                                getString(R.string._save_desc).format(file.name),
+                                                                getString(R2.string._save_desc).format(file.name),
                                                                 DURATION_DEFAULT,
-                                                                getString(R.string.open)
+                                                                getString(R2.string.open)
                                                             ) {
                                                                 Desktop.getDesktop().open(file)
                                                             }
@@ -335,7 +332,7 @@ class PlanoApplication : Application(), Resources {
                                                     }
                                                 }
                                                 separatorMenuItem()
-                                                (getString(R.string.remove)) { onAction { outputPane.children -= this@pane } }
+                                                (getString(R2.string.remove)) { onAction { outputPane.children -= this@pane } }
                                             } row 2 col 1 colSpans 2
                                         }
                                     }
@@ -354,7 +351,7 @@ class PlanoApplication : Application(), Resources {
                                 }
                             } anchorAll 0
                             borderPane {
-                                label(getString(R.string.no_content))
+                                label(getString(R2.string.no_content))
                                 visibleProperty().bind(outputPane.children.isEmptyBinding)
                                 managedProperty().bind(outputPane.children.isEmptyBinding)
                             } anchorAll 0
