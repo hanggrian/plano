@@ -17,10 +17,10 @@ sourceSets {
     getByName("main") {
         // manual import client generated build
         val dirs = mutableListOf("src")
-        val clientGeneratedDir = "client/build/generated"
-        if (rootDir.resolve(clientGeneratedDir).exists()) {
-            dirs += "../$clientGeneratedDir/buildconfig/src/main"
-            dirs += "../$clientGeneratedDir/r/src/main"
+        val generatedDir = "plano/build/generated"
+        if (rootDir.resolve(generatedDir).exists()) {
+            dirs += "../$generatedDir/buildconfig/src/main"
+            dirs += "../$generatedDir/r/src/main"
         }
         java.srcDirs(*dirs.toTypedArray())
         resources.srcDir("res")
@@ -69,18 +69,26 @@ tasks {
         outputDirectory = "$buildDir/docs"
         doFirst { file(outputDirectory).deleteRecursively() }
     }
-    
+
     named<com.hendraanggrian.generating.r.RTask>("generateR") {
         resourcesDirectory = file("res")
-        configureProperties {
-            readResourceBundle = true
-        }
     }
 
     named<Jar>("jar") {
         manifest {
             attributes(mapOf("Main-Class" to application.mainClassName))
         }
+    }
+
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        destinationDir = buildDir.resolve("releases")
+        baseName = RELEASE_ARTIFACT
+        version = RELEASE_VERSION
+        classifier = null
+    }
+
+    withType<com.hendraanggrian.packr.PackTask> {
+        dependsOn("installDist")
     }
 }
 

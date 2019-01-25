@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -23,7 +24,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
@@ -35,6 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:fabSize="normal"
-        app:layout_anchor="@id/recyclerView"
+        app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|end" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

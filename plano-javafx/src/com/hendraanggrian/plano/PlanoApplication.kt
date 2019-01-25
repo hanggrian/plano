@@ -35,8 +35,8 @@ import kotlinx.coroutines.launch
 import ktfx.bindings.buildBooleanBinding
 import ktfx.bindings.eq
 import ktfx.bindings.minus
-import ktfx.bindings.otherwise
 import ktfx.bindings.then
+import ktfx.bindings.otherwise
 import ktfx.bindings.times
 import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
@@ -78,7 +78,6 @@ import javax.imageio.ImageIO
 class PlanoApplication : Application(), Resources {
 
     companion object {
-
         const val DURATION_DEFAULT = 3000L
 
         const val SCALE_SMALL = 2.0
@@ -133,7 +132,8 @@ class PlanoApplication : Application(), Resources {
 
     override fun init() {
         preferences = Preferences()
-        resources = Language.ofFullCode(preferences.getString(Preferences.LANGUAGE)).toResourcesBundle()
+        resources =
+            Language.ofFullCode(preferences.getString(R2.preference.language)).toResourcesBundle()
     }
 
     override fun start(stage: Stage) {
@@ -183,11 +183,15 @@ class PlanoApplication : Application(), Resources {
                                             radioMenuItem(language.toLocale().displayLanguage) {
                                                 toggleGroup = group
                                                 isSelected = language.fullCode ==
-                                                    preferences.getString(Preferences.LANGUAGE)
+                                                    preferences.getString(R2.preference.language)
                                                 onAction {
-                                                    preferences[Preferences.LANGUAGE] = language.fullCode
+                                                    preferences[R2.preference.language] =
+                                                        language.fullCode
                                                     preferences.save()
-                                                    TextDialog(this@PlanoApplication, this@stackPane)
+                                                    TextDialog(
+                                                        this@PlanoApplication,
+                                                        this@stackPane
+                                                    )
                                                         .apply { setOnDialogClosed { Platform.exit() } }
                                                         .show()
                                                 }
@@ -197,7 +201,10 @@ class PlanoApplication : Application(), Resources {
                                     separatorMenuItem()
                                     (getString(R2.string.about)) {
                                         onAction {
-                                            AboutDialog(this@PlanoApplication, this@stackPane).show()
+                                            AboutDialog(
+                                                this@PlanoApplication,
+                                                this@stackPane
+                                            ).show()
                                         }
                                     }
                                 }
@@ -223,28 +230,36 @@ class PlanoApplication : Application(), Resources {
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                             label(getString(R2.string.sheet_size)) row row col 1
                             sheetWidthField.apply {
-                                text = preferences.getString(Preferences.SHEET_WIDTH)
+                                text = preferences.getString(R2.preference.sheet_width)
                             }() row row col 2
                             label("x") row row col 3
                             sheetHeightField.apply {
-                                text = preferences.getString(Preferences.SHEET_HEIGHT)
+                                text = preferences.getString(R2.preference.sheet_height)
                             }() row row col 4
-                            morePaperButton(this@PlanoApplication, sheetWidthField, sheetHeightField) row row++ col 5
+                            morePaperButton(
+                                this@PlanoApplication,
+                                sheetWidthField,
+                                sheetHeightField
+                            ) row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
                             label(getString(R2.string.print_size)) row row col 1
                             printWidthField.apply {
-                                text = preferences.getString(Preferences.PRINT_WIDTH)
+                                text = preferences.getString(R2.preference.print_width)
                             }() row row col 2
                             label("x") row row col 3
                             printHeightField.apply {
-                                text = preferences.getString(Preferences.PRINT_HEIGHT)
+                                text = preferences.getString(R2.preference.print_height)
                             }() row row col 4
-                            morePaperButton(this@PlanoApplication, printWidthField, printHeightField) row row++ col 5
+                            morePaperButton(
+                                this@PlanoApplication,
+                                printWidthField,
+                                printHeightField
+                            ) row row++ col 5
 
                             label(getString(R2.string.trim)) row row col 1
                             trimField.apply {
-                                text = preferences.getString(Preferences.TRIM)
+                                text = preferences.getString(R2.preference.trim)
                             }() row row++ col 2
 
                             row++
@@ -265,11 +280,11 @@ class PlanoApplication : Application(), Resources {
                                     }
                                 })
                                 onAction {
-                                    preferences[Preferences.SHEET_WIDTH] = sheetWidthField.value
-                                    preferences[Preferences.SHEET_HEIGHT] = sheetHeightField.value
-                                    preferences[Preferences.PRINT_WIDTH] = printWidthField.value
-                                    preferences[Preferences.PRINT_HEIGHT] = printHeightField.value
-                                    preferences[Preferences.TRIM] = trimField.value
+                                    preferences[R2.preference.sheet_width] = sheetWidthField.value
+                                    preferences[R2.preference.sheet_height] = sheetHeightField.value
+                                    preferences[R2.preference.print_width] = printWidthField.value
+                                    preferences[R2.preference.print_height] = printHeightField.value
+                                    preferences[R2.preference.trim] = trimField.value
                                     preferences.save()
 
                                     outputPane.children += ktfx.layouts.pane {
@@ -316,13 +331,19 @@ class PlanoApplication : Application(), Resources {
                                                         moreButton.isVisible = false
                                                         val file = ResultFile()
                                                         @Suppress("LABEL_NAME_CLASH") this@gridPane.snapshot {
-                                                            ImageIO.write(it.image.toSwingImage(), "png", file)
+                                                            ImageIO.write(
+                                                                it.image.toSwingImage(),
+                                                                "png",
+                                                                file
+                                                            )
                                                         }
                                                         GlobalScope.launch(Dispatchers.JavaFx) {
                                                             delay(500)
                                                             moreButton.isVisible = true
                                                             this@vbox.jfxSnackbar(
-                                                                getString(R2.string._save_desc).format(file.name),
+                                                                getString(R2.string._save_desc).format(
+                                                                    file.name
+                                                                ),
                                                                 DURATION_DEFAULT,
                                                                 getString(R2.string.open)
                                                             ) {
