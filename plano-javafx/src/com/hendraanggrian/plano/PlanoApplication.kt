@@ -35,8 +35,8 @@ import kotlinx.coroutines.launch
 import ktfx.bindings.buildBooleanBinding
 import ktfx.bindings.eq
 import ktfx.bindings.minus
-import ktfx.bindings.then
 import ktfx.bindings.otherwise
+import ktfx.bindings.then
 import ktfx.bindings.times
 import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap

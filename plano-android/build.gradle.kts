@@ -56,8 +56,8 @@ android {
 val configuration = configurations.register("ktlint")
 
 dependencies {
-    implementation(project(":plano"))
-    implementation(kotlinx("coroutines-android", VERSION_COROUTINES))
+    api(project(":plano"))
+    api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
     implementation(androidx("multidex", version = VERSION_MULTIDEX))
     implementation(androidx("core", "core-ktx", "$VERSION_ANDROIDX-alpha03"))

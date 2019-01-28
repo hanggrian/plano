@@ -2,23 +2,24 @@ group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 plugins {
-    application
     kotlin("jvm")
     dokka()
     idea
     id("com.hendraanggrian.generating.r")
     id("com.hendraanggrian.packr")
     id("com.github.johnrengelman.shadow")
+    application
 }
 
 application.mainClassName = "$RELEASE_GROUP.PlanoApplication"
 
 sourceSets {
     getByName("main") {
-        // manual import client generated build
+        // manual import generated build
         val dirs = mutableListOf("src")
         val generatedDir = "plano/build/generated"
         if (rootDir.resolve(generatedDir).exists()) {
+            dirs += "build/generated/r/src/main"
             dirs += "../$generatedDir/buildconfig/src/main"
             dirs += "../$generatedDir/r/src/main"
         }
@@ -30,8 +31,8 @@ sourceSets {
 val configuration = configurations.register("ktlint")
 
 dependencies {
-    implementation(project(":$RELEASE_ARTIFACT"))
-    implementation(kotlin("stdlib", VERSION_KOTLIN))
+    api(project(":$RELEASE_ARTIFACT"))
+    api(kotlin("stdlib", VERSION_KOTLIN))
 
     implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
     implementation(hendraanggrian("ktfx", version = VERSION_KTFX))

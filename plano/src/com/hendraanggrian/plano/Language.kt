@@ -41,9 +41,11 @@ enum class Language(private val nativeLocale: Locale) {
 
     companion object {
 
-        fun ofCode(code: String): Language = find { it.code == code }
+        fun ofCode(code: String): Language =
+            find { it.code == code }
 
-        fun ofFullCode(fullCode: String): Language = find { it.fullCode == fullCode }
+        fun ofFullCode(fullCode: String): Language =
+            find { it.fullCode == fullCode }
 
         private inline fun find(predicate: (Language) -> Boolean): Language =
             Language.values().singleOrNull(predicate) ?: EN_US

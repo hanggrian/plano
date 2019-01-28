@@ -2,6 +2,7 @@ group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 plugins {
+    `java-library`
     kotlin("jvm")
     dokka()
     idea
@@ -20,7 +21,7 @@ sourceSets {
 val configuration = configurations.register("ktlint")
 
 dependencies {
-    implementation(kotlin("stdlib", VERSION_KOTLIN))
+    api(kotlin("stdlib", VERSION_KOTLIN))
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
     testImplementation(junit())
