@@ -1,5 +1,8 @@
 package com.hendraanggrian.plano
 
+import com.hendraanggrian.defaults.Defaults
+import com.hendraanggrian.defaults.DefaultsDebugger
+import com.hendraanggrian.defaults.from
 import com.hendraanggrian.plano.control.DoubleField
 import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.border
@@ -8,8 +11,6 @@ import com.hendraanggrian.plano.control.morePaperButton
 import com.hendraanggrian.plano.control.roundButton
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
-import com.hendraanggrian.plano.io.Preferences
-import com.hendraanggrian.plano.io.ResultFile
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXMasonryPane
 import javafx.application.Application
@@ -127,13 +128,15 @@ class PlanoApplication : Application(), Resources {
     lateinit var sendButton: Button
     lateinit var outputPane: JFXMasonryPane
 
-    lateinit var preferences: Preferences
+    lateinit var defaults: Defaults<*>
     override lateinit var resources: ResourceBundle
 
     override fun init() {
-        preferences = Preferences()
-        resources =
-            Language.ofFullCode(preferences.getString(R2.preference.language)).toResourcesBundle()
+        if (BuildConfig.DEBUG) {
+            Defaults.setDebug(DefaultsDebugger.Default)
+        }
+        defaults = Defaults.from(PreferencesFile())
+        resources = Language.ofFullCode(defaults[R2.preference.language]).toResourcesBundle()
     }
 
     override fun start(stage: Stage) {
@@ -183,16 +186,16 @@ class PlanoApplication : Application(), Resources {
                                             radioMenuItem(language.toLocale().displayLanguage) {
                                                 toggleGroup = group
                                                 isSelected = language.fullCode ==
-                                                    preferences.getString(R2.preference.language)
+                                                    defaults[R2.preference.language]
                                                 onAction {
-                                                    preferences[R2.preference.language] =
-                                                        language.fullCode
-                                                    preferences.save()
+                                                    defaults {
+                                                        this[R2.preference.language] =
+                                                            language.fullCode
+                                                    }
                                                     TextDialog(
                                                         this@PlanoApplication,
                                                         this@stackPane
-                                                    )
-                                                        .apply { setOnDialogClosed { Platform.exit() } }
+                                                    ).apply { setOnDialogClosed { Platform.exit() } }
                                                         .show()
                                                 }
                                             }
@@ -230,11 +233,11 @@ class PlanoApplication : Application(), Resources {
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                             label(getString(R2.string.sheet_size)) row row col 1
                             sheetWidthField.apply {
-                                text = preferences.getString(R2.preference.sheet_width)
+                                text = defaults[R2.preference.sheet_width]
                             }() row row col 2
                             label("x") row row col 3
                             sheetHeightField.apply {
-                                text = preferences.getString(R2.preference.sheet_height)
+                                text = defaults[R2.preference.sheet_height]
                             }() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
@@ -245,11 +248,11 @@ class PlanoApplication : Application(), Resources {
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
                             label(getString(R2.string.print_size)) row row col 1
                             printWidthField.apply {
-                                text = preferences.getString(R2.preference.print_width)
+                                text = defaults[R2.preference.print_width]
                             }() row row col 2
                             label("x") row row col 3
                             printHeightField.apply {
-                                text = preferences.getString(R2.preference.print_height)
+                                text = defaults[R2.preference.print_height]
                             }() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
@@ -259,7 +262,7 @@ class PlanoApplication : Application(), Resources {
 
                             label(getString(R2.string.trim)) row row col 1
                             trimField.apply {
-                                text = preferences.getString(R2.preference.trim)
+                                text = defaults[R2.preference.trim]
                             }() row row++ col 2
 
                             row++
@@ -280,12 +283,17 @@ class PlanoApplication : Application(), Resources {
                                     }
                                 })
                                 onAction {
-                                    preferences[R2.preference.sheet_width] = sheetWidthField.value
-                                    preferences[R2.preference.sheet_height] = sheetHeightField.value
-                                    preferences[R2.preference.print_width] = printWidthField.value
-                                    preferences[R2.preference.print_height] = printHeightField.value
-                                    preferences[R2.preference.trim] = trimField.value
-                                    preferences.save()
+                                    defaults {
+                                        this[R2.preference.sheet_width] =
+                                            sheetWidthField.value.toFloat()
+                                        this[R2.preference.sheet_height] =
+                                            sheetHeightField.value.toFloat()
+                                        this[R2.preference.print_width] =
+                                            printWidthField.value.toFloat()
+                                        this[R2.preference.print_height] =
+                                            printHeightField.value.toFloat()
+                                        this[R2.preference.trim] = trimField.value.toFloat()
+                                    }
 
                                     outputPane.children += ktfx.layouts.pane {
                                         gridPane {
@@ -329,7 +337,8 @@ class PlanoApplication : Application(), Resources {
                                                 (getString(R2.string.save)) {
                                                     onAction {
                                                         moreButton.isVisible = false
-                                                        val file = ResultFile()
+                                                        val file =
+                                                            ResultFile()
                                                         @Suppress("LABEL_NAME_CLASH") this@gridPane.snapshot {
                                                             ImageIO.write(
                                                                 it.image.toSwingImage(),

@@ -1,6 +1,5 @@
-package com.hendraanggrian.plano.io
+package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.BuildConfig
 import org.apache.commons.lang3.SystemUtils
 import java.io.File
 import java.time.LocalDateTime

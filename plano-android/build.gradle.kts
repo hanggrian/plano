@@ -2,7 +2,6 @@ plugins {
     android("application")
     kotlin("android")
     kotlin("android.extensions")
-    kotlin("kapt")
     dokka("android")
 }
 
@@ -58,6 +57,8 @@ val configuration = configurations.register("ktlint")
 dependencies {
     api(project(":plano"))
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
+
+    implementation(hendraanggrian("defaults", "defaults-android", VERSION_DEFAULTS))
 
     implementation(androidx("multidex", version = VERSION_MULTIDEX))
     implementation(androidx("core", "core-ktx", "$VERSION_ANDROIDX-alpha03"))
