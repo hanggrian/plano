@@ -189,7 +189,7 @@ class PlanoApplication : Application(), Resources {
                                                     defaults[R2.preference.language]
                                                 onAction {
                                                     defaults {
-                                                        this[R2.preference.language] =
+                                                        it[R2.preference.language] =
                                                             language.fullCode
                                                     }
                                                     TextDialog(
@@ -284,15 +284,15 @@ class PlanoApplication : Application(), Resources {
                                 })
                                 onAction {
                                     defaults {
-                                        this[R2.preference.sheet_width] =
+                                        it[R2.preference.sheet_width] =
                                             sheetWidthField.value.toFloat()
-                                        this[R2.preference.sheet_height] =
+                                        it[R2.preference.sheet_height] =
                                             sheetHeightField.value.toFloat()
-                                        this[R2.preference.print_width] =
+                                        it[R2.preference.print_width] =
                                             printWidthField.value.toFloat()
-                                        this[R2.preference.print_height] =
+                                        it[R2.preference.print_height] =
                                             printHeightField.value.toFloat()
-                                        this[R2.preference.trim] = trimField.value.toFloat()
+                                        it[R2.preference.trim] = trimField.value.toFloat()
                                     }
 
                                     outputPane.children += ktfx.layouts.pane {
