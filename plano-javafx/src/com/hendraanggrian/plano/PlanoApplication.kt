@@ -2,7 +2,8 @@ package com.hendraanggrian.plano
 
 import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
-import com.hendraanggrian.defaults.from
+import com.hendraanggrian.defaults.PropertiesFileDefaults
+import com.hendraanggrian.defaults.get
 import com.hendraanggrian.plano.control.DoubleField
 import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.border
@@ -128,15 +129,17 @@ class PlanoApplication : Application(), Resources {
     lateinit var sendButton: Button
     lateinit var outputPane: JFXMasonryPane
 
-    lateinit var defaults: Defaults<*>
+    lateinit var defaults: PropertiesFileDefaults
     override lateinit var resources: ResourceBundle
 
     override fun init() {
         if (BuildConfig.DEBUG) {
             Defaults.setDebug(DefaultsDebugger.Default)
         }
-        defaults = Defaults.from(PreferencesFile())
-        resources = Language.ofFullCode(defaults[R2.preference.language]).toResourcesBundle()
+        defaults = Defaults[PreferencesFile()]
+        resources = Language
+            .ofFullCode(defaults[R2.preference.language] ?: Language.EN_US.fullCode)
+            .toResourcesBundle()
     }
 
     override fun start(stage: Stage) {
@@ -188,10 +191,8 @@ class PlanoApplication : Application(), Resources {
                                                 isSelected = language.fullCode ==
                                                     defaults[R2.preference.language]
                                                 onAction {
-                                                    defaults {
-                                                        it[R2.preference.language] =
-                                                            language.fullCode
-                                                    }
+                                                    defaults[R2.preference.language] =
+                                                        language.fullCode
                                                     TextDialog(
                                                         this@PlanoApplication,
                                                         this@stackPane
@@ -283,17 +284,15 @@ class PlanoApplication : Application(), Resources {
                                     }
                                 })
                                 onAction {
-                                    defaults {
-                                        it[R2.preference.sheet_width] =
-                                            sheetWidthField.value.toFloat()
-                                        it[R2.preference.sheet_height] =
-                                            sheetHeightField.value.toFloat()
-                                        it[R2.preference.print_width] =
-                                            printWidthField.value.toFloat()
-                                        it[R2.preference.print_height] =
-                                            printHeightField.value.toFloat()
-                                        it[R2.preference.trim] = trimField.value.toFloat()
-                                    }
+                                    defaults[R2.preference.sheet_width] =
+                                        sheetWidthField.value.toFloat()
+                                    defaults[R2.preference.sheet_height] =
+                                        sheetHeightField.value.toFloat()
+                                    defaults[R2.preference.print_width] =
+                                        printWidthField.value.toFloat()
+                                    defaults[R2.preference.print_height] =
+                                        printHeightField.value.toFloat()
+                                    defaults[R2.preference.trim] = trimField.value.toFloat()
 
                                     outputPane.children += ktfx.layouts.pane {
                                         gridPane {
