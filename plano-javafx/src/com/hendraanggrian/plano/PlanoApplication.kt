@@ -191,8 +191,12 @@ class PlanoApplication : Application(), Resources {
                                                 isSelected = language.fullCode ==
                                                     defaults[R2.preference.language]
                                                 onAction {
-                                                    defaults[R2.preference.language] =
-                                                        language.fullCode
+                                                    defaults {
+                                                        set(
+                                                            R2.preference.language,
+                                                            language.fullCode
+                                                        )
+                                                    }
                                                     TextDialog(
                                                         this@PlanoApplication,
                                                         this@stackPane
@@ -284,15 +288,17 @@ class PlanoApplication : Application(), Resources {
                                     }
                                 })
                                 onAction {
-                                    defaults[R2.preference.sheet_width] =
-                                        sheetWidthField.value.toFloat()
-                                    defaults[R2.preference.sheet_height] =
-                                        sheetHeightField.value.toFloat()
-                                    defaults[R2.preference.print_width] =
-                                        printWidthField.value.toFloat()
-                                    defaults[R2.preference.print_height] =
-                                        printHeightField.value.toFloat()
-                                    defaults[R2.preference.trim] = trimField.value.toFloat()
+                                    defaults {
+                                        this[R2.preference.sheet_width] =
+                                            sheetWidthField.value.toFloat()
+                                        this[R2.preference.sheet_height] =
+                                            sheetHeightField.value.toFloat()
+                                        this[R2.preference.print_width] =
+                                            printWidthField.value.toFloat()
+                                        this[R2.preference.print_height] =
+                                            printHeightField.value.toFloat()
+                                        this[R2.preference.trim] = trimField.value.toFloat()
+                                    }
 
                                     outputPane.children += ktfx.layouts.pane {
                                         gridPane {
