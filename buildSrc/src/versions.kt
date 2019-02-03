@@ -6,13 +6,13 @@ const val SDK_MIN = 14
 const val SDK_TARGET = 28
 const val BUILD_TOOLS = "28.0.3"
 
-internal const val VERSION_ANDROID_PLUGIN = "3.5.0-alpha02"
+internal const val VERSION_ANDROID_PLUGIN = "3.5.0-alpha03"
 const val VERSION_MULTIDEX = "2.0.1"
 const val VERSION_ANDROIDX = "1.1.0"
 
 const val VERSION_COMMONS_LANG = "3.8.1"
 const val VERSION_KTFX = "8.4.8"
-const val VERSION_DEFAULTS = "0.2-rc2"
+const val VERSION_DEFAULTS = "0.2-rc4"
 
 internal const val VERSION_DOKKA = "0.9.17"
 internal const val VERSION_TESTFX = "4.0.15-alpha"

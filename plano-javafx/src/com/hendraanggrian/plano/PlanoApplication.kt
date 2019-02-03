@@ -3,7 +3,7 @@ package com.hendraanggrian.plano
 import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
 import com.hendraanggrian.defaults.PropertiesFileDefaults
-import com.hendraanggrian.defaults.get
+import com.hendraanggrian.defaults.toDefaults
 import com.hendraanggrian.plano.control.DoubleField
 import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.border
@@ -134,11 +134,11 @@ class PlanoApplication : Application(), Resources {
 
     override fun init() {
         if (BuildConfig.DEBUG) {
-            Defaults.setDebug(DefaultsDebugger.Default)
+            Defaults.setDebugger(DefaultsDebugger.Default)
         }
-        defaults = Defaults[PreferencesFile()]
+        defaults = PreferencesFile().toDefaults()
         resources = Language
-            .ofFullCode(defaults[R2.preference.language] ?: Language.EN_US.fullCode)
+            .ofFullCode(defaults.getOrDefault(R2.preference.language, Language.EN_US.fullCode))
             .toResourcesBundle()
     }
 
@@ -189,7 +189,10 @@ class PlanoApplication : Application(), Resources {
                                             radioMenuItem(language.toLocale().displayLanguage) {
                                                 toggleGroup = group
                                                 isSelected = language.fullCode ==
-                                                    defaults[R2.preference.language]
+                                                    defaults.getOrDefault(
+                                                        R2.preference.language,
+                                                        Language.EN_US.fullCode
+                                                    )
                                                 onAction {
                                                     defaults {
                                                         set(
@@ -290,14 +293,16 @@ class PlanoApplication : Application(), Resources {
                                 onAction {
                                     defaults {
                                         this[R2.preference.sheet_width] =
-                                            sheetWidthField.value.toFloat()
+                                            sheetWidthField.value.toString()
                                         this[R2.preference.sheet_height] =
-                                            sheetHeightField.value.toFloat()
+                                            sheetHeightField.value.toString()
                                         this[R2.preference.print_width] =
-                                            printWidthField.value.toFloat()
+                                            printWidthField.value.toString()
                                         this[R2.preference.print_height] =
-                                            printHeightField.value.toFloat()
-                                        this[R2.preference.trim] = trimField.value.toFloat()
+                                            printHeightField.value.toString()
+                                        if (trimField.value > 0) {
+                                            this[R2.preference.trim] = trimField.value.toString()
+                                        }
                                     }
 
                                     outputPane.children += ktfx.layouts.pane {

@@ -7,7 +7,7 @@ import androidx.preference.PreferenceManager
 import com.hendraanggrian.defaults.Android
 import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
-import com.hendraanggrian.defaults.get
+import com.hendraanggrian.defaults.toDefaults
 
 class PlanoApplication : Application() {
 
@@ -19,9 +19,9 @@ class PlanoApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
-            Defaults.setDebug(DefaultsDebugger.Android)
+            Defaults.setDebugger(DefaultsDebugger.Android)
         }
-        val defaults = Defaults[PreferenceManager.getDefaultSharedPreferences(this)]
+        val defaults = PreferenceManager.getDefaultSharedPreferences(this).toDefaults()
         defaults {
             if (R2.preference.language !in this)
                 it[R2.preference.language] = Language.EN_US.fullCode

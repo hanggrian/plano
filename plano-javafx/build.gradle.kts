@@ -37,7 +37,7 @@ dependencies {
     implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
     implementation(hendraanggrian("ktfx", version = VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
-    implementation(hendraanggrian("defaults", "defaults-jvm", VERSION_DEFAULTS))
+    implementation(hendraanggrian("defaults", version = VERSION_DEFAULTS))
 
     configuration {
         invoke(ktlint())
