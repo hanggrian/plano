@@ -147,8 +147,8 @@ class PlanoApplication : Application(), Resources {
         stage.setMinSize(700.0, 400.0)
         stage.scene = scene {
             stylesheets.addAll(
-                PlanoApplication::class.java.getResource(R.style.css_plano).toExternalForm(),
-                PlanoApplication::class.java.getResource(R.style.css_plano_font).toExternalForm()
+                PlanoApplication::class.java.getResource(R.style.plano).toExternalForm(),
+                PlanoApplication::class.java.getResource(R.style.plano_font).toExternalForm()
             )
             stackPane {
                 vbox {
@@ -295,6 +295,7 @@ class PlanoApplication : Application(), Resources {
                                         this[R2.preference.sheet_width] =
                                             sheetWidthField.value.toString()
                                         this[R2.preference.sheet_height] =
+
                                             sheetHeightField.value.toString()
                                         this[R2.preference.print_width] =
                                             printWidthField.value.toString()

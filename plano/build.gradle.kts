@@ -58,7 +58,7 @@ tasks {
     named<com.hendraanggrian.generating.r.RTask>("generateR") {
         className = "R2"
         resourcesDirectory = file("res")
-        configureProperties {
+        useProperties {
             readResourceBundle = true
         }
     }
