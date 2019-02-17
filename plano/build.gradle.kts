@@ -24,7 +24,6 @@ dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
-    testImplementation(junit())
     testImplementation(truth())
 
     configuration {

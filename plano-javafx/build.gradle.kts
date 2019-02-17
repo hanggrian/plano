@@ -35,9 +35,9 @@ dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
 
     implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
-    implementation(hendraanggrian("ktfx", version = VERSION_KTFX))
+    implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
-    implementation(hendraanggrian("defaults", version = VERSION_DEFAULTS))
+    implementation(hendraanggrian("defaults", "defaults", VERSION_DEFAULTS))
 
     configuration {
         invoke(ktlint())
@@ -97,7 +97,7 @@ tasks {
 packr {
     mainClass = application.mainClassName
     executable = RELEASE_ARTIFACT
-    classpath("$buildDir/install/$RELEASE_ARTIFACT/lib")
+    classpath("$buildDir/install/$RELEASE_ARTIFACT-javafx/lib")
     resources("$projectDir/res")
     vmArgs("Xmx2G")
     macOS {

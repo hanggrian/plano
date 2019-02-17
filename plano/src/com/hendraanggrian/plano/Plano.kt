@@ -39,7 +39,8 @@ object Plano {
         printWidth: Double,
         printHeight: Double
     ): List<PrintSize> {
-        if (BuildConfig.DEBUG) println("----- ${sheetWidth}x$sheetHeight - ${printWidth}x$printHeight -----")
+        if (BuildConfig.DEBUG)
+            println("----- ${sheetWidth}x$sheetHeight - ${printWidth}x$printHeight -----")
 
         val sizes = mutableListOf<PrintSize>()
         val columns = (sheetWidth / printWidth).toInt()

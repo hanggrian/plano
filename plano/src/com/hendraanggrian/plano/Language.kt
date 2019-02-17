@@ -16,11 +16,13 @@ enum class Language(private val nativeLocale: Locale) {
 
     /** Reverse the damage done in [Locale.convertOldISOCodes]. */
     val code: String
-        get() = when (nativeLocale.language) {
-            "iw" -> "he"
-            "ji" -> "yi"
-            "in" -> "id"
-            else -> nativeLocale.language
+        get() = nativeLocale.language.let {
+            when (it) {
+                "iw" -> "he"
+                "ji" -> "yi"
+                "in" -> "id"
+                else -> it
+            }
         }
 
     val fullCode: String get() = "$code-${nativeLocale.country}"

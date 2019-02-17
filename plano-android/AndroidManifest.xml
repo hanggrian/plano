@@ -5,6 +5,7 @@
 
     <application
         android:name=".PlanoApplication"
+        android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:label="OpenPSS"
         android:supportsRtl="true"

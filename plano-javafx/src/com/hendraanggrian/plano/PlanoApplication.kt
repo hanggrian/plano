@@ -49,7 +49,6 @@ import ktfx.coroutines.snapshot
 import ktfx.double
 import ktfx.jfoenix.jfxMasonryPane
 import ktfx.jfoenix.jfxSnackbar
-import ktfx.launchApplication
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.circle
@@ -90,7 +89,7 @@ class PlanoApplication : Application(), Resources {
         val COLOR_BORDER: Color = Color.web("#c8c8c8")
 
         @JvmStatic
-        fun main(args: Array<String>) = launchApplication<PlanoApplication>(*args)
+        fun main(args: Array<String>) = ktfx.launchApplication<PlanoApplication>(*args)
     }
 
     private val scale = double(SCALE_SMALL).apply {
@@ -100,14 +99,13 @@ class PlanoApplication : Application(), Resources {
                 val gridPane = pane.children[0] as GridPane
                 val anchorPane = gridPane.children[0] as AnchorPane
                 anchorPane.children.forEachIndexed { index, node ->
-                    @Suppress("UNCHECKED_CAST")
                     when (index) {
                         0 -> {
                             node as Pane
                             pane.prefWidth = gridPane.prefWidth
                             pane.prefHeight = gridPane.prefHeight
                         }
-                        else -> {
+                        else -> @Suppress("UNCHECKED_CAST") {
                             val (x, y) = node.userData as Pair<Double, Double>
                             AnchorPane.setLeftAnchor(node, x * newValue.toDouble())
                             AnchorPane.setTopAnchor(node, y * newValue.toDouble())
@@ -120,16 +118,17 @@ class PlanoApplication : Application(), Resources {
         }
     }
 
-    val sheetWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    val sheetHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    val printWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    val printHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    val trimField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val sheetWidthField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val sheetHeightField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val printWidthField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val printHeightField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val trimField = DoubleField().apply { onAction { sendButton.fire() } }
 
-    lateinit var sendButton: Button
-    lateinit var outputPane: JFXMasonryPane
+    private lateinit var rootPane: Pane
+    private lateinit var sendButton: Button
+    private lateinit var outputPane: JFXMasonryPane
 
-    lateinit var defaults: PropertiesFileDefaults
+    private lateinit var defaults: PropertiesFileDefaults
     override lateinit var resources: ResourceBundle
 
     override fun init() {
@@ -144,13 +143,13 @@ class PlanoApplication : Application(), Resources {
 
     override fun start(stage: Stage) {
         stage.title = BuildConfig.NAME
-        stage.setMinSize(700.0, 400.0)
+        stage.setMinSize(700.0, 450.0)
         stage.scene = scene {
             stylesheets.addAll(
                 PlanoApplication::class.java.getResource(R.style.plano).toExternalForm(),
                 PlanoApplication::class.java.getResource(R.style.plano_font).toExternalForm()
             )
-            stackPane {
+            rootPane = stackPane {
                 vbox {
                     Toolbar().apply {
                         leftItems {
@@ -160,8 +159,18 @@ class PlanoApplication : Application(), Resources {
                         }
                         rightItems {
                             roundButton(24.0, R.image.ic_refresh) {
-                                tooltip(getString(R2.string.reset))
-                                onAction { outputPane.children.clear() }
+                                tooltip(getString(R2.string.clear))
+                                onAction {
+                                    val children = outputPane.children.toList()
+                                    outputPane.children.clear()
+                                    rootPane.jfxSnackbar(
+                                        getString(R2.string._clear),
+                                        DURATION_DEFAULT,
+                                        getString(R2.string.undo)
+                                    ) {
+                                        outputPane.children += children
+                                    }
+                                }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
                             roundButton(24.0, R.image.ic_fullscreen) {
@@ -348,9 +357,9 @@ class PlanoApplication : Application(), Resources {
                                                 (getString(R2.string.save)) {
                                                     onAction {
                                                         moreButton.isVisible = false
-                                                        val file =
-                                                            ResultFile()
-                                                        @Suppress("LABEL_NAME_CLASH") this@gridPane.snapshot {
+                                                        val file = ResultFile()
+                                                        @Suppress("LABEL_NAME_CLASH")
+                                                        this@gridPane.snapshot {
                                                             ImageIO.write(
                                                                 it.image.toSwingImage(),
                                                                 "png",
@@ -361,9 +370,8 @@ class PlanoApplication : Application(), Resources {
                                                             delay(500)
                                                             moreButton.isVisible = true
                                                             this@vbox.jfxSnackbar(
-                                                                getString(R2.string._save_desc).format(
-                                                                    file.name
-                                                                ),
+                                                                getString(R2.string._save_desc)
+                                                                    .format(file.name),
                                                                 DURATION_DEFAULT,
                                                                 getString(R2.string.open)
                                                             ) {
@@ -373,7 +381,14 @@ class PlanoApplication : Application(), Resources {
                                                     }
                                                 }
                                                 separatorMenuItem()
-                                                (getString(R2.string.remove)) { onAction { outputPane.children -= this@pane } }
+                                                (getString(R2.string.remove)) {
+                                                    onAction {
+                                                        outputPane.children -= this@pane
+                                                    }
+                                                }
+                                            }.apply {
+                                                @Suppress("LABEL_NAME_CLASH")
+                                                visibleProperty().bind(this@gridPane.hoverProperty())
                                             } row 2 col 1 colSpans 2
                                         }
                                     }
