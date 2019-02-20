@@ -99,19 +99,17 @@ tasks {
 packr {
     mainClass = application.mainClassName
     executable = RELEASE_ARTIFACT
-
     classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
     resources = files("res")
     minimizeJre = PackrExtension.MINIMIZE_HARD
-    vmArgs("Xmx2G")
     macOS {
         name = "$RELEASE_NAME.app"
-        icon = "${rootProject.projectDir}/art/$RELEASE_ARTIFACT.icns"
+        icon = rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns")
         bundleId = RELEASE_GROUP
     }
-    windows64 {
+    windows32 {
         name = RELEASE_NAME
-        jdk = "/Users/hendraanggrian/Desktop/Windows JDK/jdk1.8.0_202"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_202-x86"
     }
     verbose = true
     openOnDone = true
