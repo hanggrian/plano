@@ -2,17 +2,16 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
-        maven("https://dl.bintray.com/hendraanggrian/packr")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
     dependencies {
         classpath(kotlin("gradle-plugin", VERSION_KOTLIN))
         classpath(android())
         classpath(dokka())
         classpath(dokka("android"))
-        classpath(hendraanggrian("generating", "r-gradle-plugin", "0.6-rc1"))
-        classpath(hendraanggrian("generating", "buildconfig-gradle-plugin", "0.5"))
-        classpath(hendraanggrian("packr", "packr-gradle-plugin", "0.9"))
+        classpath(hendraanggrian("r-gradle-plugin", "0.1"))
+        classpath(hendraanggrian("buildconfig-gradle-plugin", "0.1"))
+        classpath(hendraanggrian("packr-gradle-plugin", "0.1"))
         classpath(shadow())
         classpath(gitPublish())
     }

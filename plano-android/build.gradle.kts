@@ -89,7 +89,7 @@ tasks {
     "check" {
         dependsOn(ktlint.get())
     }
-    register("ktlintFormat", JavaExec::class) {
+    register<JavaExec>("ktlintFormat") {
         group = "formatting"
         inputs.dir("src")
         outputs.dir("src")

@@ -124,6 +124,9 @@ class PlanoApplication : Application(), Resources {
     private val printHeightField = DoubleField().apply { onAction { sendButton.fire() } }
     private val trimField = DoubleField().apply { onAction { sendButton.fire() } }
 
+    private lateinit var refreshButton: Button
+    private lateinit var fullscreenButton: Button
+    private lateinit var settingsButton: Button
     private lateinit var rootPane: Pane
     private lateinit var sendButton: Button
     private lateinit var outputPane: JFXMasonryPane
@@ -143,7 +146,7 @@ class PlanoApplication : Application(), Resources {
 
     override fun start(stage: Stage) {
         stage.title = BuildConfig.NAME
-        stage.setMinSize(700.0, 450.0)
+        stage.setMinSize(750.0, 500.0)
         stage.scene = scene {
             stylesheets.addAll(
                 PlanoApplication::class.java.getResource(R.style.plano).toExternalForm(),
@@ -158,7 +161,7 @@ class PlanoApplication : Application(), Resources {
                             label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                         }
                         rightItems {
-                            roundButton(24.0, R.image.ic_refresh) {
+                            refreshButton = roundButton(24.0, R.image.ic_refresh) {
                                 tooltip(getString(R2.string.clear))
                                 onAction {
                                     val children = outputPane.children.toList()
@@ -170,10 +173,13 @@ class PlanoApplication : Application(), Resources {
                                     ) {
                                         outputPane.children += children
                                     }
+                                    fullscreenButton.isDisable = true
+                                    delay(DURATION_DEFAULT)
+                                    fullscreenButton.isDisable = false
                                 }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
-                            roundButton(24.0, R.image.ic_fullscreen) {
+                            fullscreenButton = roundButton(24.0, R.image.ic_fullscreen) {
                                 tooltip(getString(R2.string.toggle_scale))
                                 graphicProperty().bind(
                                     Bindings.`when`(scale eq SCALE_SMALL)
@@ -189,7 +195,7 @@ class PlanoApplication : Application(), Resources {
                                     )
                                 }
                             }
-                            roundButton(24.0, R.image.ic_settings) {
+                            settingsButton = roundButton(24.0, R.image.ic_settings) {
                                 tooltip(getString(R2.string.settings))
                                 contextMenu {
                                     menu(getString(R2.string.language)) {
@@ -197,17 +203,15 @@ class PlanoApplication : Application(), Resources {
                                         Language.values().forEach { language ->
                                             radioMenuItem(language.toLocale().displayLanguage) {
                                                 toggleGroup = group
-                                                isSelected = language.fullCode ==
-                                                    defaults.getOrDefault(
+                                                isSelected =
+                                                    language.fullCode == defaults.getOrDefault(
                                                         R2.preference.language,
                                                         Language.EN_US.fullCode
                                                     )
                                                 onAction {
                                                     defaults {
-                                                        set(
-                                                            R2.preference.language,
+                                                        this[R2.preference.language] =
                                                             language.fullCode
-                                                        )
                                                     }
                                                     TextDialog(
                                                         this@PlanoApplication,
@@ -344,7 +348,6 @@ class PlanoApplication : Application(), Resources {
                                             } row 0 rowSpans 3 col 0
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
                                             textFlow {
-                                                "1pcs " { styleClass += "bold" }
                                                 "${sheetWidthField.text}x${sheetHeightField.text}"()
                                             } row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
@@ -386,9 +389,6 @@ class PlanoApplication : Application(), Resources {
                                                         outputPane.children -= this@pane
                                                     }
                                                 }
-                                            }.apply {
-                                                @Suppress("LABEL_NAME_CLASH")
-                                                visibleProperty().bind(this@gridPane.hoverProperty())
                                             } row 2 col 1 colSpans 2
                                         }
                                     }

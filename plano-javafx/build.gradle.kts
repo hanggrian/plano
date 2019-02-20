@@ -1,3 +1,5 @@
+import com.hendraanggrian.packr.PackrExtension
+
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
@@ -5,7 +7,7 @@ plugins {
     kotlin("jvm")
     dokka()
     idea
-    id("com.hendraanggrian.generating.r")
+    id("com.hendraanggrian.r")
     id("com.hendraanggrian.packr")
     id("com.github.johnrengelman.shadow")
     application
@@ -45,7 +47,7 @@ dependencies {
 }
 
 tasks {
-    val ktlint = register("ktlint", JavaExec::class) {
+    val ktlint by registering(JavaExec::class) {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         inputs.dir("src")
         outputs.dir("src")
@@ -57,7 +59,7 @@ tasks {
     "check" {
         dependsOn(ktlint.get())
     }
-    register("ktlintFormat", JavaExec::class) {
+    register<JavaExec>("ktlintFormat") {
         group = "formatting"
         inputs.dir("src")
         outputs.dir("src")
@@ -72,8 +74,8 @@ tasks {
         doFirst { file(outputDirectory).deleteRecursively() }
     }
 
-    named<com.hendraanggrian.generating.r.RTask>("generateR") {
-        resourcesDirectory = file("res")
+    named<com.hendraanggrian.r.RTask>("generateR") {
+        resourcesDirectory = "res"
     }
 
     named<Jar>("jar") {
@@ -97,8 +99,10 @@ tasks {
 packr {
     mainClass = application.mainClassName
     executable = RELEASE_ARTIFACT
-    classpath("$buildDir/install/$RELEASE_ARTIFACT-javafx/lib")
-    resources("$projectDir/res")
+
+    classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
+    resources = files("res")
+    minimizeJre = PackrExtension.MINIMIZE_HARD
     vmArgs("Xmx2G")
     macOS {
         name = "$RELEASE_NAME.app"
@@ -107,7 +111,7 @@ packr {
     }
     windows64 {
         name = RELEASE_NAME
-        jdk = "/Volumes/hendraa-laptop2/Windows JDK/jdk1.8.0_202"
+        jdk = "/Users/hendraanggrian/Desktop/Windows JDK/jdk1.8.0_202"
     }
     verbose = true
     openOnDone = true

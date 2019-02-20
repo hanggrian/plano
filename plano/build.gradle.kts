@@ -6,8 +6,8 @@ plugins {
     kotlin("jvm")
     dokka()
     idea
-    id("com.hendraanggrian.generating.r")
-    id("com.hendraanggrian.generating.buildconfig")
+    id("com.hendraanggrian.r")
+    id("com.hendraanggrian.buildconfig")
 }
 
 sourceSets {
@@ -44,7 +44,7 @@ tasks {
     "check" {
         dependsOn(ktlint.get())
     }
-    register("ktlintFormat", JavaExec::class) {
+    register<JavaExec>("ktlintFormat") {
         group = "formatting"
         inputs.dir("src")
         outputs.dir("src")
@@ -54,15 +54,15 @@ tasks {
         args("-F", "src/**/*.kt")
     }
 
-    named<com.hendraanggrian.generating.r.RTask>("generateR") {
+    named<com.hendraanggrian.r.RTask>("generateR") {
         className = "R2"
-        resourcesDirectory = file("res")
+        resourcesDirectory = "res"
         useProperties {
             readResourceBundle = true
         }
     }
 
-    named<com.hendraanggrian.generating.buildconfig.BuildConfigTask>("generateBuildConfig") {
+    named<com.hendraanggrian.buildconfig.BuildConfigTask>("generateBuildConfig") {
         appName = RELEASE_NAME
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
