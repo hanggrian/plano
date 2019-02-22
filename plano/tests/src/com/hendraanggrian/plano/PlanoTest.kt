@@ -8,7 +8,7 @@ class PlanoTest {
 
     @Test
     fun a5inA3plus() {
-        val sizes = Plano.getPrintSizes(48.7, 32.5, 21.0, 14.85)
+        val sizes = Plano.getTrimSizes(48.7, 32.5, 21.0, 14.85)
         assertEquals(4, sizes.size)
         Truth.assertThat(sizes.map { it.x to it.y }).containsExactly(
             21.0 to 14.85,

@@ -21,11 +21,10 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven("https://dl.bintray.com/hendraanggrian/defaults/")
     }
     tasks {
         withType<Delete> {
-            delete(projectDir.resolve("out"))
+            delete(files("out"))
         }
         withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions {

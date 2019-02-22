@@ -118,11 +118,11 @@ class PlanoApplication : Application(), Resources {
         }
     }
 
-    private val sheetWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val sheetHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val printWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val printHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val trimField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val mediaWidthField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val mediaHeightField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val trimWidthField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val trimHeightField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val bleedField = DoubleField().apply { onAction { sendButton.fire() } }
 
     private lateinit var refreshButton: Button
     private lateinit var fullscreenButton: Button
@@ -161,13 +161,13 @@ class PlanoApplication : Application(), Resources {
                             label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                         }
                         rightItems {
-                            refreshButton = roundButton(24.0, R.image.ic_refresh) {
+                            refreshButton = roundButton(24.0, R.image.btn_refresh) {
                                 tooltip(getString(R2.string.clear))
                                 onAction {
                                     val children = outputPane.children.toList()
                                     outputPane.children.clear()
                                     rootPane.jfxSnackbar(
-                                        getString(R2.string._clear),
+                                        getString(R2.string.boxes_cleared),
                                         DURATION_DEFAULT,
                                         getString(R2.string.undo)
                                     ) {
@@ -179,12 +179,12 @@ class PlanoApplication : Application(), Resources {
                                 }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
-                            fullscreenButton = roundButton(24.0, R.image.ic_fullscreen) {
+                            fullscreenButton = roundButton(24.0, R.image.btn_fullscreen) {
                                 tooltip(getString(R2.string.toggle_scale))
                                 graphicProperty().bind(
                                     Bindings.`when`(scale eq SCALE_SMALL)
-                                        then ImageView(R.image.ic_fullscreen)
-                                        otherwise ImageView((R.image.ic_fullscreen_exit))
+                                        then ImageView(R.image.btn_fullscreen)
+                                        otherwise ImageView((R.image.btn_fullscreen_exit))
                                 )
                                 onAction {
                                     scale.set(
@@ -195,7 +195,7 @@ class PlanoApplication : Application(), Resources {
                                     )
                                 }
                             }
-                            settingsButton = roundButton(24.0, R.image.ic_settings) {
+                            settingsButton = roundButton(24.0, R.image.btn_settings) {
                                 tooltip(getString(R2.string.settings))
                                 contextMenu {
                                     menu(getString(R2.string.language)) {
@@ -222,7 +222,6 @@ class PlanoApplication : Application(), Resources {
                                             }
                                         }
                                     }
-                                    separatorMenuItem()
                                     (getString(R2.string.about)) {
                                         onAction {
                                             AboutDialog(
@@ -252,70 +251,70 @@ class PlanoApplication : Application(), Resources {
                             } row row++ col 0 colSpans 6
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
-                            label(getString(R2.string.sheet_size)) row row col 1
-                            sheetWidthField.apply {
-                                text = defaults[R2.preference.sheet_width]
+                            label(getString(R2.string.media_box)) row row col 1
+                            mediaWidthField.apply {
+                                text = defaults[R2.preference.media_width]
                             }() row row col 2
                             label("x") row row col 3
-                            sheetHeightField.apply {
-                                text = defaults[R2.preference.sheet_height]
+                            mediaHeightField.apply {
+                                text = defaults[R2.preference.media_height]
                             }() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
-                                sheetWidthField,
-                                sheetHeightField
+                                mediaWidthField,
+                                mediaHeightField
                             ) row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
-                            label(getString(R2.string.print_size)) row row col 1
-                            printWidthField.apply {
-                                text = defaults[R2.preference.print_width]
+                            label(getString(R2.string.trim_box)) row row col 1
+                            trimWidthField.apply {
+                                text = defaults[R2.preference.trim_width]
                             }() row row col 2
                             label("x") row row col 3
-                            printHeightField.apply {
-                                text = defaults[R2.preference.print_height]
+                            trimHeightField.apply {
+                                text = defaults[R2.preference.trim_height]
                             }() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
-                                printWidthField,
-                                printHeightField
+                                trimWidthField,
+                                trimHeightField
                             ) row row++ col 5
 
-                            label(getString(R2.string.trim)) row row col 1
-                            trimField.apply {
-                                text = defaults[R2.preference.trim]
+                            label(getString(R2.string.bleed)) row row col 1
+                            bleedField.apply {
+                                text = defaults[R2.preference.bleed]
                             }() row row++ col 2
 
                             row++
                             row++
-                            sendButton = roundButton(24.0, R.image.ic_send) {
+                            sendButton = roundButton(24.0, R.image.btn_send) {
                                 styleClass += "raised"
                                 buttonType = JFXButton.ButtonType.RAISED
                                 disableProperty().bind(buildBooleanBinding(
-                                    sheetWidthField.textProperty(),
-                                    sheetHeightField.textProperty(),
-                                    printWidthField.textProperty(),
-                                    printHeightField.textProperty()
+                                    mediaWidthField.textProperty(),
+                                    mediaHeightField.textProperty(),
+                                    trimWidthField.textProperty(),
+                                    trimHeightField.textProperty()
                                 ) {
                                     when {
-                                        sheetWidthField.value <= 0.0 || sheetHeightField.value <= 0.0 -> true
-                                        printWidthField.value <= 0.0 || printHeightField.value <= 0.0 -> true
+                                        mediaWidthField.value <= 0.0 || mediaHeightField.value <= 0.0 -> true
+                                        trimWidthField.value <= 0.0 || trimHeightField.value <= 0.0 -> true
                                         else -> false
                                     }
                                 })
                                 onAction {
                                     defaults {
-                                        this[R2.preference.sheet_width] =
-                                            sheetWidthField.value.toString()
-                                        this[R2.preference.sheet_height] =
+                                        this[R2.preference.media_width] =
+                                            mediaWidthField.value.toString()
+                                        this[R2.preference.media_height] =
 
-                                            sheetHeightField.value.toString()
-                                        this[R2.preference.print_width] =
-                                            printWidthField.value.toString()
-                                        this[R2.preference.print_height] =
-                                            printHeightField.value.toString()
-                                        if (trimField.value > 0) {
-                                            this[R2.preference.trim] = trimField.value.toString()
+                                            mediaHeightField.value.toString()
+                                        this[R2.preference.trim_width] =
+                                            trimWidthField.value.toString()
+                                        this[R2.preference.trim_height] =
+                                            trimHeightField.value.toString()
+                                        if (bleedField.value > 0) {
+                                            this[R2.preference.bleed] = bleedField.value.toString()
                                         }
                                     }
 
@@ -323,18 +322,18 @@ class PlanoApplication : Application(), Resources {
                                         gridPane {
                                             paddingAll = 10
                                             gap = 10
-                                            val printSizes = Plano.getPrintSizes(
-                                                sheetWidthField.value,
-                                                sheetHeightField.value,
-                                                printWidthField.value,
-                                                printHeightField.value,
-                                                trimField.value
+                                            val printSizes = Plano.getTrimSizes(
+                                                mediaWidthField.value,
+                                                mediaHeightField.value,
+                                                trimWidthField.value,
+                                                trimHeightField.value,
+                                                bleedField.value
                                             )
                                             anchorPane {
                                                 pane {
                                                     border(COLOR_YELLOW, 3)
-                                                    prefWidthProperty().bind(sheetWidthField.value * scale)
-                                                    prefHeightProperty().bind(sheetHeightField.value * scale)
+                                                    prefWidthProperty().bind(mediaWidthField.value * scale)
+                                                    prefHeightProperty().bind(mediaHeightField.value * scale)
                                                 }
 
                                                 printSizes.forEach { size ->
@@ -348,12 +347,12 @@ class PlanoApplication : Application(), Resources {
                                             } row 0 rowSpans 3 col 0
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
                                             textFlow {
-                                                "${sheetWidthField.text}x${sheetHeightField.text}"()
+                                                "${mediaWidthField.text}x${mediaHeightField.text}"()
                                             } row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
                                                 "${printSizes.size}pcs " { styleClass += "bold" }
-                                                "${printWidthField.text}x${printHeightField.text}"()
+                                                "${trimWidthField.text}x${trimHeightField.text}"()
                                             } row 1 col 2
                                             lateinit var moreButton: Button
                                             moreButton = moreButton {
@@ -418,6 +417,6 @@ class PlanoApplication : Application(), Resources {
         }
         stage.show()
 
-        sheetWidthField.requestFocus()
+        mediaWidthField.requestFocus()
     }
 }

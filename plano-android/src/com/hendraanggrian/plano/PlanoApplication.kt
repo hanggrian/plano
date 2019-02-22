@@ -25,11 +25,11 @@ class PlanoApplication : Application() {
         defaults {
             if (R2.preference.language !in this)
                 it[R2.preference.language] = Language.EN_US.fullCode
-            if (R2.preference.sheet_width !in this) it[R2.preference.sheet_width] = 0f
-            if (R2.preference.sheet_height !in this) it[R2.preference.sheet_height] = 0f
-            if (R2.preference.print_width !in this) it[R2.preference.print_width] = 0f
-            if (R2.preference.print_height !in this) it[R2.preference.print_height] = 0f
-            if (R2.preference.trim !in this) it[R2.preference.trim] = 0f
+            if (R2.preference.media_width !in this) it[R2.preference.media_width] = 0f
+            if (R2.preference.media_height !in this) it[R2.preference.media_height] = 0f
+            if (R2.preference.trim_width !in this) it[R2.preference.trim_width] = 0f
+            if (R2.preference.trim_height !in this) it[R2.preference.trim_height] = 0f
+            if (R2.preference.bleed !in this) it[R2.preference.bleed] = 0f
         }
     }
 }

@@ -2,24 +2,24 @@ package com.hendraanggrian.plano
 
 object Plano {
 
-    fun getPrintSizes(
-        sheetWidth: Double,
-        sheetHeight: Double,
-        printWidth: Double,
-        printHeight: Double,
-        trim: Double = 0.0
+    fun getTrimSizes(
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
+        bleed: Double = 0.0
     ): List<PrintSize> {
-        val sizes1 = calculatePrintSizes(
-            sheetWidth,
-            sheetHeight,
-            printWidth + trim,
-            printHeight + trim
+        val sizes1 = calculateTrimSizes(
+            mediaWidth,
+            mediaHeight,
+            trimWidth + bleed,
+            trimHeight + bleed
         )
-        val sizes2 = calculatePrintSizes(
-            sheetWidth,
-            sheetHeight,
-            printHeight + trim,
-            printWidth + trim
+        val sizes2 = calculateTrimSizes(
+            mediaWidth,
+            mediaHeight,
+            trimHeight + bleed,
+            trimWidth + bleed
         )
         return when {
             sizes1.size >= sizes2.size -> {
@@ -33,53 +33,53 @@ object Plano {
         }
     }
 
-    private fun calculatePrintSizes(
-        sheetWidth: Double,
-        sheetHeight: Double,
-        printWidth: Double,
-        printHeight: Double
+    private fun calculateTrimSizes(
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double
     ): List<PrintSize> {
         if (BuildConfig.DEBUG)
-            println("----- ${sheetWidth}x$sheetHeight - ${printWidth}x$printHeight -----")
+            println("----- ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight -----")
 
         val sizes = mutableListOf<PrintSize>()
-        val columns = (sheetWidth / printWidth).toInt()
-        val rows = (sheetHeight / printHeight).toInt()
+        val columns = (mediaWidth / trimWidth).toInt()
+        val rows = (mediaHeight / trimHeight).toInt()
         if (BuildConfig.DEBUG) {
             println("columns: $columns")
             println("rows: $rows")
         }
         for (column in 0 until columns) {
-            val x = column * printWidth
+            val x = column * trimWidth
             for (row in 0 until rows) {
-                val y = row * printHeight
-                sizes += PrintSize(x, y, printWidth, printHeight)
+                val y = row * trimHeight
+                sizes += PrintSize(x, y, trimWidth, trimHeight)
             }
         }
 
         var rightLeftovers = 0
-        val widthLeftover = sheetWidth - printWidth * columns
-        if (columns > 0 && widthLeftover >= printHeight) {
-            rightLeftovers = (sheetHeight / printWidth).toInt()
+        val widthLeftover = mediaWidth - trimWidth * columns
+        if (columns > 0 && widthLeftover >= trimHeight) {
+            rightLeftovers = (mediaHeight / trimWidth).toInt()
         }
         var bottomLeftovers = 0
-        val heightLeftover = sheetHeight - printHeight * rows
-        if (rows > 0 && heightLeftover >= printWidth) {
-            bottomLeftovers = (sheetWidth / printHeight).toInt()
+        val heightLeftover = mediaHeight - trimHeight * rows
+        if (rows > 0 && heightLeftover >= trimWidth) {
+            bottomLeftovers = (mediaWidth / trimHeight).toInt()
         }
         if (BuildConfig.DEBUG) {
             println("rightLeftovers: $rightLeftovers")
             println("bottomLeftovers: $bottomLeftovers")
         }
         if (rightLeftovers > bottomLeftovers) {
-            val x = printWidth * columns
+            val x = trimWidth * columns
             for (leftover in 0 until rightLeftovers) {
-                sizes += PrintSize(x, leftover * printWidth, printHeight, printWidth)
+                sizes += PrintSize(x, leftover * trimWidth, trimHeight, trimWidth)
             }
         } else if (bottomLeftovers > rightLeftovers) {
-            val y = printHeight * columns
+            val y = trimHeight * columns
             for (leftover in 0 until bottomLeftovers) {
-                sizes += PrintSize(leftover * printHeight, y, printHeight, printWidth)
+                sizes += PrintSize(leftover * trimHeight, y, trimHeight, trimWidth)
             }
         }
 

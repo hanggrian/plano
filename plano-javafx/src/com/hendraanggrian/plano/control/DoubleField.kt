@@ -24,11 +24,11 @@ class DoubleField : JFXTextField() {
             }
         })
         focusedProperty().listener { _, _, focused ->
-            if (focused && text.isNotEmpty()) {
+            if (focused && text?.isNotEmpty() == true) {
                 selectAll()
             }
         }
     }
 
-    val value: Double get() = text.toDoubleOrNull() ?: 0.0
+    val value: Double get() = text?.toDoubleOrNull() ?: 0.0
 }

@@ -64,7 +64,7 @@ fun NodeInvokable.morePaperButton(
 
 fun NodeInvokable.moreButton(
     init: ((@LayoutMarker _ContextMenu).() -> kotlin.Unit)? = null
-): Button = roundButton(16.0, R.image.ic_more) {
+): Button = roundButton(16.0, R.image.menu_more) {
     val contextMenu = contextMenu(init)
     onAction {
         if (!contextMenu.isShowing) {
@@ -92,7 +92,7 @@ private fun MenuItemInvokable.paperMenuItem(
     name: String? = null
 ) {
     val defaultTitle = "$width x $height"
-    menuItem(name?.let { "$it ($defaultTitle)" } ?: defaultTitle) {
+    menuItem(name?.let { "$it\t $defaultTitle" } ?: defaultTitle) {
         onAction {
             widthField.text = width.toString()
             heightField.text = height.toString()
