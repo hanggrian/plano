@@ -9,28 +9,14 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double,
         bleed: Double = 0.0
-    ): List<TrimSize> {
-        val traditional1 =
-            traditional(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed)
-        val traditional2 =
-            traditional(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
-        val radicalColumns1 =
-            radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed)
-        val radicalColumns2 =
-            radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
-        val radicalRows1 =
-            radicalRows(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed)
-        val radicalRows2 =
-            radicalRows(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
-        return listOf(
-            traditional1,
-            traditional2,
-            radicalColumns1,
-            radicalColumns2,
-            radicalRows1,
-            radicalRows2
-        ).maxBy { it.size }!!
-    }
+    ): List<TrimSize> = listOf(
+        traditional(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
+        traditional(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
+        radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
+        radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
+        radicalRows(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
+        radicalRows(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
+    ).maxBy { it.size }!!
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(
@@ -102,8 +88,8 @@ object Plano {
         }
 
         val sizes = mutableListOf<TrimSize>()
-        val columns = ((mediaWidth - trimHeight) / trimWidth).toInt()
-        val rows = (mediaHeight / trimHeight).toInt()
+        val columns = (mediaWidth / trimWidth).toInt()
+        val rows = ((mediaHeight - trimWidth) / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
         val flippedColumns =

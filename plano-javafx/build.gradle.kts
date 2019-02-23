@@ -1,5 +1,3 @@
-import com.hendraanggrian.packr.PackrExtension
-
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
@@ -101,7 +99,7 @@ packr {
     executable = RELEASE_ARTIFACT
     classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
     resources = files("res")
-    minimizeJre = PackrExtension.MINIMIZE_HARD
+    minimizeJre = "hard"
     macOS {
         name = "$RELEASE_NAME.app"
         icon = rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns")
