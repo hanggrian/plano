@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano
 
-data class PrintSize(
+data class TrimSize(
     val x: Double,
     val y: Double,
     val width: Double,

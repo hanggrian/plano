@@ -2,87 +2,196 @@ package com.hendraanggrian.plano
 
 object Plano {
 
+    /** Using the total of 6 possible calculations, determine the most efficient of them. */
     fun getTrimSizes(
         mediaWidth: Double,
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
         bleed: Double = 0.0
-    ): List<PrintSize> {
-        val sizes1 = calculateTrimSizes(
-            mediaWidth,
-            mediaHeight,
-            trimWidth + bleed,
-            trimHeight + bleed
-        )
-        val sizes2 = calculateTrimSizes(
-            mediaWidth,
-            mediaHeight,
-            trimHeight + bleed,
-            trimWidth + bleed
-        )
-        return when {
-            sizes1.size >= sizes2.size -> {
-                if (BuildConfig.DEBUG) println("Choice 1 chosen")
-                sizes1
-            }
-            else -> {
-                if (BuildConfig.DEBUG) println("Choice 2 chosen")
-                sizes2
-            }
-        }
+    ): List<TrimSize> {
+        val traditional1 =
+            traditional(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed)
+        val traditional2 =
+            traditional(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
+        val radicalColumns1 =
+            radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed)
+        val radicalColumns2 =
+            radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
+        val radicalRows1 =
+            radicalRows(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed)
+        val radicalRows2 =
+            radicalRows(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
+        return listOf(
+            traditional1,
+            traditional2,
+            radicalColumns1,
+            radicalColumns2,
+            radicalRows1,
+            radicalRows2
+        ).maxBy { it.size }!!
     }
 
-    private fun calculateTrimSizes(
+    /** Lay columns and rows, then search for optional leftovers. */
+    private fun traditional(
         mediaWidth: Double,
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double
-    ): List<PrintSize> {
-        if (BuildConfig.DEBUG)
-            println("----- ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight -----")
+    ): List<TrimSize> {
+        if (BuildConfig.DEBUG) {
+            println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        }
 
-        val sizes = mutableListOf<PrintSize>()
+        val sizes = mutableListOf<TrimSize>()
         val columns = (mediaWidth / trimWidth).toInt()
         val rows = (mediaHeight / trimHeight).toInt()
+        sizes.populate(columns, rows, trimWidth, trimHeight)
+
+        val flippedColumns =
+            calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        val flippedRows =
+            calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+
+        if (flippedColumns > flippedRows) {
+            sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+        } else if (flippedRows > flippedColumns) {
+            sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+        }
+
+        return sizes
+    }
+
+    /** Columns are always flipped. */
+    private fun radicalColumns(
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double
+    ): List<TrimSize> {
         if (BuildConfig.DEBUG) {
-            println("columns: $columns")
-            println("rows: $rows")
+            println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        }
+
+        val sizes = mutableListOf<TrimSize>()
+        val columns = ((mediaWidth - trimHeight) / trimWidth).toInt()
+        val rows = (mediaHeight / trimHeight).toInt()
+        sizes.populate(columns, rows, trimWidth, trimHeight)
+
+        val flippedColumns =
+            calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        val flippedRows =
+            calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+
+        sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+        if (flippedRows > 0) {
+            sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+        }
+        return sizes
+    }
+
+    /** Rows are always flipped. */
+    private fun radicalRows(
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double
+    ): List<TrimSize> {
+        if (BuildConfig.DEBUG) {
+            println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        }
+
+        val sizes = mutableListOf<TrimSize>()
+        val columns = ((mediaWidth - trimHeight) / trimWidth).toInt()
+        val rows = (mediaHeight / trimHeight).toInt()
+        sizes.populate(columns, rows, trimWidth, trimHeight)
+
+        val flippedColumns =
+            calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        val flippedRows =
+            calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+
+        sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+        if (flippedColumns > 0) {
+            sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+        }
+        return sizes
+    }
+
+    private fun MutableList<TrimSize>.populate(
+        columns: Int,
+        rows: Int,
+        trimWidth: Double,
+        trimHeight: Double
+    ) {
+        if (BuildConfig.DEBUG) {
+            println("* columns: $columns")
+            println("* rows: $rows")
         }
         for (column in 0 until columns) {
             val x = column * trimWidth
             for (row in 0 until rows) {
                 val y = row * trimHeight
-                sizes += PrintSize(x, y, trimWidth, trimHeight)
+                add(TrimSize(x, y, trimWidth, trimHeight))
             }
         }
+    }
 
-        var rightLeftovers = 0
-        val widthLeftover = mediaWidth - trimWidth * columns
-        if (columns > 0 && widthLeftover >= trimHeight) {
-            rightLeftovers = (mediaHeight / trimWidth).toInt()
-        }
-        var bottomLeftovers = 0
-        val heightLeftover = mediaHeight - trimHeight * rows
-        if (rows > 0 && heightLeftover >= trimWidth) {
-            bottomLeftovers = (mediaWidth / trimHeight).toInt()
+    private fun calculateFlippedColumns(
+        columns: Int,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double
+    ): Int {
+        var flippedColumns = 0
+        if (columns > 0 && mediaWidth - trimWidth * columns >= trimHeight) {
+            flippedColumns = (mediaHeight / trimWidth).toInt()
         }
         if (BuildConfig.DEBUG) {
-            println("rightLeftovers: $rightLeftovers")
-            println("bottomLeftovers: $bottomLeftovers")
+            println("* flippedColumns: $flippedColumns")
         }
-        if (rightLeftovers > bottomLeftovers) {
-            val x = trimWidth * columns
-            for (leftover in 0 until rightLeftovers) {
-                sizes += PrintSize(x, leftover * trimWidth, trimHeight, trimWidth)
-            }
-        } else if (bottomLeftovers > rightLeftovers) {
-            val y = trimHeight * columns
-            for (leftover in 0 until bottomLeftovers) {
-                sizes += PrintSize(leftover * trimHeight, y, trimHeight, trimWidth)
-            }
-        }
+        return flippedColumns
+    }
 
-        return sizes
+    private fun calculateFlippedRows(
+        rows: Int,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double
+    ): Int {
+        var flippedRows = 0
+        if (rows > 0 && mediaHeight - trimHeight * rows >= trimWidth) {
+            flippedRows = (mediaWidth / trimHeight).toInt()
+        }
+        if (BuildConfig.DEBUG) {
+            println("* flippedRows: $flippedRows")
+        }
+        return flippedRows
+    }
+
+    private fun MutableList<TrimSize>.populateFlippedColumns(
+        columns: Int,
+        flippedColumns: Int,
+        trimWidth: Double,
+        trimHeight: Double
+    ) {
+        val x = trimWidth * columns
+        for (leftover in 0 until flippedColumns) {
+            add(TrimSize(x, leftover * trimWidth, trimHeight, trimWidth))
+        }
+    }
+
+    private fun MutableList<TrimSize>.populateFlippedRows(
+        rows: Int,
+        flippedRows: Int,
+        trimWidth: Double,
+        trimHeight: Double
+    ) {
+        val y = trimHeight * rows
+        for (leftover in 0 until flippedRows) {
+            add(TrimSize(leftover * trimHeight, y, trimHeight, trimWidth))
+        }
     }
 }

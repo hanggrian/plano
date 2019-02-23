@@ -13,7 +13,6 @@ import com.hendraanggrian.plano.control.roundButton
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
 import com.jfoenix.controls.JFXButton
-import com.jfoenix.controls.JFXMasonryPane
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
@@ -24,6 +23,7 @@ import javafx.scene.control.ScrollPane
 import javafx.scene.control.ToggleGroup
 import javafx.scene.image.ImageView
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.FlowPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
@@ -47,12 +47,12 @@ import ktfx.coroutines.listener
 import ktfx.coroutines.onAction
 import ktfx.coroutines.snapshot
 import ktfx.double
-import ktfx.jfoenix.jfxMasonryPane
 import ktfx.jfoenix.jfxSnackbar
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.circle
 import ktfx.layouts.contextMenu
+import ktfx.layouts.flowPane
 import ktfx.layouts.gridPane
 import ktfx.layouts.hbox
 import ktfx.layouts.imageView
@@ -113,8 +113,6 @@ class PlanoApplication : Application(), Resources {
                     }
                 }
             }
-            outputPane.clearLayout()
-            outputPane.requestLayout()
         }
     }
 
@@ -129,7 +127,7 @@ class PlanoApplication : Application(), Resources {
     private lateinit var settingsButton: Button
     private lateinit var rootPane: Pane
     private lateinit var sendButton: Button
-    private lateinit var outputPane: JFXMasonryPane
+    private lateinit var outputPane: FlowPane
 
     private lateinit var defaults: PropertiesFileDefaults
     override lateinit var resources: ResourceBundle
@@ -169,10 +167,11 @@ class PlanoApplication : Application(), Resources {
                                     rootPane.jfxSnackbar(
                                         getString(R2.string.boxes_cleared),
                                         DURATION_DEFAULT,
-                                        getString(R2.string.undo)
+                                        getString(R2.string.btn_undo)
                                     ) {
                                         outputPane.children += children
                                     }
+                                    mediaWidthField.requestFocus()
                                     fullscreenButton.isDisable = true
                                     delay(DURATION_DEFAULT)
                                     fullscreenButton.isDisable = false
@@ -391,8 +390,6 @@ class PlanoApplication : Application(), Resources {
                                             } row 2 col 1 colSpans 2
                                         }
                                     }
-                                    outputPane.clearLayout()
-                                    outputPane.requestLayout()
                                 }
                             } row row col 0 colSpans 6 halign HPos.RIGHT
                         }
@@ -400,7 +397,7 @@ class PlanoApplication : Application(), Resources {
                             scrollPane {
                                 isFitToWidth = true
                                 hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
-                                outputPane = jfxMasonryPane {
+                                outputPane = flowPane {
                                     paddingAll = 10
                                     prefWidthProperty().bind(this@scrollPane.widthProperty() - 10)
                                 }
