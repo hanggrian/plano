@@ -66,6 +66,7 @@ dependencies {
     implementation(androidx("preference", version = "$VERSION_ANDROIDX-alpha01"))
     implementation(androidx("coordinatorlayout", version = "$VERSION_ANDROIDX-alpha01"))
     implementation(androidx("recyclerview", version = "$VERSION_ANDROIDX-alpha01"))
+    implementation(androidx("cardview", version = "1.0.0"))
     implementation(material("$VERSION_ANDROIDX-alpha02"))
 
     implementation("com.jakewharton:process-phoenix:2.0.0")

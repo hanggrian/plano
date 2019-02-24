@@ -321,7 +321,7 @@ class PlanoApplication : Application(), Resources {
                                         gridPane {
                                             paddingAll = 10
                                             gap = 10
-                                            val printSizes = Plano.getTrimSizes(
+                                            val sizes = Plano.getTrimSizes(
                                                 mediaWidthField.value,
                                                 mediaHeightField.value,
                                                 trimWidthField.value,
@@ -335,7 +335,7 @@ class PlanoApplication : Application(), Resources {
                                                     prefHeightProperty().bind(mediaHeightField.value * scale)
                                                 }
 
-                                                printSizes.forEach { size ->
+                                                sizes.forEach { size ->
                                                     pane {
                                                         prefWidthProperty().bind(size.width * scale)
                                                         prefHeightProperty().bind(size.height * scale)
@@ -350,7 +350,7 @@ class PlanoApplication : Application(), Resources {
                                             } row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
-                                                "${printSizes.size}pcs " { styleClass += "bold" }
+                                                "${sizes.size}pcs " { styleClass += "bold" }
                                                 "${trimWidthField.text}x${trimHeightField.text}"()
                                             } row 1 col 2
                                             lateinit var moreButton: Button
