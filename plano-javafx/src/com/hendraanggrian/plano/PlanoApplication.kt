@@ -122,7 +122,7 @@ class PlanoApplication : Application(), Resources {
     private val trimHeightField = DoubleField().apply { onAction { sendButton.fire() } }
     private val bleedField = DoubleField().apply { onAction { sendButton.fire() } }
 
-    private lateinit var refreshButton: Button
+    private lateinit var clearButton: Button
     private lateinit var fullscreenButton: Button
     private lateinit var settingsButton: Button
     private lateinit var rootPane: Pane
@@ -159,15 +159,15 @@ class PlanoApplication : Application(), Resources {
                             label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                         }
                         rightItems {
-                            refreshButton = roundButton(24.0, R.image.btn_refresh) {
+                            clearButton = roundButton(24.0, R.image.btn_clear) {
                                 tooltip(getString(R2.string.clear))
                                 onAction {
                                     val children = outputPane.children.toList()
                                     outputPane.children.clear()
                                     rootPane.jfxSnackbar(
-                                        getString(R2.string.boxes_cleared),
+                                        getString(R2.string._boxes_cleared),
                                         DURATION_DEFAULT,
-                                        getString(R2.string.btn_undo)
+                                        getString(R2.string.undo)
                                     ) {
                                         outputPane.children += children
                                     }
@@ -186,12 +186,10 @@ class PlanoApplication : Application(), Resources {
                                         otherwise ImageView((R.image.btn_fullscreen_exit))
                                 )
                                 onAction {
-                                    scale.set(
-                                        when (scale.value) {
-                                            SCALE_SMALL -> SCALE_BIG
-                                            else -> SCALE_SMALL
-                                        }
-                                    )
+                                    scale.value = when (scale.value) {
+                                        SCALE_SMALL -> SCALE_BIG
+                                        else -> SCALE_SMALL
+                                    }
                                 }
                             }
                             settingsButton = roundButton(24.0, R.image.btn_settings) {
@@ -312,8 +310,10 @@ class PlanoApplication : Application(), Resources {
                                             trimWidthField.value.toString()
                                         this[R2.preference.trim_height] =
                                             trimHeightField.value.toString()
-                                        if (bleedField.value > 0) {
-                                            this[R2.preference.bleed] = bleedField.value.toString()
+                                        when {
+                                            bleedField.value > 0 -> this[R2.preference.bleed] =
+                                                bleedField.value.toString()
+                                            else -> this -= R2.preference.bleed
                                         }
                                     }
 

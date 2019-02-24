@@ -12,12 +12,72 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="192dp"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+            app:contentScrim="?colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|bottom"
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/Widget.Plano.TextView"
+                        android:text="Media size" />
+
+                    <EditText
+                        android:id="@+id/mediaWidthText"
+                        style="@style/Widget.Plano.EditText" />
+
+                    <TextView
+                        style="@style/Widget.Plano.TextView"
+                        android:text="x" />
+
+                    <EditText
+                        android:id="@+id/mediaHeightText"
+                        style="@style/Widget.Plano.EditText" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/Widget.Plano.TextView"
+                        android:text="Trim size" />
+
+                    <EditText
+                        android:id="@+id/trimWidthText"
+                        style="@style/Widget.Plano.EditText" />
+
+                    <TextView
+                        style="@style/Widget.Plano.TextView"
+                        android:text="x" />
+
+                    <EditText
+                        android:id="@+id/trimHeightText"
+                        style="@style/Widget.Plano.EditText" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        style="@style/Widget.Plano.TextView"
+                        android:text="Bleed" />
+
+                    <EditText
+                        android:id="@+id/bleedText"
+                        style="@style/Widget.Plano.EditText" />
+                </TableRow>
+            </TableLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize" />
+                android:layout_height="?actionBarSize"
+                app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,9 +92,11 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:src="@drawable/btn_send"
         app:fabSize="normal"
         app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|end" />

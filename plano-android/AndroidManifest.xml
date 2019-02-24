@@ -5,12 +5,21 @@
 
     <application
         android:name=".PlanoApplication"
-        android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
-        android:label="OpenPSS"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Plano"
         android:supportsRtl="true"
+        android:theme="@style/Theme.Plano"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="m">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

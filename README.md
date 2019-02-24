@@ -2,11 +2,15 @@ Plano
 =====
 Efficient paper size calculator.
 
-![demo][demo]
+![Desktop][demo_javafx]
 
 Download
 --------
 Go to [releases][releases] to download Plano.
+
+Roadmap
+-------
+Android app is coming, though uncertain when.
 
 License
 -------
@@ -24,5 +28,5 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
     
-[demo]: /art/demo.png
+[demo_javafx]: /art/demo_javafx.png
 [releases]: https://github.com/hendraanggrian/plano/releases
