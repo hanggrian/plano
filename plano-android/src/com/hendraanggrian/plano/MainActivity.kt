@@ -12,11 +12,13 @@ import com.hendraanggrian.defaults.DefaultsSaver
 import com.hendraanggrian.defaults.bindDefaults
 import com.jakewharton.processphoenix.ProcessPhoenix
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.ResourceBundle
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Resources {
 
-    @BindDefault(R2.preference.language) lateinit var language: String
-    private lateinit var menu: Menu
+    override lateinit var resourceBundle: ResourceBundle
+
+    @BindDefault(R2.preference.language) var language: String = Language.EN_US.fullCode
     private lateinit var adapter: MainAdapter
     private lateinit var saver: DefaultsSaver
 
@@ -25,6 +27,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         saver = bindDefaults()
+        resourceBundle = Language.ofFullCode(language).toResourcesBundle()
+
+        mediaBoxText.text = getString(R2.string.media_box)
+        trimBoxText.text = getString(R2.string.trim_box)
+        bleedBoxText.text = getString(R2.string.bleed)
 
         adapter = MainAdapter()
         recyclerView.adapter = adapter
@@ -45,15 +52,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        Language.values().forEach {
-            val item = menu[R.id.language].subMenu
-                .add(it.toLocale().displayLanguage)
+        menu[R.id.clear].title = getString(R2.string.clear)
+        menu[R.id.language].title = getString(R2.string.language)
+        menu[R.id.about].title = getString(R2.string.about)
+        Language.values().map { it.toLocale().displayLanguage }.forEach {
+            menu[R.id.language].subMenu
+                .add(it)
                 .setCheckable(true)
-            if (item.title == language) {
-                item.isChecked = true
-            }
+                .isChecked = it == language
         }
-        this.menu = menu
         return super.onCreateOptionsMenu(menu)
     }
 

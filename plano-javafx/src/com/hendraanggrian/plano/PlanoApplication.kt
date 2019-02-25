@@ -130,14 +130,14 @@ class PlanoApplication : Application(), Resources {
     private lateinit var outputPane: FlowPane
 
     private lateinit var defaults: PropertiesFileDefaults
-    override lateinit var resources: ResourceBundle
+    override lateinit var resourceBundle: ResourceBundle
 
     override fun init() {
         if (BuildConfig.DEBUG) {
             Defaults.setDebugger(DefaultsDebugger.Default)
         }
         defaults = PreferencesFile().toDefaults()
-        resources = Language
+        resourceBundle = Language
             .ofFullCode(defaults.getOrDefault(R2.preference.language, Language.EN_US.fullCode))
             .toResourcesBundle()
     }

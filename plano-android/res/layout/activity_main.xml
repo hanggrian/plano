@@ -26,6 +26,7 @@
                 <TableRow>
 
                     <TextView
+                        android:id="@+id/mediaBoxText"
                         style="@style/Widget.Plano.TextView"
                         android:text="Media size" />
 
@@ -45,6 +46,7 @@
                 <TableRow>
 
                     <TextView
+                        android:id="@+id/trimBoxText"
                         style="@style/Widget.Plano.TextView"
                         android:text="Trim size" />
 
@@ -64,6 +66,7 @@
                 <TableRow>
 
                     <TextView
+                        android:id="@+id/bleedBoxText"
                         style="@style/Widget.Plano.TextView"
                         android:text="Bleed" />
 
