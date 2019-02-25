@@ -1,3 +1,6 @@
+[![release](https://img.shields.io/github/release/hendraanggrian/plano.svg)](https://github.com/hendraanggrian/plano/releases)
+[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
 Plano
 =====
 Efficient paper size calculator.
@@ -29,4 +32,4 @@ License
     limitations under the License.
     
 [demo_javafx]: /art/demo_javafx.png
-[releases]: https://github.com/hendraanggrian/plano/releases
+[releases]: https://github.com/hendraanggrian/plano/releasehttps://github.com/hendraanggrian/plano/releases
