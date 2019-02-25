@@ -32,6 +32,12 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
         return success
     }
 
+    override fun clear() {
+        val size = size
+        clear()
+        notifyItemRangeRemoved(0, size)
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val card = itemView.findViewById<ViewGroup>(R.id.card)
     }
