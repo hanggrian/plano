@@ -21,24 +21,26 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     override fun getItemCount(): Int = size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val sizes = get(position)
         holder.card.addView(FrameLayout(context).apply {
             layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         })
     }
 
-    override fun add(element: List<TrimSize>): Boolean {
+    operator fun plusAssign(element: List<TrimSize>) {
         val success = add(element)
-        if (success) notifyItemInserted(size - 1)
-        return success
+        if (success) {
+            notifyItemInserted(size - 1)
+        }
     }
 
-    override fun clear() {
+    fun removeAll() {
         val size = size
         clear()
         notifyItemRangeRemoved(0, size)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val card = itemView.findViewById<ViewGroup>(R.id.card)
+        val card: ViewGroup = itemView.findViewById(R.id.card)
     }
 }

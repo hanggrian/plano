@@ -2,7 +2,7 @@ package com.hendraanggrian.plano
 
 import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
-import com.hendraanggrian.defaults.PropertiesFileDefaults
+import com.hendraanggrian.defaults.PropertiesDefaults
 import com.hendraanggrian.defaults.toDefaults
 import com.hendraanggrian.plano.control.DoubleField
 import com.hendraanggrian.plano.control.Toolbar
@@ -129,7 +129,7 @@ class PlanoApplication : Application(), Resources {
     private lateinit var sendButton: Button
     private lateinit var outputPane: FlowPane
 
-    private lateinit var defaults: PropertiesFileDefaults
+    private lateinit var defaults: PropertiesDefaults
     override lateinit var resourceBundle: ResourceBundle
 
     override fun init() {
@@ -167,7 +167,7 @@ class PlanoApplication : Application(), Resources {
                                     rootPane.jfxSnackbar(
                                         getString(R2.string._boxes_cleared),
                                         DURATION_DEFAULT,
-                                        getString(R2.string.undo)
+                                        getString(R2.string.btn_undo)
                                     ) {
                                         outputPane.children += children
                                     }
@@ -317,7 +317,7 @@ class PlanoApplication : Application(), Resources {
                                         }
                                     }
 
-                                    outputPane.children += ktfx.layouts.pane {
+                                    outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
                                             paddingAll = 10
                                             gap = 10
@@ -389,7 +389,7 @@ class PlanoApplication : Application(), Resources {
                                                 }
                                             } row 2 col 1 colSpans 2
                                         }
-                                    }
+                                    })
                                 }
                             } row row col 0 colSpans 6 halign HPos.RIGHT
                         }

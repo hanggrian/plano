@@ -1,8 +1,9 @@
 package com.hendraanggrian.plano
 
+import java.io.Serializable
 import java.util.ResourceBundle
 
-interface Resources {
+interface Resources : Serializable {
 
     val resourceBundle: ResourceBundle
 

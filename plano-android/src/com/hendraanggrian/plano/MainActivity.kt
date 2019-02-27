@@ -5,20 +5,23 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import com.google.android.material.snackbar.Snackbar
+import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.defaults.BindDefault
 import com.hendraanggrian.defaults.DefaultsSaver
 import com.hendraanggrian.defaults.bindDefaults
 import com.jakewharton.processphoenix.ProcessPhoenix
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.ResourceBundle
 
 class MainActivity : AppCompatActivity(), Resources {
 
     override lateinit var resourceBundle: ResourceBundle
 
-    @BindDefault(R2.preference.language) var language: String = Language.EN_US.fullCode
+    @BindDefault(R2.preference.language) @JvmField var language: String = Language.EN_US.fullCode
     private lateinit var adapter: MainAdapter
     private lateinit var saver: DefaultsSaver
 
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity(), Resources {
                     trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
                     Snackbar.make(fab, "incomplete", Snackbar.LENGTH_SHORT).show()
                 else -> adapter.add(
-                    Plano.getTrimSizes(
+                    0, Plano.getTrimSizes(
                         mediaWidthText.value, mediaHeightText.value,
                         trimWidthText.value, trimHeightText.value, bleedText.value
                     )
@@ -52,26 +55,35 @@ class MainActivity : AppCompatActivity(), Resources {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        menu[R.id.clear].title = getString(R2.string.clear)
-        menu[R.id.language].title = getString(R2.string.language)
-        menu[R.id.about].title = getString(R2.string.about)
+        menu.findItem(R.id.clear).title = getString(R2.string.clear)
+        menu.findItem(R.id.language).title = getString(R2.string.language)
+        menu.findItem(R.id.about).title = getString(R2.string.about)
         Language.values().map { it.toLocale().displayLanguage }.forEach {
-            menu[R.id.language].subMenu
+            menu.findItem(R.id.language).subMenu
                 .add(it)
                 .setCheckable(true)
-                .isChecked = it == language
+                .isChecked = it == Language.ofFullCode(language).toLocale().displayLanguage
         }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.clear -> adapter.clear()
-            R.id.about -> AboutDialogFragment().show(supportFragmentManager, null)
+            R.id.clear -> adapter.removeAll()
+            R.id.about -> AboutDialogFragment()
+                .also {
+                    it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this)
+                }
+                .show(supportFragmentManager, null)
+            R.id.language -> {
+            }
             else -> {
-                language = item.title.toString()
+                language = Language.ofDisplay(item.title.toString()).fullCode
                 saver.save()
-                ProcessPhoenix.triggerRebirth(this)
+                GlobalScope.launch {
+                    delay(500)
+                    ProcessPhoenix.triggerRebirth(this@MainActivity)
+                }
             }
         }
         return super.onOptionsItemSelected(item)

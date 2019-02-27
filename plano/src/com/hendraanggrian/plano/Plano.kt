@@ -67,7 +67,7 @@ object Plano {
         val flippedColumns =
             calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
         val flippedRows =
-            calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+            calculateFlippedRows(rows, mediaWidth - trimHeight, mediaHeight, trimWidth, trimHeight)
 
         sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
         if (flippedRows > 0) {
@@ -93,7 +93,7 @@ object Plano {
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
         val flippedColumns =
-            calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+            calculateFlippedColumns(columns, mediaWidth, mediaHeight - trimWidth, trimWidth, trimHeight)
         val flippedRows =
             calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
 
@@ -118,7 +118,7 @@ object Plano {
             val x = column * trimWidth
             for (row in 0 until rows) {
                 val y = row * trimHeight
-                add(TrimSize(x, y, trimWidth, trimHeight))
+                this += TrimSize(x, y, trimWidth, trimHeight)
             }
         }
     }
@@ -165,7 +165,7 @@ object Plano {
     ) {
         val x = trimWidth * columns
         for (leftover in 0 until flippedColumns) {
-            add(TrimSize(x, leftover * trimWidth, trimHeight, trimWidth))
+            this += TrimSize(x, leftover * trimWidth, trimHeight, trimWidth)
         }
     }
 
@@ -177,7 +177,7 @@ object Plano {
     ) {
         val y = trimHeight * rows
         for (leftover in 0 until flippedRows) {
-            add(TrimSize(leftover * trimHeight, y, trimHeight, trimWidth))
+            this += TrimSize(leftover * trimHeight, y, trimHeight, trimWidth)
         }
     }
 }

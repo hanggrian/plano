@@ -2,6 +2,7 @@ plugins {
     android("application")
     kotlin("android")
     kotlin("android.extensions")
+    kotlin("kapt")
     dokka("android")
 }
 
@@ -59,6 +60,9 @@ dependencies {
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
     implementation(hendraanggrian("defaults", "defaults-android", VERSION_DEFAULTS))
+    kapt(hendraanggrian("defaults", "defaults-compiler", VERSION_DEFAULTS))
+    implementation(hendraanggrian("bundler", "bundler", VERSION_BUNDLER))
+    kapt(hendraanggrian("bundler", "bundler-compiler", VERSION_BUNDLER))
 
     implementation(androidx("multidex", version = VERSION_MULTIDEX))
     implementation(androidx("core", "core-ktx", "$VERSION_ANDROIDX-alpha03"))

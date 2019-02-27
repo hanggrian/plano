@@ -7,13 +7,16 @@
         android:id="@+id/clear"
         android:icon="@drawable/btn_clear"
         android:title="Clear"
+        android:visible="false"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/language"
         android:title="Language"
-        app:showAsAction="never"/>
+        app:showAsAction="never">
+        <menu />
+    </item>
 
     <item
         android:id="@+id/about"

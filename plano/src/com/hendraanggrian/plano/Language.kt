@@ -43,6 +43,9 @@ enum class Language(private val nativeLocale: Locale) {
 
     companion object {
 
+        fun ofDisplay(name: String): Language =
+            find { it.toLocale().displayLanguage == name }
+
         fun ofCode(code: String): Language =
             find { it.code == code }
 
