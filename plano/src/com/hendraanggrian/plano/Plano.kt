@@ -3,20 +3,24 @@ package com.hendraanggrian.plano
 object Plano {
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
-    fun getTrimSizes(
+    fun calculate(
         mediaWidth: Double,
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
         bleed: Double = 0.0
-    ): List<TrimSize> = listOf(
-        traditional(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
-        traditional(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
-        radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
-        radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
-        radicalRows(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
-        radicalRows(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
-    ).maxBy { it.size }!!
+    ): MediaSize = MediaSize(
+        mediaWidth,
+        mediaHeight,
+        listOf(
+            traditional(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
+            traditional(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
+            radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
+            radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
+            radicalRows(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
+            radicalRows(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
+        ).maxBy { it.size }!!
+    )
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(
@@ -93,7 +97,13 @@ object Plano {
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
         val flippedColumns =
-            calculateFlippedColumns(columns, mediaWidth, mediaHeight - trimWidth, trimWidth, trimHeight)
+            calculateFlippedColumns(
+                columns,
+                mediaWidth,
+                mediaHeight - trimWidth,
+                trimWidth,
+                trimHeight
+            )
         val flippedRows =
             calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
 

@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity(), Resources {
     override lateinit var resourceBundle: ResourceBundle
 
     @BindDefault(R2.preference.language) @JvmField var language: String = Language.EN_US.fullCode
+    private lateinit var menu: Menu
     private lateinit var adapter: MainAdapter
     private lateinit var saver: DefaultsSaver
 
@@ -43,18 +44,23 @@ class MainActivity : AppCompatActivity(), Resources {
                 mediaWidthText.value <= 0 || mediaHeightText.value <= 0 ||
                     trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
                     Snackbar.make(fab, "incomplete", Snackbar.LENGTH_SHORT).show()
-                else -> adapter.add(
-                    0, Plano.getTrimSizes(
-                        mediaWidthText.value, mediaHeightText.value,
-                        trimWidthText.value, trimHeightText.value, bleedText.value
+                else -> {
+                    adapter.add(
+                        0, Plano.calculate(
+                            mediaWidthText.value, mediaHeightText.value,
+                            trimWidthText.value, trimHeightText.value, bleedText.value
+                        )
                     )
-                )
+                    adapter.notifyDataSetChanged()
+                    menu.findItem(R.id.clear).run { if (!isVisible) isVisible = true }
+                }
             }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
+        this.menu = menu
         menu.findItem(R.id.clear).title = getString(R2.string.clear)
         menu.findItem(R.id.language).title = getString(R2.string.language)
         menu.findItem(R.id.about).title = getString(R2.string.about)
@@ -69,7 +75,14 @@ class MainActivity : AppCompatActivity(), Resources {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.clear -> adapter.removeAll()
+            R.id.clear -> {
+                val size = adapter.size
+                adapter.clear()
+                adapter.notifyItemRangeRemoved(0, size)
+                item.isVisible = false
+                mediaWidthText.requestFocus()
+                appBar.setExpanded(true)
+            }
             R.id.about -> AboutDialogFragment()
                 .also {
                     it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this)

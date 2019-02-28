@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.FrameLayout
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
-    MutableList<List<TrimSize>> by arrayListOf() {
+    MutableList<MediaSize> by arrayListOf() {
 
     private lateinit var context: Context
 
@@ -21,23 +24,32 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     override fun getItemCount(): Int = size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val sizes = get(position)
-        holder.card.addView(FrameLayout(context).apply {
-            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        val size = get(position)
+        holder.card.addView(RelativeLayout(context).also { media ->
+            ViewCompat.setBackground(media, ContextCompat.getDrawable(context, R.drawable.bg_media))
+            media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+            media.post {
+                media.layoutParams.height = (media.width * size.height / size.width).toInt()
+                media.requestLayout()
+                size.trimSizes.forEach { trimSize ->
+                    media.addView(View(context).also { trim ->
+                        ViewCompat.setBackground(
+                            trim,
+                            ContextCompat.getDrawable(context, R.drawable.bg_trim)
+                        )
+                        trim.layoutParams =
+                            RelativeLayout.LayoutParams(
+                                (trimSize.width).toInt(),
+                                (trimSize.height).toInt()
+                            ).apply {
+                                addRule(RelativeLayout.ALIGN_PARENT_TOP or RelativeLayout.ALIGN_PARENT_LEFT)
+                                leftMargin = trimSize.x.toInt()
+                                topMargin = trimSize.y.toInt()
+                            }
+                    })
+                }
+            }
         })
-    }
-
-    operator fun plusAssign(element: List<TrimSize>) {
-        val success = add(element)
-        if (success) {
-            notifyItemInserted(size - 1)
-        }
-    }
-
-    fun removeAll() {
-        val size = size
-        clear()
-        notifyItemRangeRemoved(0, size)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
