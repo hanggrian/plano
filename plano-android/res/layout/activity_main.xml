@@ -23,7 +23,11 @@
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/medium">
 
-                <TableRow>
+                <TableRow android:gravity="center_vertical">
+
+                    <ImageView
+                        style="@style/Circle"
+                        android:src="@drawable/ci_media" />
 
                     <TextView
                         android:id="@+id/mediaBoxText"
@@ -43,7 +47,11 @@
                         style="@style/Widget.Plano.EditText" />
                 </TableRow>
 
-                <TableRow>
+                <TableRow android:gravity="center_vertical">
+
+                    <ImageView
+                        style="@style/Circle"
+                        android:src="@drawable/ci_trim" />
 
                     <TextView
                         android:id="@+id/trimBoxText"
@@ -64,6 +72,8 @@
                 </TableRow>
 
                 <TableRow>
+
+                    <Space />
 
                     <TextView
                         android:id="@+id/bleedBoxText"
@@ -92,7 +102,9 @@
         android:paddingTop="@dimen/small"
         android:paddingBottom="@dimen/small"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:reverseLayout="true"
+        app:stackFromEnd="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

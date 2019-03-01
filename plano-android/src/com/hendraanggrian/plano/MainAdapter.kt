@@ -25,6 +25,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mediaSize = get(position)
+        holder.card.removeAllViews()
         holder.card.addView(RelativeLayout(context).also { media ->
             ViewCompat.setBackground(media, ContextCompat.getDrawable(context, R.drawable.bg_media))
             media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)

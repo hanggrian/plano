@@ -7,7 +7,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.defaults.BindDefault
@@ -40,10 +39,6 @@ class MainActivity : AppCompatActivity(), Resources {
         trimBoxText.text = getString(R2.string.trim_box)
         bleedBoxText.text = getString(R2.string.bleed)
 
-        (recyclerView.layoutManager as LinearLayoutManager).run {
-            reverseLayout = true
-            stackFromEnd = true
-        }
         adapter = MainAdapter()
         recyclerView.adapter = adapter
         fab.setOnClickListener {

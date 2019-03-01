@@ -5,7 +5,8 @@ Plano
 =====
 Efficient paper size calculator.
 
-![Desktop][demo_javafx]
+![Desktop][ss_javafx]
+![Mobile][ss_android]
 
 Download
 --------
@@ -31,5 +32,6 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
     
-[demo_javafx]: /art/demo_javafx.png
+[ss_javafx]: /art/ss_javafx.png
+[ss_android]: /art/ss_android.png
 [releases]: https://github.com/hendraanggrian/plano/releasehttps://github.com/hendraanggrian/plano/releases
