@@ -23,5 +23,5 @@
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="android:inputType">numberDecimal</item>
-    </style>/
+    </style>
 </resources>

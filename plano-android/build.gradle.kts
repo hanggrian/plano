@@ -59,6 +59,7 @@ dependencies {
     api(project(":plano"))
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
+    implementation(hendraanggrian("appcompat", "dispatcher", VERSION_DISPATCHER))
     implementation(hendraanggrian("defaults", "defaults-android", VERSION_DEFAULTS))
     kapt(hendraanggrian("defaults", "defaults-compiler", VERSION_DEFAULTS))
     implementation(hendraanggrian("bundler", "bundler", VERSION_BUNDLER))

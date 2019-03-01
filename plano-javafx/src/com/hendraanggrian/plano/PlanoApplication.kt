@@ -362,9 +362,7 @@ class PlanoApplication : Application(), Resources {
                                                         @Suppress("LABEL_NAME_CLASH")
                                                         this@gridPane.snapshot {
                                                             ImageIO.write(
-                                                                it.image.toSwingImage(),
-                                                                "png",
-                                                                file
+                                                                it.image.toSwingImage(), "png", file
                                                             )
                                                         }
                                                         GlobalScope.launch(Dispatchers.JavaFx) {

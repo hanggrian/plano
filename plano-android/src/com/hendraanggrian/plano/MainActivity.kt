@@ -3,8 +3,11 @@ package com.hendraanggrian.plano
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.defaults.BindDefault
@@ -37,21 +40,30 @@ class MainActivity : AppCompatActivity(), Resources {
         trimBoxText.text = getString(R2.string.trim_box)
         bleedBoxText.text = getString(R2.string.bleed)
 
+        (recyclerView.layoutManager as LinearLayoutManager).run {
+            reverseLayout = true
+            stackFromEnd = true
+        }
         adapter = MainAdapter()
         recyclerView.adapter = adapter
         fab.setOnClickListener {
             when {
                 mediaWidthText.value <= 0 || mediaHeightText.value <= 0 ||
                     trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
-                    Snackbar.make(fab, "incomplete", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        fab, resourceBundle.getString(R2.string._incomplete), Snackbar.LENGTH_SHORT
+                    ).show()
                 else -> {
+                    getSystemService<InputMethodManager>()!!
+                        .hideSoftInputFromWindow(fab.applicationWindowToken, 0)
                     adapter.add(
-                        0, Plano.calculate(
+                        Plano.calculate(
                             mediaWidthText.value, mediaHeightText.value,
                             trimWidthText.value, trimHeightText.value, bleedText.value
                         )
                     )
-                    adapter.notifyDataSetChanged()
+                    adapter.notifyItemInserted(adapter.size - 1)
+                    recyclerView.scrollToPosition(adapter.size - 1)
                     menu.findItem(R.id.clear).run { if (!isVisible) isVisible = true }
                 }
             }

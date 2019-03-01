@@ -24,32 +24,40 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     override fun getItemCount(): Int = size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val size = get(position)
+        val mediaSize = get(position)
         holder.card.addView(RelativeLayout(context).also { media ->
             ViewCompat.setBackground(media, ContextCompat.getDrawable(context, R.drawable.bg_media))
             media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             media.post {
-                media.layoutParams.height = (media.width * size.height / size.width).toInt()
+                media.layoutParams.height =
+                    (media.width * mediaSize.height / mediaSize.width).toInt()
                 media.requestLayout()
-                size.trimSizes.forEach { trimSize ->
-                    media.addView(View(context).also { trim ->
-                        ViewCompat.setBackground(
-                            trim,
-                            ContextCompat.getDrawable(context, R.drawable.bg_trim)
-                        )
-                        trim.layoutParams =
-                            RelativeLayout.LayoutParams(
-                                (trimSize.width).toInt(),
-                                (trimSize.height).toInt()
+                media.post {
+                    mediaSize.trimSizes.forEach { trimSize ->
+                        media.addView(View(context).also { trim ->
+                            ViewCompat.setBackground(
+                                trim, ContextCompat.getDrawable(context, R.drawable.bg_trim)
+                            )
+                            val widthRatio = media.width / mediaSize.width
+                            val heightRatio = media.height / mediaSize.height
+                            trim.layoutParams = RelativeLayout.LayoutParams(
+                                (trimSize.width * widthRatio).toInt(),
+                                (trimSize.height * heightRatio).toInt()
                             ).apply {
-                                addRule(RelativeLayout.ALIGN_PARENT_TOP or RelativeLayout.ALIGN_PARENT_LEFT)
-                                leftMargin = trimSize.x.toInt()
-                                topMargin = trimSize.y.toInt()
+                                addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                                addRule(RelativeLayout.ALIGN_PARENT_LEFT)
+                                leftMargin = (trimSize.x * widthRatio).toInt()
+                                topMargin = (trimSize.y * heightRatio).toInt()
                             }
-                    })
+                        })
+                    }
                 }
             }
         })
+        holder.card.isDrawingCacheEnabled = true
+        holder.card.setOnLongClickListener {
+            false
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

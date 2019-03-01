@@ -29,7 +29,6 @@
 }
 .jfx-snackbar-action {
     -fx-text-fill: -accent;
-    -fx-font-family: "Roboto Bold";
 }
 
 .jfx-dialog-overlay-pane {
