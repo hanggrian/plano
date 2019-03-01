@@ -9,6 +9,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
@@ -25,7 +26,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mediaSize = get(position)
-        holder.card.removeAllViews()
+        if (holder.card.isNotEmpty()) holder.card.removeAllViews()
         holder.card.addView(RelativeLayout(context).also { media ->
             ViewCompat.setBackground(media, ContextCompat.getDrawable(context, R.drawable.bg_media))
             media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
@@ -55,10 +56,6 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
                 }
             }
         })
-        holder.card.isDrawingCacheEnabled = true
-        holder.card.setOnLongClickListener {
-            false
-        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

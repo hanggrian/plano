@@ -16,10 +16,6 @@ Go to [releases][releases] to download Plano in several options:
  * dmg - macOS app, mount and move it to your `Applications` directory.
  * jar - standalone Java app.
 
-Roadmap
--------
-Android app is coming, though uncertain when.
-
 License
 -------
     Copyright 2019 Hendra Anggrian

@@ -304,7 +304,6 @@ class PlanoApplication : Application(), Resources {
                                         this[R2.preference.media_width] =
                                             mediaWidthField.value.toString()
                                         this[R2.preference.media_height] =
-
                                             mediaHeightField.value.toString()
                                         this[R2.preference.trim_width] =
                                             trimWidthField.value.toString()
