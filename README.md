@@ -5,12 +5,16 @@ Plano
 =====
 Efficient paper size calculator.
 
-![Desktop][ss_javafx]
-![Mobile][ss_android]
+![JavaFX][ss_javafx]
+![Android][ss_android]
 
 Download
 --------
-Go to [releases][releases] to download Plano.
+Go to [releases][releases] to download Plano in several options:
+ * apk - Android debug app, go to Setting > Security > check `Unknown sources` to install. 
+ * exe - Windows 32-bit app archive, unpack in your `Program Files` directory.
+ * dmg - macOS app, mount and move it to your `Applications` directory.
+ * jar - standalone Java app.
 
 Roadmap
 -------
