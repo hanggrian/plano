@@ -9,15 +9,19 @@ import ktfx.jfoenix._JFXDialog
 import ktfx.jfoenix.jfxButton
 import ktfx.layouts._VBox
 import ktfx.layouts.buttonBar
+import ktfx.layouts.label
 import ktfx.layouts.vbox
 
-abstract class Dialog(resources: Resources, container: StackPane) :
-    _JFXDialog(container, DialogTransition.CENTER, true),
-    Resources by resources {
+abstract class Dialog(
+    resources: Resources,
+    container: StackPane,
+    title: String
+) : _JFXDialog(container, DialogTransition.CENTER, true), Resources by resources {
 
     init {
         vbox(20.0) {
             paddingAll = 20
+            label(title) { styleClass.addAll("bold", "display") }
             onCreateContent()
             buttonBar {
                 jfxButton(getString(R2.string.close)) {

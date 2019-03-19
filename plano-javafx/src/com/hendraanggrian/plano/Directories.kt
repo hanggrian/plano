@@ -5,16 +5,6 @@ import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-private val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm")
-
-object MainDirectory : Directory(SystemUtils.USER_HOME)
-
-object DesktopDirectory : Directory(MainDirectory, "Desktop")
-
-class PreferencesFile : File(MainDirectory, ".${BuildConfig.ARTIFACT}")
-
-class ResultFile : File(DesktopDirectory, "${FORMATTER.format(LocalDateTime.now())}.png")
-
 sealed class Directory : File {
 
     constructor(parent: String) : super(parent)
@@ -27,3 +17,14 @@ sealed class Directory : File {
         @Suppress("LeakingThis") mkdirs()
     }
 }
+
+object MainDirectory : Directory(SystemUtils.USER_HOME)
+
+object DesktopDirectory : Directory(MainDirectory, "Desktop")
+
+class PreferencesFile : File(MainDirectory, ".${BuildConfig.ARTIFACT}")
+
+class ResultFile : File(
+    DesktopDirectory,
+    "${DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm").format(LocalDateTime.now())}.png"
+)

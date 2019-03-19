@@ -15,7 +15,7 @@ import com.hendraanggrian.bundler.Extra
 
 class AboutDialogFragment : DialogFragment() {
 
-    @Extra lateinit var resources: Resources
+    @Extra lateinit var resources: Resources // need extra key or else will crash
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Bundler.bindExtras(this)

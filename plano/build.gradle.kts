@@ -4,7 +4,6 @@ version = RELEASE_VERSION
 plugins {
     `java-library`
     kotlin("jvm")
-    dokka()
     idea
     id("com.hendraanggrian.r")
     id("com.hendraanggrian.buildconfig")
@@ -22,6 +21,10 @@ val configuration = configurations.register("ktlint")
 
 dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
+    api(kotlinx("coroutines-core", VERSION_COROUTINES))
+    api(ktor("client-okhttp"))
+    api(ktor("client-gson"))
+    api(apache("maven-artifact", VERSION_MAVEN))
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
     testImplementation(truth())
@@ -66,11 +69,7 @@ tasks {
         appName = RELEASE_NAME
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
-        website = RELEASE_WEBSITE
-    }
-
-    named<org.jetbrains.dokka.gradle.DokkaTask>("dokka") {
-        outputDirectory = "$buildDir/docs"
-        doFirst { file(outputDirectory).deleteRecursively() }
+        website = RELEASE_HOMEPAGE
+        field("USER", RELEASE_USER)
     }
 }

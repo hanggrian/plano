@@ -4,12 +4,12 @@ import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
 import com.hendraanggrian.defaults.PropertiesDefaults
 import com.hendraanggrian.defaults.toDefaults
-import com.hendraanggrian.plano.control.DoubleField
-import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.border
 import com.hendraanggrian.plano.control.moreButton
 import com.hendraanggrian.plano.control.morePaperButton
 import com.hendraanggrian.plano.control.roundButton
+import com.hendraanggrian.plano.control.sizeField
+import com.hendraanggrian.plano.control.toolbar
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
 import com.jfoenix.controls.JFXButton
@@ -34,6 +34,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ktfx.bindings.buildBooleanBinding
 import ktfx.bindings.eq
 import ktfx.bindings.minus
@@ -72,14 +73,17 @@ import ktfx.layouts.vbox
 import ktfx.runLater
 import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
+import org.apache.commons.lang3.SystemUtils
 import java.awt.Desktop
+import java.net.URI
 import java.util.ResourceBundle
 import javax.imageio.ImageIO
 
 class PlanoApplication : Application(), Resources {
 
     companion object {
-        const val DURATION_DEFAULT = 3000L
+        const val DURATION_SHORT = 3000L
+        const val DURATION_LONG = 6000L
 
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
@@ -116,11 +120,11 @@ class PlanoApplication : Application(), Resources {
         }
     }
 
-    private val mediaWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val mediaHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val trimWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val trimHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val bleedField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val mediaWidthField = sizeField { onAction { sendButton.fire() } }
+    private val mediaHeightField = sizeField { onAction { sendButton.fire() } }
+    private val trimWidthField = sizeField { onAction { sendButton.fire() } }
+    private val trimHeightField = sizeField { onAction { sendButton.fire() } }
+    private val bleedField = sizeField { onAction { sendButton.fire() } }
 
     private lateinit var clearButton: Button
     private lateinit var fullscreenButton: Button
@@ -152,7 +156,7 @@ class PlanoApplication : Application(), Resources {
             )
             rootPane = stackPane {
                 vbox {
-                    Toolbar().apply {
+                    toolbar {
                         leftItems {
                             imageView(R.image.ic_launcher)
                             region { prefWidth = 12.0 }
@@ -166,14 +170,14 @@ class PlanoApplication : Application(), Resources {
                                     outputPane.children.clear()
                                     rootPane.jfxSnackbar(
                                         getString(R2.string._boxes_cleared),
-                                        DURATION_DEFAULT,
+                                        DURATION_SHORT,
                                         getString(R2.string.btn_undo)
                                     ) {
                                         outputPane.children += children
                                     }
                                     mediaWidthField.requestFocus()
                                     fullscreenButton.isDisable = true
-                                    delay(DURATION_DEFAULT)
+                                    delay(DURATION_SHORT)
                                     fullscreenButton.isDisable = false
                                 }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
@@ -219,6 +223,38 @@ class PlanoApplication : Application(), Resources {
                                             }
                                         }
                                     }
+                                    separatorMenuItem()
+                                    (getString(R2.string.check_for_update)) {
+                                        onAction {
+                                            val release = withContext(Dispatchers.IO) {
+                                                GitHubApi.getLatestRelease()
+                                            }
+                                            when {
+                                                release.isNewerThan(BuildConfig.VERSION) ->
+                                                    rootPane.jfxSnackbar(
+                                                        getString(R2.string._update_available)
+                                                            .format(BuildConfig.VERSION),
+                                                        DURATION_LONG,
+                                                        getString(R2.string.btn_download)
+                                                    ) {
+                                                        Desktop.getDesktop()
+                                                            .browse(URI(release.assets.first {
+                                                                when {
+                                                                    SystemUtils.IS_OS_MAC ->
+                                                                        it.name.endsWith("dmg")
+                                                                    SystemUtils.IS_OS_WINDOWS ->
+                                                                        it.name.endsWith("exe")
+                                                                    else -> it.name.endsWith("jar")
+                                                                }
+                                                            }.downloadUrl))
+                                                    }
+                                                else -> rootPane.jfxSnackbar(
+                                                    getString(R2.string._update_unavailable),
+                                                    DURATION_LONG
+                                                )
+                                            }
+                                        }
+                                    }
                                     (getString(R2.string.about)) {
                                         onAction {
                                             AboutDialog(
@@ -235,7 +271,7 @@ class PlanoApplication : Application(), Resources {
                                 }
                             }
                         }
-                    }()
+                    }
                     hbox {
                         gridPane {
                             border(COLOR_BORDER)
@@ -367,11 +403,11 @@ class PlanoApplication : Application(), Resources {
                                                         GlobalScope.launch(Dispatchers.JavaFx) {
                                                             delay(500)
                                                             moreButton.isVisible = true
-                                                            this@vbox.jfxSnackbar(
+                                                            rootPane.jfxSnackbar(
                                                                 getString(R2.string._save_desc)
                                                                     .format(file.name),
-                                                                DURATION_DEFAULT,
-                                                                getString(R2.string.open)
+                                                                DURATION_SHORT,
+                                                                getString(R2.string.btn_open)
                                                             ) {
                                                                 Desktop.getDesktop().open(file)
                                                             }

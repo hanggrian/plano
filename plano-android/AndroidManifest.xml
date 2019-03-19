@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hendraanggrian.plano">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".PlanoApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Plano"
         android:roundIcon="@mipmap/ic_launcher_rounded"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.Plano"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"

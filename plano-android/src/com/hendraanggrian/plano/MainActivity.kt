@@ -1,5 +1,7 @@
 package com.hendraanggrian.plano
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -7,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import com.google.android.material.snackbar.Snackbar
 import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.defaults.BindDefault
 import com.hendraanggrian.defaults.DefaultsSaver
@@ -16,16 +17,18 @@ import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.defaults.toDefaults
 import com.jakewharton.processphoenix.ProcessPhoenix
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.ResourceBundle
 
 class MainActivity : AppCompatActivity(), Resources {
 
     override lateinit var resourceBundle: ResourceBundle
 
-    @BindDefault(R2.preference.language) @JvmField var language: String = Language.EN_US.fullCode
+    @BindDefault @JvmField var language: String = Language.EN_US.fullCode
     private lateinit var menu: Menu
     private lateinit var adapter: MainAdapter
 
@@ -56,9 +59,7 @@ class MainActivity : AppCompatActivity(), Resources {
             when {
                 mediaWidthText.value <= 0 || mediaHeightText.value <= 0 ||
                     trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
-                    Snackbar.make(
-                        fab, resourceBundle.getString(R2.string._incomplete), Snackbar.LENGTH_SHORT
-                    ).show()
+                    recyclerView.snackbar(resourceBundle.getString(R2.string._incomplete))
                 else -> {
                     defaults {
                         it[R2.preference.media_width] = mediaWidthText.text.toString()
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity(), Resources {
         this.menu = menu
         menu.findItem(R.id.clear).title = getString(R2.string.clear)
         menu.findItem(R.id.language).title = getString(R2.string.language)
+        menu.findItem(R.id.checkForUpdate).title = getString(R2.string.check_for_update)
         menu.findItem(R.id.about).title = getString(R2.string.about)
         Language.values().map { it.toLocale().displayLanguage }.forEach {
             menu.findItem(R.id.language).subMenu
@@ -111,27 +113,48 @@ class MainActivity : AppCompatActivity(), Resources {
                 adapter.clear()
                 adapter.notifyItemRangeRemoved(0, size)
 
-                Snackbar
-                    .make(recyclerView, getString(R2.string._boxes_cleared), Snackbar.LENGTH_SHORT)
-                    .setAction(getString(R2.string.btn_undo)) {
-                        val start = adapter.size + 1
-                        adapter.addAll(temp)
-                        adapter.notifyItemRangeInserted(start, adapter.size)
-                        item.isVisible = true
-                    }
-                    .show()
+                recyclerView.snackbar(
+                    getString(R2.string._boxes_cleared),
+                    getString(R2.string.btn_undo)
+                ) {
+                    val start = adapter.size + 1
+                    adapter.addAll(temp)
+                    adapter.notifyItemRangeInserted(start, adapter.size)
+                    item.isVisible = true
+                }
 
                 item.isVisible = false
                 mediaWidthText.requestFocus()
                 appBar.setExpanded(true)
+            }
+            R.id.language -> {
+            }
+            R.id.checkForUpdate -> GlobalScope.launch(Dispatchers.Main) {
+                val release = withContext(Dispatchers.IO) {
+                    GitHubApi.getLatestRelease()
+                }
+                when {
+                    release.isNewerThan(BuildConfig.VERSION) -> recyclerView.longSnackbar(
+                        getString(R2.string._update_available).format(BuildConfig.VERSION),
+                        getString(R2.string.btn_download)
+                    ) {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(release.assets.first {
+                                    it.name.endsWith("apk")
+                                }.downloadUrl)
+                            )
+                        )
+                    }
+                    else -> recyclerView.longSnackbar(getString(R2.string._update_unavailable))
+                }
             }
             R.id.about -> AboutDialogFragment()
                 .also {
                     it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this)
                 }
                 .show(supportFragmentManager, null)
-            R.id.language -> {
-            }
             else -> {
                 language = Language.ofDisplay(item.title.toString()).fullCode
                 saver.save()

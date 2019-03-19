@@ -30,5 +30,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
         <item name="android:inputType">numberDecimal</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:selectAllOnFocus">true</item>
     </style>
 </resources>

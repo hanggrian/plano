@@ -3,12 +3,10 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    dokka("android")
 }
 
 android {
     compileSdkVersion(SDK_TARGET)
-    buildToolsVersion(BUILD_TOOLS)
     defaultConfig {
         minSdkVersion(SDK_MIN)
         targetSdkVersion(SDK_TARGET)
@@ -35,12 +33,12 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
     applicationVariants.all {
-        generateBuildConfigProvider?.configure {
+        generateBuildConfigProvider?.invoke {
             enabled = false
         }
     }
@@ -50,6 +48,9 @@ android {
     packagingOptions {
         exclude("META-INF/NOTICE.txt")
         exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/kotlinx-io.kotlin_module")
+        exclude("META-INF/kotlinx-coroutines-io.kotlin_module")
+        exclude("META-INF/atomicfu.kotlin_module")
     }
 }
 
@@ -102,10 +103,5 @@ tasks {
         classpath(configuration.get())
         main = "com.github.shyiko.ktlint.Main"
         args("-F", "src/**/*.kt")
-    }
-
-    named<org.jetbrains.dokka.gradle.DokkaTask>("dokka") {
-        outputDirectory = "$buildDir/docs"
-        doFirst { file(outputDirectory).deleteRecursively() }
     }
 }

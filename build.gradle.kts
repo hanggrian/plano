@@ -7,8 +7,6 @@ buildscript {
     dependencies {
         classpath(kotlin("gradle-plugin", VERSION_KOTLIN))
         classpath(android())
-        classpath(dokka())
-        classpath(dokka("android"))
         classpath(hendraanggrian("r-gradle-plugin", "0.1"))
         classpath(hendraanggrian("buildconfig-gradle-plugin", "0.1"))
         classpath(hendraanggrian("packr-gradle-plugin", "0.1"))
@@ -21,6 +19,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven("https://kotlin.bintray.com/kotlinx")
     }
     tasks {
         withType<Delete> {

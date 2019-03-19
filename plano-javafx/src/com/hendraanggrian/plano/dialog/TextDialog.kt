@@ -6,10 +6,12 @@ import javafx.scene.layout.StackPane
 import ktfx.layouts._VBox
 import ktfx.layouts.label
 
-class TextDialog(resources: Resources, container: StackPane) : Dialog(resources, container) {
+class TextDialog(
+    resources: Resources,
+    container: StackPane
+) : Dialog(resources, container, resources.getString(R2.string.please_restart)) {
 
     override fun _VBox.onCreateContent() {
-        label(getString(R2.string.please_restart)) { styleClass.addAll("bold", "display") }
         label(getString(R2.string._please_restart_desc))
     }
 }

@@ -3,7 +3,6 @@ version = RELEASE_VERSION
 
 plugins {
     kotlin("jvm")
-    dokka()
     idea
     id("com.hendraanggrian.r")
     id("com.hendraanggrian.packr")
@@ -33,6 +32,7 @@ val configuration = configurations.register("ktlint")
 dependencies {
     api(project(":$RELEASE_ARTIFACT"))
     api(kotlin("stdlib", VERSION_KOTLIN))
+    api(kotlinx("coroutines-javafx", VERSION_COROUTINES))
 
     implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
@@ -65,11 +65,6 @@ tasks {
         classpath(configuration.get())
         main = "com.github.shyiko.ktlint.Main"
         args("-F", "src/**/*.kt")
-    }
-
-    named<org.jetbrains.dokka.gradle.DokkaTask>("dokka") {
-        outputDirectory = "$buildDir/docs"
-        doFirst { file(outputDirectory).deleteRecursively() }
     }
 
     named<com.hendraanggrian.r.RTask>("generateR") {

@@ -1,18 +1,14 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.plugin.use.PluginDependenciesSpec
 
+fun DependencyHandler.ktor(module: String) = "io.ktor:ktor-$module:1.1.3"
+
 fun DependencyHandler.kotlinx(
     module: String,
     version: String? = null
 ) = "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" } ?: ""}"
 
-fun DependencyHandler.dokka(module: String? = null) =
-    "org.jetbrains.dokka:dokka-${module.orEmpty { "$it-" }}gradle-plugin:$VERSION_DOKKA"
-
-fun PluginDependenciesSpec.dokka(module: String? = null) =
-    id("org.jetbrains.dokka${module.orEmpty { "-$it" }}")
-
-fun DependencyHandler.android() = "com.android.tools.build:gradle:$VERSION_ANDROID_PLUGIN"
+fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha07"
 fun PluginDependenciesSpec.android(submodule: String) = id("com.android.$submodule")
 
 fun DependencyHandler.androidx(
@@ -36,16 +32,16 @@ fun DependencyHandler.hendraanggrian(
 fun DependencyHandler.apache(module: String, version: String) =
     "org.apache.${module.split("-")[0]}:$module:$version"
 
-fun DependencyHandler.truth() = "com.google.truth:truth:$VERSION_TRUTH"
+fun DependencyHandler.truth() = "com.google.truth:truth:0.43"
 
-fun DependencyHandler.shadow() = "com.github.jengelman.gradle.plugins:shadow:$VERSION_SHADOW"
+fun DependencyHandler.shadow() = "com.github.jengelman.gradle.plugins:shadow:4.0.1"
 
-fun DependencyHandler.gitPublish() = "org.ajoberstar:gradle-git-publish:$VERSION_GIT_PUBLISH"
+fun DependencyHandler.gitPublish() = "org.ajoberstar:gradle-git-publish:0.3.3"
 inline val PluginDependenciesSpec.`git-publish` get() = id("org.ajoberstar.git-publish")
 
 fun DependencyHandler.ktlint(module: String? = null) = when (module) {
-    null -> "com.github.shyiko:ktlint:$VERSION_KTLINT"
-    else -> "com.github.shyiko.ktlint:ktlint-$module:$VERSION_KTLINT"
+    null -> "com.github.shyiko:ktlint:0.31.0"
+    else -> "com.github.shyiko.ktlint:ktlint-$module:0.31.0"
 }
 
 private fun String?.orEmpty(wrapper: (String) -> String) = this?.let(wrapper).orEmpty()

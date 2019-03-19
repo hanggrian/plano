@@ -8,6 +8,13 @@ import javafx.geometry.Side
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
+import javafx.scene.layout.Border
+import javafx.scene.layout.BorderStroke
+import javafx.scene.layout.BorderStrokeStyle
+import javafx.scene.layout.BorderWidths
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.Region
+import javafx.scene.paint.Paint
 import javafx.scene.shape.Circle
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.jfxButton
@@ -19,6 +26,15 @@ import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
 import ktfx.layouts.separatorMenuItem
+
+fun Region.border(
+    fill: Paint,
+    width: Number = 1.0,
+    style: BorderStrokeStyle = BorderStrokeStyle.SOLID,
+    radii: CornerRadii = CornerRadii.EMPTY
+) {
+    border = Border(BorderStroke(fill, style, radii, BorderWidths(width.toDouble())))
+}
 
 fun NodeInvokable.morePaperButton(
     resources: Resources,
