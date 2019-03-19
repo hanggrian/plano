@@ -192,7 +192,7 @@ header {
   margin-top: 10px; }
 
 .cta {
-  margin: 25px 0 0 0; }
+  margin: 10px 0 0 0; }
 
 .page h2 {
   text-align: center; }
@@ -437,7 +437,7 @@ blockquote:before {
   border: 2px solid #ffb300;
   transition: .2s ease-in-out;
   display: inline-block;
-  padding: 16px 50px;
+  padding: 8px 40px;
   background: #fff; }
 
 .button a:hover, input[type=submit]:hover {
