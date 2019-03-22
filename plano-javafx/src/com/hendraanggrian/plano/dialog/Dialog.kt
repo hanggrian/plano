@@ -7,7 +7,7 @@ import ktfx.controls.paddingAll
 import ktfx.coroutines.onAction
 import ktfx.jfoenix._JFXDialog
 import ktfx.jfoenix.jfxButton
-import ktfx.layouts._VBox
+import ktfx.layouts.NodeManager
 import ktfx.layouts.buttonBar
 import ktfx.layouts.label
 import ktfx.layouts.vbox
@@ -22,9 +22,10 @@ abstract class Dialog(
         vbox(20.0) {
             paddingAll = 20
             label(title) { styleClass.addAll("bold", "display") }
-            onCreateContent()
+            onContent()
             buttonBar {
-                jfxButton(getString(R2.string.close)) {
+                onButtons()
+                jfxButton(getString(R2.string.btn_close)) {
                     styleClass.addAll("flat", "bold")
                     onAction {
                         close()
@@ -34,5 +35,8 @@ abstract class Dialog(
         }
     }
 
-    abstract fun _VBox.onCreateContent()
+    abstract fun NodeManager.onContent()
+
+    open fun NodeManager.onButtons() {
+    }
 }

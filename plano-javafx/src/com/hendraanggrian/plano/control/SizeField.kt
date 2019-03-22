@@ -7,7 +7,7 @@ import javafx.geometry.Pos
 import javafx.scene.control.TextFormatter
 import ktfx.coroutines.listener
 import ktfx.layouts.LayoutMarker
-import ktfx.layouts.NodeInvokable
+import ktfx.layouts.NodeManager
 import java.util.function.UnaryOperator
 import java.util.regex.Pattern
 
@@ -42,6 +42,6 @@ fun sizeField(
     init: ((@LayoutMarker SizeField).() -> Unit)? = null
 ): SizeField = SizeField().also { init?.invoke(it) }
 
-inline fun NodeInvokable.sizeField(
+inline fun NodeManager.sizeField(
     noinline init: ((@LayoutMarker SizeField).() -> Unit)? = null
-): SizeField = com.hendraanggrian.plano.control.sizeField(init)()
+): SizeField = com.hendraanggrian.plano.control.sizeField(init).add()

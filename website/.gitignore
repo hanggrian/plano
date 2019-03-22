@@ -1,2 +1,5 @@
 /build
-/out
+
+src/_site/
+src/.sass-cache/
+src/.jekyll-metadata

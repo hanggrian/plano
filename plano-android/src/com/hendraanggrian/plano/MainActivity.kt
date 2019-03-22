@@ -5,16 +5,20 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.defaults.BindDefault
 import com.hendraanggrian.defaults.DefaultsSaver
 import com.hendraanggrian.defaults.SharedPreferencesDefaults
 import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.defaults.toDefaults
+import com.hendraanggrian.plano.dialog.AboutDialogFragment
 import com.jakewharton.processphoenix.ProcessPhoenix
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -29,11 +33,13 @@ class MainActivity : AppCompatActivity(), Resources {
     override lateinit var resourceBundle: ResourceBundle
 
     @BindDefault @JvmField var language: String = Language.EN_US.fullCode
-    private lateinit var menu: Menu
-    private lateinit var adapter: MainAdapter
 
+    private lateinit var clearMenu: MenuItem
     private lateinit var defaults: SharedPreferencesDefaults
     private lateinit var saver: DefaultsSaver
+
+    private val emptyObservable = ObservableBoolean()
+    private val adapter = MainAdapter(emptyObservable)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,7 @@ class MainActivity : AppCompatActivity(), Resources {
         mediaBoxText.text = getString(R2.string.media_box)
         trimBoxText.text = getString(R2.string.trim_box)
         bleedBoxText.text = getString(R2.string.bleed)
+        emptyText.text = getString(R2.string.no_content)
 
         defaults[R2.preference.media_width]?.let { mediaWidthText.setText(it) }
         defaults[R2.preference.media_height]?.let { mediaHeightText.setText(it) }
@@ -53,7 +60,25 @@ class MainActivity : AppCompatActivity(), Resources {
         defaults[R2.preference.trim_height]?.let { trimHeightText.setText(it) }
         defaults[R2.preference.bleed]?.let { bleedText.setText(it) }
 
-        adapter = MainAdapter()
+        emptyObservable.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable, propertyId: Int) {
+                when {
+                    (sender as ObservableBoolean).get() -> {
+                        emptyText.visibility = View.VISIBLE
+                        clearMenu.isVisible = false
+                        appBar.setExpanded(true)
+                        mediaWidthText.requestFocus()
+                    }
+                    else -> {
+                        emptyText.visibility = View.GONE
+                        clearMenu.isVisible = true
+                        recyclerView.scrollToPosition(adapter.size - 1)
+                    }
+                }
+            }
+        })
+
         recyclerView.adapter = adapter
         fab.setOnClickListener {
             when {
@@ -75,15 +100,12 @@ class MainActivity : AppCompatActivity(), Resources {
 
                     getSystemService<InputMethodManager>()!!
                         .hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-                    adapter.add(
+                    adapter.put(
                         Plano.calculate(
                             mediaWidthText.value, mediaHeightText.value,
                             trimWidthText.value, trimHeightText.value, bleedText.value
                         )
                     )
-                    adapter.notifyItemInserted(adapter.size - 1)
-                    recyclerView.scrollToPosition(adapter.size - 1)
-                    menu.findItem(R.id.clear).run { if (!isVisible) isVisible = true }
                 }
             }
         }
@@ -91,8 +113,9 @@ class MainActivity : AppCompatActivity(), Resources {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        this.menu = menu
-        menu.findItem(R.id.clear).title = getString(R2.string.clear)
+        clearMenu = menu.findItem(R.id.clear).apply {
+            title = getString(R2.string.clear)
+        }
         menu.findItem(R.id.language).title = getString(R2.string.language)
         menu.findItem(R.id.checkForUpdate).title = getString(R2.string.check_for_update)
         menu.findItem(R.id.about).title = getString(R2.string.about)
@@ -109,23 +132,13 @@ class MainActivity : AppCompatActivity(), Resources {
         when (item.itemId) {
             R.id.clear -> {
                 val temp = adapter.toList()
-                val size = adapter.size
-                adapter.clear()
-                adapter.notifyItemRangeRemoved(0, size)
-
+                adapter.removeAll()
                 recyclerView.snackbar(
                     getString(R2.string._boxes_cleared),
                     getString(R2.string.btn_undo)
                 ) {
-                    val start = adapter.size + 1
-                    adapter.addAll(temp)
-                    adapter.notifyItemRangeInserted(start, adapter.size)
-                    item.isVisible = true
+                    adapter.putAll(temp)
                 }
-
-                item.isVisible = false
-                mediaWidthText.requestFocus()
-                appBar.setExpanded(true)
             }
             R.id.language -> {
             }

@@ -47,7 +47,7 @@ import ktfx.controls.paddingAll
 import ktfx.coroutines.listener
 import ktfx.coroutines.onAction
 import ktfx.coroutines.snapshot
-import ktfx.double
+import ktfx.doublePropertyOf
 import ktfx.jfoenix.jfxSnackbar
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
@@ -93,10 +93,10 @@ class PlanoApplication : Application(), Resources {
         val COLOR_BORDER: Color = Color.web("#c8c8c8")
 
         @JvmStatic
-        fun main(args: Array<String>) = ktfx.launchApplication<PlanoApplication>(*args)
+        fun main(args: Array<String>) = ktfx.launch<PlanoApplication>(*args)
     }
 
-    private val scale = double(SCALE_SMALL).apply {
+    private val scale = doublePropertyOf(SCALE_SMALL).apply {
         listener { _, _, newValue ->
             outputPane.children.forEach {
                 val pane = it as Pane
@@ -287,11 +287,11 @@ class PlanoApplication : Application(), Resources {
                             label(getString(R2.string.media_box)) row row col 1
                             mediaWidthField.apply {
                                 text = defaults[R2.preference.media_width]
-                            }() row row col 2
+                            }.add() row row col 2
                             label("x") row row col 3
                             mediaHeightField.apply {
                                 text = defaults[R2.preference.media_height]
-                            }() row row col 4
+                            }.add() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
                                 mediaWidthField,
@@ -302,11 +302,11 @@ class PlanoApplication : Application(), Resources {
                             label(getString(R2.string.trim_box)) row row col 1
                             trimWidthField.apply {
                                 text = defaults[R2.preference.trim_width]
-                            }() row row col 2
+                            }.add() row row col 2
                             label("x") row row col 3
                             trimHeightField.apply {
                                 text = defaults[R2.preference.trim_height]
-                            }() row row col 4
+                            }.add() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
                                 trimWidthField,
@@ -316,7 +316,7 @@ class PlanoApplication : Application(), Resources {
                             label(getString(R2.string.bleed)) row row col 1
                             bleedField.apply {
                                 text = defaults[R2.preference.bleed]
-                            }() row row++ col 2
+                            }.add() row row++ col 2
 
                             row++
                             row++

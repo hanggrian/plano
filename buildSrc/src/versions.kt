@@ -10,6 +10,6 @@ const val VERSION_ANDROIDX = "1.1.0"
 
 const val VERSION_MAVEN = "3.6.0"
 const val VERSION_COMMONS_LANG = "3.8.1"
-const val VERSION_KTFX = "8.4.8"
+const val VERSION_KTFX = "8.5.0"
 const val VERSION_DEFAULTS = "0.3"
 const val VERSION_BUNDLER = "0.3-rc1"

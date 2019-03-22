@@ -10,7 +10,7 @@ Efficient paper size calculator.
 
 Download
 --------
-Go to [releases][releases] to download Plano in several options:
+Go to [homepage][homepage] to download Plano in several options:
  * apk - Android debug app, go to Setting > Security > check `Unknown sources` to install. 
  * exe - Windows 32-bit app archive, unpack in your `Program Files` directory.
  * dmg - macOS app, mount and move it to your `Applications` directory.
@@ -34,4 +34,4 @@ License
     
 [ss_javafx]: /art/ss_javafx.png
 [ss_android]: /art/ss_android.png
-[releases]: https://github.com/hendraanggrian/plano/releasehttps://github.com/hendraanggrian/plano/releases
+[homepage]: https://hendraanggrian.com/plano

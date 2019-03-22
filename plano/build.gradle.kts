@@ -69,7 +69,7 @@ tasks {
         appName = RELEASE_NAME
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
-        website = RELEASE_HOMEPAGE
         field("USER", RELEASE_USER)
+        field("HOMEPAGE", RELEASE_HOMEPAGE)
     }
 }

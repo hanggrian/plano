@@ -19,8 +19,8 @@ import javafx.scene.shape.Circle
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.jfxButton
 import ktfx.layouts.LayoutMarker
-import ktfx.layouts.MenuItemInvokable
-import ktfx.layouts.NodeInvokable
+import ktfx.layouts.MenuItemManager
+import ktfx.layouts.NodeManager
 import ktfx.layouts._ContextMenu
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
@@ -36,7 +36,7 @@ fun Region.border(
     border = Border(BorderStroke(fill, style, radii, BorderWidths(width.toDouble())))
 }
 
-fun NodeInvokable.morePaperButton(
+fun NodeManager.morePaperButton(
     resources: Resources,
     widthField: TextField,
     heightField: TextField
@@ -78,7 +78,7 @@ fun NodeInvokable.morePaperButton(
     paperMenuItem(86, 106, widthField, heightField)
 }
 
-fun NodeInvokable.moreButton(
+fun NodeManager.moreButton(
     init: ((@LayoutMarker _ContextMenu).() -> kotlin.Unit)? = null
 ): Button = roundButton(16.0, R.image.menu_more) {
     val contextMenu = contextMenu(init)
@@ -89,7 +89,7 @@ fun NodeInvokable.moreButton(
     }
 }
 
-fun NodeInvokable.roundButton(
+fun NodeManager.roundButton(
     radius: Double,
     graphicUrl: String,
     init: ((@LayoutMarker JFXButton).() -> Unit)? = null
@@ -100,7 +100,7 @@ fun NodeInvokable.roundButton(
     init?.invoke(this)
 }
 
-private fun MenuItemInvokable.paperMenuItem(
+private fun MenuItemManager.paperMenuItem(
     width: Number,
     height: Number,
     widthField: TextField,

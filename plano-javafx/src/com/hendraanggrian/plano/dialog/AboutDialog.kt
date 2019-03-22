@@ -5,9 +5,9 @@ import com.hendraanggrian.plano.R2
 import com.hendraanggrian.plano.Resources
 import javafx.scene.layout.StackPane
 import ktfx.coroutines.onAction
-import ktfx.layouts._VBox
-import ktfx.layouts.hyperlink
-import ktfx.layouts.textFlow
+import ktfx.jfoenix.jfxButton
+import ktfx.layouts.NodeManager
+import ktfx.layouts.label
 import java.awt.Desktop
 import java.net.URI
 
@@ -16,17 +16,19 @@ class AboutDialog(
     container: StackPane
 ) : Dialog(resources, container, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
 
-    override fun _VBox.onCreateContent() {
-        textFlow {
-            getString(R2.string._about1)()
-            newLine()
-            getString(R2.string._about2_1)()
-            hyperlink(getString(R2.string._about2_2)) {
-                onAction {
-                    Desktop.getDesktop().browse(URI(BuildConfig.WEBSITE))
-                }
+    override fun NodeManager.onContent() {
+        label(getString(R2.string._about)) {
+            prefWidth = 300.0
+            isWrapText = true
+        }
+    }
+
+    override fun NodeManager.onButtons() {
+        jfxButton(getString(R2.string.btn_homepage)) {
+            styleClass.addAll("flat", "bold")
+            onAction {
+                Desktop.getDesktop().browse(URI(BuildConfig.HOMEPAGE))
             }
-            getString(R2.string._about2_3)()
         }
     }
 }

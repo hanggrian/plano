@@ -10,9 +10,11 @@ import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isNotEmpty
+import androidx.databinding.ObservableBoolean
 import androidx.recyclerview.widget.RecyclerView
 
-class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
+class MainAdapter(private val emptyObservable: ObservableBoolean) :
+    RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     MutableList<MediaSize> by arrayListOf() {
 
     private lateinit var context: Context
@@ -56,6 +58,33 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
                 }
             }
         })
+    }
+
+    fun put(element: MediaSize) {
+        if (isEmpty()) {
+            emptyObservable.set(false)
+            emptyObservable.notifyChange()
+        }
+        add(element)
+        notifyItemInserted(size - 1)
+    }
+
+    fun putAll(elements: Collection<MediaSize>) {
+        if (isEmpty()) {
+            emptyObservable.set(false)
+            emptyObservable.notifyChange()
+        }
+        val start = size + 1
+        addAll(elements)
+        notifyItemRangeInserted(start, size)
+    }
+
+    fun removeAll() {
+        emptyObservable.set(true)
+        emptyObservable.notifyChange()
+        val size = size
+        clear()
+        notifyItemRangeRemoved(0, size)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
