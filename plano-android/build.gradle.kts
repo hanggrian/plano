@@ -15,9 +15,6 @@ android {
         versionCode = 1
         versionName = RELEASE_VERSION
     }
-    dataBinding {
-        isEnabled = true
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -69,6 +66,9 @@ dependencies {
     kapt(hendraanggrian("bundler", "bundler-compiler", VERSION_BUNDLER))
 
     implementation(androidx("multidex", version = VERSION_MULTIDEX))
+    implementation(androidx("lifecycle", "lifecycle-extensions", VERSION_LIFECYCLE))
+    implementation(androidx("lifecycle", "lifecycle-viewmodel-ktx", VERSION_LIFECYCLE))
+    implementation(androidx("lifecycle", "lifecycle-livedata-ktx", VERSION_LIFECYCLE))
     implementation(androidx("core", "core-ktx", "$VERSION_ANDROIDX-alpha03"))
     implementation(androidx("appcompat", version = "$VERSION_ANDROIDX-alpha01"))
     implementation(androidx("preference", version = "$VERSION_ANDROIDX-alpha01"))
@@ -86,7 +86,7 @@ dependencies {
 }
 
 tasks {
-    val ktlint = register("ktlint", JavaExec::class) {
+    val ktlint by registering(JavaExec::class) {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         inputs.dir("src")
         outputs.dir("src")

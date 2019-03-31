@@ -35,7 +35,7 @@ dependencies {
 }
 
 tasks {
-    val ktlint = register("ktlint", JavaExec::class) {
+    val ktlint by registering(JavaExec::class) {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         inputs.dir("src")
         outputs.dir("src")

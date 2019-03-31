@@ -13,12 +13,12 @@ object Plano {
         mediaWidth,
         mediaHeight,
         listOf(
-            traditional(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
-            traditional(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
-            radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
-            radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed),
-            radicalRows(mediaWidth, mediaHeight, trimWidth + bleed, trimHeight + bleed),
-            radicalRows(mediaWidth, mediaHeight, trimHeight + bleed, trimWidth + bleed)
+            traditional(mediaWidth, mediaHeight, trimWidth + bleed * 2, trimHeight + bleed * 2),
+            traditional(mediaWidth, mediaHeight, trimHeight + bleed * 2, trimWidth + bleed * 2),
+            radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed * 2, trimHeight + bleed * 2),
+            radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed * 2, trimWidth + bleed * 2),
+            radicalRows(mediaWidth, mediaHeight, trimWidth + bleed * 2, trimHeight + bleed * 2),
+            radicalRows(mediaWidth, mediaHeight, trimHeight + bleed * 2, trimWidth + bleed * 2)
         ).maxBy { it.size }!!
     )
 

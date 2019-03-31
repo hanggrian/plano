@@ -10,8 +10,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import androidx.databinding.Observable
-import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
+import androidx.lifecycle.observe
 import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.defaults.BindDefault
 import com.hendraanggrian.defaults.DefaultsSaver
@@ -30,16 +31,15 @@ import java.util.ResourceBundle
 
 class MainActivity : AppCompatActivity(), Resources {
 
-    override lateinit var resourceBundle: ResourceBundle
-
     @BindDefault @JvmField var language: String = Language.EN_US.fullCode
 
-    private lateinit var clearMenu: MenuItem
+    override lateinit var resourceBundle: ResourceBundle
+
+    private lateinit var viewModel: MainViewModel
+    private var clearMenu: MenuItem? = null
     private lateinit var defaults: SharedPreferencesDefaults
     private lateinit var saver: DefaultsSaver
-
-    private val emptyObservable = ObservableBoolean()
-    private val adapter = MainAdapter(emptyObservable)
+    private lateinit var adapter: MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +48,23 @@ class MainActivity : AppCompatActivity(), Resources {
         defaults = toDefaults()
         saver = defaults.bindDefaults(this)
         resourceBundle = Language.ofFullCode(language).toResourcesBundle()
+
+        viewModel = ViewModelProviders.of(this).get()
+        viewModel.emptyData.observe(this) { isEmpty ->
+            when {
+                isEmpty -> {
+                    emptyText.visibility = View.VISIBLE
+                    clearMenu?.isVisible = false
+                    appBar.setExpanded(true)
+                    mediaWidthText.requestFocus()
+                }
+                else -> {
+                    emptyText.visibility = View.GONE
+                    clearMenu?.isVisible = true
+                    recyclerView.scrollToPosition(adapter.size - 1)
+                }
+            }
+        }
 
         mediaBoxText.text = getString(R2.string.media_box)
         trimBoxText.text = getString(R2.string.trim_box)
@@ -60,25 +77,7 @@ class MainActivity : AppCompatActivity(), Resources {
         defaults[R2.preference.trim_height]?.let { trimHeightText.setText(it) }
         defaults[R2.preference.bleed]?.let { bleedText.setText(it) }
 
-        emptyObservable.addOnPropertyChangedCallback(object :
-            Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable, propertyId: Int) {
-                when {
-                    (sender as ObservableBoolean).get() -> {
-                        emptyText.visibility = View.VISIBLE
-                        clearMenu.isVisible = false
-                        appBar.setExpanded(true)
-                        mediaWidthText.requestFocus()
-                    }
-                    else -> {
-                        emptyText.visibility = View.GONE
-                        clearMenu.isVisible = true
-                        recyclerView.scrollToPosition(adapter.size - 1)
-                    }
-                }
-            }
-        })
-
+        adapter = MainAdapter(viewModel.emptyData)
         recyclerView.adapter = adapter
         fab.setOnClickListener {
             when {

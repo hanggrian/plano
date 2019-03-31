@@ -10,10 +10,10 @@ import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isNotEmpty
-import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 
-class MainAdapter(private val emptyObservable: ObservableBoolean) :
+class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     MutableList<MediaSize> by arrayListOf() {
 
@@ -62,8 +62,7 @@ class MainAdapter(private val emptyObservable: ObservableBoolean) :
 
     fun put(element: MediaSize) {
         if (isEmpty()) {
-            emptyObservable.set(false)
-            emptyObservable.notifyChange()
+            emptyData.value = false
         }
         add(element)
         notifyItemInserted(size - 1)
@@ -71,8 +70,7 @@ class MainAdapter(private val emptyObservable: ObservableBoolean) :
 
     fun putAll(elements: Collection<MediaSize>) {
         if (isEmpty()) {
-            emptyObservable.set(false)
-            emptyObservable.notifyChange()
+            emptyData.value = false
         }
         val start = size + 1
         addAll(elements)
@@ -80,8 +78,7 @@ class MainAdapter(private val emptyObservable: ObservableBoolean) :
     }
 
     fun removeAll() {
-        emptyObservable.set(true)
-        emptyObservable.notifyChange()
+        emptyData.value = true
         val size = size
         clear()
         notifyItemRangeRemoved(0, size)

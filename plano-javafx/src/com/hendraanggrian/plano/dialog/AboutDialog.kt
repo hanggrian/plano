@@ -28,6 +28,7 @@ class AboutDialog(
             styleClass.addAll("flat", "bold")
             onAction {
                 Desktop.getDesktop().browse(URI(BuildConfig.HOMEPAGE))
+                close()
             }
         }
     }

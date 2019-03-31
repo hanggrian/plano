@@ -390,7 +390,7 @@ class PlanoApplication : Application(), Resources {
                                             } row 1 col 2
                                             lateinit var moreButton: Button
                                             moreButton = moreButton {
-                                                (getString(R2.string.save)) {
+                                                getString(R2.string.save)(ImageView(R.image.menu_save)) {
                                                     onAction {
                                                         moreButton.isVisible = false
                                                         val file = ResultFile()
@@ -414,8 +414,7 @@ class PlanoApplication : Application(), Resources {
                                                         }
                                                     }
                                                 }
-                                                separatorMenuItem()
-                                                (getString(R2.string.remove)) {
+                                                getString(R2.string.delete)(ImageView(R.image.menu_delete)) {
                                                     onAction {
                                                         outputPane.children -= this@pane
                                                     }
