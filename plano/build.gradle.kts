@@ -7,6 +7,7 @@ plugins {
     idea
     id("com.hendraanggrian.r")
     id("com.hendraanggrian.buildconfig")
+    id("com.hendraanggrian.locale")
 }
 
 sourceSets {
@@ -72,4 +73,8 @@ tasks {
         field("USER", RELEASE_USER)
         field("HOMEPAGE", RELEASE_HOMEPAGE)
     }
+}
+
+locale {
+
 }

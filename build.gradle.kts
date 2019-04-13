@@ -9,6 +9,7 @@ buildscript {
         classpath(android())
         classpath(hendraanggrian("r-gradle-plugin", "0.1"))
         classpath(hendraanggrian("buildconfig-gradle-plugin", "0.1"))
+        classpath(hendraanggrian("locale-gradle-plugin", "0.1"))
         classpath(hendraanggrian("packr-gradle-plugin", "0.1"))
         classpath(shadow())
         classpath(gitPublish())
@@ -26,9 +27,7 @@ allprojects {
             delete(files("out"))
         }
         withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+            kotlinOptions.jvmTarget = "1.8"
         }
     }
 }

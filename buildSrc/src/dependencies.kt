@@ -8,7 +8,7 @@ fun DependencyHandler.kotlinx(
     version: String? = null
 ) = "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" } ?: ""}"
 
-fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha07"
+fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha10"
 fun PluginDependenciesSpec.android(submodule: String) = id("com.android.$submodule")
 
 fun DependencyHandler.androidx(
