@@ -1,6 +1,7 @@
 package com.hendraanggrian.plano
 
 object Plano {
+    var DEBUG = false // change according to BuildConfig
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
     fun calculate(
@@ -29,7 +30,7 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double
     ): List<TrimSize> {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
         }
 
@@ -59,7 +60,7 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double
     ): List<TrimSize> {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
         }
 
@@ -87,7 +88,7 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double
     ): List<TrimSize> {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
         }
 
@@ -120,7 +121,7 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double
     ) {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             println("* columns: $columns")
             println("* rows: $rows")
         }
@@ -144,7 +145,7 @@ object Plano {
         if (columns > 0 && mediaWidth - trimWidth * columns >= trimHeight) {
             flippedColumns = (mediaHeight / trimWidth).toInt()
         }
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             println("* flippedColumns: $flippedColumns")
         }
         return flippedColumns
@@ -161,7 +162,7 @@ object Plano {
         if (rows > 0 && mediaHeight - trimHeight * rows >= trimWidth) {
             flippedRows = (mediaWidth / trimHeight).toInt()
         }
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             println("* flippedRows: $flippedRows")
         }
         return flippedRows

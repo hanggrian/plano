@@ -11,21 +11,10 @@ import java.util.ResourceBundle
  * @param nativeLocale following pattern of [Regex.nativePattern]
  */
 enum class Language(private val nativeLocale: Locale) {
-    EN_US(Locale.US),
-    ID_ID(Locale("id", "ID"));
+    ENGLISH(Locale.ENGLISH),
+    INDONESIAN(Locale("id"));
 
-    /** Reverse the damage done in [Locale.convertOldISOCodes]. */
-    val code: String
-        get() = nativeLocale.language.let {
-            when (it) {
-                "iw" -> "he"
-                "ji" -> "yi"
-                "in" -> "id"
-                else -> it
-            }
-        }
-
-    val fullCode: String get() = "$code-${nativeLocale.country}"
+    val code: String get() = nativeLocale.language
 
     fun toLocale(): Locale = nativeLocale
 
@@ -49,10 +38,7 @@ enum class Language(private val nativeLocale: Locale) {
         fun ofCode(code: String): Language =
             find { it.code == code }
 
-        fun ofFullCode(fullCode: String): Language =
-            find { it.fullCode == fullCode }
-
         private inline fun find(predicate: (Language) -> Boolean): Language =
-            Language.values().singleOrNull(predicate) ?: EN_US
+            values().singleOrNull(predicate) ?: ENGLISH
     }
 }

@@ -14,31 +14,20 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import com.hendraanggrian.bundler.Bundler
-import com.hendraanggrian.defaults.BindDefault
-import com.hendraanggrian.defaults.DefaultsSaver
 import com.hendraanggrian.defaults.SharedPreferencesDefaults
-import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.defaults.toDefaults
 import com.hendraanggrian.plano.dialog.AboutDialogFragment
-import com.jakewharton.processphoenix.ProcessPhoenix
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.ResourceBundle
 
-class MainActivity : AppCompatActivity(), Resources {
-
-    @BindDefault @JvmField var language: String = Language.EN_US.fullCode
-
-    override lateinit var resourceBundle: ResourceBundle
+class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private var clearMenu: MenuItem? = null
     private lateinit var defaults: SharedPreferencesDefaults
-    private lateinit var saver: DefaultsSaver
     private lateinit var adapter: MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +35,6 @@ class MainActivity : AppCompatActivity(), Resources {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         defaults = toDefaults()
-        saver = defaults.bindDefaults(this)
-        resourceBundle = Language.ofFullCode(language).toResourcesBundle()
 
         viewModel = ViewModelProviders.of(this).get()
         viewModel.emptyData.observe(this) { isEmpty ->
@@ -66,16 +53,11 @@ class MainActivity : AppCompatActivity(), Resources {
             }
         }
 
-        mediaBoxText.text = getString(R2.string.media_box)
-        trimBoxText.text = getString(R2.string.trim_box)
-        bleedBoxText.text = getString(R2.string.bleed)
-        emptyText.text = getString(R2.string.no_content)
-
-        defaults[R2.preference.media_width]?.let { mediaWidthText.setText(it) }
-        defaults[R2.preference.media_height]?.let { mediaHeightText.setText(it) }
-        defaults[R2.preference.trim_width]?.let { trimWidthText.setText(it) }
-        defaults[R2.preference.trim_height]?.let { trimHeightText.setText(it) }
-        defaults[R2.preference.bleed]?.let { bleedText.setText(it) }
+        defaults[Preferences.MEDIA_WIDTH]?.let { mediaWidthText.setText(it) }
+        defaults[Preferences.MEDIA_HEIGHT]?.let { mediaHeightText.setText(it) }
+        defaults[Preferences.TRIM_WIDTH]?.let { trimWidthText.setText(it) }
+        defaults[Preferences.TRIM_HEIGHT]?.let { trimHeightText.setText(it) }
+        defaults[Preferences.BLEED]?.let { bleedText.setText(it) }
 
         adapter = MainAdapter(viewModel.emptyData)
         recyclerView.adapter = adapter
@@ -83,17 +65,17 @@ class MainActivity : AppCompatActivity(), Resources {
             when {
                 mediaWidthText.value <= 0 || mediaHeightText.value <= 0 ||
                     trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
-                    recyclerView.snackbar(resourceBundle.getString(R2.string._incomplete))
+                    recyclerView.snackbar(getString(R.string._incomplete))
                 else -> {
                     defaults {
-                        it[R2.preference.media_width] = mediaWidthText.text.toString()
-                        it[R2.preference.media_height] = mediaHeightText.text.toString()
-                        it[R2.preference.trim_width] = trimWidthText.text.toString()
-                        it[R2.preference.trim_height] = trimHeightText.text.toString()
+                        it[Preferences.MEDIA_WIDTH] = mediaWidthText.text.toString()
+                        it[Preferences.MEDIA_HEIGHT] = mediaHeightText.text.toString()
+                        it[Preferences.TRIM_WIDTH] = trimWidthText.text.toString()
+                        it[Preferences.TRIM_HEIGHT] = trimHeightText.text.toString()
                         when {
-                            bleedText.value > 0 -> it[R2.preference.bleed] =
+                            bleedText.value > 0 -> it[Preferences.BLEED] =
                                 bleedText.value.toString()
-                            else -> it -= R2.preference.bleed
+                            else -> it -= Preferences.BLEED
                         }
                     }
 
@@ -112,18 +94,7 @@ class MainActivity : AppCompatActivity(), Resources {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        clearMenu = menu.findItem(R.id.clear).apply {
-            title = getString(R2.string.clear)
-        }
-        menu.findItem(R.id.language).title = getString(R2.string.language)
-        menu.findItem(R.id.checkForUpdate).title = getString(R2.string.check_for_update)
-        menu.findItem(R.id.about).title = getString(R2.string.about)
-        Language.values().map { it.toLocale().displayLanguage }.forEach {
-            menu.findItem(R.id.language).subMenu
-                .add(it)
-                .setCheckable(true)
-                .isChecked = it == Language.ofFullCode(language).toLocale().displayLanguage
-        }
+        clearMenu = menu.findItem(R.id.clear)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -133,22 +104,20 @@ class MainActivity : AppCompatActivity(), Resources {
                 val temp = adapter.toList()
                 adapter.removeAll()
                 recyclerView.snackbar(
-                    getString(R2.string._boxes_cleared),
-                    getString(R2.string.btn_undo)
+                    getString(R.string._boxes_cleared),
+                    getString(R.string.btn_undo)
                 ) {
                     adapter.putAll(temp)
                 }
-            }
-            R.id.language -> {
             }
             R.id.checkForUpdate -> GlobalScope.launch(Dispatchers.Main) {
                 val release = withContext(Dispatchers.IO) {
                     GitHubApi.getLatestRelease()
                 }
                 when {
-                    release.isNewerThan(BuildConfig.VERSION) -> recyclerView.longSnackbar(
-                        getString(R2.string._update_available).format(BuildConfig.VERSION),
-                        getString(R2.string.btn_download)
+                    release.isNewerThan(BuildConfig.VERSION_NAME) -> recyclerView.longSnackbar(
+                        getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
+                        getString(R.string.btn_download)
                     ) {
                         startActivity(
                             Intent(
@@ -159,7 +128,7 @@ class MainActivity : AppCompatActivity(), Resources {
                             )
                         )
                     }
-                    else -> recyclerView.longSnackbar(getString(R2.string._update_unavailable))
+                    else -> recyclerView.longSnackbar(getString(R.string._update_unavailable))
                 }
             }
             R.id.about -> AboutDialogFragment()
@@ -167,14 +136,6 @@ class MainActivity : AppCompatActivity(), Resources {
                     it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this)
                 }
                 .show(supportFragmentManager, null)
-            else -> {
-                language = Language.ofDisplay(item.title.toString()).fullCode
-                saver.save()
-                GlobalScope.launch {
-                    delay(500)
-                    ProcessPhoenix.triggerRebirth(this@MainActivity)
-                }
-            }
         }
         return super.onOptionsItemSelected(item)
     }

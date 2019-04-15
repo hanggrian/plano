@@ -20,7 +20,7 @@ object GitHubApi {
     }
 
     suspend fun getLatestRelease(): Release = client.get {
-        apiUrl("repos/${BuildConfig.USER}/${BuildConfig.ARTIFACT}/releases/latest")
+        apiUrl("repos/hendraanggrian/plano/releases/latest")
     }
 
     private fun HttpRequestBuilder.apiUrl(path: String) {

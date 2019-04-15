@@ -4,6 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="200dp"
+            android:text="@string/no_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/small"
+            android:paddingBottom="@dimen/small"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:reverseLayout="true"
+            app:stackFromEnd="true" />
+    </FrameLayout>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -30,9 +55,8 @@
                         android:src="@drawable/ci_media" />
 
                     <TextView
-                        android:id="@+id/mediaBoxText"
                         style="@style/Widget.Plano.TextView"
-                        android:text="Media size" />
+                        android:text="@string/media_box" />
 
                     <EditText
                         android:id="@+id/mediaWidthText"
@@ -54,9 +78,8 @@
                         android:src="@drawable/ci_trim" />
 
                     <TextView
-                        android:id="@+id/trimBoxText"
                         style="@style/Widget.Plano.TextView"
-                        android:text="Trim size" />
+                        android:text="@string/trim_box" />
 
                     <EditText
                         android:id="@+id/trimWidthText"
@@ -72,13 +95,11 @@
                 </TableRow>
 
                 <TableRow>
-
                     <Space />
 
                     <TextView
-                        android:id="@+id/bleedBoxText"
                         style="@style/Widget.Plano.TextView"
-                        android:text="Bleed" />
+                        android:text="@string/bleed" />
 
                     <EditText
                         android:id="@+id/bleedText"
@@ -93,30 +114,6 @@
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="@dimen/small"
-            android:paddingBottom="@dimen/small"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:reverseLayout="true"
-            app:stackFromEnd="true" />
-
-        <TextView
-            android:id="@+id/emptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="200dp" />
-    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

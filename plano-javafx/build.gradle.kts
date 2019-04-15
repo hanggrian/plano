@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm")
     idea
     id("com.hendraanggrian.r")
+    id("com.hendraanggrian.buildconfig")
     id("com.hendraanggrian.packr")
     id("com.github.johnrengelman.shadow")
     application
@@ -14,15 +15,7 @@ application.mainClassName = "$RELEASE_GROUP.PlanoApplication"
 
 sourceSets {
     getByName("main") {
-        // manual import generated build
-        val dirs = mutableListOf("src")
-        val generatedDir = "plano/build/generated"
-        if (rootDir.resolve(generatedDir).exists()) {
-            dirs += "build/generated/r/src/main"
-            dirs += "../$generatedDir/buildconfig/src/main"
-            dirs += "../$generatedDir/r/src/main"
-        }
-        java.srcDirs(*dirs.toTypedArray())
+        java.srcDir("src")
         resources.srcDir("res")
     }
 }
@@ -67,8 +60,19 @@ tasks {
         args("-F", "src/**/*.kt")
     }
 
-    named<com.hendraanggrian.r.RTask>("generateR") {
+    withType<com.hendraanggrian.r.RTask> {
         resourcesDirectory = "res"
+        useProperties {
+            readResourceBundle = true
+        }
+    }
+
+    withType<com.hendraanggrian.buildconfig.BuildConfigTask> {
+        appName = RELEASE_NAME
+        artifactId = RELEASE_ARTIFACT
+        debug = RELEASE_DEBUG
+        field("USER", RELEASE_USER)
+        field("HOMEPAGE", RELEASE_HOMEPAGE)
     }
 
     named<Jar>("jar") {

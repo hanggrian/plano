@@ -8,7 +8,7 @@ fun DependencyHandler.kotlinx(
     version: String? = null
 ) = "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" } ?: ""}"
 
-fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha10"
+fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha11"
 fun PluginDependenciesSpec.android(submodule: String) = id("com.android.$submodule")
 
 fun DependencyHandler.androidx(
@@ -19,6 +19,9 @@ fun DependencyHandler.androidx(
 
 fun DependencyHandler.material(version: String = VERSION_ANDROIDX) =
     "com.google.android.material:material:$version"
+
+fun DependencyHandler.leakCanary(module: String? = null) =
+    "com.squareup.leakcanary:leakcanary-android${module.orEmpty { "-$it" }}:1.6.3"
 
 fun DependencyHandler.hendraanggrian(module: String, version: String) =
     "com.hendraanggrian:$module:$version"
@@ -32,7 +35,7 @@ fun DependencyHandler.hendraanggrian(
 fun DependencyHandler.apache(module: String, version: String) =
     "org.apache.${module.split("-")[0]}:$module:$version"
 
-fun DependencyHandler.truth() = "com.google.truth:truth:0.43"
+fun DependencyHandler.truth() = "com.google.truth:truth:0.44"
 
 fun DependencyHandler.shadow() = "com.github.jengelman.gradle.plugins:shadow:4.0.1"
 

@@ -1,12 +1,11 @@
+import java.util.Locale
+
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 plugins {
     `java-library`
     kotlin("jvm")
-    idea
-    id("com.hendraanggrian.r")
-    id("com.hendraanggrian.buildconfig")
     id("com.hendraanggrian.locale")
 }
 
@@ -58,23 +57,129 @@ tasks {
         args("-F", "src/**/*.kt")
     }
 
-    named<com.hendraanggrian.r.RTask>("generateR") {
-        className = "R2"
-        resourcesDirectory = "res"
-        useProperties {
-            readResourceBundle = true
-        }
+    withType<com.hendraanggrian.locale.LocalizeJavaTask> {
+        resourceName = "string"
+        outputDirectory = "../$RELEASE_ARTIFACT-javafx/res"
     }
-
-    named<com.hendraanggrian.buildconfig.BuildConfigTask>("generateBuildConfig") {
-        appName = RELEASE_NAME
-        artifactId = RELEASE_ARTIFACT
-        debug = RELEASE_DEBUG
-        field("USER", RELEASE_USER)
-        field("HOMEPAGE", RELEASE_HOMEPAGE)
+    withType<com.hendraanggrian.locale.LocalizeAndroidTask> {
+        defaultLocale = Locale.ENGLISH
+        outputDirectory = "../$RELEASE_ARTIFACT-android/res"
     }
 }
 
 locale {
+    "clear" {
+        en = "Clear"
+        id = "Hapus semua"
+    }
+    "_boxes_cleared" {
+        en = "Boxes cleared."
+        id = "Konten terhapus."
+    }
+    "toggle_scale" {
+        en = "Toggle scale"
+        id = "Alihkan skala"
+    }
+    "settings" {
+        en = "Settings"
+        id = "Setelan"
+    }
+    "language" {
+        en = "Language"
+        id = "Bahasa"
+    }
+    "about" {
+        en = "About"
+        id = "Tentang"
+    }
+    "check_for_update" {
+        en = "Check for update"
+        id = "Cek pembaruan"
+    }
+    "_update_available" {
+        en = "Plano version %s is available."
+        id = "Plano versi %s tersedia."
+    }
+    "_update_unavailable" {
+        en = "You already have the latest version."
+        id = "Tidak ada pembaruan."
+    }
+    "_desc" {
+        en = "Calculate how many trim boxes fit in a media box"
+        id = "Hitung berapa banyak kotak potong dalam kotak media"
+    }
+    "media_box" {
+        en = "Media box"
+        id = "Kotak media"
+    }
+    "trim_box" {
+        en = "Trim box"
+        id = "Kotak potong"
+    }
+    "bleed" {
+        en = "Bleed"
+        id = "Lebihan"
+    }
+    "a_series" {
+        en = "A Series"
+        id = "Seri A"
+    }
+    "b_series" {
+        en = "B Series"
+        id = "Seri B"
+    }
+    "save" {
+        en = "Save"
+        id = "Simpan"
+    }
+    "delete" {
+        en = "Delete"
+        id = "Hapus"
+    }
+    "_save_desc" {
+        en = "Saved as %s"
+        id = "Terimpan sebagai %s"
+    }
+    "no_content" {
+        en = "No content"
+        id = "Tidak ada konten"
+    }
+    "_about" {
+        en = "Efficient paper size calculator. See homepage for more information."
+        id = "Kalkulator ukuran plano efisien. Lihat beranda untuk informasi lebih."
+    }
+    "please_restart" {
+        en = "Please restart"
+        id = "Mohon mulai ulang"
+    }
+    "_please_restart_desc" {
+        en = "Restart app to see effect."
+        id = "Mulai ulang aplikasi untuk melihat perubahan."
+    }
+    "btn_undo" {
+        en = "UNDO"
+        id = "KEMBALIKAN"
+    }
+    "btn_download" {
+        en = "DOWNLOAD"
+        id = "UNDUH"
+    }
+    "btn_open" {
+        en = "OPEN"
+        id = "BUKA"
+    }
+    "btn_homepage" {
+        en = "HOMEPAGE"
+        id = "BERANDA"
+    }
+    "btn_close" {
+        en = "CLOSE"
+        id = "TUTUP"
+    }
 
+    // android-only
+    "_incomplete" {
+        en = "Media and trim size need to be filled."
+        id = "Kotak media dan potong perlu diisi."
+    }
 }

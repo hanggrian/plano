@@ -28,18 +28,19 @@ android {
         }
     }
     buildTypes {
+        val initField: com.android.build.gradle.internal.dsl.BuildType.() -> Unit = {
+            buildConfigField("String", "NAME", "\"$RELEASE_NAME\"")
+            buildConfigField("String", "HOMEPAGE", "\"$RELEASE_HOMEPAGE\"")
+        }
         getByName("debug") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            initField()
         }
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-    }
-    applicationVariants.all {
-        generateBuildConfigProvider?.invoke {
-            enabled = false
+            initField()
         }
     }
     lintOptions {
@@ -57,7 +58,8 @@ android {
 val configuration = configurations.register("ktlint")
 
 dependencies {
-    api(project(":plano"))
+    api(project(":$RELEASE_ARTIFACT"))
+    api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
     implementation(hendraanggrian("defaults", "defaults-android", VERSION_DEFAULTS))
@@ -77,8 +79,10 @@ dependencies {
     implementation(androidx("cardview", version = "1.0.0"))
     implementation(material("$VERSION_ANDROIDX-alpha02"))
 
-    implementation("com.jakewharton:process-phoenix:2.0.0")
     implementation("com.takisoft.preferencex:preferencex:1.0.0")
+
+    debugImplementation(leakCanary())
+    releaseImplementation(leakCanary("no-op"))
 
     configuration {
         invoke(ktlint())
