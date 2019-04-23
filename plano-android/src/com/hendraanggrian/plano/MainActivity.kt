@@ -14,8 +14,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import com.hendraanggrian.bundler.Bundler
-import com.hendraanggrian.defaults.SharedPreferencesDefaults
-import com.hendraanggrian.defaults.toDefaults
+import com.hendraanggrian.defaults.BindDefault
+import com.hendraanggrian.defaults.DefaultsSaver
+import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.plano.dialog.AboutDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -27,14 +28,20 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private var clearMenu: MenuItem? = null
-    private lateinit var defaults: SharedPreferencesDefaults
     private lateinit var adapter: MainAdapter
+    private lateinit var saver: DefaultsSaver
+
+    @JvmField @BindDefault("media_width") var mediaWidth = 0f
+    @JvmField @BindDefault("media_height") var mediaHeight = 0f
+    @JvmField @BindDefault("trim_width") var trimWidth = 0f
+    @JvmField @BindDefault("trim_height") var trimHeight = 0f
+    @JvmField @BindDefault("bleed") var bleed = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        defaults = toDefaults()
+        saver = bindDefaults()
 
         viewModel = ViewModelProviders.of(this).get()
         viewModel.emptyData.observe(this) { isEmpty ->
@@ -53,11 +60,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        defaults[Preferences.MEDIA_WIDTH]?.let { mediaWidthText.setText(it) }
-        defaults[Preferences.MEDIA_HEIGHT]?.let { mediaHeightText.setText(it) }
-        defaults[Preferences.TRIM_WIDTH]?.let { trimWidthText.setText(it) }
-        defaults[Preferences.TRIM_HEIGHT]?.let { trimHeightText.setText(it) }
-        defaults[Preferences.BLEED]?.let { bleedText.setText(it) }
+        mediaWidthText.setText("$mediaWidth")
+        mediaHeightText.setText("$mediaHeight")
+        trimWidthText.setText("$trimWidth")
+        trimHeightText.setText("$trimHeight")
+        bleedText.setText("$bleed")
 
         adapter = MainAdapter(viewModel.emptyData)
         recyclerView.adapter = adapter
@@ -67,24 +74,20 @@ class MainActivity : AppCompatActivity() {
                     trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
                     recyclerView.snackbar(getString(R.string._incomplete))
                 else -> {
-                    defaults {
-                        it[Preferences.MEDIA_WIDTH] = mediaWidthText.text.toString()
-                        it[Preferences.MEDIA_HEIGHT] = mediaHeightText.text.toString()
-                        it[Preferences.TRIM_WIDTH] = trimWidthText.text.toString()
-                        it[Preferences.TRIM_HEIGHT] = trimHeightText.text.toString()
-                        when {
-                            bleedText.value > 0 -> it[Preferences.BLEED] =
-                                bleedText.value.toString()
-                            else -> it -= Preferences.BLEED
-                        }
-                    }
+                    mediaWidth = mediaWidthText.value
+                    mediaHeight = mediaHeightText.value
+                    trimWidth = trimWidthText.value
+                    trimHeight = trimHeightText.value
+                    bleed = bleedText.value
+                    saver.saveAsync()
 
                     getSystemService<InputMethodManager>()!!
                         .hideSoftInputFromWindow(fab.applicationWindowToken, 0)
                     adapter.put(
                         Plano.calculate(
-                            mediaWidthText.value, mediaHeightText.value,
-                            trimWidthText.value, trimHeightText.value, bleedText.value
+                            mediaWidth.toDouble(), mediaHeight.toDouble(),
+                            trimWidth.toDouble(), trimHeight.toDouble(),
+                            bleed.toDouble()
                         )
                     )
                 }
@@ -140,5 +143,5 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private val TextView.value: Double get() = text?.toString()?.toDoubleOrNull() ?: 0.0
+    private val TextView.value: Float get() = text?.toString()?.toFloatOrNull() ?: 0f
 }

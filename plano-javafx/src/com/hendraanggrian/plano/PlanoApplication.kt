@@ -1,14 +1,15 @@
 package com.hendraanggrian.plano
 
+import com.hendraanggrian.defaults.BindDefault
 import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
-import com.hendraanggrian.defaults.PropertiesDefaults
-import com.hendraanggrian.defaults.toDefaults
+import com.hendraanggrian.defaults.DefaultsSaver
+import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.plano.control.border
+import com.hendraanggrian.plano.control.doubleField
 import com.hendraanggrian.plano.control.moreButton
 import com.hendraanggrian.plano.control.morePaperButton
 import com.hendraanggrian.plano.control.roundButton
-import com.hendraanggrian.plano.control.sizeField
 import com.hendraanggrian.plano.control.toolbar
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
@@ -77,6 +78,7 @@ import org.apache.commons.lang3.SystemUtils
 import java.awt.Desktop
 import java.net.URI
 import java.util.ResourceBundle
+import java.util.prefs.Preferences
 import javax.imageio.ImageIO
 
 class PlanoApplication : Application(), Resources {
@@ -120,11 +122,11 @@ class PlanoApplication : Application(), Resources {
         }
     }
 
-    private val mediaWidthField = sizeField { onAction { sendButton.fire() } }
-    private val mediaHeightField = sizeField { onAction { sendButton.fire() } }
-    private val trimWidthField = sizeField { onAction { sendButton.fire() } }
-    private val trimHeightField = sizeField { onAction { sendButton.fire() } }
-    private val bleedField = sizeField { onAction { sendButton.fire() } }
+    private val mediaWidthField = doubleField { onAction { sendButton.fire() } }
+    private val mediaHeightField = doubleField { onAction { sendButton.fire() } }
+    private val trimWidthField = doubleField { onAction { sendButton.fire() } }
+    private val trimHeightField = doubleField { onAction { sendButton.fire() } }
+    private val bleedField = doubleField { onAction { sendButton.fire() } }
 
     private lateinit var clearButton: Button
     private lateinit var fullscreenButton: Button
@@ -133,18 +135,23 @@ class PlanoApplication : Application(), Resources {
     private lateinit var sendButton: Button
     private lateinit var outputPane: FlowPane
 
-    private lateinit var defaults: PropertiesDefaults
+    private lateinit var saver: DefaultsSaver
     override lateinit var resourceBundle: ResourceBundle
+
+    @JvmField @BindDefault("language") var language = Language.ENGLISH.code
+    @JvmField @BindDefault("media_width") var mediaWidth = 0.0
+    @JvmField @BindDefault("media_height") var mediaHeight = 0.0
+    @JvmField @BindDefault("trim_width") var trimWidth = 0.0
+    @JvmField @BindDefault("trim_height") var trimHeight = 0.0
+    @JvmField @BindDefault("bleed") var bleed = 0.0
 
     override fun init() {
         Plano.DEBUG = BuildConfig.DEBUG
         if (BuildConfig.DEBUG) {
             Defaults.setDebugger(DefaultsDebugger.Default)
         }
-        defaults = PreferencesFile().toDefaults()
-        resourceBundle = Language
-            .ofCode(defaults.getOrDefault(Preferences.LANGUAGE, Language.ENGLISH.code))
-            .toResourcesBundle()
+        saver = Preferences.userRoot().node(BuildConfig.GROUP.replace('.', '/')).bindDefaults(this)
+        resourceBundle = Language.ofCode(language).toResourcesBundle()
     }
 
     override fun start(stage: Stage) {
@@ -202,18 +209,13 @@ class PlanoApplication : Application(), Resources {
                                 contextMenu {
                                     menu(getString(R.string.language)) {
                                         val group = ToggleGroup()
-                                        Language.values().forEach { language ->
-                                            radioMenuItem(language.toLocale().displayLanguage) {
+                                        Language.values().forEach { lang ->
+                                            radioMenuItem(lang.toLocale().displayLanguage) {
                                                 toggleGroup = group
-                                                isSelected =
-                                                    language.code == defaults.getOrDefault(
-                                                        Preferences.LANGUAGE,
-                                                        Language.ENGLISH.code
-                                                    )
+                                                isSelected = lang.code == language
                                                 onAction {
-                                                    defaults {
-                                                        this[Preferences.LANGUAGE] = language.code
-                                                    }
+                                                    language = lang.code
+                                                    saver.save()
                                                     TextDialog(
                                                         this@PlanoApplication,
                                                         this@stackPane
@@ -286,11 +288,11 @@ class PlanoApplication : Application(), Resources {
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                             label(getString(R.string.media_box)) row row col 1
                             mediaWidthField.apply {
-                                text = defaults[Preferences.MEDIA_WIDTH]
+                                value = mediaWidth
                             }.add() row row col 2
                             label("x") row row col 3
                             mediaHeightField.apply {
-                                text = defaults[Preferences.MEDIA_HEIGHT]
+                                value = mediaHeight
                             }.add() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
@@ -301,11 +303,11 @@ class PlanoApplication : Application(), Resources {
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
                             label(getString(R.string.trim_box)) row row col 1
                             trimWidthField.apply {
-                                text = defaults[Preferences.TRIM_WIDTH]
+                                value = trimWidth
                             }.add() row row col 2
                             label("x") row row col 3
                             trimHeightField.apply {
-                                text = defaults[Preferences.TRIM_HEIGHT]
+                                value = trimHeight
                             }.add() row row col 4
                             morePaperButton(
                                 this@PlanoApplication,
@@ -315,7 +317,7 @@ class PlanoApplication : Application(), Resources {
 
                             label(getString(R.string.bleed)) row row col 1
                             bleedField.apply {
-                                text = defaults[Preferences.BLEED]
+                                value = bleed
                             }.add() row row++ col 2
 
                             row++
@@ -336,38 +338,27 @@ class PlanoApplication : Application(), Resources {
                                     }
                                 })
                                 onAction {
-                                    defaults {
-                                        this[Preferences.MEDIA_WIDTH] =
-                                            mediaWidthField.value.toString()
-                                        this[Preferences.MEDIA_HEIGHT] =
-                                            mediaHeightField.value.toString()
-                                        this[Preferences.TRIM_WIDTH] =
-                                            trimWidthField.value.toString()
-                                        this[Preferences.TRIM_HEIGHT] =
-                                            trimHeightField.value.toString()
-                                        when {
-                                            bleedField.value > 0 -> this[Preferences.BLEED] =
-                                                bleedField.value.toString()
-                                            else -> this -= Preferences.BLEED
-                                        }
-                                    }
+                                    mediaWidth = mediaWidthField.value
+                                    mediaHeight = mediaHeightField.value
+                                    trimWidth = trimWidthField.value
+                                    trimHeight = trimHeightField.value
+                                    bleed = bleedField.value
+                                    saver.save()
 
                                     outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
                                             paddingAll = 10
                                             gap = 10
                                             val size = Plano.calculate(
-                                                mediaWidthField.value,
-                                                mediaHeightField.value,
-                                                trimWidthField.value,
-                                                trimHeightField.value,
-                                                bleedField.value
+                                                mediaWidth, mediaHeight,
+                                                trimWidth, trimHeight,
+                                                bleed
                                             )
                                             anchorPane {
                                                 pane {
                                                     border(COLOR_YELLOW, 3)
-                                                    prefWidthProperty().bind(mediaWidthField.value * scale)
-                                                    prefHeightProperty().bind(mediaHeightField.value * scale)
+                                                    prefWidthProperty().bind(mediaWidth * scale)
+                                                    prefHeightProperty().bind(mediaHeight * scale)
                                                 }
 
                                                 size.trimSizes.forEach { size ->
@@ -381,12 +372,12 @@ class PlanoApplication : Application(), Resources {
                                             } row 0 rowSpans 3 col 0
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
                                             textFlow {
-                                                "${mediaWidthField.text}x${mediaHeightField.text}"()
+                                                "${mediaWidth}x$mediaHeight"()
                                             } row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
                                                 "${size.trimSizes.size}pcs " { styleClass += "bold" }
-                                                "${trimWidthField.text}x${trimHeightField.text}"()
+                                                "${trimWidth}x$trimHeight"()
                                             } row 1 col 2
                                             lateinit var moreButton: Button
                                             moreButton = moreButton {

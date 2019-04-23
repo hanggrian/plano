@@ -3,10 +3,11 @@ version = RELEASE_VERSION
 
 plugins {
     kotlin("jvm")
+    kotlin("kapt")
     idea
-    id("com.hendraanggrian.r")
-    id("com.hendraanggrian.buildconfig")
-    id("com.hendraanggrian.packr")
+    hendraanggrian("r")
+    hendraanggrian("buildconfig")
+    hendraanggrian("packr")
     id("com.github.johnrengelman.shadow")
     application
 }
@@ -31,6 +32,7 @@ dependencies {
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
     implementation(hendraanggrian("defaults", "defaults", VERSION_DEFAULTS))
+    kapt(hendraanggrian("defaults", "defaults-compiler", VERSION_DEFAULTS))
 
     configuration {
         invoke(ktlint())

@@ -11,7 +11,7 @@ import ktfx.layouts.NodeManager
 import java.util.function.UnaryOperator
 import java.util.regex.Pattern
 
-class SizeField : JFXTextField() {
+class DoubleField : JFXTextField() {
 
     private companion object {
 
@@ -35,13 +35,17 @@ class SizeField : JFXTextField() {
         }
     }
 
-    val value: Double get() = text?.toDoubleOrNull() ?: 0.0
+    var value: Double
+        get() = text?.toDoubleOrNull() ?: 0.0
+        set(value) {
+            text = value.toString()
+        }
 }
 
-fun sizeField(
-    init: ((@LayoutMarker SizeField).() -> Unit)? = null
-): SizeField = SizeField().also { init?.invoke(it) }
+fun doubleField(
+    init: ((@LayoutMarker DoubleField).() -> Unit)? = null
+): DoubleField = DoubleField().also { init?.invoke(it) }
 
-inline fun NodeManager.sizeField(
-    noinline init: ((@LayoutMarker SizeField).() -> Unit)? = null
-): SizeField = com.hendraanggrian.plano.control.sizeField(init).add()
+inline fun NodeManager.doubleField(
+    noinline init: ((@LayoutMarker DoubleField).() -> Unit)? = null
+): DoubleField = com.hendraanggrian.plano.control.doubleField(init).add()

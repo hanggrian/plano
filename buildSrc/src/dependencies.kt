@@ -8,7 +8,7 @@ fun DependencyHandler.kotlinx(
     version: String? = null
 ) = "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" } ?: ""}"
 
-fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha11"
+fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha12"
 fun PluginDependenciesSpec.android(submodule: String) = id("com.android.$submodule")
 
 fun DependencyHandler.androidx(
@@ -31,6 +31,8 @@ fun DependencyHandler.hendraanggrian(
     module: String,
     version: String
 ) = "com.hendraanggrian.$repository:$module:$version"
+
+fun PluginDependenciesSpec.hendraanggrian(module: String) = id("com.hendraanggrian.$module")
 
 fun DependencyHandler.apache(module: String, version: String) =
     "org.apache.${module.split("-")[0]}:$module:$version"

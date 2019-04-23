@@ -6,7 +6,7 @@ version = RELEASE_VERSION
 plugins {
     `java-library`
     kotlin("jvm")
-    id("com.hendraanggrian.locale")
+    hendraanggrian("locale")
 }
 
 sourceSets {
