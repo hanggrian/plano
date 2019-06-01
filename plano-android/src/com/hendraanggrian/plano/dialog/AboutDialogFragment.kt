@@ -13,6 +13,7 @@ class AboutDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         AlertDialog.Builder(context!!)
+            .setIcon(R.mipmap.ic_launcher)
             .setTitle("${BuildConfig.NAME} ${BuildConfig.VERSION_NAME}")
             .setMessage(getString(R.string._about))
             .setPositiveButton(getString(R.string.btn_close)) { _, _ -> }

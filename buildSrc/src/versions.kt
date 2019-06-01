@@ -1,6 +1,6 @@
-const val VERSION_GRADLE = "5.3.1"
-const val VERSION_KOTLIN = "1.3.30"
-const val VERSION_COROUTINES = "1.2.0"
+const val VERSION_GRADLE = "5.4.1"
+const val VERSION_KOTLIN = "1.3.31"
+const val VERSION_COROUTINES = "1.2.1"
 
 const val SDK_MIN = 14
 const val SDK_TARGET = 28

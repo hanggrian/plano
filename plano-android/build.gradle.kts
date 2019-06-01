@@ -46,10 +46,14 @@ android {
     lintOptions {
         isAbortOnError = false
     }
+    dexOptions {
+        javaMaxHeapSize = "2g"
+    }
     packagingOptions {
         exclude("META-INF/NOTICE.txt")
         exclude("META-INF/LICENSE.txt")
         exclude("META-INF/kotlinx-io.kotlin_module")
+        exclude("META-INF/kotlinx-coroutines-core.kotlin_module")
         exclude("META-INF/kotlinx-coroutines-io.kotlin_module")
         exclude("META-INF/atomicfu.kotlin_module")
     }
@@ -82,7 +86,6 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex:1.0.0")
 
     debugImplementation(leakCanary())
-    releaseImplementation(leakCanary("no-op"))
 
     configuration {
         invoke(ktlint())
@@ -96,7 +99,7 @@ tasks {
         outputs.dir("src")
         description = "Check Kotlin code style."
         classpath(configuration.get())
-        main = "com.github.shyiko.ktlint.Main"
+        main = "com.pinterest.ktlint.Main"
         args("src/**/*.kt")
     }
     "check" {
@@ -108,7 +111,7 @@ tasks {
         outputs.dir("src")
         description = "Fix Kotlin code style deviations."
         classpath(configuration.get())
-        main = "com.github.shyiko.ktlint.Main"
+        main = "com.pinterest.ktlint.Main"
         args("-F", "src/**/*.kt")
     }
 }

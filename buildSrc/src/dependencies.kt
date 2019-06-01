@@ -1,14 +1,14 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.plugin.use.PluginDependenciesSpec
 
-fun DependencyHandler.ktor(module: String) = "io.ktor:ktor-$module:1.1.3"
+fun DependencyHandler.ktor(module: String) = "io.ktor:ktor-$module:1.1.4"
 
 fun DependencyHandler.kotlinx(
     module: String,
     version: String? = null
 ) = "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" } ?: ""}"
 
-fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-alpha12"
+fun DependencyHandler.android() = "com.android.tools.build:gradle:3.5.0-beta03"
 fun PluginDependenciesSpec.android(submodule: String) = id("com.android.$submodule")
 
 fun DependencyHandler.androidx(
@@ -21,7 +21,7 @@ fun DependencyHandler.material(version: String = VERSION_ANDROIDX) =
     "com.google.android.material:material:$version"
 
 fun DependencyHandler.leakCanary(module: String? = null) =
-    "com.squareup.leakcanary:leakcanary-android${module.orEmpty { "-$it" }}:1.6.3"
+    "com.squareup.leakcanary:leakcanary-android${module.orEmpty { "-$it" }}:2.0-alpha-1"
 
 fun DependencyHandler.hendraanggrian(module: String, version: String) =
     "com.hendraanggrian:$module:$version"
@@ -45,8 +45,8 @@ fun DependencyHandler.gitPublish() = "org.ajoberstar:gradle-git-publish:0.3.3"
 inline val PluginDependenciesSpec.`git-publish` get() = id("org.ajoberstar.git-publish")
 
 fun DependencyHandler.ktlint(module: String? = null) = when (module) {
-    null -> "com.github.shyiko:ktlint:0.31.0"
-    else -> "com.github.shyiko.ktlint:ktlint-$module:0.31.0"
+    null -> "com.pinterest:ktlint:0.32.0"
+    else -> "com.pinterest:ktlint-$module:0.32.0"
 }
 
 private fun String?.orEmpty(wrapper: (String) -> String) = this?.let(wrapper).orEmpty()

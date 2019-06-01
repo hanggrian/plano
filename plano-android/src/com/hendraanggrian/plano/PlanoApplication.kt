@@ -6,7 +6,6 @@ import androidx.multidex.MultiDex
 import com.hendraanggrian.defaults.Android
 import com.hendraanggrian.defaults.Defaults
 import com.hendraanggrian.defaults.DefaultsDebugger
-import com.squareup.leakcanary.LeakCanary
 
 class PlanoApplication : Application() {
 
@@ -20,9 +19,6 @@ class PlanoApplication : Application() {
         Plano.DEBUG = BuildConfig.DEBUG
         if (BuildConfig.DEBUG) {
             Defaults.setDebugger(DefaultsDebugger.Android)
-        }
-        if (!LeakCanary.isInAnalyzerProcess(this)) {
-            LeakCanary.install(this)
         }
     }
 }
