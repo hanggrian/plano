@@ -66,8 +66,8 @@ dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
-    implementation(hendraanggrian("defaults", "defaults-android", VERSION_DEFAULTS))
-    kapt(hendraanggrian("defaults", "defaults-compiler", VERSION_DEFAULTS))
+    implementation(hendraanggrian("prefs", "prefs-android", VERSION_PREFS))
+    kapt(hendraanggrian("prefs", "prefs-compiler", VERSION_PREFS))
     implementation(hendraanggrian("bundler", "bundler", VERSION_BUNDLER))
     kapt(hendraanggrian("bundler", "bundler-compiler", VERSION_BUNDLER))
 

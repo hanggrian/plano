@@ -14,10 +14,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import com.hendraanggrian.bundler.Bundler
-import com.hendraanggrian.defaults.BindDefault
-import com.hendraanggrian.defaults.DefaultsSaver
-import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.plano.dialog.AboutDialogFragment
+import com.hendraanggrian.prefs.BindPref
+import com.hendraanggrian.prefs.Prefs
+import com.hendraanggrian.prefs.PrefsSaver
+import com.hendraanggrian.prefs.android.bind
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -29,19 +30,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private var clearMenu: MenuItem? = null
     private lateinit var adapter: MainAdapter
-    private lateinit var saver: DefaultsSaver
+    private lateinit var saver: PrefsSaver
 
-    @JvmField @BindDefault("media_width") var mediaWidth = 0f
-    @JvmField @BindDefault("media_height") var mediaHeight = 0f
-    @JvmField @BindDefault("trim_width") var trimWidth = 0f
-    @JvmField @BindDefault("trim_height") var trimHeight = 0f
-    @JvmField @BindDefault("bleed") var bleed = 0f
+    @JvmField @BindPref("media_width") var mediaWidth = 0f
+    @JvmField @BindPref("media_height") var mediaHeight = 0f
+    @JvmField @BindPref("trim_width") var trimWidth = 0f
+    @JvmField @BindPref("trim_height") var trimHeight = 0f
+    @JvmField @BindPref("bleed") var bleed = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        saver = bindDefaults()
+        saver = Prefs.bind(this)
 
         viewModel = ViewModelProviders.of(this).get()
         viewModel.emptyData.observe(this) { isEmpty ->

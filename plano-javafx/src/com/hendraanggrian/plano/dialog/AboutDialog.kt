@@ -3,13 +3,13 @@ package com.hendraanggrian.plano.dialog
 import com.hendraanggrian.plano.BuildConfig
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
+import java.awt.Desktop
+import java.net.URI
 import javafx.scene.layout.StackPane
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.jfxButton
 import ktfx.layouts.NodeManager
 import ktfx.layouts.label
-import java.awt.Desktop
-import java.net.URI
 
 class AboutDialog(
     resources: Resources,

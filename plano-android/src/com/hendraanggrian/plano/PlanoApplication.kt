@@ -3,9 +3,8 @@ package com.hendraanggrian.plano
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
-import com.hendraanggrian.defaults.Android
-import com.hendraanggrian.defaults.Defaults
-import com.hendraanggrian.defaults.DefaultsDebugger
+import com.hendraanggrian.prefs.Prefs
+import com.hendraanggrian.prefs.android.setDebug
 
 class PlanoApplication : Application() {
 
@@ -17,8 +16,6 @@ class PlanoApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Plano.DEBUG = BuildConfig.DEBUG
-        if (BuildConfig.DEBUG) {
-            Defaults.setDebugger(DefaultsDebugger.Android)
-        }
+        Prefs.setDebug(BuildConfig.DEBUG)
     }
 }

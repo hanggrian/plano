@@ -1,10 +1,5 @@
 package com.hendraanggrian.plano
 
-import com.hendraanggrian.defaults.BindDefault
-import com.hendraanggrian.defaults.Defaults
-import com.hendraanggrian.defaults.DefaultsDebugger
-import com.hendraanggrian.defaults.DefaultsSaver
-import com.hendraanggrian.defaults.bindDefaults
 import com.hendraanggrian.plano.control.border
 import com.hendraanggrian.plano.control.doubleField
 import com.hendraanggrian.plano.control.moreButton
@@ -13,7 +8,16 @@ import com.hendraanggrian.plano.control.roundButton
 import com.hendraanggrian.plano.control.toolbar
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
+import com.hendraanggrian.prefs.BindPref
+import com.hendraanggrian.prefs.Prefs
+import com.hendraanggrian.prefs.PrefsSaver
+import com.hendraanggrian.prefs.jvm.bind
+import com.hendraanggrian.prefs.jvm.setDebug
 import com.jfoenix.controls.JFXButton
+import java.awt.Desktop
+import java.net.URI
+import java.util.ResourceBundle
+import java.util.prefs.Preferences
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.binding.Bindings
@@ -30,6 +34,7 @@ import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.stage.Stage
+import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -60,6 +65,7 @@ import ktfx.layouts.hbox
 import ktfx.layouts.imageView
 import ktfx.layouts.label
 import ktfx.layouts.menu
+import ktfx.layouts.menuBar
 import ktfx.layouts.pane
 import ktfx.layouts.radioMenuItem
 import ktfx.layouts.region
@@ -75,11 +81,6 @@ import ktfx.runLater
 import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
 import org.apache.commons.lang3.SystemUtils
-import java.awt.Desktop
-import java.net.URI
-import java.util.ResourceBundle
-import java.util.prefs.Preferences
-import javax.imageio.ImageIO
 
 class PlanoApplication : Application(), Resources {
 
@@ -135,22 +136,20 @@ class PlanoApplication : Application(), Resources {
     private lateinit var sendButton: Button
     private lateinit var outputPane: FlowPane
 
-    private lateinit var saver: DefaultsSaver
+    private lateinit var saver: PrefsSaver
     override lateinit var resourceBundle: ResourceBundle
 
-    @JvmField @BindDefault("language") var language = Language.ENGLISH.code
-    @JvmField @BindDefault("media_width") var mediaWidth = 0.0
-    @JvmField @BindDefault("media_height") var mediaHeight = 0.0
-    @JvmField @BindDefault("trim_width") var trimWidth = 0.0
-    @JvmField @BindDefault("trim_height") var trimHeight = 0.0
-    @JvmField @BindDefault("bleed") var bleed = 0.0
+    @JvmField @BindPref("language") var language = Language.ENGLISH.code
+    @JvmField @BindPref("media_width") var mediaWidth = 0.0
+    @JvmField @BindPref("media_height") var mediaHeight = 0.0
+    @JvmField @BindPref("trim_width") var trimWidth = 0.0
+    @JvmField @BindPref("trim_height") var trimHeight = 0.0
+    @JvmField @BindPref("bleed") var bleed = 0.0
 
     override fun init() {
         Plano.DEBUG = BuildConfig.DEBUG
-        if (BuildConfig.DEBUG) {
-            Defaults.setDebugger(DefaultsDebugger.Default)
-        }
-        saver = Preferences.userRoot().node(BuildConfig.GROUP.replace('.', '/')).bindDefaults(this)
+        Prefs.setDebug(BuildConfig.DEBUG)
+        Prefs.bind(Preferences.userRoot().node(BuildConfig.GROUP.replace('.', '/')), this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
     }
 
