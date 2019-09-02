@@ -80,13 +80,21 @@ locale {
         en = "Boxes cleared."
         id = "Konten terhapus."
     }
-    "toggle_scale" {
-        en = "Toggle scale"
-        id = "Alihkan skala"
+    "expand" {
+        en = "Expand"
+        id = "Perbesar"
     }
-    "settings" {
-        en = "Settings"
-        id = "Setelan"
+    "shrink" {
+        en = "Shrink"
+        id = "Perkecil"
+    }
+    "show_count" {
+        en = "Show count"
+        id = "Tampilkan hitungan"
+    }
+    "hide_count" {
+        en = "Hide count"
+        id = "Sembunyikan hitungan"
     }
     "language" {
         en = "Language"

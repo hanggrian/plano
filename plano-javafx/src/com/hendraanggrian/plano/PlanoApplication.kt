@@ -18,8 +18,8 @@ import javafx.application.Application
 import javafx.application.Platform
 import javafx.beans.binding.Bindings.`when`
 import javafx.geometry.HPos
-import javafx.geometry.Side
 import javafx.scene.control.Button
+import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.ToggleGroup
 import javafx.scene.image.ImageView
@@ -43,6 +43,7 @@ import ktfx.bindings.minus
 import ktfx.bindings.otherwise
 import ktfx.bindings.then
 import ktfx.bindings.times
+import ktfx.booleanPropertyOf
 import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
@@ -55,7 +56,6 @@ import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
 import ktfx.layouts.circle
-import ktfx.layouts.contextMenu
 import ktfx.layouts.flowPane
 import ktfx.layouts.gridPane
 import ktfx.layouts.hbox
@@ -102,8 +102,11 @@ class PlanoApplication : Application(), Resources {
         fun main(args: Array<String>) = ktfx.launch<PlanoApplication>(*args)
     }
 
-    private val scale = doublePropertyOf(SCALE_SMALL).apply {
+    private val scale = doublePropertyOf(SCALE_SMALL)
+    private val isExpanded = booleanPropertyOf().apply {
+        bind(scale eq SCALE_BIG)
         listener { _, _, newValue ->
+            expandedMenu.isSelected = newValue
             outputPane.children.forEach {
                 val pane = it as Pane
                 val gridPane = pane.children[0] as GridPane
@@ -117,14 +120,15 @@ class PlanoApplication : Application(), Resources {
                         }
                         else -> @Suppress("UNCHECKED_CAST") {
                             val (x, y) = node.userData as Pair<Double, Double>
-                            AnchorPane.setLeftAnchor(node, x * newValue.toDouble())
-                            AnchorPane.setTopAnchor(node, y * newValue.toDouble())
+                            AnchorPane.setLeftAnchor(node, x * scale.value)
+                            AnchorPane.setTopAnchor(node, y * scale.value)
                         }
                     }
                 }
             }
         }
     }
+    private val isShowCount = booleanPropertyOf()
 
     private val mediaWidthField = doubleField { onAction { sendButton.fire() } }
     private val mediaHeightField = doubleField { onAction { sendButton.fire() } }
@@ -132,9 +136,10 @@ class PlanoApplication : Application(), Resources {
     private val trimHeightField = doubleField { onAction { sendButton.fire() } }
     private val bleedField = doubleField { onAction { sendButton.fire() } }
 
+    private lateinit var expandedMenu: CheckMenuItem
     private lateinit var clearButton: Button
-    private lateinit var fullscreenButton: Button
-    private lateinit var settingsButton: Button
+    private lateinit var expandButton: Button
+    private lateinit var countButton: Button
     private lateinit var rootPane: Pane
     private lateinit var sendButton: Button
     private lateinit var outputPane: FlowPane
@@ -169,7 +174,22 @@ class PlanoApplication : Application(), Resources {
                     menuBar {
                         "File" {
                             menu(getString(R.string.language)) {
-
+                                val group = ToggleGroup()
+                                Language.values().forEach { lang ->
+                                    radioMenuItem(lang.toLocale().displayLanguage) {
+                                        toggleGroup = group
+                                        isSelected = lang.code == language
+                                        onAction {
+                                            language = lang.code
+                                            saver.save()
+                                            TextDialog(
+                                                this@PlanoApplication,
+                                                this@stackPane
+                                            ).apply { setOnDialogClosed { Platform.exit() } }
+                                                .show()
+                                        }
+                                    }
+                                }
                             }
                             separatorMenuItem()
                             menuItem(getString(R.string.quit)) {
@@ -186,9 +206,8 @@ class PlanoApplication : Application(), Resources {
                             }
                         }
                         "View" {
-                            checkMenuItem(getString(R.string.toggle_scale)) {
-                                selectedProperty().bind(`when`(scale eq SCALE_SMALL) then false otherwise true)
-                                // onAction { toggleScale() }
+                            expandedMenu = checkMenuItem(getString(R.string.expand)) {
+                                onAction { toggleScale() }
                             }
                         }
                         "Window" {
@@ -216,48 +235,28 @@ class PlanoApplication : Application(), Resources {
                                 onAction { clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
-                            fullscreenButton = roundButton(24.0, R.image.btn_fullscreen) {
-                                tooltip(getString(R.string.toggle_scale))
+                            expandButton = roundButton(24.0, R.image.btn_scale_expand) {
+                                tooltip {
+                                    textProperty().bind(
+                                        `when`(isExpanded)
+                                            then getString(R.string.shrink)
+                                            otherwise getString(R.string.expand)
+                                    )
+                                }
                                 graphicProperty().bind(
-                                    `when`(scale eq SCALE_SMALL)
-                                        then ImageView(R.image.btn_fullscreen)
-                                        otherwise ImageView((R.image.btn_fullscreen_exit))
+                                    `when`(isExpanded)
+                                        then ImageView(R.image.btn_scale_shrink)
+                                        otherwise ImageView(R.image.btn_scale_expand)
                                 )
                                 onAction { toggleScale() }
                             }
-                            settingsButton = roundButton(24.0, R.image.btn_settings) {
-                                tooltip(getString(R.string.settings))
-                                contextMenu {
-                                    menu(getString(R.string.language)) {
-                                        val group = ToggleGroup()
-                                        Language.values().forEach { lang ->
-                                            radioMenuItem(lang.toLocale().displayLanguage) {
-                                                toggleGroup = group
-                                                isSelected = lang.code == language
-                                                onAction {
-                                                    language = lang.code
-                                                    saver.save()
-                                                    TextDialog(
-                                                        this@PlanoApplication,
-                                                        this@stackPane
-                                                    ).apply { setOnDialogClosed { Platform.exit() } }
-                                                        .show()
-                                                }
-                                            }
-                                        }
-                                    }
-                                    separatorMenuItem()
-                                    (getString(R.string.check_for_update)) {
-                                        onAction { checkForUpdate() }
-                                    }
-                                    (getString(R.string.about)) {
-                                        onAction { this@stackPane.showAbout() }
-                                    }
-                                }
-                                onAction {
-                                    if (!contextMenu.isShowing) {
-                                        contextMenu.show(this@roundButton, Side.RIGHT, 0.0, 0.0)
-                                    }
+                            countButton = roundButton(24.0, R.image.btn_count_show) {
+                                tooltip {
+                                    textProperty().bind(
+                                        `when`(isShowCount)
+                                            then getString(R.string.hide_count)
+                                            otherwise getString(R.string.show_count)
+                                    )
                                 }
                             }
                         }
@@ -439,9 +438,9 @@ class PlanoApplication : Application(), Resources {
             outputPane.children += children
         }
         mediaWidthField.requestFocus()
-        fullscreenButton.isDisable = true
+        expandButton.isDisable = true
         delay(DURATION_SHORT)
-        fullscreenButton.isDisable = false
+        expandButton.isDisable = false
     }
 
     private fun toggleScale() {
