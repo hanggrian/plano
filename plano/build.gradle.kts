@@ -72,6 +72,14 @@ locale {
         en = "Quit"
         id = "Keluar"
     }
+    "minimize" {
+        en = "Minimize"
+        id = "Perkecil"
+    }
+    "zoom" {
+        en = "Zoom"
+        id = "Perbesar"
+    }
     "clear" {
         en = "Clear"
         id = "Hapus semua"
@@ -82,19 +90,27 @@ locale {
     }
     "expand" {
         en = "Expand"
-        id = "Perbesar"
+        id = "Memperluar"
     }
     "shrink" {
         en = "Shrink"
-        id = "Perkecil"
+        id = "Menyusut"
     }
-    "show_count" {
-        en = "Show count"
-        id = "Tampilkan hitungan"
+    "fill_background" {
+        en = "Fill background"
+        id = "Isi latar belakang"
     }
-    "hide_count" {
-        en = "Hide count"
-        id = "Sembunyikan hitungan"
+    "unfill_background" {
+        en = "Unfill background"
+        id = "Kosongkan latar belakang"
+    }
+    "thicken_border" {
+        en = "Thicken border"
+        id = "Perbesar batasan"
+    }
+    "unthicken_border" {
+        en = "Unthicken border"
+        id = "Perkecil batasan"
     }
     "language" {
         en = "Language"

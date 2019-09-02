@@ -26,7 +26,7 @@ import ktfx.layouts.menu
 import ktfx.layouts.menuItem
 import ktfx.layouts.separatorMenuItem
 
-fun Region.border(
+fun Region.setBorder(
     fill: Paint,
     width: Number = 1.0,
     style: BorderStrokeStyle = BorderStrokeStyle.SOLID,

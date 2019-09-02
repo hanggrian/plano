@@ -3,13 +3,11 @@
 package com.hendraanggrian.plano.control
 
 import com.jfoenix.controls.JFXTextField
-import java.util.function.UnaryOperator
-import java.util.regex.Pattern
 import javafx.geometry.Pos
 import javafx.scene.control.TextFormatter
 import ktfx.coroutines.listener
-import ktfx.layouts.LayoutDslMarker
-import ktfx.layouts.NodeManager
+import java.util.function.UnaryOperator
+import java.util.regex.Pattern
 
 class DoubleField : JFXTextField() {
 
@@ -41,11 +39,3 @@ class DoubleField : JFXTextField() {
             text = value.toString()
         }
 }
-
-fun doubleField(
-    init: ((@LayoutDslMarker DoubleField).() -> Unit)? = null
-): DoubleField = DoubleField().also { init?.invoke(it) }
-
-inline fun NodeManager.doubleField(
-    noinline init: ((@LayoutDslMarker DoubleField).() -> Unit)? = null
-): DoubleField = com.hendraanggrian.plano.control.doubleField(init).add()

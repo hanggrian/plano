@@ -1,11 +1,13 @@
 package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.control.border
-import com.hendraanggrian.plano.control.doubleField
+import com.hendraanggrian.plano.control.DoubleField
+import com.hendraanggrian.plano.control.MediaPane
+import com.hendraanggrian.plano.control.Toolbar
+import com.hendraanggrian.plano.control.TrimPane
 import com.hendraanggrian.plano.control.moreButton
 import com.hendraanggrian.plano.control.morePaperButton
 import com.hendraanggrian.plano.control.roundButton
-import com.hendraanggrian.plano.control.toolbar
+import com.hendraanggrian.plano.control.setBorder
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
 import com.hendraanggrian.prefs.BindPref
@@ -23,6 +25,8 @@ import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.ToggleGroup
 import javafx.scene.image.ImageView
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyCombination
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.GridPane
@@ -42,15 +46,16 @@ import ktfx.bindings.eq
 import ktfx.bindings.minus
 import ktfx.bindings.otherwise
 import ktfx.bindings.then
-import ktfx.bindings.times
 import ktfx.booleanPropertyOf
 import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.coroutines.listener
 import ktfx.coroutines.onAction
+import ktfx.coroutines.onHiding
 import ktfx.coroutines.snapshot
 import ktfx.doublePropertyOf
+import ktfx.inputs.plus
 import ktfx.jfoenix.jfxSnackbar
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
@@ -64,7 +69,6 @@ import ktfx.layouts.label
 import ktfx.layouts.menu
 import ktfx.layouts.menuBar
 import ktfx.layouts.menuItem
-import ktfx.layouts.pane
 import ktfx.layouts.radioMenuItem
 import ktfx.layouts.region
 import ktfx.layouts.scene
@@ -83,7 +87,6 @@ import java.awt.Desktop
 import java.net.URI
 import java.util.ResourceBundle
 import javax.imageio.ImageIO
-import kotlin.system.exitProcess
 
 class PlanoApplication : Application(), Resources {
 
@@ -94,8 +97,13 @@ class PlanoApplication : Application(), Resources {
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
 
+        // Material Orange 500
         val COLOR_YELLOW: Color = Color.web("#ffb300")
-        val COLOR_RED: Color = Color.web("#f08077")
+        val COLOR_YELLOW_LIGHT: Color = Color.web("#ffe54c")
+        // Material Red 500
+        val COLOR_RED: Color = Color.web("#f44336")
+        val COLOR_RED_LIGHT: Color = Color.web("#ff7961")
+        // Others
         val COLOR_BORDER: Color = Color.web("#c8c8c8")
 
         @JvmStatic
@@ -128,18 +136,26 @@ class PlanoApplication : Application(), Resources {
             }
         }
     }
-    private val isShowCount = booleanPropertyOf()
+    private val isFilled = booleanPropertyOf().apply {
+        listener { _, _, newValue ->
+            fillMenu.isSelected = newValue
+        }
+    }
+    private val isThicked = booleanPropertyOf().apply {
+        listener { _, _, newValue ->
+            thickMenu.isSelected = newValue
+        }
+    }
 
-    private val mediaWidthField = doubleField { onAction { sendButton.fire() } }
-    private val mediaHeightField = doubleField { onAction { sendButton.fire() } }
-    private val trimWidthField = doubleField { onAction { sendButton.fire() } }
-    private val trimHeightField = doubleField { onAction { sendButton.fire() } }
-    private val bleedField = doubleField { onAction { sendButton.fire() } }
+    private val mediaWidthField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val mediaHeightField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val trimWidthField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val trimHeightField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val bleedField = DoubleField().apply { onAction { sendButton.fire() } }
 
     private lateinit var expandedMenu: CheckMenuItem
-    private lateinit var clearButton: Button
-    private lateinit var expandButton: Button
-    private lateinit var countButton: Button
+    private lateinit var fillMenu: CheckMenuItem
+    private lateinit var thickMenu: CheckMenuItem
     private lateinit var rootPane: Pane
     private lateinit var sendButton: Button
     private lateinit var outputPane: FlowPane
@@ -148,6 +164,9 @@ class PlanoApplication : Application(), Resources {
     override lateinit var resourceBundle: ResourceBundle
 
     @JvmField @BindPref("language") var language = Language.ENGLISH.code
+    @JvmField @BindPref("is_expand") var isExpand = false
+    @JvmField @BindPref("is_fill") var isFill = false
+    @JvmField @BindPref("is_thick") var isThick = false
     @JvmField @BindPref("media_width") var mediaWidth = 0.0
     @JvmField @BindPref("media_height") var mediaHeight = 0.0
     @JvmField @BindPref("trim_width") var trimWidth = 0.0
@@ -164,6 +183,12 @@ class PlanoApplication : Application(), Resources {
     override fun start(stage: Stage) {
         stage.title = BuildConfig.NAME
         stage.setMinSize(750.0, 500.0)
+        stage.onHiding {
+            isExpand = isExpanded.value
+            isFill = isFilled.value
+            isThick = isThicked.value
+            saver.save()
+        }
         stage.scene = scene {
             stylesheets.addAll(
                 PlanoApplication::class.java.getResource(R.style.plano).toExternalForm(),
@@ -181,11 +206,8 @@ class PlanoApplication : Application(), Resources {
                                         isSelected = lang.code == language
                                         onAction {
                                             language = lang.code
-                                            saver.save()
-                                            TextDialog(
-                                                this@PlanoApplication,
-                                                this@stackPane
-                                            ).apply { setOnDialogClosed { Platform.exit() } }
+                                            TextDialog(this@PlanoApplication, this@stackPane)
+                                                .apply { setOnDialogClosed { stage.close() } }
                                                 .show()
                                         }
                                     }
@@ -193,10 +215,8 @@ class PlanoApplication : Application(), Resources {
                             }
                             separatorMenuItem()
                             menuItem(getString(R.string.quit)) {
-                                onAction {
-                                    Platform.exit()
-                                    exitProcess(0)
-                                }
+                                accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.Q
+                                onAction { Platform.exit() }
                             }
                         }
                         "Edit" {
@@ -207,12 +227,23 @@ class PlanoApplication : Application(), Resources {
                         }
                         "View" {
                             expandedMenu = checkMenuItem(getString(R.string.expand)) {
-                                onAction { toggleScale() }
+                                onAction { toggleExpand() }
+                            }
+                            fillMenu = checkMenuItem(getString(R.string.fill_background)) {
+                                onAction { toggleFill() }
+                            }
+                            thickMenu = checkMenuItem(getString(R.string.thicken_border)) {
+                                onAction { toggleThick() }
                             }
                         }
                         "Window" {
-                            "Minimize"()
-                            "Maximize"()
+                            menuItem(getString(R.string.minimize)) {
+                                accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.M
+                                onAction { stage.isIconified = true }
+                            }
+                            menuItem(getString(R.string.zoom)) {
+                                onAction { stage.isMaximized = true }
+                            }
                         }
                         "Help" {
                             menuItem(getString(R.string.about)) {
@@ -222,20 +253,20 @@ class PlanoApplication : Application(), Resources {
                                 onAction { checkForUpdate() }
                             }
                         }
-                    }
-                    toolbar {
+                    }.isUseSystemMenuBar = SystemUtils.IS_OS_MAC
+                    Toolbar().apply {
                         leftItems {
                             imageView(R.image.ic_launcher)
                             region { prefWidth = 12.0 }
                             label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                         }
                         rightItems {
-                            clearButton = roundButton(24.0, R.image.btn_clear) {
+                            roundButton(24.0, R.image.btn_clear) {
                                 tooltip(getString(R.string.clear))
                                 onAction { clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
-                            expandButton = roundButton(24.0, R.image.btn_scale_expand) {
+                            roundButton(24.0, R.image.btn_scale_expand) {
                                 tooltip {
                                     textProperty().bind(
                                         `when`(isExpanded)
@@ -248,22 +279,43 @@ class PlanoApplication : Application(), Resources {
                                         then ImageView(R.image.btn_scale_shrink)
                                         otherwise ImageView(R.image.btn_scale_expand)
                                 )
-                                onAction { toggleScale() }
+                                onAction { toggleExpand() }
                             }
-                            countButton = roundButton(24.0, R.image.btn_count_show) {
+                            roundButton(24.0, R.image.btn_background_fill) {
                                 tooltip {
                                     textProperty().bind(
-                                        `when`(isShowCount)
-                                            then getString(R.string.hide_count)
-                                            otherwise getString(R.string.show_count)
+                                        `when`(isFilled)
+                                            then getString(R.string.unfill_background)
+                                            otherwise getString(R.string.fill_background)
                                     )
                                 }
+                                graphicProperty().bind(
+                                    `when`(isFilled)
+                                        then ImageView(R.image.btn_background_unfill)
+                                        otherwise ImageView(R.image.btn_background_fill)
+                                )
+                                onAction { toggleFill() }
+                            }
+                            roundButton(24.0, R.image.btn_border_thick) {
+                                tooltip {
+                                    textProperty().bind(
+                                        `when`(isThicked)
+                                            then getString(R.string.thicken_border)
+                                            otherwise getString(R.string.unthicken_border)
+                                    )
+                                }
+                                graphicProperty().bind(
+                                    `when`(isThicked)
+                                        then ImageView(R.image.btn_border_thin)
+                                        otherwise ImageView(R.image.btn_border_thick)
+                                )
+                                onAction { toggleThick() }
                             }
                         }
-                    }
+                    }.add()
                     hbox {
                         gridPane {
-                            border(COLOR_BORDER)
+                            setBorder(COLOR_BORDER)
                             paddingAll = 20
                             gap = 10
                             var row = 0
@@ -330,7 +382,6 @@ class PlanoApplication : Application(), Resources {
                                     trimWidth = trimWidthField.value
                                     trimHeight = trimHeightField.value
                                     bleed = bleedField.value
-                                    saver.save()
 
                                     outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
@@ -342,19 +393,9 @@ class PlanoApplication : Application(), Resources {
                                                 bleed
                                             )
                                             anchorPane {
-                                                pane {
-                                                    border(COLOR_YELLOW, 3)
-                                                    prefWidthProperty().bind(mediaWidth * scale)
-                                                    prefHeightProperty().bind(mediaHeight * scale)
-                                                }
-
-                                                size.trimSizes.forEach { size ->
-                                                    pane {
-                                                        prefWidthProperty().bind(size.width * scale)
-                                                        prefHeightProperty().bind(size.height * scale)
-                                                        border(COLOR_RED, 3)
-                                                        userData = size.x to size.y
-                                                    } anchorLeft size.x * scale.value anchorTop size.y * scale.value
+                                                MediaPane(size, scale, isFilled, isThicked).add()
+                                                size.trimSizes.forEach {
+                                                    TrimPane(it, scale, isFilled, isThicked).add()
                                                 }
                                             } row 0 rowSpans 3 col 0
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
@@ -424,10 +465,12 @@ class PlanoApplication : Application(), Resources {
         }
         stage.show()
 
+        if (isExpand) toggleExpand()
+        if (isFill) toggleFill()
         mediaWidthField.requestFocus()
     }
 
-    private suspend fun clear() {
+    private fun clear() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
         rootPane.jfxSnackbar(
@@ -438,16 +481,21 @@ class PlanoApplication : Application(), Resources {
             outputPane.children += children
         }
         mediaWidthField.requestFocus()
-        expandButton.isDisable = true
-        delay(DURATION_SHORT)
-        expandButton.isDisable = false
     }
 
-    private fun toggleScale() {
+    private fun toggleExpand() {
         scale.value = when (scale.value) {
             SCALE_SMALL -> SCALE_BIG
             else -> SCALE_SMALL
         }
+    }
+
+    private fun toggleFill() {
+        isFilled.value = !isFilled.value
+    }
+
+    private fun toggleThick() {
+        isThicked.value = !isThicked.value
     }
 
     private suspend fun checkForUpdate() {
@@ -461,10 +509,8 @@ class PlanoApplication : Application(), Resources {
                 Desktop.getDesktop()
                     .browse(URI(release.assets.first {
                         when {
-                            SystemUtils.IS_OS_MAC ->
-                                it.name.endsWith("dmg")
-                            SystemUtils.IS_OS_WINDOWS ->
-                                it.name.endsWith("exe")
+                            SystemUtils.IS_OS_MAC -> it.name.endsWith("dmg")
+                            SystemUtils.IS_OS_WINDOWS -> it.name.endsWith("exe")
                             else -> it.name.endsWith("jar")
                         }
                     }.downloadUrl))
