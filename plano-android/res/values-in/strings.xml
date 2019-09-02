@@ -24,6 +24,7 @@
     <string name="media_box">Kotak media</string>
     <string name="no_content">Tidak ada konten</string>
     <string name="please_restart">Mohon mulai ulang</string>
+    <string name="quit">Keluar</string>
     <string name="save">Simpan</string>
     <string name="settings">Setelan</string>
     <string name="toggle_scale">Alihkan skala</string>

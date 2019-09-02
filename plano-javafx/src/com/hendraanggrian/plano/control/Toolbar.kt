@@ -4,7 +4,7 @@ package com.hendraanggrian.plano.control
 
 import com.jfoenix.effects.JFXDepthManager
 import ktfx.jfoenix._JFXToolbar
-import ktfx.layouts.LayoutMarker
+import ktfx.layouts.LayoutDslMarker
 import ktfx.layouts.NodeManager
 
 class Toolbar : _JFXToolbar() {
@@ -15,9 +15,9 @@ class Toolbar : _JFXToolbar() {
 }
 
 fun toolbar(
-    init: ((@LayoutMarker Toolbar).() -> Unit)? = null
+    init: ((@LayoutDslMarker Toolbar).() -> Unit)? = null
 ): Toolbar = Toolbar().also { init?.invoke(it) }
 
 inline fun NodeManager.toolbar(
-    noinline init: ((@LayoutMarker Toolbar).() -> Unit)? = null
+    noinline init: ((@LayoutDslMarker Toolbar).() -> Unit)? = null
 ): Toolbar = com.hendraanggrian.plano.control.toolbar(init).add()

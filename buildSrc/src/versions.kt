@@ -11,7 +11,7 @@ const val VERSION_LIFECYCLE = "2.1.0-alpha04"
 
 const val VERSION_MAVEN = "3.6.0"
 const val VERSION_COMMONS_LANG = "3.8.1"
-const val VERSION_KTFX = "8.5.0"
+const val VERSION_KTFX = "8.5.2"
 const val VERSION_PREFS = "0.1"
 const val VERSION_BUNDLER = "0.3-rc1"
 

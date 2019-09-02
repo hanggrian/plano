@@ -11,16 +11,12 @@ import com.hendraanggrian.plano.dialog.TextDialog
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
 import com.hendraanggrian.prefs.PrefsSaver
-import com.hendraanggrian.prefs.jvm.bind
 import com.hendraanggrian.prefs.jvm.setDebug
+import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXButton
-import java.awt.Desktop
-import java.net.URI
-import java.util.ResourceBundle
-import java.util.prefs.Preferences
 import javafx.application.Application
 import javafx.application.Platform
-import javafx.beans.binding.Bindings
+import javafx.beans.binding.Bindings.`when`
 import javafx.geometry.HPos
 import javafx.geometry.Side
 import javafx.scene.control.Button
@@ -32,9 +28,9 @@ import javafx.scene.layout.FlowPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
-import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -57,6 +53,7 @@ import ktfx.doublePropertyOf
 import ktfx.jfoenix.jfxSnackbar
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
+import ktfx.layouts.checkMenuItem
 import ktfx.layouts.circle
 import ktfx.layouts.contextMenu
 import ktfx.layouts.flowPane
@@ -66,6 +63,7 @@ import ktfx.layouts.imageView
 import ktfx.layouts.label
 import ktfx.layouts.menu
 import ktfx.layouts.menuBar
+import ktfx.layouts.menuItem
 import ktfx.layouts.pane
 import ktfx.layouts.radioMenuItem
 import ktfx.layouts.region
@@ -81,6 +79,11 @@ import ktfx.runLater
 import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
 import org.apache.commons.lang3.SystemUtils
+import java.awt.Desktop
+import java.net.URI
+import java.util.ResourceBundle
+import javax.imageio.ImageIO
+import kotlin.system.exitProcess
 
 class PlanoApplication : Application(), Resources {
 
@@ -149,7 +152,7 @@ class PlanoApplication : Application(), Resources {
     override fun init() {
         Plano.DEBUG = BuildConfig.DEBUG
         Prefs.setDebug(BuildConfig.DEBUG)
-        Prefs.bind(Preferences.userRoot().node(BuildConfig.GROUP.replace('.', '/')), this)
+        saver = Prefs.userRoot().node(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
     }
 
@@ -163,6 +166,44 @@ class PlanoApplication : Application(), Resources {
             )
             rootPane = stackPane {
                 vbox {
+                    menuBar {
+                        "File" {
+                            menu(getString(R.string.language)) {
+
+                            }
+                            separatorMenuItem()
+                            menuItem(getString(R.string.quit)) {
+                                onAction {
+                                    Platform.exit()
+                                    exitProcess(0)
+                                }
+                            }
+                        }
+                        "Edit" {
+                            menuItem(getString(R.string.clear)) {
+                                onAction { clear() }
+                                runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
+                            }
+                        }
+                        "View" {
+                            checkMenuItem(getString(R.string.toggle_scale)) {
+                                selectedProperty().bind(`when`(scale eq SCALE_SMALL) then false otherwise true)
+                                // onAction { toggleScale() }
+                            }
+                        }
+                        "Window" {
+                            "Minimize"()
+                            "Maximize"()
+                        }
+                        "Help" {
+                            menuItem(getString(R.string.about)) {
+                                onAction { this@stackPane.showAbout() }
+                            }
+                            menuItem(getString(R.string.check_for_update)) {
+                                onAction { checkForUpdate() }
+                            }
+                        }
+                    }
                     toolbar {
                         leftItems {
                             imageView(R.image.ic_launcher)
@@ -172,36 +213,17 @@ class PlanoApplication : Application(), Resources {
                         rightItems {
                             clearButton = roundButton(24.0, R.image.btn_clear) {
                                 tooltip(getString(R.string.clear))
-                                onAction {
-                                    val children = outputPane.children.toList()
-                                    outputPane.children.clear()
-                                    rootPane.jfxSnackbar(
-                                        getString(R.string._boxes_cleared),
-                                        DURATION_SHORT,
-                                        getString(R.string.btn_undo)
-                                    ) {
-                                        outputPane.children += children
-                                    }
-                                    mediaWidthField.requestFocus()
-                                    fullscreenButton.isDisable = true
-                                    delay(DURATION_SHORT)
-                                    fullscreenButton.isDisable = false
-                                }
+                                onAction { clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
                             }
                             fullscreenButton = roundButton(24.0, R.image.btn_fullscreen) {
                                 tooltip(getString(R.string.toggle_scale))
                                 graphicProperty().bind(
-                                    Bindings.`when`(scale eq SCALE_SMALL)
+                                    `when`(scale eq SCALE_SMALL)
                                         then ImageView(R.image.btn_fullscreen)
                                         otherwise ImageView((R.image.btn_fullscreen_exit))
                                 )
-                                onAction {
-                                    scale.value = when (scale.value) {
-                                        SCALE_SMALL -> SCALE_BIG
-                                        else -> SCALE_SMALL
-                                    }
-                                }
+                                onAction { toggleScale() }
                             }
                             settingsButton = roundButton(24.0, R.image.btn_settings) {
                                 tooltip(getString(R.string.settings))
@@ -226,43 +248,10 @@ class PlanoApplication : Application(), Resources {
                                     }
                                     separatorMenuItem()
                                     (getString(R.string.check_for_update)) {
-                                        onAction {
-                                            val release = withContext(Dispatchers.IO) {
-                                                GitHubApi.getLatestRelease()
-                                            }
-                                            when {
-                                                release.isNewerThan(BuildConfig.VERSION) ->
-                                                    rootPane.jfxSnackbar(
-                                                        getString(R.string._update_available)
-                                                            .format(BuildConfig.VERSION),
-                                                        DURATION_LONG,
-                                                        getString(R.string.btn_download)
-                                                    ) {
-                                                        Desktop.getDesktop()
-                                                            .browse(URI(release.assets.first {
-                                                                when {
-                                                                    SystemUtils.IS_OS_MAC ->
-                                                                        it.name.endsWith("dmg")
-                                                                    SystemUtils.IS_OS_WINDOWS ->
-                                                                        it.name.endsWith("exe")
-                                                                    else -> it.name.endsWith("jar")
-                                                                }
-                                                            }.downloadUrl))
-                                                    }
-                                                else -> rootPane.jfxSnackbar(
-                                                    getString(R.string._update_unavailable),
-                                                    DURATION_LONG
-                                                )
-                                            }
-                                        }
+                                        onAction { checkForUpdate() }
                                     }
                                     (getString(R.string.about)) {
-                                        onAction {
-                                            AboutDialog(
-                                                this@PlanoApplication,
-                                                this@stackPane
-                                            ).show()
-                                        }
+                                        onAction { this@stackPane.showAbout() }
                                     }
                                 }
                                 onAction {
@@ -438,4 +427,56 @@ class PlanoApplication : Application(), Resources {
 
         mediaWidthField.requestFocus()
     }
+
+    private suspend fun clear() {
+        val children = outputPane.children.toList()
+        outputPane.children.clear()
+        rootPane.jfxSnackbar(
+            getString(R.string._boxes_cleared),
+            DURATION_SHORT,
+            getString(R.string.btn_undo)
+        ) {
+            outputPane.children += children
+        }
+        mediaWidthField.requestFocus()
+        fullscreenButton.isDisable = true
+        delay(DURATION_SHORT)
+        fullscreenButton.isDisable = false
+    }
+
+    private fun toggleScale() {
+        scale.value = when (scale.value) {
+            SCALE_SMALL -> SCALE_BIG
+            else -> SCALE_SMALL
+        }
+    }
+
+    private suspend fun checkForUpdate() {
+        val release = withContext(Dispatchers.IO) { GitHubApi.getLatestRelease() }
+        when {
+            release.isNewerThan(BuildConfig.VERSION) -> rootPane.jfxSnackbar(
+                getString(R.string._update_available).format(BuildConfig.VERSION),
+                DURATION_LONG,
+                getString(R.string.btn_download)
+            ) {
+                Desktop.getDesktop()
+                    .browse(URI(release.assets.first {
+                        when {
+                            SystemUtils.IS_OS_MAC ->
+                                it.name.endsWith("dmg")
+                            SystemUtils.IS_OS_WINDOWS ->
+                                it.name.endsWith("exe")
+                            else -> it.name.endsWith("jar")
+                        }
+                    }.downloadUrl))
+            }
+            else -> rootPane.jfxSnackbar(
+                getString(R.string._update_unavailable),
+                DURATION_LONG
+            )
+        }
+    }
+
+    private fun StackPane.showAbout() =
+        AboutDialog(this@PlanoApplication, this).show()
 }

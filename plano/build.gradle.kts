@@ -68,6 +68,10 @@ tasks {
 }
 
 locale {
+    "quit" {
+        en = "Quit"
+        id = "Keluar"
+    }
     "clear" {
         en = "Clear"
         id = "Hapus semua"

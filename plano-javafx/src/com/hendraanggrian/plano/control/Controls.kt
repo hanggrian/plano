@@ -17,7 +17,7 @@ import javafx.scene.paint.Paint
 import javafx.scene.shape.Circle
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.jfxButton
-import ktfx.layouts.LayoutMarker
+import ktfx.layouts.LayoutDslMarker
 import ktfx.layouts.MenuItemManager
 import ktfx.layouts.NodeManager
 import ktfx.layouts._ContextMenu
@@ -78,7 +78,7 @@ fun NodeManager.morePaperButton(
 }
 
 fun NodeManager.moreButton(
-    init: ((@LayoutMarker _ContextMenu).() -> kotlin.Unit)? = null
+    init: ((@LayoutDslMarker _ContextMenu).() -> kotlin.Unit)? = null
 ): Button = roundButton(16.0, R.image.menu_more) {
     val contextMenu = contextMenu(init)
     onAction {
@@ -91,7 +91,7 @@ fun NodeManager.moreButton(
 fun NodeManager.roundButton(
     radius: Double,
     graphicUrl: String,
-    init: ((@LayoutMarker JFXButton).() -> Unit)? = null
+    init: ((@LayoutDslMarker JFXButton).() -> Unit)? = null
 ): Button = jfxButton(graphic = ImageView(graphicUrl)) {
     shape = Circle(radius)
     setMinSize(2 * radius, 2 * radius)

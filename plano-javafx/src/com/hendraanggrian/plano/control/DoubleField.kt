@@ -8,7 +8,7 @@ import java.util.regex.Pattern
 import javafx.geometry.Pos
 import javafx.scene.control.TextFormatter
 import ktfx.coroutines.listener
-import ktfx.layouts.LayoutMarker
+import ktfx.layouts.LayoutDslMarker
 import ktfx.layouts.NodeManager
 
 class DoubleField : JFXTextField() {
@@ -43,9 +43,9 @@ class DoubleField : JFXTextField() {
 }
 
 fun doubleField(
-    init: ((@LayoutMarker DoubleField).() -> Unit)? = null
+    init: ((@LayoutDslMarker DoubleField).() -> Unit)? = null
 ): DoubleField = DoubleField().also { init?.invoke(it) }
 
 inline fun NodeManager.doubleField(
-    noinline init: ((@LayoutMarker DoubleField).() -> Unit)? = null
+    noinline init: ((@LayoutDslMarker DoubleField).() -> Unit)? = null
 ): DoubleField = com.hendraanggrian.plano.control.doubleField(init).add()

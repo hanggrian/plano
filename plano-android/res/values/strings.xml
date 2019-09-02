@@ -24,6 +24,7 @@
     <string name="media_box">Media box</string>
     <string name="no_content">No content</string>
     <string name="please_restart">Please restart</string>
+    <string name="quit">Quit</string>
     <string name="save">Save</string>
     <string name="settings">Settings</string>
     <string name="toggle_scale">Toggle scale</string>
