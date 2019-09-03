@@ -21,6 +21,10 @@
     -fx-background: white;
 }
 
+.jfx-check-box {
+     -jfx-checked-color: -accent;
+}
+
 .jfx-snackbar-content {
     -fx-background-color: #323232;
 }

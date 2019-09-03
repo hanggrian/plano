@@ -1,12 +1,14 @@
 package com.hendraanggrian.plano
 
+import com.hendraanggrian.plano.control.AdaptableRoundButton
 import com.hendraanggrian.plano.control.DoubleField
+import com.hendraanggrian.plano.control.InfoButton
 import com.hendraanggrian.plano.control.MediaPane
+import com.hendraanggrian.plano.control.MoreButton
+import com.hendraanggrian.plano.control.MorePaperButton
+import com.hendraanggrian.plano.control.RoundButton
 import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.TrimPane
-import com.hendraanggrian.plano.control.moreButton
-import com.hendraanggrian.plano.control.morePaperButton
-import com.hendraanggrian.plano.control.roundButton
 import com.hendraanggrian.plano.control.setBorder
 import com.hendraanggrian.plano.dialog.AboutDialog
 import com.hendraanggrian.plano.dialog.TextDialog
@@ -16,9 +18,9 @@ import com.hendraanggrian.prefs.PrefsSaver
 import com.hendraanggrian.prefs.jvm.setDebug
 import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXButton
+import com.jfoenix.controls.JFXCheckBox
 import javafx.application.Application
 import javafx.application.Platform
-import javafx.beans.binding.Bindings.`when`
 import javafx.geometry.HPos
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
@@ -44,8 +46,6 @@ import kotlinx.coroutines.withContext
 import ktfx.bindings.buildBooleanBinding
 import ktfx.bindings.eq
 import ktfx.bindings.minus
-import ktfx.bindings.otherwise
-import ktfx.bindings.then
 import ktfx.booleanPropertyOf
 import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
@@ -71,13 +71,13 @@ import ktfx.layouts.menuBar
 import ktfx.layouts.menuItem
 import ktfx.layouts.radioMenuItem
 import ktfx.layouts.region
+import ktfx.layouts.rowConstraints
 import ktfx.layouts.scene
 import ktfx.layouts.scrollPane
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.stackPane
 import ktfx.layouts.text
 import ktfx.layouts.textFlow
-import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.runLater
 import ktfx.swing.toSwingImage
@@ -88,7 +88,7 @@ import java.net.URI
 import java.util.ResourceBundle
 import javax.imageio.ImageIO
 
-class PlanoApplication : Application(), Resources {
+class PlanoApp : Application(), Resources {
 
     companion object {
         const val DURATION_SHORT = 3000L
@@ -107,7 +107,7 @@ class PlanoApplication : Application(), Resources {
         val COLOR_BORDER: Color = Color.web("#c8c8c8")
 
         @JvmStatic
-        fun main(args: Array<String>) = ktfx.launch<PlanoApplication>(*args)
+        fun main(args: Array<String>) = ktfx.launch<PlanoApp>(*args)
     }
 
     private val scale = doublePropertyOf(SCALE_SMALL)
@@ -147,17 +147,18 @@ class PlanoApplication : Application(), Resources {
         }
     }
 
-    private val mediaWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val mediaHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val trimWidthField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val trimHeightField = DoubleField().apply { onAction { sendButton.fire() } }
-    private val bleedField = DoubleField().apply { onAction { sendButton.fire() } }
+    private val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val mediaHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val trimWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val trimHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val bleedField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val allowFlipCheck = JFXCheckBox()
 
     private lateinit var expandedMenu: CheckMenuItem
     private lateinit var fillMenu: CheckMenuItem
     private lateinit var thickMenu: CheckMenuItem
     private lateinit var rootPane: Pane
-    private lateinit var sendButton: Button
+    private lateinit var calculateButton: Button
     private lateinit var outputPane: FlowPane
 
     private lateinit var saver: PrefsSaver
@@ -172,6 +173,7 @@ class PlanoApplication : Application(), Resources {
     @JvmField @BindPref("trim_width") var trimWidth = 0.0
     @JvmField @BindPref("trim_height") var trimHeight = 0.0
     @JvmField @BindPref("bleed") var bleed = 0.0
+    @JvmField @BindPref("allow_flip") var allowFlip = false
 
     override fun init() {
         Plano.DEBUG = BuildConfig.DEBUG
@@ -191,8 +193,8 @@ class PlanoApplication : Application(), Resources {
         }
         stage.scene = scene {
             stylesheets.addAll(
-                PlanoApplication::class.java.getResource(R.style.plano).toExternalForm(),
-                PlanoApplication::class.java.getResource(R.style.plano_font).toExternalForm()
+                PlanoApp::class.java.getResource(R.style.plano).toExternalForm(),
+                PlanoApp::class.java.getResource(R.style.plano_font).toExternalForm()
             )
             rootPane = stackPane {
                 vbox {
@@ -206,7 +208,7 @@ class PlanoApplication : Application(), Resources {
                                         isSelected = lang.code == language
                                         onAction {
                                             language = lang.code
-                                            TextDialog(this@PlanoApplication, this@stackPane)
+                                            TextDialog(this@PlanoApp, this@stackPane)
                                                 .apply { setOnDialogClosed { stage.close() } }
                                                 .show()
                                         }
@@ -261,56 +263,44 @@ class PlanoApplication : Application(), Resources {
                             label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                         }
                         rightItems {
-                            roundButton(24.0, R.image.btn_clear) {
-                                tooltip(getString(R.string.clear))
+                            RoundButton(
+                                24,
+                                getString(R.string.clear),
+                                R.image.btn_clear
+                            ).apply {
                                 onAction { clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
-                            }
-                            roundButton(24.0, R.image.btn_scale_expand) {
-                                tooltip {
-                                    textProperty().bind(
-                                        `when`(isExpanded)
-                                            then getString(R.string.shrink)
-                                            otherwise getString(R.string.expand)
-                                    )
-                                }
-                                graphicProperty().bind(
-                                    `when`(isExpanded)
-                                        then ImageView(R.image.btn_scale_shrink)
-                                        otherwise ImageView(R.image.btn_scale_expand)
-                                )
+                            }.add()
+                            AdaptableRoundButton(
+                                24,
+                                isExpanded,
+                                getString(R.string.shrink),
+                                getString(R.string.expand),
+                                R.image.btn_scale_expand,
+                                R.image.btn_scale_shrink
+                            ).apply {
                                 onAction { toggleExpand() }
-                            }
-                            roundButton(24.0, R.image.btn_background_fill) {
-                                tooltip {
-                                    textProperty().bind(
-                                        `when`(isFilled)
-                                            then getString(R.string.unfill_background)
-                                            otherwise getString(R.string.fill_background)
-                                    )
-                                }
-                                graphicProperty().bind(
-                                    `when`(isFilled)
-                                        then ImageView(R.image.btn_background_unfill)
-                                        otherwise ImageView(R.image.btn_background_fill)
-                                )
+                            }.add()
+                            AdaptableRoundButton(
+                                24,
+                                isFilled,
+                                getString(R.string.unfill_background),
+                                getString(R.string.fill_background),
+                                R.image.btn_background_fill,
+                                R.image.btn_background_unfill
+                            ).apply {
                                 onAction { toggleFill() }
-                            }
-                            roundButton(24.0, R.image.btn_border_thick) {
-                                tooltip {
-                                    textProperty().bind(
-                                        `when`(isThicked)
-                                            then getString(R.string.thicken_border)
-                                            otherwise getString(R.string.unthicken_border)
-                                    )
-                                }
-                                graphicProperty().bind(
-                                    `when`(isThicked)
-                                        then ImageView(R.image.btn_border_thin)
-                                        otherwise ImageView(R.image.btn_border_thick)
-                                )
+                            }.add()
+                            AdaptableRoundButton(
+                                24,
+                                isThicked,
+                                getString(R.string.unthicken_border),
+                                getString(R.string.thicken_border),
+                                R.image.btn_border_thick,
+                                R.image.btn_border_thin
+                            ).apply {
                                 onAction { toggleThick() }
-                            }
+                            }.add()
                         }
                     }.add()
                     hbox {
@@ -320,48 +310,70 @@ class PlanoApplication : Application(), Resources {
                             gap = 10
                             var row = 0
 
+                            rowConstraints {
+                                constraints() // description text
+                                repeat(4) { constraints { prefHeight = 32.0 } } // input form
+                            }
+
                             text(getString(R.string._desc)) {
                                 wrappingWidth = 200.0
                             } row row++ col 0 colSpans 6
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                             label(getString(R.string.media_box)) row row col 1
-                            mediaWidthField.apply {
+                            mediaWidthField.run {
                                 value = mediaWidth
-                            }.add() row row col 2
+                                add() row row col 2
+                            }
                             label("x") row row col 3
-                            mediaHeightField.apply {
+                            mediaHeightField.run {
                                 value = mediaHeight
-                            }.add() row row col 4
-                            morePaperButton(
-                                this@PlanoApplication,
+                                add() row row col 4
+                            }
+                            MorePaperButton(
+                                this@PlanoApp,
                                 mediaWidthField,
                                 mediaHeightField
-                            ) row row++ col 5
+                            ).add() row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
                             label(getString(R.string.trim_box)) row row col 1
-                            trimWidthField.apply {
+                            trimWidthField.run {
                                 value = trimWidth
-                            }.add() row row col 2
+                                add() row row col 2
+                            }
                             label("x") row row col 3
-                            trimHeightField.apply {
+                            trimHeightField.run {
                                 value = trimHeight
-                            }.add() row row col 4
-                            morePaperButton(
-                                this@PlanoApplication,
+                                add() row row col 4
+                            }
+                            MorePaperButton(
+                                this@PlanoApp,
                                 trimWidthField,
                                 trimHeightField
-                            ) row row++ col 5
+                            ).add() row row++ col 5
 
                             label(getString(R.string.bleed)) row row col 1
-                            bleedField.apply {
+                            bleedField.run {
                                 value = bleed
-                            }.add() row row++ col 2
+                                add() row row col 2
+                            }
+                            InfoButton(this@PlanoApp).add() row row++ col 5
+
+                            label(getString(R.string.allow_flip)) row row col 1
+                            allowFlipCheck.run {
+                                isSelected = allowFlip
+                                add() row row col 2
+                            }
+                            InfoButton(this@PlanoApp).add() row row++ col 5
 
                             row++
                             row++
-                            sendButton = roundButton(24.0, R.image.btn_send) {
+                            calculateButton = RoundButton(
+                                24,
+                                getString(R.string.calculate),
+                                R.image.btn_send
+                            ).apply {
                                 styleClass += "raised"
                                 buttonType = JFXButton.ButtonType.RAISED
                                 disableProperty().bind(buildBooleanBinding(
@@ -382,6 +394,7 @@ class PlanoApplication : Application(), Resources {
                                     trimWidth = trimWidthField.value
                                     trimHeight = trimHeightField.value
                                     bleed = bleedField.value
+                                    allowFlip = allowFlipCheck.isSelected
 
                                     outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
@@ -393,12 +406,25 @@ class PlanoApplication : Application(), Resources {
                                                 bleed
                                             )
                                             anchorPane {
-                                                MediaPane(size, scale, isFilled, isThicked).add()
+                                                MediaPane(
+                                                    size,
+                                                    scale,
+                                                    isFilled,
+                                                    isThicked
+                                                ).add()
                                                 size.trimSizes.forEach {
-                                                    TrimPane(it, scale, isFilled, isThicked).add()
+                                                    TrimPane(
+                                                        it,
+                                                        scale,
+                                                        isFilled,
+                                                        isThicked
+                                                    ).add()
                                                 }
                                             } row 0 rowSpans 3 col 0
-                                            circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
+                                            circle(
+                                                radius = 4.0,
+                                                fill = COLOR_YELLOW
+                                            ) row 0 col 1
                                             textFlow {
                                                 "${mediaWidth}x$mediaHeight"()
                                             } row 0 col 2
@@ -408,7 +434,7 @@ class PlanoApplication : Application(), Resources {
                                                 "${trimWidth}x$trimHeight"()
                                             } row 1 col 2
                                             lateinit var moreButton: Button
-                                            moreButton = moreButton {
+                                            moreButton = MoreButton(this@PlanoApp) {
                                                 getString(R.string.save)(ImageView(R.image.menu_save)) {
                                                     onAction {
                                                         moreButton.isVisible = false
@@ -416,7 +442,9 @@ class PlanoApplication : Application(), Resources {
                                                         @Suppress("LABEL_NAME_CLASH")
                                                         this@gridPane.snapshot {
                                                             ImageIO.write(
-                                                                it.image.toSwingImage(), "png", file
+                                                                it.image.toSwingImage(),
+                                                                "png",
+                                                                file
                                                             )
                                                         }
                                                         GlobalScope.launch(Dispatchers.JavaFx) {
@@ -433,16 +461,11 @@ class PlanoApplication : Application(), Resources {
                                                         }
                                                     }
                                                 }
-                                                getString(R.string.delete)(ImageView(R.image.menu_delete)) {
-                                                    onAction {
-                                                        outputPane.children -= this@pane
-                                                    }
-                                                }
-                                            } row 2 col 1 colSpans 2
+                                            }.add() row 2 col 1 colSpans 2
                                         }
                                     })
                                 }
-                            } row row col 0 colSpans 6 halign HPos.RIGHT
+                            }.add() row row col 0 colSpans 6 halign HPos.RIGHT
                         }
                         anchorPane {
                             scrollPane {
@@ -523,5 +546,5 @@ class PlanoApplication : Application(), Resources {
     }
 
     private fun StackPane.showAbout() =
-        AboutDialog(this@PlanoApplication, this).show()
+        AboutDialog(this@PlanoApp, this).show()
 }

@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.plano.control
 
 import com.jfoenix.effects.JFXDepthManager

@@ -12,7 +12,7 @@ plugins {
     application
 }
 
-application.mainClassName = "$RELEASE_GROUP.PlanoApplication"
+application.mainClassName = "$RELEASE_GROUP.PlanoApp"
 
 sourceSets {
     getByName("main") {

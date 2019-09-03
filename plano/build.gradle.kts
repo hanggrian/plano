@@ -148,6 +148,22 @@ locale {
         en = "Bleed"
         id = "Lebihan"
     }
+    "allow_flip" {
+        en = "Allow flip"
+        id = "Izinkan putar"
+    }
+    "calculate" {
+        en = "Calculate"
+        id = "Kalkulasi"
+    }
+    "more" {
+        en = "More"
+        id = "Lain-lain"
+    }
+    "info" {
+        en = "Info"
+        id = "Jelaskan"
+    }
     "a_series" {
         en = "A Series"
         id = "Seri A"
