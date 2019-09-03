@@ -9,18 +9,55 @@ object Plano {
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
-        bleed: Double = 0.0
+        bleed: Double,
+        allowFlip: Boolean
     ): MediaSize = MediaSize(
         mediaWidth,
         mediaHeight,
-        listOf(
-            traditional(mediaWidth, mediaHeight, trimWidth + bleed * 2, trimHeight + bleed * 2),
-            traditional(mediaWidth, mediaHeight, trimHeight + bleed * 2, trimWidth + bleed * 2),
-            radicalColumns(mediaWidth, mediaHeight, trimWidth + bleed * 2, trimHeight + bleed * 2),
-            radicalColumns(mediaWidth, mediaHeight, trimHeight + bleed * 2, trimWidth + bleed * 2),
-            radicalRows(mediaWidth, mediaHeight, trimWidth + bleed * 2, trimHeight + bleed * 2),
-            radicalRows(mediaWidth, mediaHeight, trimHeight + bleed * 2, trimWidth + bleed * 2)
-        ).maxBy { it.size }!!
+        mutableListOf<List<TrimSize>>().apply {
+            add(
+                traditional(
+                    mediaWidth, mediaHeight,
+                    trimWidth + bleed * 2, trimHeight + bleed * 2,
+                    allowFlip
+                )
+            )
+            add(
+                traditional(
+                    mediaWidth, mediaHeight,
+                    trimHeight + bleed * 2, trimWidth + bleed * 2,
+                    allowFlip
+                )
+            )
+            add(
+                radicalColumns(
+                    mediaWidth, mediaHeight,
+                    trimWidth + bleed * 2, trimHeight + bleed * 2,
+                    allowFlip
+                )
+            )
+            add(
+                radicalColumns(
+                    mediaWidth, mediaHeight,
+                    trimHeight + bleed * 2, trimWidth + bleed * 2,
+                    allowFlip
+                )
+            )
+            add(
+                radicalRows(
+                    mediaWidth, mediaHeight,
+                    trimWidth + bleed * 2, trimHeight + bleed * 2,
+                    allowFlip
+                )
+            )
+            add(
+                radicalRows(
+                    mediaWidth, mediaHeight,
+                    trimHeight + bleed * 2, trimWidth + bleed * 2,
+                    allowFlip
+                )
+            )
+        }.maxBy { it.size }!!
     )
 
     /** Lay columns and rows, then search for optional leftovers. */
@@ -28,7 +65,8 @@ object Plano {
         mediaWidth: Double,
         mediaHeight: Double,
         trimWidth: Double,
-        trimHeight: Double
+        trimHeight: Double,
+        allowFlip: Boolean
     ): List<TrimSize> {
         if (DEBUG) {
             println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
@@ -39,17 +77,18 @@ object Plano {
         val rows = (mediaHeight / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
-        val flippedColumns =
-            calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
-        val flippedRows =
-            calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        if (allowFlip) {
+            val flippedColumns =
+                calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+            val flippedRows =
+                calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
 
-        if (flippedColumns > flippedRows) {
-            sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
-        } else if (flippedRows > flippedColumns) {
-            sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+            if (flippedColumns > flippedRows) {
+                sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+            } else if (flippedRows > flippedColumns) {
+                sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+            }
         }
-
         return sizes
     }
 
@@ -58,7 +97,8 @@ object Plano {
         mediaWidth: Double,
         mediaHeight: Double,
         trimWidth: Double,
-        trimHeight: Double
+        trimHeight: Double,
+        allowFlip: Boolean
     ): List<TrimSize> {
         if (DEBUG) {
             println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
@@ -69,14 +109,22 @@ object Plano {
         val rows = (mediaHeight / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
-        val flippedColumns =
-            calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
-        val flippedRows =
-            calculateFlippedRows(rows, mediaWidth - trimHeight, mediaHeight, trimWidth, trimHeight)
+        if (allowFlip) {
+            val flippedColumns =
+                calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+            val flippedRows =
+                calculateFlippedRows(
+                    rows,
+                    mediaWidth - trimHeight,
+                    mediaHeight,
+                    trimWidth,
+                    trimHeight
+                )
 
-        sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
-        if (flippedRows > 0) {
-            sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+            sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+            if (flippedRows > 0) {
+                sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+            }
         }
         return sizes
     }
@@ -86,7 +134,8 @@ object Plano {
         mediaWidth: Double,
         mediaHeight: Double,
         trimWidth: Double,
-        trimHeight: Double
+        trimHeight: Double,
+        allowFlip: Boolean
     ): List<TrimSize> {
         if (DEBUG) {
             println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
@@ -97,20 +146,22 @@ object Plano {
         val rows = ((mediaHeight - trimWidth) / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
-        val flippedColumns =
-            calculateFlippedColumns(
-                columns,
-                mediaWidth,
-                mediaHeight - trimWidth,
-                trimWidth,
-                trimHeight
-            )
-        val flippedRows =
-            calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        if (allowFlip) {
+            val flippedColumns =
+                calculateFlippedColumns(
+                    columns,
+                    mediaWidth,
+                    mediaHeight - trimWidth,
+                    trimWidth,
+                    trimHeight
+                )
+            val flippedRows =
+                calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
 
-        sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
-        if (flippedColumns > 0) {
-            sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+            sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+            if (flippedColumns > 0) {
+                sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+            }
         }
         return sizes
     }

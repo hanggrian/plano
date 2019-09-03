@@ -1,9 +1,10 @@
 [![release](https://img.shields.io/github/release/hendraanggrian/plano.svg)](https://github.com/hendraanggrian/plano/releases)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 Plano
 =====
-Efficient paper size calculator.
+App to efficiently calculate paper usage for commercial printing use, available as desktop and Android app.
 
 ![JavaFX][ss_javafx]
 ![Android][ss_android]

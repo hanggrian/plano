@@ -426,7 +426,7 @@ class PlanoApp : Application(), Resources {
                                             val size = Plano.calculate(
                                                 mediaWidth, mediaHeight,
                                                 trimWidth, trimHeight,
-                                                bleed
+                                                bleed, allowFlip
                                             )
                                             anchorPane {
                                                 MediaPane(
