@@ -1,5 +1,6 @@
 package com.hendraanggrian.plano.control
 
+import com.hendraanggrian.plano.PlanoApp.Companion.BUTTON_OPACITY
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXButton
@@ -9,6 +10,7 @@ import javafx.beans.value.ObservableValue
 import javafx.geometry.Side
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
+import javafx.scene.layout.StackPane
 import javafx.scene.shape.Circle
 import ktfx.bindings.buildBinding
 import ktfx.bindings.otherwise
@@ -29,12 +31,6 @@ sealed class AbstractRoundButton(
     radius: Number,
     textBinding: ObservableValue<String>
 ) : JFXButton() {
-
-    constructor(
-        radius: Number,
-        text: String
-    ) : this(radius, finalStringPropertyOf(text))
-
     init {
         val r = radius.toDouble()
         shape = Circle(r)
@@ -47,12 +43,21 @@ sealed class AbstractRoundButton(
     }
 }
 
+open class SimpleRoundButton(
+    radius: Number,
+    text: String,
+    graphicUrl: String
+) : AbstractRoundButton(radius, finalStringPropertyOf(text)) {
+    init {
+        graphic = ImageView(graphicUrl)
+    }
+}
+
 open class RoundButton(
     radius: Number,
     textBinding: ObservableValue<String>,
     graphicUrl: String
 ) : AbstractRoundButton(radius, textBinding) {
-
     constructor(
         radius: Number,
         text: String,
@@ -61,7 +66,7 @@ open class RoundButton(
 
     init {
         graphicProperty().bind(buildBinding(hoverProperty()) {
-            ImageView(graphicUrl).also { if (!isHover) it.opacity = 0.54 }
+            ImageView(graphicUrl).also { if (!isHover) it.opacity = BUTTON_OPACITY }
         })
     }
 }
@@ -74,7 +79,6 @@ open class AdaptableRoundButton(
     graphicUrl1: String,
     graphicUrl2: String
 ) : AbstractRoundButton(radius, `when`(dependency) then text1 otherwise text2) {
-
     init {
         graphicProperty().bind(buildBinding(dependency, hoverProperty()) {
             ImageView(
@@ -82,20 +86,28 @@ open class AdaptableRoundButton(
                     dependency.value -> graphicUrl1
                     else -> graphicUrl2
                 }
-            ).also { if (!isHover) it.opacity = 0.54 }
+            ).also { if (!isHover) it.opacity = BUTTON_OPACITY }
         })
     }
 }
 
 open class InfoButton(
-    resources: Resources
-) : RoundButton(16, resources.getString(R.string.info), R.image.menu_info)
+    resources: Resources,
+    container: StackPane,
+    titleId: String,
+    contentId: String
+) : RoundButton(16, resources.getString(R.string.info), R.image.menu_info) {
+    init {
+        onAction {
+            TextDialog(resources, container, titleId, contentId).show()
+        }
+    }
+}
 
 open class MoreButton(
     resources: Resources,
     init: ((@LayoutDslMarker _ContextMenu).() -> Unit)? = null
 ) : RoundButton(16, resources.getString(R.string.more), R.image.menu_more) {
-
     init {
         val contextMenu = contextMenu(init)
         onAction {

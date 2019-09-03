@@ -90,7 +90,7 @@ locale {
     }
     "expand" {
         en = "Expand"
-        id = "Memperluar"
+        id = "Memperluas"
     }
     "shrink" {
         en = "Shrink"
@@ -111,6 +111,10 @@ locale {
     "unthicken_border" {
         en = "Unthicken border"
         id = "Perkecil batasan"
+    }
+    "reset" {
+        en = "Reset"
+        id = "Atur ulang"
     }
     "language" {
         en = "Language"
@@ -148,9 +152,21 @@ locale {
         en = "Bleed"
         id = "Lebihan"
     }
+    "_bleed" {
+        en =
+            "Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed."
+        id =
+            "Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area lebih di kertas yang dapat dipotong secara aman."
+    }
     "allow_flip" {
         en = "Allow flip"
         id = "Izinkan putar"
+    }
+    "_allow_flip" {
+        en =
+            "When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available."
+        id =
+            "Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi."
     }
     "calculate" {
         en = "Calculate"
@@ -180,7 +196,7 @@ locale {
         en = "Delete"
         id = "Hapus"
     }
-    "_save_desc" {
+    "_save" {
         en = "Saved as %s"
         id = "Terimpan sebagai %s"
     }
@@ -196,7 +212,7 @@ locale {
         en = "Please restart"
         id = "Mohon mulai ulang"
     }
-    "_please_restart_desc" {
+    "_please_restart" {
         en = "Restart app to see effect."
         id = "Mulai ulang aplikasi untuk melihat perubahan."
     }

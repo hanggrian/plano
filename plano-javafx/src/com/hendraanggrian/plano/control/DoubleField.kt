@@ -1,11 +1,11 @@
 package com.hendraanggrian.plano.control
 
 import com.jfoenix.controls.JFXTextField
+import java.util.function.UnaryOperator
+import java.util.regex.Pattern
 import javafx.geometry.Pos
 import javafx.scene.control.TextFormatter
 import ktfx.coroutines.listener
-import java.util.function.UnaryOperator
-import java.util.regex.Pattern
 
 class DoubleField : JFXTextField() {
 
