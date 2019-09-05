@@ -106,7 +106,7 @@ open class InfoButton(
 
 open class MoreButton(
     resources: Resources,
-    init: ((@LayoutDslMarker _ContextMenu).() -> Unit)? = null
+    init: (@LayoutDslMarker _ContextMenu).() -> Unit
 ) : RoundButton(16, resources.getString(R.string.more), R.image.menu_more) {
     init {
         val contextMenu = contextMenu(init)

@@ -27,6 +27,8 @@ import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.ToggleGroup
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCombination
 import javafx.scene.layout.AnchorPane
@@ -57,6 +59,7 @@ import ktfx.coroutines.snapshot
 import ktfx.doublePropertyOf
 import ktfx.inputs.plus
 import ktfx.jfoenix.jfxSnackbar
+import ktfx.layouts._Pane
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
@@ -193,7 +196,7 @@ class PlanoApp : Application(), Resources {
             isThick = thickProperty.value
             saver.save()
         }
-        stage.scene = scene {
+        stage.scene {
             stylesheets.addAll(
                 PlanoApp::class.java.getResource(R.style.plano).toExternalForm(),
                 PlanoApp::class.java.getResource(R.style.plano_font).toExternalForm()
@@ -323,8 +326,8 @@ class PlanoApp : Application(), Resources {
                     hbox {
                         gridPane {
                             setBorder(COLOR_BORDER)
-                            paddingAll = 20
-                            gap = 10
+                            paddingAll = 20.0
+                            gap = 10.0
                             var row = 0
 
                             rowConstraints {
@@ -419,10 +422,10 @@ class PlanoApp : Application(), Resources {
                                     bleed = bleedField.value
                                     allowFlip = allowFlipCheck.isSelected
 
-                                    outputPane.children.add(0, ktfx.layouts.pane {
+                                    outputPane.children.add(0, _Pane().apply {
                                         gridPane {
-                                            paddingAll = 10
-                                            gap = 10
+                                            paddingAll = 10.0
+                                            gap = 10.0
                                             val size = Plano.calculate(
                                                 mediaWidth, mediaHeight,
                                                 trimWidth, trimHeight,
@@ -449,17 +452,17 @@ class PlanoApp : Application(), Resources {
                                                 fill = COLOR_YELLOW
                                             ) row 0 col 1
                                             textFlow {
-                                                "${mediaWidth}x$mediaHeight"()
+                                                text("${mediaWidth}x$mediaHeight")
                                             } row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
                                                 "${size.trimSizes.size}pcs " { styleClass += "bold" }
-                                                "${trimWidth}x$trimHeight"()
+                                                text("${trimWidth}x$trimHeight")
                                             } row 1 col 2
                                             lateinit var moreButton: Button
                                             moreButton = MoreButton(this@PlanoApp) {
                                                 getString(R.string.save)(
-                                                    ktfx.layouts.imageView(R.image.menu_save) {
+                                                    ImageView(Image(R.image.menu_save)).apply {
                                                         opacity = BUTTON_OPACITY
                                                     }
                                                 ) {
@@ -489,12 +492,12 @@ class PlanoApp : Application(), Resources {
                                                     }
                                                 }
                                                 getString(R.string.delete)(
-                                                    ktfx.layouts.imageView(R.image.menu_delete) {
+                                                    ImageView(Image(R.image.menu_delete)).apply {
                                                         opacity = BUTTON_OPACITY
                                                     }
                                                 ) {
                                                     onAction {
-                                                        outputPane.children -= this@pane
+                                                        outputPane.children -= this@apply
                                                     }
                                                 }
                                             }.add() row 2 col 1 colSpans 2
@@ -508,15 +511,15 @@ class PlanoApp : Application(), Resources {
                                 isFitToWidth = true
                                 hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
                                 outputPane = flowPane {
-                                    paddingAll = 10
+                                    paddingAll = 10.0
                                     prefWidthProperty().bind(this@scrollPane.widthProperty() - 10)
                                 }
-                            } anchorAll 0
+                            } anchorAll 0.0
                             borderPane {
                                 label(getString(R.string.no_content))
                                 visibleProperty().bind(outputPane.children.isEmptyBinding)
                                 managedProperty().bind(outputPane.children.isEmptyBinding)
-                            } anchorAll 0
+                            } anchorAll 0.0
                         } hpriority Priority.ALWAYS
                     } vpriority Priority.ALWAYS
                 }

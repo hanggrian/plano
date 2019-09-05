@@ -9,8 +9,8 @@ object Plano {
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
-        bleed: Double,
-        allowFlip: Boolean
+        bleed: Double = 0.0,
+        allowFlip: Boolean = true
     ): MediaSize = MediaSize(
         mediaWidth,
         mediaHeight,

@@ -3,14 +3,15 @@ package com.hendraanggrian.plano.control
 import com.hendraanggrian.plano.BuildConfig
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
+import com.jfoenix.controls.JFXDialog
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import ktfx.controls.paddingAll
 import ktfx.coroutines.onAction
-import ktfx.jfoenix._JFXDialog
 import ktfx.jfoenix.jfxButton
 import ktfx.layouts.NodeManager
+import ktfx.layouts._VBox
 import ktfx.layouts.buttonBar
 import ktfx.layouts.label
 import ktfx.layouts.vbox
@@ -21,24 +22,22 @@ sealed class Dialog(
     resources: Resources,
     container: StackPane,
     title: String
-) : _JFXDialog(container, DialogTransition.CENTER, true), Resources by resources {
+) : JFXDialog(container, _VBox(20.0), DialogTransition.CENTER), NodeManager, Resources by resources {
 
-    private lateinit var contentPane: VBox
+    private var contentPane: VBox
 
     override fun <R : Node> R.add(): R = also { contentPane.children += it }
 
     init {
-        content = ktfx.layouts.vbox(20.0) {
-            paddingAll = 20
+        (content as _VBox).run {
+            paddingAll = 20.0
             label(title) { styleClass.addAll("bold", "display") }
             contentPane = vbox()
             buttonBar {
                 onButtons()
                 jfxButton(getString(R.string.btn_close)) {
                     styleClass.addAll("flat", "bold")
-                    onAction {
-                        close()
-                    }
+                    onAction { close() }
                 }
             }
         }

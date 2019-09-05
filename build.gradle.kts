@@ -21,7 +21,6 @@ allprojects {
         google()
         jcenter()
         maven("https://kotlin.bintray.com/kotlinx")
-        maven("https://dl.bintray.com/hendraanggrian/prefs")
     }
     tasks {
         withType<Delete> {
