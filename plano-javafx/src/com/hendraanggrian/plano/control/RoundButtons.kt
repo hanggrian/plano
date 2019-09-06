@@ -3,6 +3,7 @@ package com.hendraanggrian.plano.control
 import com.hendraanggrian.plano.PlanoApp.Companion.BUTTON_OPACITY
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
+import com.hendraanggrian.plano.StandardSize
 import com.jfoenix.controls.JFXButton
 import javafx.beans.binding.Bindings.`when`
 import javafx.beans.value.ObservableBooleanValue
@@ -123,55 +124,16 @@ open class MorePaperButton(
     widthField: TextField,
     heightField: TextField
 ) : MoreButton(resources, {
-    menu(resources.getString(R.string.a_series)) {
-        paperMenuItem(118.9, 84.1, widthField, heightField, "A0")
-        paperMenuItem(84.1, 59.4, widthField, heightField, "A1")
-        paperMenuItem(59.4, 42, widthField, heightField, "A2")
-        paperMenuItem(42, 29.7, widthField, heightField, "A3")
-        paperMenuItem(29.7, 21, widthField, heightField, "A4")
-        paperMenuItem(21, 14.8, widthField, heightField, "A5")
-        paperMenuItem(14.8, 10.5, widthField, heightField, "A6")
-        paperMenuItem(10.5, 7.4, widthField, heightField, "A7")
-        paperMenuItem(7.4, 5.2, widthField, heightField, "A8")
-        paperMenuItem(5.2, 3.7, widthField, heightField, "A9")
-        paperMenuItem(3.7, 2.6, widthField, heightField, "A10")
-    }
-    menu(resources.getString(R.string.b_series)) {
-        paperMenuItem(141.4, 100, widthField, heightField, "B0")
-        paperMenuItem(100, 70.7, widthField, heightField, "B1")
-        paperMenuItem(70.7, 50, widthField, heightField, "B2")
-        paperMenuItem(50, 35.3, widthField, heightField, "B3")
-        paperMenuItem(35.3, 25, widthField, heightField, "B4")
-        paperMenuItem(25, 17.6, widthField, heightField, "B5")
-        paperMenuItem(17.6, 12.5, widthField, heightField, "B6")
-        paperMenuItem(12.5, 8.8, widthField, heightField, "B7")
-        paperMenuItem(8.8, 6.2, widthField, heightField, "B8")
-        paperMenuItem(6.2, 4.4, widthField, heightField, "B9")
-        paperMenuItem(4.4, 3.1, widthField, heightField, "B10")
-    }
-    separatorMenuItem()
-    paperMenuItem(61, 86, widthField, heightField)
-    paperMenuItem(61, 92, widthField, heightField)
-    paperMenuItem(65, 90, widthField, heightField)
-    paperMenuItem(65, 100, widthField, heightField)
-    paperMenuItem(79, 109, widthField, heightField)
-    separatorMenuItem()
-    paperMenuItem(70, 108, widthField, heightField)
-    paperMenuItem(86, 106, widthField, heightField)
-})
-
-private fun MenuItemManager.paperMenuItem(
-    width: Number,
-    height: Number,
-    widthField: TextField,
-    heightField: TextField,
-    name: String? = null
-) {
-    val defaultTitle = "$width x $height"
-    menuItem(name?.let { "$it\t $defaultTitle" } ?: defaultTitle) {
-        onAction {
-            widthField.text = width.toString()
-            heightField.text = height.toString()
+    val append: MenuItemManager.(StandardSize) -> Unit = { standardSize ->
+        menuItem(standardSize.title) {
+            onAction {
+                widthField.text = standardSize.width.toString()
+                heightField.text = standardSize.height.toString()
+            }
         }
     }
-}
+    menu(resources.getString(R.string.a_series)) { StandardSize.aSeries().forEach { append(it) } }
+    menu(resources.getString(R.string.b_series)) { StandardSize.bSeries().forEach { append(it) } }
+    separatorMenuItem()
+    menu(resources.getString(R.string.others)) { StandardSize.others().forEach { append(it) } }
+})

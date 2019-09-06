@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano
 
 import com.google.common.truth.Truth
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PlanoTest {

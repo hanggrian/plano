@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually.--><resources>
     <string name="_about">Efficient paper size calculator. See homepage for more information.</string>
+    <string name="_allow_flip">When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available.</string>
+    <string name="_bleed">Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed.</string>
     <string name="_boxes_cleared">Boxes cleared.</string>
     <string name="_desc">Calculate how many trim boxes fit in a media box</string>
     <string name="_incomplete">Media and trim size need to be filled.</string>
-    <string name="_please_restart_desc">Restart app to see effect.</string>
-    <string name="_save_desc">Saved as %s</string>
+    <string name="_please_restart">Restart app to see effect.</string>
+    <string name="_save">Saved as %s</string>
     <string name="_update_available">Plano version %s is available.</string>
     <string name="_update_unavailable">You already have the latest version.</string>
     <string name="a_series">A Series</string>
     <string name="about">About</string>
+    <string name="allow_flip">Allow flip</string>
     <string name="b_series">B Series</string>
     <string name="bleed">Bleed</string>
     <string name="btn_close">CLOSE</string>
@@ -17,16 +20,27 @@
     <string name="btn_homepage">HOMEPAGE</string>
     <string name="btn_open">OPEN</string>
     <string name="btn_undo">UNDO</string>
+    <string name="calculate">Calculate</string>
     <string name="check_for_update">Check for update</string>
     <string name="clear">Clear</string>
     <string name="delete">Delete</string>
+    <string name="expand">Expand</string>
+    <string name="fill_background">Fill background</string>
+    <string name="info">Info</string>
     <string name="language">Language</string>
     <string name="media_box">Media box</string>
+    <string name="minimize">Minimize</string>
+    <string name="more">More</string>
     <string name="no_content">No content</string>
+    <string name="others">Others</string>
     <string name="please_restart">Please restart</string>
     <string name="quit">Quit</string>
+    <string name="reset">Reset</string>
     <string name="save">Save</string>
-    <string name="settings">Settings</string>
-    <string name="toggle_scale">Toggle scale</string>
+    <string name="shrink">Shrink</string>
+    <string name="thicken_border">Thicken border</string>
     <string name="trim_box">Trim box</string>
+    <string name="unfill_background">Unfill background</string>
+    <string name="unthicken_border">Unthicken border</string>
+    <string name="zoom">Zoom</string>
 </resources>

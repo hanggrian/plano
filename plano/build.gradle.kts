@@ -26,7 +26,8 @@ dependencies {
     api(ktor("client-gson"))
     api(apache("maven-artifact", VERSION_MAVEN))
 
-    testImplementation(kotlin("test", VERSION_KOTLIN))
+    testImplementation(kotlin("test-junit", VERSION_KOTLIN))
+    testImplementation(apache("commons-math3", VERSION_COMMONS_MATH))
     testImplementation(truth())
 
     configuration {
@@ -187,6 +188,10 @@ locale {
     "b_series" {
         en = "B Series"
         id = "Seri B"
+    }
+    "others" {
+        en = "Others"
+        id = "Lain-lain"
     }
     "save" {
         en = "Save"
