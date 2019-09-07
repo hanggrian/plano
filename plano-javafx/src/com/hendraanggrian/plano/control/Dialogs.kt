@@ -4,6 +4,8 @@ import com.hendraanggrian.plano.BuildConfig
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXDialog
+import java.awt.Desktop
+import java.net.URI
 import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
@@ -11,25 +13,22 @@ import ktfx.controls.paddingAll
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.jfxButton
 import ktfx.layouts.NodeManager
-import ktfx.layouts._VBox
 import ktfx.layouts.buttonBar
 import ktfx.layouts.label
 import ktfx.layouts.vbox
-import java.awt.Desktop
-import java.net.URI
 
 sealed class Dialog(
     resources: Resources,
     container: StackPane,
     title: String
-) : JFXDialog(container, _VBox(20.0), DialogTransition.CENTER), NodeManager, Resources by resources {
+) : JFXDialog(container, null, DialogTransition.CENTER), NodeManager, Resources by resources {
 
-    private var contentPane: VBox
+    private lateinit var contentPane: VBox
 
-    override fun <R : Node> R.add(): R = also { contentPane.children += it }
+    override fun <T : Node> addNode(node: T): T = node.also { contentPane.children += it }
 
     init {
-        (content as _VBox).run {
+        content = ktfx.layouts.vbox(20.0) {
             paddingAll = 20.0
             label(title) { styleClass.addAll("bold", "display") }
             contentPane = vbox()

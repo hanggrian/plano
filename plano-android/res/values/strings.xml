@@ -18,7 +18,7 @@
     <string name="btn_close">CLOSE</string>
     <string name="btn_download">DOWNLOAD</string>
     <string name="btn_homepage">HOMEPAGE</string>
-    <string name="btn_open">OPEN</string>
+    <string name="btn_show_file">SHOW FILE</string>
     <string name="btn_undo">UNDO</string>
     <string name="calculate">Calculate</string>
     <string name="check_for_update">Check for update</string>

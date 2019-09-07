@@ -157,7 +157,7 @@ locale {
         en =
             "Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed."
         id =
-            "Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area lebih di kertas yang dapat dipotong secara aman."
+            "Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman."
     }
     "allow_flip" {
         en = "Allow flip"
@@ -229,9 +229,9 @@ locale {
         en = "DOWNLOAD"
         id = "UNDUH"
     }
-    "btn_open" {
-        en = "OPEN"
-        id = "BUKA"
+    "btn_show_file" {
+        en = "SHOW FILE"
+        id = "TUNJUKKAN FILE"
     }
     "btn_homepage" {
         en = "HOMEPAGE"

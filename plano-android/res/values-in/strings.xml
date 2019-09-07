@@ -18,7 +18,7 @@
     <string name="btn_close">TUTUP</string>
     <string name="btn_download">UNDUH</string>
     <string name="btn_homepage">BERANDA</string>
-    <string name="btn_open">BUKA</string>
+    <string name="btn_show_file">TUNJUKKAN FILE</string>
     <string name="btn_undo">KEMBALIKAN</string>
     <string name="calculate">Kalkulasi</string>
     <string name="check_for_update">Cek pembaruan</string>

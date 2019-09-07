@@ -12,7 +12,6 @@ import com.hendraanggrian.plano.control.SimpleRoundButton
 import com.hendraanggrian.plano.control.TextDialog
 import com.hendraanggrian.plano.control.Toolbar
 import com.hendraanggrian.plano.control.TrimPane
-import com.hendraanggrian.plano.control.setBorder
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
 import com.hendraanggrian.prefs.PrefsSaver
@@ -20,6 +19,9 @@ import com.hendraanggrian.prefs.jvm.setDebug
 import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXCheckBox
+import java.awt.Desktop
+import java.net.URI
+import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.geometry.HPos
@@ -32,6 +34,8 @@ import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCombination
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.BorderStrokeStyle
+import javafx.scene.layout.BorderWidths
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
@@ -39,6 +43,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
+import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -52,6 +57,7 @@ import ktfx.booleanPropertyOf
 import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
+import ktfx.controls.updateBorder
 import ktfx.coroutines.listener
 import ktfx.coroutines.onAction
 import ktfx.coroutines.onHiding
@@ -59,7 +65,6 @@ import ktfx.coroutines.snapshot
 import ktfx.doublePropertyOf
 import ktfx.inputs.plus
 import ktfx.jfoenix.jfxSnackbar
-import ktfx.layouts._Pane
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
@@ -86,10 +91,6 @@ import ktfx.runLater
 import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
 import org.apache.commons.lang3.SystemUtils
-import java.awt.Desktop
-import java.net.URI
-import java.util.ResourceBundle
-import javax.imageio.ImageIO
 
 class PlanoApp : Application(), Resources {
 
@@ -276,22 +277,22 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                     }.isUseSystemMenuBar = SystemUtils.IS_OS_MAC
-                    Toolbar().apply {
+                    addNode(Toolbar().apply {
                         leftItems {
                             imageView(R.image.ic_launcher)
                             region { prefWidth = 12.0 }
                             label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                         }
                         rightItems {
-                            RoundButton(
+                            addNode(RoundButton(
                                 24,
                                 getString(R.string.clear),
                                 R.image.btn_clear
                             ).apply {
                                 onAction { clear() }
                                 runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
-                            }.add()
-                            AdaptableRoundButton(
+                            })
+                            addNode(AdaptableRoundButton(
                                 24,
                                 expandedProperty,
                                 getString(R.string.shrink),
@@ -300,8 +301,8 @@ class PlanoApp : Application(), Resources {
                                 R.image.btn_scale_shrink
                             ).apply {
                                 onAction { toggleExpand() }
-                            }.add()
-                            AdaptableRoundButton(
+                            })
+                            addNode(AdaptableRoundButton(
                                 24,
                                 filledProperty,
                                 getString(R.string.unfill_background),
@@ -310,8 +311,8 @@ class PlanoApp : Application(), Resources {
                                 R.image.btn_background_unfill
                             ).apply {
                                 onAction { toggleFill() }
-                            }.add()
-                            AdaptableRoundButton(
+                            })
+                            addNode(AdaptableRoundButton(
                                 24,
                                 thickProperty,
                                 getString(R.string.unthicken_border),
@@ -320,12 +321,16 @@ class PlanoApp : Application(), Resources {
                                 R.image.btn_border_thin
                             ).apply {
                                 onAction { toggleThick() }
-                            }.add()
+                            })
                         }
-                    }.add()
+                    })
                     hbox {
                         gridPane {
-                            setBorder(COLOR_BORDER)
+                            updateBorder(
+                                topStroke = COLOR_BORDER,
+                                topStyle = BorderStrokeStyle.SOLID,
+                                widths = BorderWidths(1.0)
+                            )
                             paddingAll = 20.0
                             gap = 10.0
                             var row = 0
@@ -341,61 +346,63 @@ class PlanoApp : Application(), Resources {
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                             label(getString(R.string.media_box)) row row col 1
-                            mediaWidthField.run {
+                            addNode(mediaWidthField.apply {
                                 value = mediaWidth
-                                add() row row col 2
-                            }
+                            }) row row col 2
                             label("x") row row col 3
-                            mediaHeightField.run {
+                            addNode(mediaHeightField.apply {
                                 value = mediaHeight
-                                add() row row col 4
-                            }
-                            MorePaperButton(
-                                this@PlanoApp,
-                                mediaWidthField,
-                                mediaHeightField
-                            ).add() row row++ col 5
+                            }) row row col 4
+                            addNode(
+                                MorePaperButton(
+                                    this@PlanoApp,
+                                    mediaWidthField,
+                                    mediaHeightField
+                                )
+                            ) row row++ col 5
 
                             circle(radius = 4.0, fill = COLOR_RED) row row col 0
                             label(getString(R.string.trim_box)) row row col 1
-                            trimWidthField.run {
+                            addNode(trimWidthField.apply {
                                 value = trimWidth
-                                add() row row col 2
-                            }
+                            }) row row col 2
                             label("x") row row col 3
-                            trimHeightField.run {
+                            addNode(trimHeightField.apply {
                                 value = trimHeight
-                                add() row row col 4
-                            }
-                            MorePaperButton(
-                                this@PlanoApp,
-                                trimWidthField,
-                                trimHeightField
-                            ).add() row row++ col 5
+                            }) row row col 4
+                            addNode(
+                                MorePaperButton(
+                                    this@PlanoApp,
+                                    trimWidthField,
+                                    trimHeightField
+                                )
+                            ) row row++ col 5
 
                             label(getString(R.string.bleed)) row row col 1
-                            bleedField.run {
+                            addNode(bleedField.apply {
                                 value = bleed
-                                add() row row col 2
-                            }
-                            InfoButton(
-                                this@PlanoApp, this@stackPane,
-                                R.string.bleed, R.string._bleed
-                            ).add() row row++ col 5
+                            }) row row col 2
+                            addNode(
+                                InfoButton(
+                                    this@PlanoApp, this@stackPane,
+                                    R.string.bleed, R.string._bleed
+                                )
+                            ) row row++ col 5
 
                             label(getString(R.string.allow_flip)) row row col 1
-                            allowFlipCheck.run {
+                            addNode(allowFlipCheck.apply {
                                 isSelected = allowFlip
-                                add() row row col 2
-                            }
-                            InfoButton(
-                                this@PlanoApp, this@stackPane,
-                                R.string.allow_flip, R.string._allow_flip
-                            ).add() row row++ col 5
+                            }) row row col 2
+                            addNode(
+                                InfoButton(
+                                    this@PlanoApp, this@stackPane,
+                                    R.string.allow_flip, R.string._allow_flip
+                                )
+                            ) row row++ col 5
 
                             row++
                             row++
-                            calculateButton = SimpleRoundButton(
+                            calculateButton = addNode(SimpleRoundButton(
                                 24,
                                 getString(R.string.calculate),
                                 R.image.btn_send
@@ -422,7 +429,7 @@ class PlanoApp : Application(), Resources {
                                     bleed = bleedField.value
                                     allowFlip = allowFlipCheck.isSelected
 
-                                    outputPane.children.add(0, _Pane().apply {
+                                    outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
                                             paddingAll = 10.0
                                             gap = 10.0
@@ -432,19 +439,19 @@ class PlanoApp : Application(), Resources {
                                                 bleed, allowFlip
                                             )
                                             anchorPane {
-                                                MediaPane(
-                                                    size,
-                                                    scaleProperty,
-                                                    filledProperty,
-                                                    thickProperty
-                                                ).add()
+                                                addNode(
+                                                    MediaPane(
+                                                        size, scaleProperty,
+                                                        filledProperty, thickProperty
+                                                    )
+                                                )
                                                 size.trimSizes.forEach {
-                                                    TrimPane(
-                                                        it,
-                                                        scaleProperty,
-                                                        filledProperty,
-                                                        thickProperty
-                                                    ).add()
+                                                    addNode(
+                                                        TrimPane(
+                                                            it, scaleProperty,
+                                                            filledProperty, thickProperty
+                                                        )
+                                                    )
                                                 }
                                             } row 0 rowSpans 3 col 0
                                             circle(
@@ -457,10 +464,10 @@ class PlanoApp : Application(), Resources {
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
                                                 "${size.trimSizes.size}pcs " { styleClass += "bold" }
-                                                text("${trimWidth}x$trimHeight")
+                                                text("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
                                             } row 1 col 2
                                             lateinit var moreButton: Button
-                                            moreButton = MoreButton(this@PlanoApp) {
+                                            moreButton = addNode(MoreButton(this@PlanoApp) {
                                                 getString(R.string.save)(
                                                     ImageView(Image(R.image.menu_save)).apply {
                                                         opacity = BUTTON_OPACITY
@@ -484,9 +491,10 @@ class PlanoApp : Application(), Resources {
                                                                 getString(R.string._save)
                                                                     .format(file.name),
                                                                 DURATION_SHORT,
-                                                                getString(R.string.btn_open)
+                                                                getString(R.string.btn_show_file)
                                                             ) {
-                                                                Desktop.getDesktop().open(file)
+                                                                Desktop.getDesktop()
+                                                                    .open(file.parentFile)
                                                             }
                                                         }
                                                     }
@@ -497,15 +505,15 @@ class PlanoApp : Application(), Resources {
                                                     }
                                                 ) {
                                                     onAction {
-                                                        outputPane.children -= this@apply
+                                                        outputPane.children -= this@pane
                                                     }
                                                 }
-                                            }.add() row 2 col 1 colSpans 2
+                                            }) row 2 col 1 colSpans 2
                                         }
                                     })
                                 }
-                            }.add() row row col 0 colSpans 6 halign HPos.RIGHT
-                        }
+                            }) row row col 0 colSpans 6 halign HPos.RIGHT
+                        } hpriority Priority.SOMETIMES
                         anchorPane {
                             scrollPane {
                                 isFitToWidth = true
