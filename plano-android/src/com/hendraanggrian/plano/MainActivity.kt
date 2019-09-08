@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private var clearMenu: MenuItem? = null
+    private var clearItem: MenuItem? = null
     private lateinit var adapter: MainAdapter
     private lateinit var saver: PrefsSaver
 
@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity() {
             when {
                 isEmpty -> {
                     emptyText.visibility = View.VISIBLE
-                    clearMenu?.isVisible = false
+                    clearItem?.isVisible = false
                     appBar.setExpanded(true)
                     mediaWidthText.requestFocus()
                 }
                 else -> {
                     emptyText.visibility = View.GONE
-                    clearMenu?.isVisible = true
+                    clearItem?.isVisible = true
                     recyclerView.scrollToPosition(adapter.size - 1)
                 }
             }
@@ -98,13 +98,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        clearMenu = menu.findItem(R.id.clear)
+        clearItem = menu.findItem(R.id.clearItem)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.clear -> {
+            R.id.clearItem -> {
                 val temp = adapter.toList()
                 adapter.removeAll()
                 recyclerView.snackbar(
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                     adapter.putAll(temp)
                 }
             }
-            R.id.checkForUpdate -> GlobalScope.launch(Dispatchers.Main) {
+            R.id.checkForUpdateItem -> GlobalScope.launch(Dispatchers.Main) {
                 val release = withContext(Dispatchers.IO) {
                     GitHubApi.getLatestRelease()
                 }
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                     else -> recyclerView.longSnackbar(getString(R.string._update_unavailable))
                 }
             }
-            R.id.about -> AboutDialogFragment()
+            R.id.aboutItem -> AboutDialogFragment()
                 .also {
                     it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this)
                 }

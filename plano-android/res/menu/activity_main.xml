@@ -4,22 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/clear"
+        android:id="@+id/clearItem"
         android:icon="@drawable/btn_clear"
         android:title="@string/clear"
         android:visible="false"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
 
-    <group>
-        <item
-            android:id="@+id/checkForUpdate"
-            android:title="@string/check_for_update"
-            app:showAsAction="never" />
+    <item
+        android:id="@+id/flipItem"
+        android:checkable="true"
+        android:title="@string/allow_flip"
+        app:showAsAction="never" />
 
-        <item
-            android:id="@+id/about"
-            android:title="@string/about"
-            app:showAsAction="never" />
-    </group>
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/checkForUpdateItem"
+                android:title="@string/check_for_update"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/aboutItem"
+                android:title="@string/about"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 </menu>
