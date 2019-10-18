@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano.control
 
-import com.hendraanggrian.plano.PlanoApp.Companion.BUTTON_OPACITY
+import com.hendraanggrian.plano.App.Companion.BUTTON_OPACITY
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.StandardSize
@@ -13,14 +13,14 @@ import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Circle
+import ktfx.asProperty
 import ktfx.bindings.buildBinding
 import ktfx.bindings.otherwise
 import ktfx.bindings.then
 import ktfx.coroutines.onAction
-import ktfx.finalStringPropertyOf
+import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.LayoutDslMarker
 import ktfx.layouts.MenuItemManager
-import ktfx.layouts._ContextMenu
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
@@ -48,7 +48,7 @@ open class SimpleRoundButton(
     radius: Number,
     text: String,
     graphicUrl: String
-) : AbstractRoundButton(radius, finalStringPropertyOf(text)) {
+) : AbstractRoundButton(radius, text.asProperty(true)) {
     init {
         graphic = ImageView(graphicUrl)
     }
@@ -63,7 +63,7 @@ open class RoundButton(
         radius: Number,
         text: String,
         graphicUrl: String
-    ) : this(radius, finalStringPropertyOf(text), graphicUrl)
+    ) : this(radius, text.asProperty(true), graphicUrl)
 
     init {
         graphicProperty().bind(buildBinding(hoverProperty()) {
@@ -107,7 +107,7 @@ open class InfoButton(
 
 open class MoreButton(
     resources: Resources,
-    init: (@LayoutDslMarker _ContextMenu).() -> Unit
+    init: (@LayoutDslMarker KtfxContextMenu).() -> Unit
 ) : RoundButton(16, resources.getString(R.string.more), R.image.menu_more) {
     init {
         val contextMenu = contextMenu(init)

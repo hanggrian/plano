@@ -2,7 +2,7 @@
 <!--Generated file by locale-gradle-plugin, do not edit manually.--><resources>
     <string name="_about">Kalkulator ukuran plano efisien. Lihat beranda untuk informasi lebih.</string>
     <string name="_allow_flip">Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi.</string>
-    <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area lebih di kertas yang dapat dipotong secara aman.</string>
+    <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman.</string>
     <string name="_boxes_cleared">Konten terhapus.</string>
     <string name="_desc">Hitung berapa banyak kotak potong dalam kotak media</string>
     <string name="_incomplete">Kotak media dan potong perlu diisi.</string>

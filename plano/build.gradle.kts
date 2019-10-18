@@ -28,7 +28,7 @@ dependencies {
 
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
     testImplementation(apache("commons-math3", VERSION_COMMONS_MATH))
-    testImplementation(truth())
+    testImplementation(google("truth", "truth", VERSION_TRUTH))
 
     configuration {
         invoke(ktlint())
@@ -69,10 +69,6 @@ tasks {
 }
 
 locale {
-    "quit" {
-        en = "Quit"
-        id = "Keluar"
-    }
     "minimize" {
         en = "Minimize"
         id = "Perkecil"

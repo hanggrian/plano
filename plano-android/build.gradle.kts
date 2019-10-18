@@ -12,7 +12,6 @@ android {
         targetSdkVersion(SDK_TARGET)
         multiDexEnabled = true
         applicationId = RELEASE_GROUP
-        versionCode = 1
         versionName = RELEASE_VERSION
     }
     compileOptions {
@@ -28,19 +27,17 @@ android {
         }
     }
     buildTypes {
-        val initField: com.android.build.gradle.internal.dsl.BuildType.() -> Unit = {
-            buildConfigField("String", "NAME", "\"$RELEASE_NAME\"")
-            buildConfigField("String", "HOMEPAGE", "\"$RELEASE_HOMEPAGE\"")
-        }
         getByName("debug") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            initField()
+            buildConfigField("String", "NAME", "\"$RELEASE_NAME\"")
+            buildConfigField("String", "HOMEPAGE", "\"$RELEASE_HOMEPAGE\"")
         }
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            initField()
+            buildConfigField("String", "NAME", "\"$RELEASE_NAME\"")
+            buildConfigField("String", "HOMEPAGE", "\"$RELEASE_HOMEPAGE\"")
         }
     }
     lintOptions {
@@ -75,17 +72,17 @@ dependencies {
     implementation(androidx("lifecycle", "lifecycle-extensions", VERSION_LIFECYCLE))
     implementation(androidx("lifecycle", "lifecycle-viewmodel-ktx", VERSION_LIFECYCLE))
     implementation(androidx("lifecycle", "lifecycle-livedata-ktx", VERSION_LIFECYCLE))
-    implementation(androidx("core", "core-ktx", "$VERSION_ANDROIDX-alpha03"))
-    implementation(androidx("appcompat", version = "$VERSION_ANDROIDX-alpha01"))
-    implementation(androidx("preference", version = "$VERSION_ANDROIDX-alpha01"))
-    implementation(androidx("coordinatorlayout", version = "$VERSION_ANDROIDX-alpha01"))
-    implementation(androidx("recyclerview", version = "$VERSION_ANDROIDX-alpha01"))
+    implementation(androidx("core", "core-ktx"))
+    implementation(androidx("appcompat"))
+    implementation(androidx("preference"))
+    implementation(androidx("coordinatorlayout", version = "$VERSION_ANDROIDX-beta01"))
+    implementation(androidx("recyclerview", version = "$VERSION_ANDROIDX-beta01"))
     implementation(androidx("cardview", version = "1.0.0"))
-    implementation(material("$VERSION_ANDROIDX-alpha02"))
+    implementation(material("$VERSION_ANDROIDX-beta01"))
 
-    implementation("com.takisoft.preferencex:preferencex:1.0.0")
+    implementation(preferencex())
 
-    debugImplementation(leakCanary())
+    debugImplementation(squareup("leakcanary", "leakcanary-android", VERSION_LEAKCANARY))
 
     configuration {
         invoke(ktlint())

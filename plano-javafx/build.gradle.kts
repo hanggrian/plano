@@ -8,11 +8,11 @@ plugins {
     hendraanggrian("r")
     hendraanggrian("buildconfig")
     hendraanggrian("packr")
-    id("com.github.johnrengelman.shadow")
+    shadow
     application
 }
 
-application.mainClassName = "$RELEASE_GROUP.PlanoApp"
+application.mainClassName = "$RELEASE_GROUP.App"
 
 sourceSets {
     getByName("main") {

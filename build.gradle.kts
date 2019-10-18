@@ -36,7 +36,4 @@ tasks {
     register<Delete>("clean") {
         delete(buildDir)
     }
-    named<Wrapper>("wrapper") {
-        gradleVersion = VERSION_GRADLE
-    }
 }
