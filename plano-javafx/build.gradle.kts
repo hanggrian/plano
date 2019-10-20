@@ -103,13 +103,17 @@ packr {
     resources = files("res")
     minimizeJre = "hard"
     macOS {
-        name = "$RELEASE_NAME.app"
+        name = "$RELEASE_NAME/$RELEASE_NAME.app"
         icon = rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns")
         bundleId = RELEASE_GROUP
     }
     windows32 {
-        name = RELEASE_NAME
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_202-x86"
+        name = "32-bit/$RELEASE_NAME"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_231-x86"
+    }
+    windows64 {
+        name = "64-bit/$RELEASE_NAME"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_231-x64"
     }
     verbose = true
     openOnDone = true
