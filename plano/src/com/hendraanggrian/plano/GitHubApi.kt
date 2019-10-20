@@ -19,9 +19,9 @@ object GitHubApi {
         }
     }
 
-    suspend fun getLatestRelease(): Release = client.get {
-        apiUrl("repos/hendraanggrian/plano/releases/latest")
-    }
+    suspend fun getRelease(extension: String): Release =
+        client.get<List<Release>> { apiUrl("repos/hendraanggrian/plano/releases") }
+            .firstOrNull { release -> release.assets.any { it.name.endsWith(extension) } } ?: Release.NOT_FOUND
 
     private fun HttpRequestBuilder.apiUrl(path: String) {
         header(HttpHeaders.CacheControl, "no-cache")

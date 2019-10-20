@@ -7,6 +7,10 @@ data class Release(
     val assets: List<Asset>
 ) {
 
+    companion object {
+        val NOT_FOUND = Release("", emptyList())
+    }
+
     fun isNewerThan(currentVersion: String): Boolean =
         ComparableVersion(name) > ComparableVersion(currentVersion) &&
             assets.isNotEmpty() &&

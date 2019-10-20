@@ -566,7 +566,7 @@ class App : Application(), Resources {
     }
 
     private suspend fun checkForUpdate() {
-        val release = withContext(Dispatchers.IO) { GitHubApi.getLatestRelease() }
+        val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".jar") }
         when {
             release.isNewerThan(BuildConfig.VERSION) -> rootPane.jfxSnackbar(
                 getString(R.string._update_available).format(BuildConfig.VERSION),

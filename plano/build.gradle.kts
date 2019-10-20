@@ -1,7 +1,6 @@
 import java.util.Locale
 
 group = RELEASE_GROUP
-version = RELEASE_VERSION
 
 plugins {
     `java-library`

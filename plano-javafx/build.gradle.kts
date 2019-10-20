@@ -1,5 +1,5 @@
 group = RELEASE_GROUP
-version = RELEASE_VERSION
+version = RELEASE_VERSION_JAVAFX
 
 plugins {
     kotlin("jvm")
@@ -87,7 +87,7 @@ tasks {
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         destinationDir = buildDir.resolve("releases")
         baseName = RELEASE_ARTIFACT
-        version = RELEASE_VERSION
+        version = RELEASE_VERSION_JAVAFX
         classifier = null
     }
 
@@ -98,7 +98,7 @@ tasks {
 
 packr {
     mainClass = application.mainClassName
-    executable = RELEASE_ARTIFACT
+    executable = RELEASE_NAME
     classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
     resources = files("res")
     minimizeJre = "hard"

@@ -12,7 +12,7 @@ android {
         targetSdkVersion(SDK_TARGET)
         multiDexEnabled = true
         applicationId = RELEASE_GROUP
-        versionName = RELEASE_VERSION
+        versionName = RELEASE_VERSION_ANDROID
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

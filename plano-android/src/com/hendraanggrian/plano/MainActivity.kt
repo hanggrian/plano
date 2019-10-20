@@ -115,9 +115,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.checkForUpdateItem -> GlobalScope.launch(Dispatchers.Main) {
-                val release = withContext(Dispatchers.IO) {
-                    GitHubApi.getLatestRelease()
-                }
+                val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".apk") }
                 when {
                     release.isNewerThan(BuildConfig.VERSION_NAME) -> recyclerView.longSnackbar(
                         getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
