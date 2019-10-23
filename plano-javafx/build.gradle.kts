@@ -85,10 +85,10 @@ tasks {
     }
 
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
-        destinationDir = buildDir.resolve("releases")
-        baseName = RELEASE_ARTIFACT
-        version = RELEASE_VERSION_JAVAFX
-        classifier = null
+        destinationDirectory.set(buildDir.resolve("releases"))
+        archiveBaseName.set(RELEASE_ARTIFACT)
+        archiveVersion.set(RELEASE_VERSION)
+        archiveClassifier.set(null as String?)
     }
 
     withType<com.hendraanggrian.packr.PackTask> {
