@@ -58,12 +58,10 @@ import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.controls.updateBorder
-import ktfx.coroutines.listener
 import ktfx.coroutines.onAction
-import ktfx.coroutines.onHiding
-import ktfx.coroutines.snapshot
 import ktfx.inputs.plus
-import ktfx.jfoenix.jfxSnackbar
+import ktfx.jfoenix.controls.jfxSnackbar
+import ktfx.layouts.addNode
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
@@ -86,6 +84,9 @@ import ktfx.layouts.stackPane
 import ktfx.layouts.text
 import ktfx.layouts.textFlow
 import ktfx.layouts.vbox
+import ktfx.listeners.listener
+import ktfx.listeners.onHiding
+import ktfx.listeners.snapshot
 import ktfx.runLater
 import ktfx.swing.toSwingImage
 import ktfx.windows.setMinSize
@@ -227,7 +228,7 @@ class App : Application(), Resources {
                                 }
                                 separatorMenuItem()
                                 menuItem(getString(R.string.check_for_update)) {
-                                    onAction { checkForUpdate() }
+                                    onAction(Dispatchers.JavaFx) { checkForUpdate() }
                                 }
                             }
                             "Edit" {
@@ -273,53 +274,57 @@ class App : Application(), Resources {
                                 }
                             }
                         }.isUseSystemMenuBar = SystemUtils.IS_OS_MAC
-                        addNode(Toolbar().apply {
+                        addNode(Toolbar()) {
                             leftItems {
                                 imageView(R.image.ic_launcher)
                                 region { prefWidth = 12.0 }
                                 label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                             }
                             rightItems {
-                                addNode(RoundButton(
-                                    24,
-                                    getString(R.string.clear),
-                                    R.image.btn_clear
-                                ).apply {
+                                addNode(
+                                    RoundButton(24, getString(R.string.clear), R.image.btn_clear)
+                                ) {
                                     onAction { clear() }
                                     runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
-                                })
-                                addNode(AdaptableRoundButton(
-                                    24,
-                                    expandedProperty,
-                                    getString(R.string.shrink),
-                                    getString(R.string.expand),
-                                    R.image.btn_scale_expand,
-                                    R.image.btn_scale_shrink
-                                ).apply {
+                                }
+                                addNode(
+                                    AdaptableRoundButton(
+                                        24,
+                                        expandedProperty,
+                                        getString(R.string.shrink),
+                                        getString(R.string.expand),
+                                        R.image.btn_scale_expand,
+                                        R.image.btn_scale_shrink
+                                    )
+                                ) {
                                     onAction { toggleExpand() }
-                                })
-                                addNode(AdaptableRoundButton(
-                                    24,
-                                    filledProperty,
-                                    getString(R.string.unfill_background),
-                                    getString(R.string.fill_background),
-                                    R.image.btn_background_fill,
-                                    R.image.btn_background_unfill
-                                ).apply {
+                                }
+                                addNode(
+                                    AdaptableRoundButton(
+                                        24,
+                                        filledProperty,
+                                        getString(R.string.unfill_background),
+                                        getString(R.string.fill_background),
+                                        R.image.btn_background_fill,
+                                        R.image.btn_background_unfill
+                                    )
+                                ) {
                                     onAction { toggleFill() }
-                                })
-                                addNode(AdaptableRoundButton(
-                                    24,
-                                    thickProperty,
-                                    getString(R.string.unthicken_border),
-                                    getString(R.string.thicken_border),
-                                    R.image.btn_border_thick,
-                                    R.image.btn_border_thin
-                                ).apply {
+                                }
+                                addNode(
+                                    AdaptableRoundButton(
+                                        24,
+                                        thickProperty,
+                                        getString(R.string.unthicken_border),
+                                        getString(R.string.thicken_border),
+                                        R.image.btn_border_thick,
+                                        R.image.btn_border_thin
+                                    )
+                                ) {
                                     onAction { toggleThick() }
-                                })
+                                }
                             }
-                        })
+                        }
                         hbox {
                             gridPane {
                                 updateBorder(
@@ -342,13 +347,13 @@ class App : Application(), Resources {
 
                                 circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
                                 label(getString(R.string.media_box)) row row col 1
-                                addNode(mediaWidthField.apply {
+                                addNode(mediaWidthField) {
                                     value = mediaWidth
-                                }) row row col 2
+                                } row row col 2
                                 label("x") row row col 3
-                                addNode(mediaHeightField.apply {
+                                addNode(mediaHeightField) {
                                     value = mediaHeight
-                                }) row row col 4
+                                } row row col 4
                                 addNode(
                                     MorePaperButton(
                                         this@App,
@@ -359,13 +364,13 @@ class App : Application(), Resources {
 
                                 circle(radius = 4.0, fill = COLOR_RED) row row col 0
                                 label(getString(R.string.trim_box)) row row col 1
-                                addNode(trimWidthField.apply {
+                                addNode(trimWidthField) {
                                     value = trimWidth
-                                }) row row col 2
+                                } row row col 2
                                 label("x") row row col 3
-                                addNode(trimHeightField.apply {
+                                addNode(trimHeightField) {
                                     value = trimHeight
-                                }) row row col 4
+                                } row row col 4
                                 addNode(
                                     MorePaperButton(
                                         this@App,
@@ -375,9 +380,9 @@ class App : Application(), Resources {
                                 ) row row++ col 5
 
                                 label(getString(R.string.bleed)) row row col 1
-                                addNode(bleedField.apply {
+                                addNode(bleedField) {
                                     value = bleed
-                                }) row row col 2
+                                } row row col 2
                                 addNode(
                                     InfoButton(
                                         this@App, this@stackPane,
@@ -386,9 +391,9 @@ class App : Application(), Resources {
                                 ) row row++ col 5
 
                                 label(getString(R.string.allow_flip)) row row col 1
-                                addNode(allowFlipCheck.apply {
+                                addNode(allowFlipCheck) {
                                     isSelected = allowFlip
-                                }) row row col 2
+                                } row row col 2
                                 addNode(
                                     InfoButton(
                                         this@App, this@stackPane,
@@ -402,7 +407,7 @@ class App : Application(), Resources {
                                     24,
                                     getString(R.string.calculate),
                                     R.image.btn_send
-                                ).apply {
+                                )) {
                                     styleClass += "raised"
                                     buttonType = JFXButton.ButtonType.RAISED
                                     disableProperty().bind(buildBooleanBinding(
@@ -457,7 +462,10 @@ class App : Application(), Resources {
                                                 textFlow {
                                                     text("${mediaWidth}x$mediaHeight")
                                                 } row 0 col 2
-                                                circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
+                                                circle(
+                                                    radius = 4.0,
+                                                    fill = COLOR_RED
+                                                ) row 1 col 1
                                                 textFlow {
                                                     "${size.trimSizes.size}pcs " { styleClass += "bold" }
                                                     text("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
@@ -508,7 +516,7 @@ class App : Application(), Resources {
                                             }
                                         })
                                     }
-                                }) row row col 0 colSpans 6 halign HPos.RIGHT
+                                } row row col 0 colSpans 6 halign HPos.RIGHT
                             } hpriority Priority.SOMETIMES
                             anchorPane {
                                 scrollPane {

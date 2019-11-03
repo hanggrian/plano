@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano.control
 
 import com.jfoenix.effects.JFXDepthManager
-import ktfx.jfoenix.KtfxJFXToolbar
+import ktfx.jfoenix.layouts.KtfxJFXToolbar
 
 class Toolbar : KtfxJFXToolbar() {
 

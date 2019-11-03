@@ -10,12 +10,12 @@ import javafx.scene.Node
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import ktfx.controls.paddingAll
-import ktfx.coroutines.onAction
-import ktfx.jfoenix.jfxButton
+import ktfx.jfoenix.layouts.jfxButton
 import ktfx.layouts.NodeManager
 import ktfx.layouts.buttonBar
 import ktfx.layouts.label
 import ktfx.layouts.vbox
+import ktfx.listeners.onAction
 
 sealed class Dialog(
     resources: Resources,
