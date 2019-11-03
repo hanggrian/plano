@@ -87,7 +87,7 @@ tasks {
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         destinationDirectory.set(buildDir.resolve("releases"))
         archiveBaseName.set(RELEASE_ARTIFACT)
-        archiveVersion.set(RELEASE_VERSION)
+        archiveVersion.set(RELEASE_VERSION_JAVAFX)
         archiveClassifier.set(null as String?)
     }
 
