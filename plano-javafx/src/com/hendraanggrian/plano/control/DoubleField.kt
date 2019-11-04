@@ -5,7 +5,7 @@ import java.util.function.UnaryOperator
 import java.util.regex.Pattern
 import javafx.geometry.Pos
 import javafx.scene.control.TextFormatter
-import ktfx.coroutines.listener
+import ktfx.listeners.listener
 
 class DoubleField : JFXTextField() {
 

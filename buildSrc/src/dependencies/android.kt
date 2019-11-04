@@ -1,7 +1,7 @@
 const val SDK_MIN = 14
 const val SDK_TARGET = 29
 
-private const val VERSION_ANDROID_PLUGIN = "3.5.1"
+private const val VERSION_ANDROID_PLUGIN = "3.5.2"
 const val VERSION_LIFECYCLE = "2.1.0"
 const val VERSION_MULTIDEX = "2.0.1"
 const val VERSION_ANDROIDX = "1.1.0"

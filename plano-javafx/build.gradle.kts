@@ -28,9 +28,9 @@ dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-javafx", VERSION_COROUTINES))
 
-    implementation(apache("commons-lang3", VERSION_COMMONS_LANG))
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
+    implementation(hendraanggrian("ktfx", "ktfx-controlsfx-commons", VERSION_KTFX))
 
     implementation(hendraanggrian("prefs", "prefs-jvm", VERSION_PREFS))
     kapt(hendraanggrian("prefs", "prefs-compiler", VERSION_PREFS))

@@ -17,7 +17,6 @@ import ktfx.asProperty
 import ktfx.bindings.buildBinding
 import ktfx.bindings.otherwise
 import ktfx.bindings.then
-import ktfx.coroutines.onAction
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.LayoutDslMarker
 import ktfx.layouts.MenuItemManager
@@ -26,6 +25,7 @@ import ktfx.layouts.menu
 import ktfx.layouts.menuItem
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
+import ktfx.listeners.onAction
 
 @Suppress("LeakingThis")
 sealed class AbstractRoundButton(

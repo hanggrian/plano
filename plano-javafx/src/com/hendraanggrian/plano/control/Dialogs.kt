@@ -23,7 +23,7 @@ sealed class Dialog(
     title: String
 ) : JFXDialog(container, null, DialogTransition.CENTER), NodeManager, Resources by resources {
 
-    private lateinit var contentPane: VBox
+    private val contentPane: VBox
 
     override fun <T : Node> addNode(node: T): T = node.also { contentPane.children += it }
 

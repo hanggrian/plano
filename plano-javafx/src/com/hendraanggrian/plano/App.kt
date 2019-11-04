@@ -58,6 +58,7 @@ import ktfx.collections.isEmptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.controls.updateBorder
+import ktfx.controlsfx.isOSX
 import ktfx.coroutines.onAction
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
@@ -206,6 +207,7 @@ class App : Application(), Resources {
                 rootPane = stackPane {
                     vbox {
                         menuBar {
+                            isUseSystemMenuBar = isOSX()
                             "File" {
                                 menu(getString(R.string.language)) {
                                     val group = ToggleGroup()
@@ -273,7 +275,7 @@ class App : Application(), Resources {
                                     onAction { this@stackPane.showAbout() }
                                 }
                             }
-                        }.isUseSystemMenuBar = SystemUtils.IS_OS_MAC
+                        }
                         addNode(Toolbar()) {
                             leftItems {
                                 imageView(R.image.ic_launcher)
@@ -403,11 +405,13 @@ class App : Application(), Resources {
 
                                 row++
                                 row++
-                                calculateButton = addNode(SimpleRoundButton(
-                                    24,
-                                    getString(R.string.calculate),
-                                    R.image.btn_send
-                                )) {
+                                calculateButton = addNode(
+                                    SimpleRoundButton(
+                                        24,
+                                        getString(R.string.calculate),
+                                        R.image.btn_send
+                                    )
+                                ) {
                                     styleClass += "raised"
                                     buttonType = JFXButton.ButtonType.RAISED
                                     disableProperty().bind(buildBooleanBinding(
