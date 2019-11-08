@@ -18,7 +18,6 @@ import ktfx.bindings.buildBinding
 import ktfx.bindings.otherwise
 import ktfx.bindings.then
 import ktfx.layouts.KtfxContextMenu
-import ktfx.layouts.LayoutDslMarker
 import ktfx.layouts.MenuItemManager
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
@@ -107,7 +106,7 @@ open class InfoButton(
 
 open class MoreButton(
     resources: Resources,
-    init: (@LayoutDslMarker KtfxContextMenu).() -> Unit
+    init: KtfxContextMenu.() -> Unit
 ) : RoundButton(16, resources.getString(R.string.more), R.image.menu_more) {
     init {
         val contextMenu = contextMenu(init)
