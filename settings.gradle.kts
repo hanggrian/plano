@@ -1,4 +1,4 @@
-include(RELEASE_ARTIFACT)
-include("$RELEASE_ARTIFACT-javafx")
-include("$RELEASE_ARTIFACT-android")
+include("plano")
+include("plano-javafx")
+include("plano-android")
 include("website")

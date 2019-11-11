@@ -49,13 +49,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ktfx.asProperty
-import ktfx.bindings.buildBooleanBinding
+import ktfx.bindings.booleanBindingOf
 import ktfx.bindings.eq
 import ktfx.bindings.minus
+import ktfx.booleanProperty
 import ktfx.collections.isEmptyBinding
 import ktfx.controlsfx.isOSX
 import ktfx.coroutines.onAction
+import ktfx.doubleProperty
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.layouts.addNode
@@ -116,8 +117,8 @@ class App : Application(), Resources {
         fun main(args: Array<String>) = ktfx.launch<App>(*args)
     }
 
-    private val scaleProperty = SCALE_SMALL.asProperty()
-    private val expandedProperty = SimpleBooleanProperty().apply {
+    private val scaleProperty = doubleProperty(SCALE_SMALL)
+    private val expandedProperty = booleanProperty().apply {
         bind(scaleProperty eq SCALE_BIG)
         listener { _, _, newValue ->
             expandedMenu.isSelected = newValue
@@ -450,7 +451,7 @@ class App : Application(), Resources {
                                     halign = HPos.RIGHT
                                     styleClass += "raised"
                                     buttonType = JFXButton.ButtonType.RAISED
-                                    disableProperty().bind(buildBooleanBinding(
+                                    disableProperty().bind(booleanBindingOf(
                                         mediaWidthField.textProperty(),
                                         mediaHeightField.textProperty(),
                                         trimWidthField.textProperty(),

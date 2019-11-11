@@ -5,7 +5,6 @@ import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.StandardSize
 import com.jfoenix.controls.JFXButton
-import javafx.beans.binding.Bindings.`when`
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Side
@@ -13,10 +12,11 @@ import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Circle
-import ktfx.asProperty
-import ktfx.bindings.buildBinding
+import ktfx.bindings.bindingOf
+import ktfx.bindings.given
 import ktfx.bindings.otherwise
 import ktfx.bindings.then
+import ktfx.finalStringProperty
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.MenuItemManager
 import ktfx.layouts.contextMenu
@@ -47,7 +47,7 @@ open class SimpleRoundButton(
     radius: Number,
     text: String,
     graphicUrl: String
-) : AbstractRoundButton(radius, text.asProperty(true)) {
+) : AbstractRoundButton(radius, finalStringProperty(text)) {
     init {
         graphic = ImageView(graphicUrl)
     }
@@ -62,10 +62,10 @@ open class RoundButton(
         radius: Number,
         text: String,
         graphicUrl: String
-    ) : this(radius, text.asProperty(true), graphicUrl)
+    ) : this(radius, finalStringProperty(text), graphicUrl)
 
     init {
-        graphicProperty().bind(buildBinding(hoverProperty()) {
+        graphicProperty().bind(bindingOf(hoverProperty()) {
             ImageView(graphicUrl).also { if (!isHover) it.opacity = BUTTON_OPACITY }
         })
     }
@@ -78,9 +78,9 @@ open class AdaptableRoundButton(
     text2: String,
     graphicUrl1: String,
     graphicUrl2: String
-) : AbstractRoundButton(radius, `when`(dependency) then text1 otherwise text2) {
+) : AbstractRoundButton(radius, given(dependency) then text1 otherwise text2) {
     init {
-        graphicProperty().bind(buildBinding(dependency, hoverProperty()) {
+        graphicProperty().bind(bindingOf(dependency, hoverProperty()) {
             ImageView(
                 when {
                     dependency.value -> graphicUrl1
