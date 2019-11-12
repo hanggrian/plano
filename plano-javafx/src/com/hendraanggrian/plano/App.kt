@@ -345,8 +345,7 @@ class App : Application(), Resources {
                                 }
 
                                 text(getString(R.string._desc)) {
-                                    gridAt(row++, 0)
-                                    colSpans = 6
+                                    gridAt(row++, 0, colSpans = 6)
                                     wrappingWidth = 200.0
                                 }
 
@@ -446,8 +445,7 @@ class App : Application(), Resources {
                                         R.image.btn_send
                                     )
                                 ) {
-                                    gridAt(row, 0)
-                                    colSpans = 6
+                                    gridAt(row, 0, colSpans = 6)
                                     halign = HPos.RIGHT
                                     styleClass += "raised"
                                     buttonType = JFXButton.ButtonType.RAISED
@@ -481,8 +479,7 @@ class App : Application(), Resources {
                                                     bleed, allowFlip
                                                 )
                                                 anchorPane {
-                                                    gridAt(0, 0)
-                                                    rowSpans = 3
+                                                    gridAt(0, 0, rowSpans = 3)
                                                     addNode(
                                                         MediaPane(
                                                             size, scaleProperty,
@@ -562,8 +559,7 @@ class App : Application(), Resources {
                                                         }
                                                     }
                                                 }) {
-                                                    gridAt(2, 1)
-                                                    colSpans = 2
+                                                    gridAt(2, 1, colSpans = 2)
                                                 }
                                             }
                                         })
