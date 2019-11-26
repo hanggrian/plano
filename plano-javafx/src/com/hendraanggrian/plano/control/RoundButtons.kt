@@ -25,7 +25,7 @@ import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
 import ktfx.otherwise
 import ktfx.then
-import ktfx.to
+import ktfx.toAny
 
 @Suppress("LeakingThis")
 sealed class AbstractRoundButton(
@@ -66,8 +66,8 @@ open class RoundButton(
     ) : this(radius, finalStringProperty(text), graphicUrl)
 
     init {
-        graphicProperty().bind(hoverProperty().to {
-            ImageView(graphicUrl).also { if (!isHover) it.opacity = BUTTON_OPACITY }
+        graphicProperty().bind(hoverProperty().toAny {
+            ImageView(graphicUrl).apply { if (!it) opacity = BUTTON_OPACITY }
         })
     }
 }

@@ -20,7 +20,7 @@ import javafx.scene.paint.Color
 import ktfx.bindingOf
 import ktfx.layouts.KtfxPane
 import ktfx.times
-import ktfx.to
+import ktfx.toAny
 
 class MediaPane(
     size: MediaSize,
@@ -69,7 +69,7 @@ class TrimPane(
         prefWidthProperty().bind(size.width * scale)
         prefHeightProperty().bind(size.height * scale)
 
-        backgroundProperty().bind(isFilled.to {
+        backgroundProperty().bind(isFilled.toAny {
             Background(
                 BackgroundFill(
                     when {
@@ -81,7 +81,7 @@ class TrimPane(
                 )
             )
         })
-        borderProperty().bind(isThicked.to {
+        borderProperty().bind(isThicked.toAny {
             Border(
                 BorderStroke(
                     App.COLOR_RED,
