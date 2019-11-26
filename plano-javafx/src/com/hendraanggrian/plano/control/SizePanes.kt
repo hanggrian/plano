@@ -17,9 +17,10 @@ import javafx.scene.layout.BorderStrokeStyle
 import javafx.scene.layout.BorderWidths
 import javafx.scene.layout.CornerRadii
 import javafx.scene.paint.Color
-import ktfx.bindings.bindingOf
-import ktfx.bindings.times
+import ktfx.bindingOf
 import ktfx.layouts.KtfxPane
+import ktfx.times
+import ktfx.to
 
 class MediaPane(
     size: MediaSize,
@@ -68,7 +69,7 @@ class TrimPane(
         prefWidthProperty().bind(size.width * scale)
         prefHeightProperty().bind(size.height * scale)
 
-        backgroundProperty().bind(bindingOf(isFilled) {
+        backgroundProperty().bind(isFilled.to {
             Background(
                 BackgroundFill(
                     when {
@@ -80,7 +81,7 @@ class TrimPane(
                 )
             )
         })
-        borderProperty().bind(bindingOf(isThicked) {
+        borderProperty().bind(isThicked.to {
             Border(
                 BorderStroke(
                     App.COLOR_RED,

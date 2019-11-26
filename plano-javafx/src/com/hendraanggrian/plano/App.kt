@@ -49,24 +49,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ktfx.bindings.booleanBindingOf
-import ktfx.bindings.eq
-import ktfx.bindings.minus
+import ktfx.booleanBindingOf
 import ktfx.booleanProperty
-import ktfx.collections.isEmptyBinding
-import ktfx.controlsfx.isOSX
+import ktfx.collections.emptyBinding
+import ktfx.controls.borderStroke
+import ktfx.controls.gap
+import ktfx.controls.paddingAll
+import ktfx.controls.setMinSize
+import ktfx.controlsfx.isOsMac
 import ktfx.coroutines.onAction
 import ktfx.doubleProperty
+import ktfx.eq
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.layouts.addNode
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
-import ktfx.layouts.borderStroke
 import ktfx.layouts.checkMenuItem
 import ktfx.layouts.circle
 import ktfx.layouts.flowPane
-import ktfx.layouts.gap
 import ktfx.layouts.gridPane
 import ktfx.layouts.hbox
 import ktfx.layouts.imageView
@@ -74,7 +75,6 @@ import ktfx.layouts.label
 import ktfx.layouts.menu
 import ktfx.layouts.menuBar
 import ktfx.layouts.menuItem
-import ktfx.layouts.paddingAll
 import ktfx.layouts.radioMenuItem
 import ktfx.layouts.region
 import ktfx.layouts.rowConstraints
@@ -88,9 +88,10 @@ import ktfx.layouts.vbox
 import ktfx.listeners.listener
 import ktfx.listeners.onHiding
 import ktfx.listeners.snapshot
+import ktfx.minus
 import ktfx.runLater
-import ktfx.swing.toSwingImage
-import ktfx.windows.setMinSize
+import ktfx.text.append
+import ktfx.util.toSwingImage
 import org.apache.commons.lang3.SystemUtils
 
 class App : Application(), Resources {
@@ -105,16 +106,15 @@ class App : Application(), Resources {
         const val BUTTON_OPACITY = 0.54
 
         // Material Orange 500
-        val COLOR_YELLOW: Color = Color.web("#ffb300")
-        val COLOR_YELLOW_LIGHT: Color = Color.web("#ffe54c")
+        val COLOR_YELLOW = Color.web("#ffb300")!!
+        val COLOR_YELLOW_LIGHT = Color.web("#ffe54c")!!
         // Material Red 500
-        val COLOR_RED: Color = Color.web("#f44336")
-        val COLOR_RED_LIGHT: Color = Color.web("#ff7961")
+        val COLOR_RED = Color.web("#f44336")!!
+        val COLOR_RED_LIGHT = Color.web("#ff7961")!!
         // Others
-        val COLOR_BORDER: Color = Color.web("#c8c8c8")
+        val COLOR_BORDER = Color.web("#c8c8c8")!!
 
-        @JvmStatic
-        fun main(args: Array<String>) = ktfx.launch<App>(*args)
+        @JvmStatic fun main(args: Array<String>) = ktfx.launch<App>(*args)
     }
 
     private val scaleProperty = doubleProperty(SCALE_SMALL)
@@ -201,13 +201,13 @@ class App : Application(), Resources {
             }
             scene {
                 stylesheets.addAll(
-                    App::class.java.getResource(R.style.plano).toExternalForm(),
-                    App::class.java.getResource(R.style.plano_font).toExternalForm()
+                    javaClass.getResource(R.style.plano).toExternalForm(),
+                    javaClass.getResource(R.style.plano_font).toExternalForm()
                 )
                 rootPane = stackPane {
                     vbox {
                         menuBar {
-                            isUseSystemMenuBar = isOSX()
+                            isUseSystemMenuBar = isOsMac()
                             "File" {
                                 menu(getString(R.string.language)) {
                                     val group = ToggleGroup()
@@ -236,7 +236,7 @@ class App : Application(), Resources {
                             "Edit" {
                                 menuItem(getString(R.string.clear)) {
                                     onAction { clear() }
-                                    runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
+                                    runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                                 }
                             }
                             "View" {
@@ -287,7 +287,7 @@ class App : Application(), Resources {
                                     RoundButton(24, getString(R.string.clear), R.image.btn_clear)
                                 ) {
                                     onAction { clear() }
-                                    runLater { disableProperty().bind(outputPane.children.isEmptyBinding) }
+                                    runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                                 }
                                 addNode(
                                     AdaptableRoundButton(
@@ -328,7 +328,6 @@ class App : Application(), Resources {
                             }
                         }
                         hbox {
-                            vgrow()
                             gridPane {
                                 borderStroke(
                                     topStroke = COLOR_BORDER,
@@ -344,109 +343,39 @@ class App : Application(), Resources {
                                     repeat(4) { constraints { prefHeight = 32.0 } } // input form
                                 }
 
-                                text(getString(R.string._desc)) {
-                                    gridAt(row++, 0, colSpans = 6)
-                                    wrappingWidth = 200.0
-                                }
+                                text(getString(R.string._desc)) { wrappingWidth = 200.0 } row row++ col (0 to 6)
 
-                                circle(radius = 4.0, fill = COLOR_YELLOW) {
-                                    gridAt(row, 0)
-                                }
-                                label(getString(R.string.media_box)) {
-                                    gridAt(row, 1)
-                                }
-                                addNode(mediaWidthField) {
-                                    gridAt(row, 2)
-                                    value = mediaWidth
-                                }
-                                label("x") {
-                                    gridAt(row, 3)
-                                }
-                                addNode(mediaHeightField) {
-                                    gridAt(row, 4)
-                                    value = mediaHeight
-                                }
+                                circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
+                                label(getString(R.string.media_box)) row row col 1
+                                addNode(mediaWidthField) { value = mediaWidth } row row col 2
+                                label("x") row row col 3
+                                addNode(mediaHeightField) { value = mediaHeight } row row col 4
+                                addNode(MorePaperButton(this@App, mediaWidthField, mediaHeightField)) row row++ col 5
+
+                                circle(radius = 4.0, fill = COLOR_RED) row row col 0
+                                label(getString(R.string.trim_box)) row row col 1
+                                addNode(trimWidthField) { value = trimWidth } row row col 2
+                                label("x") row row col 3
+                                addNode(trimHeightField) { value = trimHeight } row row col 4
+                                addNode(MorePaperButton(this@App, trimWidthField, trimHeightField)) row row++ col 5
+
+                                label(getString(R.string.bleed)) row row col 1
+                                addNode(bleedField) { value = bleed } row row col 2
                                 addNode(
-                                    MorePaperButton(
-                                        this@App,
-                                        mediaWidthField,
-                                        mediaHeightField
-                                    )
-                                ) {
+                                    InfoButton(this@App, this@stackPane, R.string.bleed, R.string._bleed)
+                                ) row row++ col 5
 
-                                    gridAt(row++, 5)
-                                }
-
-                                circle(radius = 4.0, fill = COLOR_RED) {
-                                    gridAt(row, 0)
-                                }
-                                label(getString(R.string.trim_box)) {
-                                    gridAt(row, 1)
-                                }
-                                addNode(trimWidthField) {
-                                    gridAt(row, 2)
-                                    value = trimWidth
-                                }
-                                label("x") {
-                                    gridAt(row, 3)
-                                }
-                                addNode(trimHeightField) {
-                                    gridAt(row, 4)
-                                    value = trimHeight
-                                }
+                                label(getString(R.string.allow_flip)) row row col 1
+                                addNode(allowFlipCheck) { isSelected = allowFlip } row row col 2
                                 addNode(
-                                    MorePaperButton(
-                                        this@App,
-                                        trimWidthField,
-                                        trimHeightField
-                                    )
-                                ) {
-                                    gridAt(row++, 5)
-                                }
-
-                                label(getString(R.string.bleed)) {
-                                    gridAt(row, 1)
-                                }
-                                addNode(bleedField) {
-                                    gridAt(row, 2)
-                                    value = bleed
-                                }
-                                addNode(
-                                    InfoButton(
-                                        this@App, this@stackPane,
-                                        R.string.bleed, R.string._bleed
-                                    )
-                                ) {
-                                    gridAt(row++, 5)
-                                }
-
-                                label(getString(R.string.allow_flip)) {
-                                    gridAt(row, 1)
-                                }
-                                addNode(allowFlipCheck) {
-                                    gridAt(row, 2)
-                                    isSelected = allowFlip
-                                }
-                                addNode(
-                                    InfoButton(
-                                        this@App, this@stackPane,
-                                        R.string.allow_flip, R.string._allow_flip
-                                    )
-                                ) {
-                                    gridAt(row++, 5)
-                                }
+                                    InfoButton(this@App, this@stackPane, R.string.allow_flip, R.string._allow_flip)
+                                ) row row++ col 5
 
                                 row++
                                 row++
                                 calculateButton = addNode(
-                                    SimpleRoundButton(
-                                        24,
-                                        getString(R.string.calculate),
-                                        R.image.btn_send
-                                    )
+                                    SimpleRoundButton(24, getString(R.string.calculate), R.image.btn_send)
                                 ) {
-                                    gridAt(row, 0, colSpans = 6)
-                                    halign = HPos.RIGHT
                                     styleClass += "raised"
                                     buttonType = JFXButton.ButtonType.RAISED
                                     disableProperty().bind(booleanBindingOf(
@@ -479,43 +408,22 @@ class App : Application(), Resources {
                                                     bleed, allowFlip
                                                 )
                                                 anchorPane {
-                                                    gridAt(0, 0, rowSpans = 3)
                                                     addNode(
-                                                        MediaPane(
-                                                            size, scaleProperty,
-                                                            filledProperty, thickProperty
-                                                        )
+                                                        MediaPane(size, scaleProperty, filledProperty, thickProperty)
                                                     )
                                                     size.trimSizes.forEach {
                                                         addNode(
-                                                            TrimPane(
-                                                                it, scaleProperty,
-                                                                filledProperty, thickProperty
-                                                            )
+                                                            TrimPane(it, scaleProperty, filledProperty, thickProperty)
                                                         )
                                                     }
-                                                }
-                                                circle(
-                                                    radius = 4.0,
-                                                    fill = COLOR_YELLOW
-                                                ) {
-                                                    gridAt(0, 1)
-                                                }
+                                                } row (0 to 3) col 0
+                                                circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
+                                                textFlow { append("${mediaWidth}x$mediaHeight") } row 0 col 2
+                                                circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                                 textFlow {
-                                                    gridAt(0, 2)
-                                                    text("${mediaWidth}x$mediaHeight")
-                                                }
-                                                circle(
-                                                    radius = 4.0,
-                                                    fill = COLOR_RED
-                                                ) {
-                                                    gridAt(1, 1)
-                                                }
-                                                textFlow {
-                                                    gridAt(1, 2)
                                                     "${size.trimSizes.size}pcs " { styleClass += "bold" }
-                                                    text("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
-                                                }
+                                                    append("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
+                                                } row 1 col 2
                                                 lateinit var moreButton: Button
                                                 moreButton = addNode(MoreButton(this@App) {
                                                     menuItem(
@@ -528,11 +436,7 @@ class App : Application(), Resources {
                                                             val file = ResultFile()
                                                             @Suppress("LABEL_NAME_CLASH")
                                                             this@gridPane.snapshot {
-                                                                ImageIO.write(
-                                                                    it.image.toSwingImage(),
-                                                                    "png",
-                                                                    file
-                                                                )
+                                                                ImageIO.write(it.image.toSwingImage(), "png", file)
                                                             }
                                                             GlobalScope.launch(Dispatchers.JavaFx) {
                                                                 delay(500)
@@ -558,33 +462,28 @@ class App : Application(), Resources {
                                                             outputPane.children -= this@pane
                                                         }
                                                     }
-                                                }) {
-                                                    gridAt(2, 1, colSpans = 2)
-                                                }
+                                                }) row 2 col (1 to 2)
                                             }
                                         })
                                     }
-                                }
+                                } row row col (0 to 6) halign HPos.RIGHT
                             }
                             anchorPane {
-                                hgrow()
                                 scrollPane {
-                                    anchorAll = 0.0
                                     isFitToWidth = true
                                     hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
                                     outputPane = flowPane {
                                         paddingAll = 10.0
                                         prefWidthProperty().bind(this@scrollPane.widthProperty() - 10)
                                     }
-                                }
+                                } anchorAll 0.0
                                 borderPane {
-                                    anchorAll = 0.0
                                     label(getString(R.string.no_content))
-                                    visibleProperty().bind(outputPane.children.isEmptyBinding)
-                                    managedProperty().bind(outputPane.children.isEmptyBinding)
-                                }
-                            }
-                        }
+                                    visibleProperty().bind(outputPane.children.emptyBinding)
+                                    managedProperty().bind(outputPane.children.emptyBinding)
+                                } anchorAll 0.0
+                            } hgrow true
+                        } vgrow true
                     }
                 }
             }

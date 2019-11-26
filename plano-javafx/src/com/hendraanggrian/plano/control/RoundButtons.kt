@@ -12,11 +12,9 @@ import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Circle
-import ktfx.bindings.bindingOf
-import ktfx.bindings.given
-import ktfx.bindings.otherwise
-import ktfx.bindings.then
+import ktfx.bindingOf
 import ktfx.finalStringProperty
+import ktfx.given
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.MenuItemManager
 import ktfx.layouts.contextMenu
@@ -25,6 +23,9 @@ import ktfx.layouts.menuItem
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
+import ktfx.otherwise
+import ktfx.then
+import ktfx.to
 
 @Suppress("LeakingThis")
 sealed class AbstractRoundButton(
@@ -65,7 +66,7 @@ open class RoundButton(
     ) : this(radius, finalStringProperty(text), graphicUrl)
 
     init {
-        graphicProperty().bind(bindingOf(hoverProperty()) {
+        graphicProperty().bind(hoverProperty().to {
             ImageView(graphicUrl).also { if (!isHover) it.opacity = BUTTON_OPACITY }
         })
     }

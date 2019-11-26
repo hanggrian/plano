@@ -1,2 +1,1 @@
-fun Dependencies.preferencex() =
-    "com.takisoft.preferencex:preferencex:$VERSION_ANDROIDX-alpha05"
+fun Dependencies.preferencex() = "com.takisoft.preferencex:preferencex:$VERSION_ANDROIDX-alpha05"

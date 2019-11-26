@@ -8,9 +8,7 @@ import javafx.scene.control.TextFormatter
 import ktfx.listeners.listener
 
 class DoubleField : JFXTextField() {
-
     private companion object {
-
         val PATTERN_DOUBLE: Pattern = Pattern.compile("\\d*|\\d+\\.\\d*")
     }
 
