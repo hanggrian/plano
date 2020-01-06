@@ -10,7 +10,7 @@ buildscript {
         classpath(hendraanggrian("r-gradle-plugin", "0.1"))
         classpath(hendraanggrian("buildconfig-gradle-plugin", "0.1"))
         classpath(hendraanggrian("locale-gradle-plugin", "0.1"))
-        classpath(hendraanggrian("packr-gradle-plugin", "0.1"))
+        classpath(hendraanggrian("packr-gradle-plugin", "0.2"))
         classpath(shadow())
         classpath(gitPublish())
     }
@@ -32,8 +32,6 @@ allprojects {
     }
 }
 
-tasks {
-    register<Delete>("clean") {
-        delete(buildDir)
-    }
+tasks.register<Delete>("clean") {
+    delete(buildDir)
 }

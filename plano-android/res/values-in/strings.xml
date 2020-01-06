@@ -6,8 +6,10 @@
     <string name="_boxes_cleared">Konten terhapus.</string>
     <string name="_desc">Hitung berapa banyak kotak potong dalam kotak media</string>
     <string name="_incomplete">Kotak media dan potong perlu diisi.</string>
+    <string name="_media_box">Sumber ukuran kertas, induk langsung dari ukuran potong.</string>
     <string name="_please_restart">Mulai ulang aplikasi untuk melihat perubahan.</string>
     <string name="_save">Terimpan sebagai %s</string>
+    <string name="_trim_box">Ukuran target kertas yang akan dipotong.</string>
     <string name="_update_available">Plano versi %s tersedia.</string>
     <string name="_update_unavailable">Tidak ada pembaruan.</string>
     <string name="a_series">Seri A</string>
@@ -20,6 +22,7 @@
     <string name="btn_homepage">BERANDA</string>
     <string name="btn_show_file">TUNJUKKAN FILE</string>
     <string name="btn_undo">KEMBALIKAN</string>
+    <string name="c_series">Seri C</string>
     <string name="calculate">Kalkulasi</string>
     <string name="check_for_update">Cek pembaruan</string>
     <string name="clear">Hapus semua</string>

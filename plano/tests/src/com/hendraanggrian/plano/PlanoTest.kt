@@ -6,8 +6,7 @@ import kotlin.test.assertEquals
 
 class PlanoTest {
 
-    @Test
-    fun a5inA3plus() {
+    @Test fun a5inA3plus() {
         val size = Plano.calculate(48.7, 32.5, 21.0, 14.85)
         assertEquals(4, size.trimSizes.size)
         Truth.assertThat(size.trimSizes.map { it.x to it.y }).containsExactly(
@@ -18,8 +17,7 @@ class PlanoTest {
         )
     }
 
-    @Test
-    fun f4in79109() {
+    @Test fun f4in79109() {
         val size = Plano.calculate(79.0, 109.0, 21.5, 33.0)
         assertEquals(11, size.trimSizes.size)
         Truth.assertThat(size.trimSizes.map { it.x to it.y }).containsExactly(

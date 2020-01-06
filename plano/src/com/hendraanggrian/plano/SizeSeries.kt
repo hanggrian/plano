@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano
 
 @Suppress("EnumEntryName")
-enum class StandardSize {
+enum class SizeSeries {
     A0("A0", 118.9, 84.1),
     A1("A1", 84.1, 59.4),
     A2("A2", 59.4, 42.0),
@@ -26,6 +26,18 @@ enum class StandardSize {
     B9("B9", 6.2, 4.4),
     B10("B10", 4.4, 3.1),
 
+    C0("C0", 129.7, 91.7),
+    C1("C1", 91.7, 64.8),
+    C2("C2", 64.8, 45.8),
+    C3("C3", 45.8, 32.4),
+    C4("C4", 32.4, 22.9),
+    C5("C5", 22.9, 16.2),
+    C6("C6", 16.2, 11.4),
+    C7("C7", 11.4, 8.1),
+    C8("C8", 8.1, 5.7),
+    C9("C9", 5.7, 4.0),
+    C10("C10", 4.0, 2.8),
+
     _61_86(61.0, 86.0),
     _61_92(61.0, 92.0),
     _65_90(65.0, 90.0),
@@ -35,13 +47,10 @@ enum class StandardSize {
     _86_106(86.0, 106.0);
 
     companion object {
-
-        fun aSeries(): List<StandardSize> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
-
-        fun bSeries(): List<StandardSize> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
-
-        fun others(): List<StandardSize> =
-            listOf(_61_86, _61_92, _65_90, _65_100, _79_109, _70_108, _86_106)
+        val A: List<SizeSeries> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
+        val B: List<SizeSeries> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
+        val C: List<SizeSeries> = listOf(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10)
+        fun others(): List<SizeSeries> = listOf(_61_86, _61_92, _65_90, _65_100, _79_109, _70_108, _86_106)
     }
 
     val width: Double

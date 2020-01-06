@@ -1,4 +1,4 @@
-package com.hendraanggrian.plano.control
+package com.hendraanggrian.plano.controls
 
 import ktfx.jfoenix.controls.depth
 import ktfx.jfoenix.layouts.KtfxJFXToolbar

@@ -6,8 +6,10 @@
     <string name="_boxes_cleared">Boxes cleared.</string>
     <string name="_desc">Calculate how many trim boxes fit in a media box</string>
     <string name="_incomplete">Media and trim size need to be filled.</string>
+    <string name="_media_box">Source paper size, a direct parent of trim size.</string>
     <string name="_please_restart">Restart app to see effect.</string>
     <string name="_save">Saved as %s</string>
+    <string name="_trim_box">Target size of which the paper will be trimmed into.</string>
     <string name="_update_available">Plano version %s is available.</string>
     <string name="_update_unavailable">You already have the latest version.</string>
     <string name="a_series">A Series</string>
@@ -20,6 +22,7 @@
     <string name="btn_homepage">HOMEPAGE</string>
     <string name="btn_show_file">SHOW FILE</string>
     <string name="btn_undo">UNDO</string>
+    <string name="c_series">C Series</string>
     <string name="calculate">Calculate</string>
     <string name="check_for_update">Check for update</string>
     <string name="clear">Clear</string>

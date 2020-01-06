@@ -1,4 +1,4 @@
-package com.hendraanggrian.plano.control
+package com.hendraanggrian.plano.controls
 
 import com.hendraanggrian.plano.App
 import com.hendraanggrian.plano.App.Companion.SCALE_BIG
@@ -16,18 +16,18 @@ import javafx.scene.layout.BorderStroke
 import javafx.scene.layout.BorderStrokeStyle
 import javafx.scene.layout.BorderWidths
 import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import ktfx.bindingOf
-import ktfx.layouts.KtfxPane
 import ktfx.times
-import ktfx.toAny
+import ktfx.toBinding
 
 class MediaPane(
     size: MediaSize,
     scale: DoubleProperty,
     isFilled: BooleanProperty,
     isThicked: BooleanProperty
-) : KtfxPane() {
+) : Pane() {
 
     init {
         prefWidthProperty().bind(size.width * scale)
@@ -63,13 +63,13 @@ class TrimPane(
     scale: DoubleProperty,
     isFilled: BooleanProperty,
     isThicked: BooleanProperty
-) : KtfxPane() {
+) : Pane() {
 
     init {
         prefWidthProperty().bind(size.width * scale)
         prefHeightProperty().bind(size.height * scale)
 
-        backgroundProperty().bind(isFilled.toAny {
+        backgroundProperty().bind(isFilled.toBinding {
             Background(
                 BackgroundFill(
                     when {
@@ -81,7 +81,7 @@ class TrimPane(
                 )
             )
         })
-        borderProperty().bind(isThicked.toAny {
+        borderProperty().bind(isThicked.toBinding {
             Border(
                 BorderStroke(
                     App.COLOR_RED,

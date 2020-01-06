@@ -1,4 +1,4 @@
-package com.hendraanggrian.plano.dialog
+package com.hendraanggrian.plano.dialogs
 
 import android.app.Dialog
 import android.content.Intent

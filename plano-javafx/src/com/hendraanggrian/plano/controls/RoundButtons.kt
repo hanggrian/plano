@@ -1,19 +1,17 @@
-package com.hendraanggrian.plano.control
+package com.hendraanggrian.plano.controls
 
 import com.hendraanggrian.plano.App.Companion.BUTTON_OPACITY
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
-import com.hendraanggrian.plano.StandardSize
+import com.hendraanggrian.plano.SizeSeries
 import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Side
 import javafx.scene.control.TextField
 import javafx.scene.image.ImageView
-import javafx.scene.layout.StackPane
 import javafx.scene.shape.Circle
 import ktfx.bindingOf
-import ktfx.finalStringProperty
 import ktfx.given
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.MenuItemManager
@@ -24,8 +22,9 @@ import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
 import ktfx.otherwise
+import ktfx.stringPropertyOf
 import ktfx.then
-import ktfx.toAny
+import ktfx.toBinding
 
 @Suppress("LeakingThis")
 sealed class AbstractRoundButton(
@@ -48,7 +47,7 @@ open class SimpleRoundButton(
     radius: Number,
     text: String,
     graphicUrl: String
-) : AbstractRoundButton(radius, finalStringProperty(text)) {
+) : AbstractRoundButton(radius, stringPropertyOf(text)) {
     init {
         graphic = ImageView(graphicUrl)
     }
@@ -63,10 +62,10 @@ open class RoundButton(
         radius: Number,
         text: String,
         graphicUrl: String
-    ) : this(radius, finalStringProperty(text), graphicUrl)
+    ) : this(radius, stringPropertyOf(text), graphicUrl)
 
     init {
-        graphicProperty().bind(hoverProperty().toAny {
+        graphicProperty().bind(hoverProperty().toBinding {
             ImageView(graphicUrl).apply { if (!it) opacity = BUTTON_OPACITY }
         })
     }
@@ -92,19 +91,6 @@ open class AdaptableRoundButton(
     }
 }
 
-open class InfoButton(
-    resources: Resources,
-    container: StackPane,
-    titleId: String,
-    contentId: String
-) : RoundButton(16, resources.getString(R.string.info), R.image.menu_info) {
-    init {
-        onAction {
-            TextDialog(resources, container, titleId, contentId).show()
-        }
-    }
-}
-
 open class MoreButton(
     resources: Resources,
     init: KtfxContextMenu.() -> Unit
@@ -124,7 +110,7 @@ open class MorePaperButton(
     widthField: TextField,
     heightField: TextField
 ) : MoreButton(resources, {
-    val append: MenuItemManager.(StandardSize) -> Unit = { standardSize ->
+    val append: MenuItemManager.(SizeSeries) -> Unit = { standardSize ->
         menuItem(standardSize.title) {
             onAction {
                 widthField.text = standardSize.width.toString()
@@ -132,8 +118,9 @@ open class MorePaperButton(
             }
         }
     }
-    menu(resources.getString(R.string.a_series)) { StandardSize.aSeries().forEach { append(it) } }
-    menu(resources.getString(R.string.b_series)) { StandardSize.bSeries().forEach { append(it) } }
+    menu(resources.getString(R.string.a_series)) { SizeSeries.A.forEach { append(it) } }
+    menu(resources.getString(R.string.b_series)) { SizeSeries.B.forEach { append(it) } }
+    menu(resources.getString(R.string.c_series)) { SizeSeries.C.forEach { append(it) } }
     separatorMenuItem()
-    menu(resources.getString(R.string.others)) { StandardSize.others().forEach { append(it) } }
+    menu(resources.getString(R.string.others)) { SizeSeries.others().forEach { append(it) } }
 })

@@ -1,17 +1,16 @@
 package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.control.AboutDialog
-import com.hendraanggrian.plano.control.AdaptableRoundButton
-import com.hendraanggrian.plano.control.DoubleField
-import com.hendraanggrian.plano.control.InfoButton
-import com.hendraanggrian.plano.control.MediaPane
-import com.hendraanggrian.plano.control.MoreButton
-import com.hendraanggrian.plano.control.MorePaperButton
-import com.hendraanggrian.plano.control.RoundButton
-import com.hendraanggrian.plano.control.SimpleRoundButton
-import com.hendraanggrian.plano.control.TextDialog
-import com.hendraanggrian.plano.control.Toolbar
-import com.hendraanggrian.plano.control.TrimPane
+import com.hendraanggrian.plano.controls.AdaptableRoundButton
+import com.hendraanggrian.plano.controls.DoubleField
+import com.hendraanggrian.plano.controls.MediaPane
+import com.hendraanggrian.plano.controls.MoreButton
+import com.hendraanggrian.plano.controls.MorePaperButton
+import com.hendraanggrian.plano.controls.RoundButton
+import com.hendraanggrian.plano.controls.SimpleRoundButton
+import com.hendraanggrian.plano.controls.Toolbar
+import com.hendraanggrian.plano.controls.TrimPane
+import com.hendraanggrian.plano.dialogs.AboutDialog
+import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
 import com.hendraanggrian.prefs.PrefsSaver
@@ -23,7 +22,6 @@ import java.awt.Desktop
 import java.net.URI
 import java.util.ResourceBundle
 import javafx.application.Application
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.geometry.HPos
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
@@ -50,7 +48,7 @@ import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ktfx.booleanBindingOf
-import ktfx.booleanProperty
+import ktfx.booleanPropertyOf
 import ktfx.collections.emptyBinding
 import ktfx.controls.borderStroke
 import ktfx.controls.gap
@@ -58,11 +56,14 @@ import ktfx.controls.paddingAll
 import ktfx.controls.setMinSize
 import ktfx.controlsfx.isOsMac
 import ktfx.coroutines.onAction
-import ktfx.doubleProperty
+import ktfx.doublePropertyOf
 import ktfx.eq
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
-import ktfx.layouts.addNode
+import ktfx.jfoenix.layouts.leftItems
+import ktfx.jfoenix.layouts.rightItems
+import ktfx.launchApplication
+import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
@@ -84,6 +85,7 @@ import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.stackPane
 import ktfx.layouts.text
 import ktfx.layouts.textFlow
+import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.listeners.listener
 import ktfx.listeners.onHiding
@@ -114,11 +116,11 @@ class App : Application(), Resources {
         // Others
         val COLOR_BORDER = Color.web("#c8c8c8")!!
 
-        @JvmStatic fun main(args: Array<String>) = ktfx.launch<App>(*args)
+        @JvmStatic fun main(args: Array<String>) = launchApplication<App>(*args)
     }
 
-    private val scaleProperty = doubleProperty(SCALE_SMALL)
-    private val expandedProperty = booleanProperty().apply {
+    private val scaleProperty = doublePropertyOf(SCALE_SMALL)
+    private val expandedProperty = booleanPropertyOf().apply {
         bind(scaleProperty eq SCALE_BIG)
         listener { _, _, newValue ->
             expandedMenu.isSelected = newValue
@@ -143,12 +145,12 @@ class App : Application(), Resources {
             }
         }
     }
-    private val filledProperty = SimpleBooleanProperty().apply {
+    private val filledProperty = booleanPropertyOf().apply {
         listener { _, _, newValue ->
             fillMenu.isSelected = newValue
         }
     }
-    private val thickProperty = SimpleBooleanProperty().apply {
+    private val thickProperty = booleanPropertyOf().apply {
         listener { _, _, newValue ->
             thickMenu.isSelected = newValue
         }
@@ -222,8 +224,7 @@ class App : Application(), Resources {
                                                     rootPane,
                                                     R.string.please_restart,
                                                     R.string._please_restart
-                                                ).apply { setOnDialogClosed { stage.close() } }
-                                                    .show()
+                                                ).apply { setOnDialogClosed { stage.close() } }.show()
                                             }
                                         }
                                     }
@@ -276,20 +277,24 @@ class App : Application(), Resources {
                                 }
                             }
                         }
-                        addNode(Toolbar()) {
+                        addChild(Toolbar()) {
                             leftItems {
                                 imageView(R.image.ic_launcher)
                                 region { prefWidth = 12.0 }
                                 label(BuildConfig.NAME) { styleClass.addAll("display2", "dark") }
                             }
                             rightItems {
-                                addNode(
-                                    RoundButton(24, getString(R.string.clear), R.image.btn_clear)
+                                addChild(
+                                    RoundButton(
+                                        24,
+                                        getString(R.string.clear),
+                                        R.image.btn_clear
+                                    )
                                 ) {
                                     onAction { clear() }
                                     runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                                 }
-                                addNode(
+                                addChild(
                                     AdaptableRoundButton(
                                         24,
                                         expandedProperty,
@@ -301,7 +306,7 @@ class App : Application(), Resources {
                                 ) {
                                     onAction { toggleExpand() }
                                 }
-                                addNode(
+                                addChild(
                                     AdaptableRoundButton(
                                         24,
                                         filledProperty,
@@ -313,7 +318,7 @@ class App : Application(), Resources {
                                 ) {
                                     onAction { toggleFill() }
                                 }
-                                addNode(
+                                addChild(
                                     AdaptableRoundButton(
                                         24,
                                         thickProperty,
@@ -345,36 +350,78 @@ class App : Application(), Resources {
 
                                 text(getString(R.string._desc)) { wrappingWidth = 200.0 } row row++ col (0 to 6)
 
-                                circle(radius = 4.0, fill = COLOR_YELLOW) row row col 0
-                                label(getString(R.string.media_box)) row row col 1
-                                addNode(mediaWidthField) { value = mediaWidth } row row col 2
-                                label("x") row row col 3
-                                addNode(mediaHeightField) { value = mediaHeight } row row col 4
-                                addNode(MorePaperButton(this@App, mediaWidthField, mediaHeightField)) row row++ col 5
-
-                                circle(radius = 4.0, fill = COLOR_RED) row row col 0
-                                label(getString(R.string.trim_box)) row row col 1
-                                addNode(trimWidthField) { value = trimWidth } row row col 2
-                                label("x") row row col 3
-                                addNode(trimHeightField) { value = trimHeight } row row col 4
-                                addNode(MorePaperButton(this@App, trimWidthField, trimHeightField)) row row++ col 5
-
-                                label(getString(R.string.bleed)) row row col 1
-                                addNode(bleedField) { value = bleed } row row col 2
-                                addNode(
-                                    InfoButton(this@App, this@stackPane, R.string.bleed, R.string._bleed)
+                                circle(radius = 4.0, fill = COLOR_YELLOW) {
+                                    tooltip(getString(R.string._media_box))
+                                } row row col 0
+                                label(getString(R.string.media_box)) {
+                                    tooltip(getString(R.string._media_box))
+                                } row row col 1
+                                addChild(mediaWidthField) {
+                                    tooltip(getString(R.string._media_box))
+                                    value = mediaWidth
+                                } row row col 2
+                                label("x") {
+                                    tooltip(getString(R.string._media_box))
+                                } row row col 3
+                                addChild(mediaHeightField) {
+                                    tooltip(getString(R.string._media_box))
+                                    value = mediaHeight
+                                } row row col 4
+                                addChild(
+                                    MorePaperButton(
+                                        this@App,
+                                        mediaWidthField,
+                                        mediaHeightField
+                                    )
                                 ) row row++ col 5
 
-                                label(getString(R.string.allow_flip)) row row col 1
-                                addNode(allowFlipCheck) { isSelected = allowFlip } row row col 2
-                                addNode(
-                                    InfoButton(this@App, this@stackPane, R.string.allow_flip, R.string._allow_flip)
+                                circle(radius = 4.0, fill = COLOR_RED) {
+                                    tooltip(getString(R.string._trim_box))
+                                } row row col 0
+                                label(getString(R.string.trim_box)) {
+                                    tooltip(getString(R.string._trim_box))
+                                } row row col 1
+                                addChild(trimWidthField) {
+                                    tooltip(getString(R.string._trim_box))
+                                    value = trimWidth
+                                } row row col 2
+                                label("x") {
+                                    tooltip(getString(R.string._trim_box))
+                                } row row col 3
+                                addChild(trimHeightField) {
+                                    tooltip(getString(R.string._trim_box))
+                                    value = trimHeight
+                                } row row col 4
+                                addChild(
+                                    MorePaperButton(
+                                        this@App,
+                                        trimWidthField,
+                                        trimHeightField
+                                    )
                                 ) row row++ col 5
 
-                                row++
-                                row++
-                                calculateButton = addNode(
-                                    SimpleRoundButton(24, getString(R.string.calculate), R.image.btn_send)
+                                label(getString(R.string.bleed)) {
+                                    tooltip(getString(R.string._bleed))
+                                } row row col 1
+                                addChild(bleedField) {
+                                    tooltip(getString(R.string._bleed))
+                                    value = bleed
+                                } row row++ col 2
+
+                                label(getString(R.string.allow_flip)) {
+                                    tooltip(getString(R.string._allow_flip))
+                                } row row col 1
+                                addChild(allowFlipCheck) {
+                                    tooltip(getString(R.string._allow_flip))
+                                    isSelected = allowFlip
+                                } row row++ col 2
+
+                                calculateButton = addChild(
+                                    SimpleRoundButton(
+                                        24,
+                                        getString(R.string.calculate),
+                                        R.image.btn_send
+                                    )
                                 ) {
                                     styleClass += "raised"
                                     buttonType = JFXButton.ButtonType.RAISED
@@ -408,12 +455,22 @@ class App : Application(), Resources {
                                                     bleed, allowFlip
                                                 )
                                                 anchorPane {
-                                                    addNode(
-                                                        MediaPane(size, scaleProperty, filledProperty, thickProperty)
+                                                    addChild(
+                                                        MediaPane(
+                                                            size,
+                                                            scaleProperty,
+                                                            filledProperty,
+                                                            thickProperty
+                                                        )
                                                     )
                                                     size.trimSizes.forEach {
-                                                        addNode(
-                                                            TrimPane(it, scaleProperty, filledProperty, thickProperty)
+                                                        addChild(
+                                                            TrimPane(
+                                                                it,
+                                                                scaleProperty,
+                                                                filledProperty,
+                                                                thickProperty
+                                                            )
                                                         )
                                                     }
                                                 } row (0 to 3) col 0
@@ -425,44 +482,47 @@ class App : Application(), Resources {
                                                     append("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
                                                 } row 1 col 2
                                                 lateinit var moreButton: Button
-                                                moreButton = addNode(MoreButton(this@App) {
-                                                    menuItem(
-                                                        getString(R.string.save),
-                                                        ImageView(Image(R.image.menu_save)).apply {
-                                                            opacity = BUTTON_OPACITY
-                                                        }) {
-                                                        onAction {
-                                                            moreButton.isVisible = false
-                                                            val file = ResultFile()
-                                                            @Suppress("LABEL_NAME_CLASH")
-                                                            this@gridPane.snapshot {
-                                                                ImageIO.write(it.image.toSwingImage(), "png", file)
-                                                            }
-                                                            GlobalScope.launch(Dispatchers.JavaFx) {
-                                                                delay(500)
-                                                                moreButton.isVisible = true
-                                                                rootPane.jfxSnackbar(
-                                                                    getString(R.string._save)
-                                                                        .format(file.name),
-                                                                    DURATION_SHORT,
-                                                                    getString(R.string.btn_show_file)
-                                                                ) {
-                                                                    Desktop.getDesktop()
-                                                                        .open(file.parentFile)
+                                                moreButton = addChild(
+                                                    MoreButton(
+                                                        this@App
+                                                    ) {
+                                                        menuItem(
+                                                            getString(R.string.save),
+                                                            ImageView(Image(R.image.menu_save)).apply {
+                                                                opacity = BUTTON_OPACITY
+                                                            }) {
+                                                            onAction {
+                                                                moreButton.isVisible = false
+                                                                val file = ResultFile()
+                                                                @Suppress("LABEL_NAME_CLASH")
+                                                                this@gridPane.snapshot {
+                                                                    ImageIO.write(it.image.toSwingImage(), "png", file)
+                                                                }
+                                                                GlobalScope.launch(Dispatchers.JavaFx) {
+                                                                    delay(500)
+                                                                    moreButton.isVisible = true
+                                                                    rootPane.jfxSnackbar(
+                                                                        getString(R.string._save)
+                                                                            .format(file.name),
+                                                                        DURATION_SHORT,
+                                                                        getString(R.string.btn_show_file)
+                                                                    ) {
+                                                                        Desktop.getDesktop()
+                                                                            .open(file.parentFile)
+                                                                    }
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                    menuItem(
-                                                        getString(R.string.delete),
-                                                        ImageView(Image(R.image.menu_delete)).apply {
-                                                            opacity = BUTTON_OPACITY
-                                                        }) {
-                                                        onAction {
-                                                            outputPane.children -= this@pane
+                                                        menuItem(
+                                                            getString(R.string.delete),
+                                                            ImageView(Image(R.image.menu_delete)).apply {
+                                                                opacity = BUTTON_OPACITY
+                                                            }) {
+                                                            onAction {
+                                                                outputPane.children -= this@pane
+                                                            }
                                                         }
-                                                    }
-                                                }) row 2 col (1 to 2)
+                                                    }) row 2 col (1 to 2)
                                             }
                                         })
                                     }
@@ -547,6 +607,5 @@ class App : Application(), Resources {
         }
     }
 
-    private fun StackPane.showAbout() =
-        AboutDialog(this@App, this).show()
+    private fun StackPane.showAbout() = AboutDialog(this@App, this).show()
 }

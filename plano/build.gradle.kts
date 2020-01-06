@@ -140,9 +140,17 @@ locale {
         en = "Media box"
         id = "Kotak media"
     }
+    "_media_box" {
+        en = "Source paper size, a direct parent of trim size."
+        id = "Sumber ukuran kertas, induk langsung dari ukuran potong."
+    }
     "trim_box" {
         en = "Trim box"
         id = "Kotak potong"
+    }
+    "_trim_box" {
+        en = "Target size of which the paper will be trimmed into."
+        id = "Ukuran target kertas yang akan dipotong."
     }
     "bleed" {
         en = "Bleed"
@@ -183,6 +191,10 @@ locale {
     "b_series" {
         en = "B Series"
         id = "Seri B"
+    }
+    "c_series" {
+        en = "C Series"
+        id = "Seri C"
     }
     "others" {
         en = "Others"

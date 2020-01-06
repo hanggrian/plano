@@ -1,3 +1,5 @@
+import com.hendraanggrian.packr.PackrExtension
+
 group = RELEASE_GROUP
 version = RELEASE_VERSION_JAVAFX
 
@@ -101,7 +103,7 @@ packr {
     executable = RELEASE_NAME
     classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
     resources = files("res")
-    minimizeJre = "hard"
+    minimizeJre = PackrExtension.MINIMIZATION_HARD
     macOS {
         name = "$RELEASE_NAME/$RELEASE_NAME.app"
         icon = rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns")
@@ -115,6 +117,6 @@ packr {
         name = "64-bit/$RELEASE_NAME"
         jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_231-x64"
     }
-    verbose = true
-    openOnDone = true
+    isVerbose = true
+    isAutoOpen = true
 }
