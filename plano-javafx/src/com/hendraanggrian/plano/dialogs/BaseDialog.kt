@@ -14,7 +14,7 @@ import ktfx.layouts.label
 import ktfx.layouts.vbox
 import ktfx.listeners.onAction
 
-abstract class PlanoDialog(
+abstract class BaseDialog(
     resources: Resources,
     container: StackPane,
     title: String

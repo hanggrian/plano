@@ -14,7 +14,7 @@ import ktfx.listeners.onAction
 class AboutDialog(
     resources: Resources,
     container: StackPane
-) : PlanoDialog(resources, container, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
+) : BaseDialog(resources, container, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
 
     init {
         label(getString(R.string._about)) {

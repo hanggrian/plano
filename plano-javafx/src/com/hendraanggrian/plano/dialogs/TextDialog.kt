@@ -9,7 +9,7 @@ class TextDialog(
     container: StackPane,
     titleId: String,
     contentId: String
-) : PlanoDialog(resources, container, resources.getString(titleId)) {
+) : BaseDialog(resources, container, resources.getString(titleId)) {
 
     init {
         label(getString(contentId)) {

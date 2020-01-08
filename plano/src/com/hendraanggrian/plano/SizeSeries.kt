@@ -36,21 +36,12 @@ enum class SizeSeries {
     C7("C7", 11.4, 8.1),
     C8("C8", 8.1, 5.7),
     C9("C9", 5.7, 4.0),
-    C10("C10", 4.0, 2.8),
-
-    _61_86(61.0, 86.0),
-    _61_92(61.0, 92.0),
-    _65_90(65.0, 90.0),
-    _65_100(65.0, 100.0),
-    _79_109(79.0, 109.0),
-    _70_108(70.0, 108.0),
-    _86_106(86.0, 106.0);
+    C10("C10", 4.0, 2.8);
 
     companion object {
         val A: List<SizeSeries> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
         val B: List<SizeSeries> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
         val C: List<SizeSeries> = listOf(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10)
-        fun others(): List<SizeSeries> = listOf(_61_86, _61_92, _65_90, _65_100, _79_109, _70_108, _86_106)
     }
 
     val width: Double

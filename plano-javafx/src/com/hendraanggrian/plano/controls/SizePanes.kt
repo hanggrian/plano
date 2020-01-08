@@ -1,9 +1,9 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.App
-import com.hendraanggrian.plano.App.Companion.SCALE_BIG
-import com.hendraanggrian.plano.App.Companion.SCALE_SMALL
 import com.hendraanggrian.plano.MediaSize
+import com.hendraanggrian.plano.PlanoApp
+import com.hendraanggrian.plano.PlanoApp.Companion.SCALE_BIG
+import com.hendraanggrian.plano.PlanoApp.Companion.SCALE_SMALL
 import com.hendraanggrian.plano.TrimSize
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
@@ -28,16 +28,14 @@ class MediaPane(
     isFilled: BooleanProperty,
     isThicked: BooleanProperty
 ) : Pane() {
-
     init {
         prefWidthProperty().bind(size.width * scale)
         prefHeightProperty().bind(size.height * scale)
-
         backgroundProperty().bind(bindingOf(isFilled) {
             Background(
                 BackgroundFill(
                     when {
-                        isFilled.value -> App.COLOR_YELLOW_LIGHT
+                        isFilled.value -> PlanoApp.COLOR_YELLOW_LIGHT
                         else -> Color.TRANSPARENT
                     },
                     CornerRadii.EMPTY,
@@ -48,7 +46,7 @@ class MediaPane(
         borderProperty().bind(bindingOf(isThicked) {
             Border(
                 BorderStroke(
-                    App.COLOR_YELLOW,
+                    PlanoApp.COLOR_YELLOW,
                     BorderStrokeStyle.SOLID,
                     CornerRadii.EMPTY,
                     BorderWidths(if (isThicked.value) SCALE_BIG else SCALE_SMALL)
@@ -64,16 +62,14 @@ class TrimPane(
     isFilled: BooleanProperty,
     isThicked: BooleanProperty
 ) : Pane() {
-
     init {
         prefWidthProperty().bind(size.width * scale)
         prefHeightProperty().bind(size.height * scale)
-
         backgroundProperty().bind(isFilled.toBinding {
             Background(
                 BackgroundFill(
                     when {
-                        isFilled.value -> App.COLOR_RED_LIGHT
+                        isFilled.value -> PlanoApp.COLOR_RED_LIGHT
                         else -> Color.TRANSPARENT
                     },
                     CornerRadii.EMPTY,
@@ -84,7 +80,7 @@ class TrimPane(
         borderProperty().bind(isThicked.toBinding {
             Border(
                 BorderStroke(
-                    App.COLOR_RED,
+                    PlanoApp.COLOR_RED,
                     BorderStrokeStyle.SOLID,
                     CornerRadii.EMPTY,
                     BorderWidths(if (isThicked.value) SCALE_BIG else SCALE_SMALL)

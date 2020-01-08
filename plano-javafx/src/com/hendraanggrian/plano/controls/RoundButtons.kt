@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.App.Companion.BUTTON_OPACITY
+import com.hendraanggrian.plano.PlanoApp.Companion.BUTTON_OPACITY
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.SizeSeries
@@ -118,9 +118,8 @@ open class MorePaperButton(
             }
         }
     }
+    separatorMenuItem()
     menu(resources.getString(R.string.a_series)) { SizeSeries.A.forEach { append(it) } }
     menu(resources.getString(R.string.b_series)) { SizeSeries.B.forEach { append(it) } }
     menu(resources.getString(R.string.c_series)) { SizeSeries.C.forEach { append(it) } }
-    separatorMenuItem()
-    menu(resources.getString(R.string.others)) { SizeSeries.others().forEach { append(it) } }
 })

@@ -1,4 +1,4 @@
-private const val VERSION_SHADOW = "4.0.3"
+private const val VERSION_SHADOW = "5.2.0"
 
 fun Dependencies.shadow() = "com.github.jengelman.gradle.plugins:shadow:$VERSION_SHADOW"
 

@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import com.hendraanggrian.bundler.Bundler
+import com.hendraanggrian.plano.controls.longSnackbar
+import com.hendraanggrian.plano.controls.snackbar
 import com.hendraanggrian.plano.dialogs.AboutDialogFragment
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs

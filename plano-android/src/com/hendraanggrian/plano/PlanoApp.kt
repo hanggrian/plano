@@ -6,7 +6,7 @@ import androidx.multidex.MultiDex
 import com.hendraanggrian.prefs.Prefs
 import com.hendraanggrian.prefs.android.setDebug
 
-class App : Application() {
+class PlanoApp : Application() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
