@@ -26,7 +26,7 @@ import ktfx.then
 import ktfx.toBinding
 
 @Suppress("LeakingThis")
-sealed class AbstractRoundButton(
+sealed class BaseRoundButton(
     radius: Number,
     textBinding: ObservableValue<String>
 ) : JFXButton() {
@@ -35,10 +35,7 @@ sealed class AbstractRoundButton(
         shape = Circle(r)
         setMinSize(2 * r, 2 * r)
         setMaxSize(2 * r, 2 * r)
-
-        tooltip {
-            textProperty().bind(textBinding)
-        }
+        tooltip { textProperty().bind(textBinding) }
     }
 }
 
@@ -46,7 +43,7 @@ open class SimpleRoundButton(
     radius: Number,
     text: String,
     graphicUrl: String
-) : AbstractRoundButton(radius, stringPropertyOf(text)) {
+) : BaseRoundButton(radius, stringPropertyOf(text)) {
     init {
         graphic = ImageView(graphicUrl)
     }
@@ -56,7 +53,7 @@ open class RoundButton(
     radius: Number,
     textBinding: ObservableValue<String>,
     graphicUrl: String
-) : AbstractRoundButton(radius, textBinding) {
+) : BaseRoundButton(radius, textBinding) {
     constructor(
         radius: Number,
         text: String,
@@ -77,7 +74,7 @@ open class AdaptableRoundButton(
     text2: String,
     graphicUrl1: String,
     graphicUrl2: String
-) : AbstractRoundButton(radius, given(dependency) then text1 otherwise text2) {
+) : BaseRoundButton(radius, given(dependency) then text1 otherwise text2) {
     init {
         graphicProperty().bind(bindingOf(dependency, hoverProperty()) {
             ImageView(

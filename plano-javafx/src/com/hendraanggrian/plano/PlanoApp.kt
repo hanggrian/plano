@@ -30,8 +30,6 @@ import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCombination
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.BorderStrokeStyle
-import javafx.scene.layout.BorderWidths
 import javafx.scene.layout.FlowPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
@@ -48,7 +46,6 @@ import kotlinx.coroutines.withContext
 import ktfx.booleanBindingOf
 import ktfx.booleanPropertyOf
 import ktfx.collections.emptyBinding
-import ktfx.controls.borderStroke
 import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.controls.setMinSize
@@ -106,8 +103,6 @@ class PlanoApp : Application(), Resources {
         // Material Red 500
         val COLOR_RED = Color.web("#f44336")!!
         val COLOR_RED_LIGHT = Color.web("#ff7961")!!
-        // Others
-        val COLOR_BORDER = Color.web("#c8c8c8")!!
 
         @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
 
@@ -292,11 +287,6 @@ class PlanoApp : Application(), Resources {
                     }
                     hbox {
                         gridPane {
-                            borderStroke(
-                                topStroke = COLOR_BORDER,
-                                topStyle = BorderStrokeStyle.SOLID,
-                                widths = BorderWidths(1.0)
-                            )
                             paddingAll = 20.0
                             gap = 10.0
                             var row = 0
@@ -406,7 +396,7 @@ class PlanoApp : Application(), Resources {
                                                 }
                                             } row (0 to 3) col 0
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
-                                            textFlow { append("${mediaWidth}x$mediaHeight") } row 0 col 2
+                                            label("${mediaWidth}x$mediaHeight") row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             textFlow {
                                                 "${size.trimSizes.size}pcs " { styleClass += "bold" }

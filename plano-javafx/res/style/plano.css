@@ -2,23 +2,25 @@
     -accent: #ffb300;
     -accent-light: #ffe54c;
     -accent-dark: #c68400;
-
-    -dark: rgba(0, 0, 0, 0.54);
+    -border-color: #e6e6e6;
 }
 
 .root {
+    -fx-base: white;
     -fx-accent: -accent;
     -fx-focus-color: -accent;
     -fx-default-button: -accent;
-    -fx-background-color: white;
-}
-
-.label {
     -fx-font-family: "Roboto";
 }
 
 .scroll-pane {
-    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: -border-color;
+}
+
+.jfx-text-field {
+    -jfx-focus-color: -accent;
 }
 
 .jfx-check-box {
@@ -33,18 +35,11 @@
 }
 .jfx-snackbar-action {
     -fx-text-fill: -accent;
+    -fx-font-family: "Roboto Bold";
 }
 
 .jfx-dialog-overlay-pane {
-    -fx-background-color: -dark;
-}
-
-.jfx-drawer-overlay-pane {
-    -fx-background-color: -dark;
-}
-
-.jfx-radio-button {
-    -jfx-selected-color: -accent;
+    -fx-background-color: rgba(0, 0, 0, 0.54);
 }
 
 .jfx-tool-bar {
@@ -52,36 +47,15 @@
     -fx-pref-height: 64;
     -fx-max-height: 64;
     -fx-padding: 0 20 0 20;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: -border-color;
 }
 .jfx-tool-bar HBox {
     -fx-alignment: center;
 }
 
-.jfx-text-field {
-    -jfx-focus-color: -accent;
-    -fx-prompt-text-fill: -dark;
-}
-
 .jfx-button .jfx-rippler {
-    -jfx-rippler-fill: -accent;
-}
-
-.jfx-tab-pane .tab-header-area .jfx-rippler {
-    -jfx-rippler-fill: -accent;
-}
-.jfx-tab-pane .tab-header-background {
-    -fx-background-color: transparent;
-}
-.jfx-tab-pane .tab-selected-line {
-    -fx-background-color: -accent;
-}
-.jfx-tab-pane .tab {
-}
-.jfx-tab-pane .tab .tab-label {
-    -fx-text-fill: -fx-text-background-color;
-}
-.jfx-tab-pane .tab:selected .tab-label {
-    -fx-text-fill: -accent;
+    -jfx-rippler-fill: -accent-dark;
 }
 
 .flat {
