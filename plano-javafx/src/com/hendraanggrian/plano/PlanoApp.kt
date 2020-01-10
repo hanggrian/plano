@@ -77,7 +77,6 @@ import ktfx.layouts.scene
 import ktfx.layouts.scrollPane
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.stackPane
-import ktfx.layouts.text
 import ktfx.layouts.textFlow
 import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
@@ -111,6 +110,8 @@ class PlanoApp : Application(), Resources {
         val COLOR_BORDER = Color.web("#c8c8c8")!!
 
         @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
+
+        fun getStyle(styleId: String): String = PlanoApp::class.java.getResource(styleId).toExternalForm()
     }
 
     private val scaleProperty = doublePropertyOf(SCALE_SMALL)
@@ -167,6 +168,7 @@ class PlanoApp : Application(), Resources {
     private lateinit var saver: PrefsSaver
     override lateinit var resourceBundle: ResourceBundle
 
+    @JvmField @BindPref("dark_mode") var darkMode = false
     @JvmField @BindPref("language") var language = Language.ENGLISH.code
     @JvmField @BindPref("is_expanded") var isExpanded = false
     @JvmField @BindPref("is_filled") var isFilled = false
@@ -194,16 +196,27 @@ class PlanoApp : Application(), Resources {
             isThick = thickProperty.value
             saver.save()
         }
-        stage.scene {
-            stylesheets.addAll(
-                javaClass.getResource(R.style.plano).toExternalForm(),
-                javaClass.getResource(R.style.plano_font).toExternalForm()
-            )
+        stage.scene(fill = Color.TRANSPARENT) {
+            stylesheets.addAll(getStyle(R.style.plano), getStyle(R.style.plano_font))
+            if (darkMode) {
+                stylesheets += getStyle(R.style.plano_dark)
+            }
             rootPane = stackPane {
                 vbox {
                     menuBar {
                         isUseSystemMenuBar = isOsMac()
                         "File" {
+                            checkMenuItem(getString(R.string.dark_mode)) {
+                                isSelected = darkMode
+                                onAction {
+                                    darkMode = !darkMode
+                                    saver.saveAsync()
+                                    when {
+                                        darkMode -> this@scene.stylesheets += getStyle(R.style.plano_dark)
+                                        else -> this@scene.stylesheets -= getStyle(R.style.plano_dark)
+                                    }
+                                }
+                            }
                             menu(getString(R.string.language)) {
                                 val group = ToggleGroup()
                                 Language.values().forEach { lang ->
@@ -293,7 +306,10 @@ class PlanoApp : Application(), Resources {
                                 repeat(4) { constraints { prefHeight = 32.0 } } // input form
                             }
 
-                            text(getString(R.string._desc)) { wrappingWidth = 200.0 } row row++ col (0 to 6)
+                            label(getString(R.string._desc)) {
+                                isWrapText = true
+                                maxWidth = 200.0
+                            } row row++ col (0 to 6)
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) {
                                 tooltip(getString(R.string._media_box))
@@ -463,6 +479,7 @@ class PlanoApp : Application(), Resources {
 
         if (isExpanded) toggleExpand()
         if (isFilled) toggleFill()
+        if (isThick) toggleThick()
         mediaWidthField.requestFocus()
     }
 

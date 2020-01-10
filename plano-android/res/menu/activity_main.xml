@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
 
     <item
         android:id="@+id/clearItem"
         android:icon="@drawable/btn_clear"
         android:title="@string/clear"
         android:visible="false"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/expandedMenu"
+        android:icon="@drawable/btn_scale_expand"
+        android:title="@string/expand"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/fillMenu"
+        android:icon="@drawable/btn_background_fill"
+        android:title="@string/fill_background"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/thickMenu"
+        android:icon="@drawable/btn_border_thin"
+        android:title="@string/thicken_border"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/flipItem"

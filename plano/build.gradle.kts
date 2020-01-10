@@ -112,6 +112,10 @@ locale {
         en = "Reset"
         id = "Atur ulang"
     }
+    "dark_mode" {
+        en = "Dark mode"
+        id = "Mode gelap"
+    }
     "language" {
         en = "Language"
         id = "Bahasa"

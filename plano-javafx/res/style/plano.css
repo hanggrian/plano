@@ -3,7 +3,7 @@
     -accent-light: #ffe54c;
     -accent-dark: #c68400;
 
-    -dark: rgba(0.0, 0.0, 0.0, 0.54);
+    -dark: rgba(0, 0, 0, 0.54);
 }
 
 .root {
@@ -48,9 +48,9 @@
 }
 
 .jfx-tool-bar {
-    -fx-min-height: 64.0;
-    -fx-pref-height: 64.0;
-    -fx-max-height: 64.0;
+    -fx-min-height: 64;
+    -fx-pref-height: 64;
+    -fx-max-height: 64;
     -fx-padding: 0 20 0 20;
 }
 .jfx-tool-bar HBox {

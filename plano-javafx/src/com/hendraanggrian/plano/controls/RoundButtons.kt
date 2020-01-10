@@ -18,7 +18,6 @@ import ktfx.layouts.MenuItemManager
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
-import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
 import ktfx.otherwise
@@ -118,7 +117,6 @@ open class MorePaperButton(
             }
         }
     }
-    separatorMenuItem()
     menu(resources.getString(R.string.a_series)) { SizeSeries.A.forEach { append(it) } }
     menu(resources.getString(R.string.b_series)) { SizeSeries.B.forEach { append(it) } }
     menu(resources.getString(R.string.c_series)) { SizeSeries.C.forEach { append(it) } }
