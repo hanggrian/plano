@@ -1,6 +1,5 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.PlanoApp.Companion.BUTTON_OPACITY
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.SizeSeries
@@ -9,9 +8,7 @@ import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableValue
 import javafx.geometry.Side
 import javafx.scene.control.TextField
-import javafx.scene.image.ImageView
 import javafx.scene.shape.Circle
-import ktfx.bindingOf
 import ktfx.given
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.MenuItemManager
@@ -23,7 +20,7 @@ import ktfx.listeners.onAction
 import ktfx.otherwise
 import ktfx.stringPropertyOf
 import ktfx.then
-import ktfx.toBinding
+import ktfx.toStringBinding
 
 @Suppress("LeakingThis")
 sealed class BaseRoundButton(
@@ -39,59 +36,28 @@ sealed class BaseRoundButton(
     }
 }
 
-open class SimpleRoundButton(
-    radius: Number,
-    text: String,
-    graphicUrl: String
-) : BaseRoundButton(radius, stringPropertyOf(text)) {
-    init {
-        graphic = ImageView(graphicUrl)
-    }
-}
-
-open class RoundButton(
-    radius: Number,
-    textBinding: ObservableValue<String>,
-    graphicUrl: String
-) : BaseRoundButton(radius, textBinding) {
-    constructor(
-        radius: Number,
-        text: String,
-        graphicUrl: String
-    ) : this(radius, stringPropertyOf(text), graphicUrl)
-
-    init {
-        graphicProperty().bind(hoverProperty().toBinding {
-            ImageView(graphicUrl).apply { if (!it) opacity = BUTTON_OPACITY }
-        })
-    }
-}
-
 open class AdaptableRoundButton(
     radius: Number,
     dependency: ObservableBooleanValue,
-    text1: String,
-    text2: String,
-    graphicUrl1: String,
-    graphicUrl2: String
-) : BaseRoundButton(radius, given(dependency) then text1 otherwise text2) {
+    text: Pair<String, String>,
+    id: Pair<String, String>
+) : BaseRoundButton(radius, given(dependency) then text.first otherwise text.second) {
     init {
-        graphicProperty().bind(bindingOf(dependency, hoverProperty()) {
-            ImageView(
-                when {
-                    dependency.value -> graphicUrl1
-                    else -> graphicUrl2
-                }
-            ).also { if (!isHover) it.opacity = BUTTON_OPACITY }
-        })
+        idProperty().bind(dependency.toStringBinding { if (it) id.first else id.second })
     }
 }
+
+open class SimpleRoundButton(
+    radius: Number,
+    text: String
+) : BaseRoundButton(radius, stringPropertyOf(text))
 
 open class MoreButton(
     resources: Resources,
     init: KtfxContextMenu.() -> Unit
-) : RoundButton(16, resources.getString(R.string.more), R.image.menu_more) {
+) : SimpleRoundButton(16, resources.getString(R.string.more)) {
     init {
+        id = "menu-more"
         val contextMenu = contextMenu(init)
         onAction {
             if (!contextMenu.isShowing) {

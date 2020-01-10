@@ -17,27 +17,3 @@
     font-family: "Roboto Bold";
     src: url("../font/Roboto-Bold.ttf");
 }
-
-.display {
-    -fx-font-size: 13pt;
-}
-
-.display2 {
-    -fx-font-size: 15pt;
-}
-
-.accent {
-    -fx-text-fill: -accent;
-}
-
-.dark {
-    -fx-text-fill: rgba(0.0, 0.0, 0.0, 0.74);
-}
-
-.bold {
-    -fx-font-family: "Roboto Bold";
-}
-
-.light {
-    -fx-font-family: "Roboto Light";
-}

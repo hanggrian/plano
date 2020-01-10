@@ -13,6 +13,7 @@ import ktfx.layouts.buttonBar
 import ktfx.layouts.label
 import ktfx.layouts.vbox
 import ktfx.listeners.onAction
+import ktfx.text.fontOf
 
 abstract class BaseDialog(
     resources: Resources,
@@ -28,12 +29,11 @@ abstract class BaseDialog(
     init {
         content = ktfx.layouts.vbox(20.0) {
             paddingAll = 20.0
-            label(title) { styleClass.addAll("bold", "display") }
+            label(title) { font = fontOf("Roboto Medium", size = 22) }
             contentPane = vbox()
             buttonBar {
                 onButtons()
                 jfxButton(getString(R.string.btn_close)) {
-                    styleClass.addAll("flat", "bold")
                     onAction { close() }
                 }
             }

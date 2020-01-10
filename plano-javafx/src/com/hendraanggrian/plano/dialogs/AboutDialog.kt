@@ -25,7 +25,6 @@ class AboutDialog(
 
     override fun NodeManager.onButtons() {
         jfxButton(getString(R.string.btn_homepage)) {
-            styleClass.addAll("flat", "bold")
             onAction {
                 Desktop.getDesktop().browse(URI(BuildConfig.HOMEPAGE))
                 close()

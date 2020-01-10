@@ -25,8 +25,6 @@ import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ScrollPane
 import javafx.scene.control.ToggleGroup
-import javafx.scene.image.Image
-import javafx.scene.image.ImageView
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCombination
 import javafx.scene.layout.AnchorPane
@@ -74,7 +72,6 @@ import ktfx.layouts.scene
 import ktfx.layouts.scrollPane
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.stackPane
-import ktfx.layouts.textFlow
 import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.listeners.listener
@@ -82,7 +79,6 @@ import ktfx.listeners.onHiding
 import ktfx.listeners.snapshot
 import ktfx.minus
 import ktfx.runLater
-import ktfx.text.append
 import ktfx.util.toSwingImage
 import org.apache.commons.lang3.SystemUtils
 
@@ -94,8 +90,6 @@ class PlanoApp : Application(), Resources {
 
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
-
-        const val BUTTON_OPACITY = 0.54
 
         // Material Orange 500
         val COLOR_YELLOW = Color.web("#ffb300")!!
@@ -298,7 +292,7 @@ class PlanoApp : Application(), Resources {
 
                             label(getString(R.string._desc)) {
                                 isWrapText = true
-                                maxWidth = 200.0
+                                maxWidth = 250.0
                             } row row++ col (0 to 6)
 
                             circle(radius = 4.0, fill = COLOR_YELLOW) {
@@ -355,10 +349,8 @@ class PlanoApp : Application(), Resources {
                                 isSelected = allowFlip
                             } row row++ col 2
 
-                            calculateButton = addChild(
-                                SimpleRoundButton(24, getString(R.string.calculate), R.image.btn_send)
-                            ) {
-                                styleClass += "raised"
+                            calculateButton = addChild(SimpleRoundButton(24, getString(R.string.calculate))) {
+                                id = "btn-calculate"
                                 buttonType = JFXButton.ButtonType.RAISED
                                 disableProperty().bind(booleanBindingOf(
                                     mediaWidthField.textProperty(),
@@ -398,18 +390,14 @@ class PlanoApp : Application(), Resources {
                                             circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
                                             label("${mediaWidth}x$mediaHeight") row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
-                                            textFlow {
-                                                "${size.trimSizes.size}pcs " { styleClass += "bold" }
-                                                append("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
-                                            } row 1 col 2
+                                            label("${size.trimSizes.size}pcs ${trimWidth + bleed * 2}x${trimHeight + bleed * 2}") row 1 col 2
                                             lateinit var moreButton: Button
                                             moreButton = addChild(
                                                 MoreButton(this@PlanoApp) {
-                                                    menuItem(
-                                                        getString(R.string.save),
-                                                        ImageView(Image(R.image.menu_save)).apply {
-                                                            opacity = BUTTON_OPACITY
-                                                        }) {
+                                                    menuItem(getString(R.string.delete)) {
+                                                        onAction { outputPane.children -= this@pane }
+                                                    }
+                                                    menuItem(getString(R.string.save)) {
                                                         onAction {
                                                             moreButton.isVisible = false
                                                             val file = ResultFile()
@@ -431,13 +419,6 @@ class PlanoApp : Application(), Resources {
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                    menuItem(
-                                                        getString(R.string.delete),
-                                                        ImageView(Image(R.image.menu_delete)).apply {
-                                                            opacity = BUTTON_OPACITY
-                                                        }) {
-                                                        onAction { outputPane.children -= this@pane }
                                                     }
                                                 }
                                             ) row 2 col (1 to 2)

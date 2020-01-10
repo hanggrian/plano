@@ -1,74 +1,111 @@
-* {
-    -accent: #ffb300;
-    -accent-light: #ffe54c;
-    -accent-dark: #c68400;
-    -border-color: #e6e6e6;
-}
-
 .root {
+    -plano-border: #e6e6e6;
+    -plano-button-hover: rgba(0, 0, 0, 0.27);
+    -plano-dialog-overlay: rgba(0, 0, 0, 0.54);
+
     -fx-base: white;
-    -fx-accent: -accent;
-    -fx-focus-color: -accent;
-    -fx-default-button: -accent;
+    -fx-accent: #ffb300; /* Material Design Amber 600 */
+    -fx-focus-color: -plano-accent;
     -fx-font-family: "Roboto";
 }
 
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-width: 0 0 0 1;
-    -fx-border-color: -border-color;
-}
-
+/* TextField */
 .jfx-text-field {
-    -jfx-focus-color: -accent;
+    -jfx-focus-color: -fx-accent;
 }
 
-.jfx-check-box {
-     -jfx-checked-color: -accent;
-}
-
+/* Snackbar */
 .jfx-snackbar-content {
-    -fx-background-color: #323232;
+    -fx-background-color: derive(black, 26.4%);
 }
 .jfx-snackbar-toast {
     -fx-text-fill: white;
 }
 .jfx-snackbar-action {
-    -fx-text-fill: -accent;
+    -fx-text-fill: -fx-accent;
     -fx-font-family: "Roboto Bold";
 }
 
-.jfx-dialog-overlay-pane {
-    -fx-background-color: rgba(0, 0, 0, 0.54);
+/* ScrollPane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: -plano-border;
 }
 
+/* ToolBar */
 .jfx-tool-bar {
     -fx-min-height: 64;
     -fx-pref-height: 64;
     -fx-max-height: 64;
     -fx-padding: 0 20 0 20;
     -fx-border-width: 0 0 1 0;
-    -fx-border-color: -border-color;
+    -fx-border-color: -plano-border;
 }
 .jfx-tool-bar HBox {
     -fx-alignment: center;
 }
 
+/* Button */
+.button {
+    -fx-text-fill: -fx-accent;
+    -fx-font-family: "Roboto Bold";
+}
+.button:hover {
+    -fx-background-color: -plano-button-hover;
+}
 .jfx-button .jfx-rippler {
-    -jfx-rippler-fill: -accent-dark;
+    -jfx-rippler-fill: -fx-accent;
 }
 
-.flat {
-    -fx-text-fill: -accent;
+/* Dialog */
+.jfx-dialog-overlay-pane > StackPane {
+    -fx-background-color: -fx-background;
+}
+.jfx-dialog-overlay-pane {
+    -fx-background-color: -plano-dialog-overlay;
 }
 
-.raised {
-    -fx-text-fill: white;
-    -fx-background-color: -accent;
+/* CheckBox */
+.jfx-check-box {
+    -jfx-checked-color: -fx-accent;
 }
-.raised:hover {
-    -fx-background-color: -accent-light;
+.jfx-check-box .mark {
+    -fx-border-color: -fx-background;
 }
-.raised:pressed {
-    -fx-background-color: -accent-dark;
+
+/* ID */
+#btn-calculate {
+    -fx-background-color: -fx-accent;
+    -fx-graphic: url("../image/btn_send.png");
+}
+#btn-calculate:hover {
+    -fx-background-color: derive(-fx-accent, 50%);
+}
+#btn-calculate:pressed {
+    -fx-background-color: derive(-fx-accent, -50%);
+}
+#btn-clear {
+    -fx-graphic: url("../image/btn_clear.png");
+}
+#btn-scale-expand {
+    -fx-graphic: url("../image/btn_scale_expand.png");
+}
+#btn-scale-shrink {
+    -fx-graphic: url("../image/btn_scale_shrink.png");
+}
+#btn-background-fill {
+    -fx-graphic: url("../image/btn_background_fill.png");
+}
+#btn-background-unfill {
+    -fx-graphic: url("../image/btn_background_unfill.png");
+}
+#btn-border-thick {
+    -fx-graphic: url("../image/btn_border_thick.png");
+}
+#btn-border-thin {
+    -fx-graphic: url("../image/btn_border_thin.png");
+}
+#menu-more {
+    -fx-graphic: url("../image/menu_more.png");
 }

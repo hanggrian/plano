@@ -11,7 +11,7 @@
         android:visible="false"
         app:showAsAction="always" />
 
-    <item
+    <!--item
         android:id="@+id/expandedMenu"
         android:icon="@drawable/btn_scale_expand"
         android:title="@string/expand"
@@ -27,7 +27,7 @@
         android:id="@+id/thickMenu"
         android:icon="@drawable/btn_border_thin"
         android:title="@string/thicken_border"
-        app:showAsAction="always" />
+        app:showAsAction="always" /-->
 
     <item
         android:id="@+id/flipItem"
