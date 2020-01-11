@@ -5,7 +5,7 @@
 
     -fx-base: white;
     -fx-accent: #ffb300; /* Material Design Amber 600 */
-    -fx-focus-color: -plano-accent;
+    -fx-focus-color: -fx-accent;
     -fx-font-family: "Roboto";
 }
 

@@ -20,6 +20,12 @@
     -fx-text-fill: black;
 }
 
+/* ScrollBar */
+.scroll-bar > .increment-button > .increment-arrow,
+.scroll-bar > .decrement-button > .decrement-arrow {
+    -fx-background-color: -plano-button-hover;
+}
+
 /* ID */
 #btn-calculate {
     -fx-graphic: url("../image-dark/btn_send.png");

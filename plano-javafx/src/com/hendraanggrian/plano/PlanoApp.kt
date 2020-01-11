@@ -87,14 +87,11 @@ class PlanoApp : Application(), Resources {
     companion object {
         const val DURATION_SHORT = 3000L
         const val DURATION_LONG = 6000L
-
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
 
-        // Material Orange 500
-        val COLOR_YELLOW = Color.web("#ffb300")!!
-        val COLOR_YELLOW_LIGHT = Color.web("#ffe54c")!!
-        // Material Red 500
+        val COLOR_AMBER = Color.web("#ffb300")!!
+        val COLOR_AMBER_LIGHT = Color.web("#ffe54c")!!
         val COLOR_RED = Color.web("#f44336")!!
         val COLOR_RED_LIGHT = Color.web("#ff7961")!!
 
@@ -295,7 +292,7 @@ class PlanoApp : Application(), Resources {
                                 maxWidth = 250.0
                             } row row++ col (0 to 6)
 
-                            circle(radius = 4.0, fill = COLOR_YELLOW) {
+                            circle(radius = 6.0, fill = COLOR_AMBER) {
                                 tooltip(getString(R.string._media_box))
                             } row row col 0
                             label(getString(R.string.media_box)) {
@@ -314,7 +311,7 @@ class PlanoApp : Application(), Resources {
                             } row row col 4
                             addChild(MorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)) row row++ col 5
 
-                            circle(radius = 4.0, fill = COLOR_RED) {
+                            circle(radius = 6.0, fill = COLOR_RED) {
                                 tooltip(getString(R.string._trim_box))
                             } row row col 0
                             label(getString(R.string.trim_box)) {
@@ -387,7 +384,7 @@ class PlanoApp : Application(), Resources {
                                                     addChild(TrimPane(it, scaleProperty, filledProperty, thickProperty))
                                                 }
                                             } row (0 to 3) col 0
-                                            circle(radius = 4.0, fill = COLOR_YELLOW) row 0 col 1
+                                            circle(radius = 4.0, fill = COLOR_AMBER) row 0 col 1
                                             label("${mediaWidth}x$mediaHeight") row 0 col 2
                                             circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
                                             label("${size.trimSizes.size}pcs ${trimWidth + bleed * 2}x${trimHeight + bleed * 2}") row 1 col 2

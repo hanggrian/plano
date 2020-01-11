@@ -35,7 +35,7 @@ class MediaPane(
             Background(
                 BackgroundFill(
                     when {
-                        isFilled.value -> PlanoApp.COLOR_YELLOW_LIGHT
+                        isFilled.value -> PlanoApp.COLOR_AMBER_LIGHT
                         else -> Color.TRANSPARENT
                     },
                     CornerRadii.EMPTY,
@@ -46,7 +46,7 @@ class MediaPane(
         borderProperty().bind(bindingOf(isThicked) {
             Border(
                 BorderStroke(
-                    PlanoApp.COLOR_YELLOW,
+                    PlanoApp.COLOR_AMBER,
                     BorderStrokeStyle.SOLID,
                     CornerRadii.EMPTY,
                     BorderWidths(if (isThicked.value) SCALE_BIG else SCALE_SMALL)
