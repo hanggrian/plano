@@ -21,6 +21,7 @@ import java.net.URI
 import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.geometry.HPos
+import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ScrollPane
@@ -107,8 +108,8 @@ class PlanoApp : Application(), Resources {
             expandedMenu.isSelected = newValue
             outputPane.children.forEach {
                 val pane = it as Pane
-                val gridPane = pane.children[0] as GridPane
-                val anchorPane = gridPane.children[0] as AnchorPane
+                val gridPane = pane.children.first() as GridPane
+                val anchorPane = gridPane.children.last() as AnchorPane
                 anchorPane.children.forEachIndexed { index, node ->
                     when (index) {
                         0 -> {
@@ -372,22 +373,17 @@ class PlanoApp : Application(), Resources {
                                     outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
                                             paddingAll = 10.0
-                                            gap = 10.0
+                                            gap = 5.0
                                             val size = Plano.calculate(
                                                 mediaWidth, mediaHeight,
                                                 trimWidth, trimHeight,
                                                 bleed, allowFlip
                                             )
-                                            anchorPane {
-                                                addChild(MediaPane(size, scaleProperty, filledProperty, thickProperty))
-                                                size.trimSizes.forEach {
-                                                    addChild(TrimPane(it, scaleProperty, filledProperty, thickProperty))
-                                                }
-                                            } row (0 to 3) col 0
-                                            circle(radius = 4.0, fill = COLOR_AMBER) row 0 col 1
-                                            label("${mediaWidth}x$mediaHeight") row 0 col 2
-                                            circle(radius = 4.0, fill = COLOR_RED) row 1 col 1
-                                            label("${size.trimSizes.size}pcs ${trimWidth + bleed * 2}x${trimHeight + bleed * 2}") row 1 col 2
+
+                                            circle(radius = 4.0, fill = COLOR_AMBER) row 0 col 0
+                                            label("${mediaWidth}x$mediaHeight") row 0 col 1
+                                            circle(radius = 4.0, fill = COLOR_RED) row 1 col 0
+                                            label("${size.trimSizes.size}pcs ${trimWidth + bleed * 2}x${trimHeight + bleed * 2}") row 1 col 1
                                             lateinit var moreButton: Button
                                             moreButton = addChild(
                                                 MoreButton(this@PlanoApp) {
@@ -411,14 +407,19 @@ class PlanoApp : Application(), Resources {
                                                                     DURATION_SHORT,
                                                                     getString(R.string.btn_show_file)
                                                                 ) {
-                                                                    Desktop.getDesktop()
-                                                                        .open(file.parentFile)
+                                                                    Desktop.getDesktop().open(file.parentFile)
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
-                                            ) row 2 col (1 to 2)
+                                            ) row (0 to 2) col 2 align Pos.CENTER_RIGHT
+                                            anchorPane {
+                                                addChild(MediaPane(size, scaleProperty, filledProperty, thickProperty))
+                                                size.trimSizes.forEach {
+                                                    addChild(TrimPane(it, scaleProperty, filledProperty, thickProperty))
+                                                }
+                                            } row 2 col (0 to 3)
                                         }
                                     })
                                 }

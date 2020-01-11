@@ -17,6 +17,7 @@ import ktfx.layouts.menu
 import ktfx.layouts.menuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
+import ktfx.or
 import ktfx.otherwise
 import ktfx.stringPropertyOf
 import ktfx.then
@@ -55,7 +56,7 @@ open class SimpleRoundButton(
 open class MoreButton(
     resources: Resources,
     init: KtfxContextMenu.() -> Unit
-) : SimpleRoundButton(16, resources.getString(R.string.more)) {
+) : SimpleRoundButton(16, resources.getString(R.string.more)), Resources by resources {
     init {
         id = "menu-more"
         val contextMenu = contextMenu(init)
@@ -72,6 +73,10 @@ open class MorePaperButton(
     widthField: TextField,
     heightField: TextField
 ) : MoreButton(resources, {
+    menuItem(resources.getString(R.string.rotate)) {
+        disableProperty().bind(widthField.textProperty().isEmpty or heightField.textProperty().isEmpty)
+        onAction { widthField.text = heightField.text.also { heightField.text = widthField.text } }
+    }
     val append: MenuItemManager.(SizeSeries) -> Unit = { standardSize ->
         menuItem(standardSize.title) {
             onAction {

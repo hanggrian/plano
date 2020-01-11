@@ -188,6 +188,10 @@ locale {
         en = "Info"
         id = "Jelaskan"
     }
+    "rotate" {
+        en = "Rotate"
+        id = "Putar"
+    }
     "a_series" {
         en = "A Series"
         id = "Seri A"
