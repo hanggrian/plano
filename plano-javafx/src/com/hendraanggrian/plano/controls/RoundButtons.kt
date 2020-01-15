@@ -58,7 +58,7 @@ open class MoreButton(
     init: KtfxContextMenu.() -> Unit
 ) : SimpleRoundButton(16, resources.getString(R.string.more)), Resources by resources {
     init {
-        id = "menu-more"
+        id = R.style.menu_more
         val contextMenu = contextMenu(init)
         onAction {
             if (!contextMenu.isShowing) {

@@ -7,8 +7,8 @@ buildscript {
     dependencies {
         classpath(kotlin("gradle-plugin", VERSION_KOTLIN))
         classpath(android())
-        classpath(hendraanggrian("r-gradle-plugin", "0.1"))
-        classpath(hendraanggrian("buildconfig-gradle-plugin", "0.1"))
+        classpath(hendraanggrian("r-gradle-plugin", "0.2"))
+        classpath(hendraanggrian("buildconfig-gradle-plugin", "0.2"))
         classpath(hendraanggrian("locale-gradle-plugin", "0.1"))
         classpath(hendraanggrian("packr-gradle-plugin", "0.2"))
         classpath(shadow())

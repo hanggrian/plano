@@ -184,9 +184,9 @@ class PlanoApp : Application(), Resources {
             saver.save()
         }
         stage.scene(fill = Color.TRANSPARENT) {
-            stylesheets.addAll(getStyle(R.style.plano), getStyle(R.style.plano_font))
+            stylesheets.addAll(getStyle(R.style._plano), getStyle(R.style._plano_font))
             if (darkMode) {
-                stylesheets += getStyle(R.style.plano_dark)
+                stylesheets += getStyle(R.style._plano_dark)
             }
             rootPane = stackPane {
                 vbox {
@@ -199,8 +199,8 @@ class PlanoApp : Application(), Resources {
                                     darkMode = !darkMode
                                     saver.saveAsync()
                                     when {
-                                        darkMode -> this@scene.stylesheets += getStyle(R.style.plano_dark)
-                                        else -> this@scene.stylesheets -= getStyle(R.style.plano_dark)
+                                        darkMode -> this@scene.stylesheets += getStyle(R.style._plano_dark)
+                                        else -> this@scene.stylesheets -= getStyle(R.style._plano_dark)
                                     }
                                 }
                             }
@@ -348,7 +348,7 @@ class PlanoApp : Application(), Resources {
                             } row row++ col 2
 
                             calculateButton = addChild(SimpleRoundButton(24, getString(R.string.calculate))) {
-                                id = "btn-calculate"
+                                id = R.style.btn_calculate
                                 buttonType = JFXButton.ButtonType.RAISED
                                 disableProperty().bind(booleanBindingOf(
                                     mediaWidthField.textProperty(),

@@ -35,13 +35,13 @@ class PlanoToolbar(
             label(BuildConfig.NAME) { font = 24.pt }
         }
         rightItems {
-            clearButton = addChild(SimpleRoundButton(24, getString(R.string.clear))) { id = "btn-clear" }
+            clearButton = addChild(SimpleRoundButton(24, getString(R.string.clear))) { id = R.style.btn_clear }
             expandButton = addChild(
                 AdaptableRoundButton(
                     24,
                     expandedProperty,
                     getString(R.string.shrink) to getString(R.string.expand),
-                    "btn-scale-expand" to "btn-scale-shrink"
+                    R.style.btn_scale_expand to R.style.btn_scale_shrink
                 )
             )
             fillButton = addChild(
@@ -49,7 +49,7 @@ class PlanoToolbar(
                     24,
                     filledProperty,
                     getString(R.string.unfill_background) to getString(R.string.fill_background),
-                    "btn-background-fill" to "btn-background-unfill"
+                    R.style.btn_background_fill to R.style.btn_background_unfill
                 )
             )
             thickButton = addChild(
@@ -57,7 +57,7 @@ class PlanoToolbar(
                     24,
                     thickProperty,
                     getString(R.string.unthicken_border) to getString(R.string.thicken_border),
-                    "btn-border-thick" to "btn-border-thin"
+                    R.style.btn_border_thick to R.style.btn_border_thin
                 )
             )
         }

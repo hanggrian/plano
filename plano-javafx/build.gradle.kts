@@ -67,17 +67,16 @@ tasks {
 
     withType<com.hendraanggrian.r.RTask> {
         resourcesDirectory = "res"
-        useProperties {
-            readResourceBundle = true
-        }
+        configureCss()
+        properties { isWriteResourceBundle = true }
     }
 
     withType<com.hendraanggrian.buildconfig.BuildConfigTask> {
         appName = RELEASE_NAME
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
-        field("USER", RELEASE_USER)
-        field("HOMEPAGE", RELEASE_HOMEPAGE)
+        addField("USER", RELEASE_USER)
+        addField("HOMEPAGE", RELEASE_HOMEPAGE)
     }
 
     named<Jar>("jar") {
