@@ -1,10 +1,8 @@
 package com.hendraanggrian.plano.dialogs
 
 import com.hendraanggrian.plano.BuildConfig
+import com.hendraanggrian.plano.PlanoApp
 import com.hendraanggrian.plano.R
-import com.hendraanggrian.plano.Resources
-import java.awt.Desktop
-import java.net.URI
 import javafx.scene.layout.StackPane
 import ktfx.jfoenix.layouts.jfxButton
 import ktfx.layouts.NodeManager
@@ -12,9 +10,9 @@ import ktfx.layouts.label
 import ktfx.listeners.onAction
 
 class AboutDialog(
-    resources: Resources,
+    private val app: PlanoApp,
     container: StackPane
-) : BaseDialog(resources, container, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
+) : BaseDialog(app, container, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
 
     init {
         label(getString(R.string._about)) {
@@ -26,7 +24,7 @@ class AboutDialog(
     override fun NodeManager.onButtons() {
         jfxButton(getString(R.string.btn_homepage)) {
             onAction {
-                Desktop.getDesktop().browse(URI(BuildConfig.HOMEPAGE))
+                app.hostServices.showDocument(BuildConfig.HOMEPAGE)
                 close()
             }
         }

@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var viewModel: MainViewModel
     private var clearItem: MenuItem? = null
     private lateinit var adapter: MainAdapter
@@ -109,10 +108,7 @@ class MainActivity : AppCompatActivity() {
             R.id.clearItem -> {
                 val temp = adapter.toList()
                 adapter.removeAll()
-                recyclerView.snackbar(
-                    getString(R.string._boxes_cleared),
-                    getString(R.string.btn_undo)
-                ) {
+                recyclerView.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {
                     adapter.putAll(temp)
                 }
             }
@@ -136,9 +132,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.aboutItem -> AboutDialogFragment()
-                .also {
-                    it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this)
-                }
+                .also { it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this) }
                 .show(supportFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)

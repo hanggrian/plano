@@ -244,9 +244,9 @@ locale {
         en = "DOWNLOAD"
         id = "UNDUH"
     }
-    "btn_show_file" {
-        en = "SHOW FILE"
-        id = "TUNJUKKAN FILE"
+    "btn_show_directory" {
+        en = "SHOW DIRECTORY"
+        id = "TUNJUKKAN FOLDER"
     }
     "btn_homepage" {
         en = "HOMEPAGE"

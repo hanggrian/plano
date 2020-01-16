@@ -20,7 +20,7 @@
     <string name="btn_close">CLOSE</string>
     <string name="btn_download">DOWNLOAD</string>
     <string name="btn_homepage">HOMEPAGE</string>
-    <string name="btn_show_file">SHOW FILE</string>
+    <string name="btn_show_directory">SHOW DIRECTORY</string>
     <string name="btn_undo">UNDO</string>
     <string name="c_series">C Series</string>
     <string name="calculate">Calculate</string>

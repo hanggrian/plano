@@ -1,12 +1,12 @@
 package com.hendraanggrian.plano
 
 import com.hendraanggrian.plano.controls.DoubleField
-import com.hendraanggrian.plano.controls.MediaPane
+import com.hendraanggrian.plano.controls.MediaBoxPane
 import com.hendraanggrian.plano.controls.MoreButton
 import com.hendraanggrian.plano.controls.MorePaperButton
 import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.SimpleRoundButton
-import com.hendraanggrian.plano.controls.TrimPane
+import com.hendraanggrian.plano.controls.TrimBoxPane
 import com.hendraanggrian.plano.dialogs.AboutDialog
 import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.prefs.BindPref
@@ -16,8 +16,6 @@ import com.hendraanggrian.prefs.jvm.setDebug
 import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXCheckBox
-import java.awt.Desktop
-import java.net.URI
 import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.geometry.HPos
@@ -49,6 +47,7 @@ import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.controls.setMinSize
 import ktfx.controlsfx.isOsMac
+import ktfx.controlsfx.isOsWindows
 import ktfx.coroutines.onAction
 import ktfx.doublePropertyOf
 import ktfx.eq
@@ -80,9 +79,9 @@ import ktfx.listeners.onHiding
 import ktfx.listeners.snapshot
 import ktfx.minus
 import ktfx.runLater
+import ktfx.text.pt
 import ktfx.times
 import ktfx.util.toSwingImage
-import org.apache.commons.lang3.SystemUtils
 
 class PlanoApp : Application(), Resources {
 
@@ -91,11 +90,6 @@ class PlanoApp : Application(), Resources {
         const val DURATION_LONG = 6000L
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
-
-        val COLOR_AMBER = Color.web("#ffb300")!!
-        val COLOR_AMBER_LIGHT = Color.web("#ffe54c")!!
-        val COLOR_RED = Color.web("#f44336")!!
-        val COLOR_RED_LIGHT = Color.web("#ff7961")!!
 
         @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
 
@@ -128,7 +122,7 @@ class PlanoApp : Application(), Resources {
             }
         }
     }
-    private val filledProperty = booleanPropertyOf().apply {
+    private val fillProperty = booleanPropertyOf().apply {
         listener { _, _, newValue ->
             fillMenu.isSelected = newValue
         }
@@ -180,7 +174,7 @@ class PlanoApp : Application(), Resources {
         stage.setMinSize(750.0, 500.0)
         stage.onHiding {
             isExpanded = expandedProperty.value
-            isFilled = filledProperty.value
+            isFilled = fillProperty.value
             isThick = thickProperty.value
             saver.save()
         }
@@ -251,7 +245,7 @@ class PlanoApp : Application(), Resources {
                             menuItem(getString(R.string.reset)) {
                                 onAction {
                                     scaleProperty.value = SCALE_SMALL
-                                    filledProperty.value = false
+                                    fillProperty.value = false
                                     thickProperty.value = false
                                 }
                             }
@@ -271,7 +265,7 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                     }
-                    addChild(PlanoToolbar(this@PlanoApp, expandedProperty, filledProperty, thickProperty)) {
+                    addChild(PlanoToolbar(this@PlanoApp, expandedProperty, fillProperty, thickProperty)) {
                         clearButton.onAction { clear() }
                         clearButton.runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                         expandButton.onAction { toggleExpand() }
@@ -294,8 +288,9 @@ class PlanoApp : Application(), Resources {
                                 maxWidth = 250.0
                             } row row++ col (0 to 6)
 
-                            circle(radius = 6.0, fill = COLOR_AMBER) {
+                            circle(radius = 6.0) {
                                 tooltip(getString(R.string._media_box))
+                                id = R.style.circle_amber
                             } row row col 0
                             label(getString(R.string.media_box)) {
                                 tooltip(getString(R.string._media_box))
@@ -313,8 +308,9 @@ class PlanoApp : Application(), Resources {
                             } row row col 4
                             addChild(MorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)) row row++ col 5
 
-                            circle(radius = 6.0, fill = COLOR_RED) {
+                            circle(radius = 6.0) {
                                 tooltip(getString(R.string._trim_box))
+                                id = R.style.circle_red
                             } row row col 0
                             label(getString(R.string.trim_box)) {
                                 tooltip(getString(R.string._trim_box))
@@ -374,7 +370,6 @@ class PlanoApp : Application(), Resources {
                                     outputPane.children.add(0, ktfx.layouts.pane {
                                         gridPane {
                                             paddingAll = 10.0
-                                            gap = 5.0
                                             val mediaBox = Plano.calculate(
                                                 mediaWidth, mediaHeight,
                                                 trimWidth, trimHeight,
@@ -387,15 +382,26 @@ class PlanoApp : Application(), Resources {
                                                 hbox {
                                                     alignment = Pos.CENTER_LEFT
                                                     spacing = 5.0
-                                                    circle(radius = 4.0, fill = COLOR_AMBER)
-                                                    label("${mediaWidth}x$mediaHeight")
+                                                    circle(radius = 4.0) {
+                                                        id = R.style.circle_amber
+                                                    }
+                                                    label("$mediaWidth x $mediaHeight") {
+                                                        font = 11.pt
+                                                    }
                                                 }
                                                 hbox {
                                                     alignment = Pos.CENTER_LEFT
                                                     spacing = 5.0
-                                                    circle(radius = 4.0, fill = COLOR_RED)
-                                                    label("${mediaBox.trimBoxes.size}") { id = R.style.label_red }
-                                                    label("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
+                                                    circle(radius = 4.0) {
+                                                        id = R.style.circle_red
+                                                    }
+                                                    label("${mediaBox.trimBoxes.size}") {
+                                                        id = R.style.label_red
+                                                        font = 11.pt
+                                                    }
+                                                    label("${trimWidth + bleed * 2} x ${trimHeight + bleed * 2}") {
+                                                        font = 11.pt
+                                                    }
                                                 }
                                             } row 0 col 0 fillHeight false
 
@@ -419,9 +425,9 @@ class PlanoApp : Application(), Resources {
                                                                 rootPane.jfxSnackbar(
                                                                     getString(R.string._save).format(file.name),
                                                                     DURATION_SHORT,
-                                                                    getString(R.string.btn_show_file)
+                                                                    getString(R.string.btn_show_directory)
                                                                 ) {
-                                                                    Desktop.getDesktop().open(file.parentFile)
+                                                                    hostServices.showDocument(file.parentFile.toURI().toString())
                                                                 }
                                                             }
                                                         }
@@ -430,10 +436,12 @@ class PlanoApp : Application(), Resources {
                                             ) row 0 col 1 align Pos.CENTER_RIGHT
                                             anchorPane {
                                                 addChild(
-                                                    MediaPane(mediaBox, scaleProperty, filledProperty, thickProperty)
+                                                    MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
                                                 )
                                                 mediaBox.trimBoxes.forEach {
-                                                    addChild(TrimPane(it, scaleProperty, filledProperty, thickProperty))
+                                                    addChild(
+                                                        TrimBoxPane(it, scaleProperty, fillProperty, thickProperty)
+                                                    )
                                                 }
                                             } row 1 col (0 to 2)
                                         }
@@ -485,7 +493,7 @@ class PlanoApp : Application(), Resources {
     }
 
     private fun toggleFill() {
-        filledProperty.value = !filledProperty.value
+        fillProperty.value = !fillProperty.value
     }
 
     private fun toggleThick() {
@@ -500,13 +508,13 @@ class PlanoApp : Application(), Resources {
                 DURATION_LONG,
                 getString(R.string.btn_download)
             ) {
-                Desktop.getDesktop().browse(URI(release.assets.first {
+                hostServices.showDocument(release.assets.first {
                     when {
-                        SystemUtils.IS_OS_MAC -> it.name.endsWith("dmg")
-                        SystemUtils.IS_OS_WINDOWS -> it.name.endsWith("exe")
+                        isOsMac() -> it.name.endsWith("dmg")
+                        isOsWindows() -> it.name.endsWith("exe")
                         else -> it.name.endsWith("jar")
                     }
-                }.downloadUrl))
+                }.downloadUrl)
             }
             else -> rootPane.jfxSnackbar(getString(R.string._update_unavailable), DURATION_LONG)
         }

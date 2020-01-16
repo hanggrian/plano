@@ -1,7 +1,7 @@
 import com.hendraanggrian.packr.PackrExtension
 
 group = RELEASE_GROUP
-version = RELEASE_VERSION_JAVAFX
+version = RELEASE_VERSION
 
 plugins {
     kotlin("jvm")
@@ -14,7 +14,7 @@ plugins {
     application
 }
 
-application.mainClassName = "$RELEASE_GROUP.App"
+application.mainClassName = "$RELEASE_GROUP.PlanoApp"
 
 sourceSets {
     getByName("main") {
@@ -88,7 +88,7 @@ tasks {
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         destinationDirectory.set(buildDir.resolve("releases"))
         archiveBaseName.set(RELEASE_ARTIFACT)
-        archiveVersion.set(RELEASE_VERSION_JAVAFX)
+        archiveVersion.set(RELEASE_VERSION)
         archiveClassifier.set(null as String?)
     }
 
@@ -104,17 +104,17 @@ packr {
     resources = files("res")
     minimizeJre = PackrExtension.MINIMIZATION_HARD
     macOS {
-        name = "$RELEASE_NAME/$RELEASE_NAME.app"
+        name = "$RELEASE_ARTIFACT-$RELEASE_VERSION/$RELEASE_NAME.app"
         icon = rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns")
         bundleId = RELEASE_GROUP
     }
     windows32 {
-        name = "32-bit/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_231-x86"
+        name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x86/$RELEASE_NAME"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_241-x86"
     }
     windows64 {
-        name = "64-bit/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_231-x64"
+        name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x64/$RELEASE_NAME"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_241-x64"
     }
     isVerbose = true
     isAutoOpen = true

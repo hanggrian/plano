@@ -4,7 +4,9 @@
     -plano-dialog-overlay: rgba(0, 0, 0, 0.54);
 
     -amber600: #ffb300;
+    -amber600light: #ffe54c;
     -red500: #f44336;
+    -red500light: #ff7961;
 
     -fx-base: white;
     -fx-accent: -amber600;
@@ -77,7 +79,35 @@
     -fx-border-color: -fx-background;
 }
 
+/** MediaBox and TrimBox */
+.box-media-background {
+    -fx-background-color: -amber600light;
+}
+.box-media-border {
+    -fx-border-color: -amber600;
+    -fx-border-width: 2;
+}
+.box-media-border-thick {
+    -fx-border-width: 4;
+}
+.box-trim-background {
+    -fx-background-color: -red500light;
+}
+.box-trim-border {
+    -fx-border-color: -red500;
+    -fx-border-width: 2;
+}
+.box-trim-border-thick {
+    -fx-border-width: 4;
+}
+
 /* ID */
+#circle-amber {
+    -fx-fill: -amber600;
+}
+#circle-red {
+    -fx-fill: -red500;
+}
 #label-red {
     -fx-text-fill: -red500;
 }

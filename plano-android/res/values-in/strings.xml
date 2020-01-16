@@ -20,7 +20,7 @@
     <string name="btn_close">TUTUP</string>
     <string name="btn_download">UNDUH</string>
     <string name="btn_homepage">BERANDA</string>
-    <string name="btn_show_file">TUNJUKKAN FILE</string>
+    <string name="btn_show_directory">TUNJUKKAN FOLDER</string>
     <string name="btn_undo">KEMBALIKAN</string>
     <string name="c_series">Seri C</string>
     <string name="calculate">Kalkulasi</string>
