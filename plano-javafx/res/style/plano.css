@@ -3,8 +3,11 @@
     -plano-button-hover: rgba(0, 0, 0, 0.27);
     -plano-dialog-overlay: rgba(0, 0, 0, 0.54);
 
+    -amber600: #ffb300;
+    -red500: #f44336;
+
     -fx-base: white;
-    -fx-accent: #ffb300; /* Material Design Amber 600 */
+    -fx-accent: -amber600;
     -fx-focus-color: -fx-accent;
     -fx-font-family: "Roboto";
 }
@@ -75,6 +78,12 @@
 }
 
 /* ID */
+#label-red {
+    -fx-text-fill: -red500;
+}
+#menu-more {
+    -fx-graphic: url("../image/menu_more.png");
+}
 #btn-calculate {
     -fx-background-color: -fx-accent;
     -fx-graphic: url("../image/btn_send.png");
@@ -105,7 +114,4 @@
 }
 #btn-border-thin {
     -fx-graphic: url("../image/btn_border_thin.png");
-}
-#menu-more {
-    -fx-graphic: url("../image/menu_more.png");
 }

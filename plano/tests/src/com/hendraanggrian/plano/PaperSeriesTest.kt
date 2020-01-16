@@ -5,15 +5,15 @@ import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SizeSeriesTest {
+class PaperSeriesTest {
 
-    @Test fun aSeries() = SizeSeries.A.testSeries()
+    @Test fun aSeries() = PaperSeries.A.testSeries()
 
-    @Test fun bSeries() = SizeSeries.B.testSeries()
+    @Test fun bSeries() = PaperSeries.B.testSeries()
 
-    @Test fun cSeries() = SizeSeries.C.testSeries()
+    @Test fun cSeries() = PaperSeries.C.testSeries()
 
-    private fun List<SizeSeries>.testSeries() = filterIndexed { i, _ -> i != lastIndex }
+    private fun List<PaperSeries>.testSeries() = filterIndexed { i, _ -> i != lastIndex }
         .forEachIndexed { i, (width, _, _) ->
             val next = get(i + 1)
             assertEquals(next.height, round(width / 2, 1, BigDecimal.ROUND_HALF_DOWN))

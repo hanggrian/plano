@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>(),
-    MutableList<MediaSize> by arrayListOf() {
+    MutableList<MediaBox> by arrayListOf() {
 
     private lateinit var context: Context
 
@@ -37,7 +37,7 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
                     (media.width * mediaSize.height / mediaSize.width).toInt()
                 media.requestLayout()
                 media.post {
-                    mediaSize.trimSizes.forEach { trimSize ->
+                    mediaSize.trimBoxes.forEach { trimSize ->
                         media.addView(View(context).also { trim ->
                             ViewCompat.setBackground(
                                 trim, ContextCompat.getDrawable(context, R.drawable.bg_trim)
@@ -60,7 +60,7 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
         })
     }
 
-    fun put(element: MediaSize) {
+    fun put(element: MediaBox) {
         if (isEmpty()) {
             emptyData.value = false
         }
@@ -68,7 +68,7 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
         notifyItemInserted(size - 1)
     }
 
-    fun putAll(elements: Collection<MediaSize>) {
+    fun putAll(elements: Collection<MediaBox>) {
         if (isEmpty()) {
             emptyData.value = false
         }

@@ -11,10 +11,10 @@ object Plano {
         trimHeight: Double,
         bleed: Double = 0.0,
         allowFlip: Boolean = true
-    ): MediaSize = MediaSize(
+    ): MediaBox = MediaBox(
         mediaWidth,
         mediaHeight,
-        mutableListOf<List<TrimSize>>().apply {
+        mutableListOf<List<TrimBox>>().apply {
             add(
                 traditional(
                     mediaWidth, mediaHeight,
@@ -67,12 +67,12 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double,
         allowFlip: Boolean
-    ): List<TrimSize> {
+    ): List<TrimBox> {
         if (DEBUG) {
             println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
         }
 
-        val sizes = mutableListOf<TrimSize>()
+        val sizes = mutableListOf<TrimBox>()
         val columns = (mediaWidth / trimWidth).toInt()
         val rows = (mediaHeight / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
@@ -99,12 +99,12 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double,
         allowFlip: Boolean
-    ): List<TrimSize> {
+    ): List<TrimBox> {
         if (DEBUG) {
             println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
         }
 
-        val sizes = mutableListOf<TrimSize>()
+        val sizes = mutableListOf<TrimBox>()
         val columns = ((mediaWidth - trimHeight) / trimWidth).toInt()
         val rows = (mediaHeight / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
@@ -136,12 +136,12 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double,
         allowFlip: Boolean
-    ): List<TrimSize> {
+    ): List<TrimBox> {
         if (DEBUG) {
             println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
         }
 
-        val sizes = mutableListOf<TrimSize>()
+        val sizes = mutableListOf<TrimBox>()
         val columns = (mediaWidth / trimWidth).toInt()
         val rows = ((mediaHeight - trimWidth) / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
@@ -166,7 +166,7 @@ object Plano {
         return sizes
     }
 
-    private fun MutableList<TrimSize>.populate(
+    private fun MutableList<TrimBox>.populate(
         columns: Int,
         rows: Int,
         trimWidth: Double,
@@ -180,7 +180,7 @@ object Plano {
             val x = column * trimWidth
             for (row in 0 until rows) {
                 val y = row * trimHeight
-                this += TrimSize(x, y, trimWidth, trimHeight)
+                this += TrimBox(x, y, trimWidth, trimHeight)
             }
         }
     }
@@ -219,7 +219,7 @@ object Plano {
         return flippedRows
     }
 
-    private fun MutableList<TrimSize>.populateFlippedColumns(
+    private fun MutableList<TrimBox>.populateFlippedColumns(
         columns: Int,
         flippedColumns: Int,
         trimWidth: Double,
@@ -227,11 +227,11 @@ object Plano {
     ) {
         val x = trimWidth * columns
         for (leftover in 0 until flippedColumns) {
-            this += TrimSize(x, leftover * trimWidth, trimHeight, trimWidth)
+            this += TrimBox(x, leftover * trimWidth, trimHeight, trimWidth)
         }
     }
 
-    private fun MutableList<TrimSize>.populateFlippedRows(
+    private fun MutableList<TrimBox>.populateFlippedRows(
         rows: Int,
         flippedRows: Int,
         trimWidth: Double,
@@ -239,7 +239,7 @@ object Plano {
     ) {
         val y = trimHeight * rows
         for (leftover in 0 until flippedRows) {
-            this += TrimSize(leftover * trimHeight, y, trimHeight, trimWidth)
+            this += TrimBox(leftover * trimHeight, y, trimHeight, trimWidth)
         }
     }
 }

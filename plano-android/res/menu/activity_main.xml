@@ -12,12 +12,6 @@
         app:showAsAction="always" />
 
     <!--item
-        android:id="@+id/expandedMenu"
-        android:icon="@drawable/btn_scale_expand"
-        android:title="@string/expand"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/fillMenu"
         android:icon="@drawable/btn_background_fill"
         android:title="@string/fill_background"

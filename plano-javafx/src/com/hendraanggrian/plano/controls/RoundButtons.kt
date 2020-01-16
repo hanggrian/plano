@@ -1,8 +1,8 @@
 package com.hendraanggrian.plano.controls
 
+import com.hendraanggrian.plano.PaperSeries
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
-import com.hendraanggrian.plano.SizeSeries
 import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
 import javafx.beans.value.ObservableValue
@@ -15,6 +15,7 @@ import ktfx.layouts.MenuItemManager
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
+import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
 import ktfx.or
@@ -56,7 +57,11 @@ open class SimpleRoundButton(
 open class MoreButton(
     resources: Resources,
     init: KtfxContextMenu.() -> Unit
-) : SimpleRoundButton(16, resources.getString(R.string.more)), Resources by resources {
+) : SimpleRoundButton(RADIUS, resources.getString(R.string.more)), Resources by resources {
+    companion object {
+        const val RADIUS = 16
+    }
+
     init {
         id = R.style.menu_more
         val contextMenu = contextMenu(init)
@@ -77,7 +82,8 @@ open class MorePaperButton(
         disableProperty().bind(widthField.textProperty().isEmpty or heightField.textProperty().isEmpty)
         onAction { widthField.text = heightField.text.also { heightField.text = widthField.text } }
     }
-    val append: MenuItemManager.(SizeSeries) -> Unit = { standardSize ->
+    separatorMenuItem()
+    val append: MenuItemManager.(PaperSeries) -> Unit = { standardSize ->
         menuItem(standardSize.title) {
             onAction {
                 widthField.text = standardSize.width.toString()
@@ -85,7 +91,7 @@ open class MorePaperButton(
             }
         }
     }
-    menu(resources.getString(R.string.a_series)) { SizeSeries.A.forEach { append(it) } }
-    menu(resources.getString(R.string.b_series)) { SizeSeries.B.forEach { append(it) } }
-    menu(resources.getString(R.string.c_series)) { SizeSeries.C.forEach { append(it) } }
+    menu(resources.getString(R.string.a_series)) { PaperSeries.A.forEach { append(it) } }
+    menu(resources.getString(R.string.b_series)) { PaperSeries.B.forEach { append(it) } }
+    menu(resources.getString(R.string.c_series)) { PaperSeries.C.forEach { append(it) } }
 })

@@ -27,6 +27,9 @@
 }
 
 /* ID */
+#menu-more {
+    -fx-graphic: url("../image-dark/menu_more.png");
+}
 #btn-calculate {
     -fx-graphic: url("../image-dark/btn_send.png");
 }
@@ -50,7 +53,4 @@
 }
 #btn-border-thin {
     -fx-graphic: url("../image-dark/btn_border_thin.png");
-}
-#menu-more {
-    -fx-graphic: url("../image-dark/menu_more.png");
 }

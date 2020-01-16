@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano
 
 @Suppress("EnumEntryName")
-enum class SizeSeries {
+enum class PaperSeries {
     A0("A0", 118.9, 84.1),
     A1("A1", 84.1, 59.4),
     A2("A2", 59.4, 42.0),
@@ -39,9 +39,9 @@ enum class SizeSeries {
     C10("C10", 4.0, 2.8);
 
     companion object {
-        val A: List<SizeSeries> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
-        val B: List<SizeSeries> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
-        val C: List<SizeSeries> = listOf(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10)
+        val A: List<PaperSeries> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
+        val B: List<PaperSeries> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
+        val C: List<PaperSeries> = listOf(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10)
     }
 
     val width: Double

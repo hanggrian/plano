@@ -1,10 +1,10 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.MediaSize
+import com.hendraanggrian.plano.MediaBox
 import com.hendraanggrian.plano.PlanoApp
 import com.hendraanggrian.plano.PlanoApp.Companion.SCALE_BIG
 import com.hendraanggrian.plano.PlanoApp.Companion.SCALE_SMALL
-import com.hendraanggrian.plano.TrimSize
+import com.hendraanggrian.plano.TrimBox
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
 import javafx.geometry.Insets
@@ -23,14 +23,14 @@ import ktfx.times
 import ktfx.toBinding
 
 class MediaPane(
-    size: MediaSize,
+    box: MediaBox,
     scale: DoubleProperty,
     isFilled: BooleanProperty,
     isThicked: BooleanProperty
 ) : Pane() {
     init {
-        prefWidthProperty().bind(size.width * scale)
-        prefHeightProperty().bind(size.height * scale)
+        prefWidthProperty().bind(box.width * scale)
+        prefHeightProperty().bind(box.height * scale)
         backgroundProperty().bind(bindingOf(isFilled) {
             Background(
                 BackgroundFill(
@@ -57,14 +57,14 @@ class MediaPane(
 }
 
 class TrimPane(
-    size: TrimSize,
+    box: TrimBox,
     scale: DoubleProperty,
     isFilled: BooleanProperty,
     isThicked: BooleanProperty
 ) : Pane() {
     init {
-        prefWidthProperty().bind(size.width * scale)
-        prefHeightProperty().bind(size.height * scale)
+        prefWidthProperty().bind(box.width * scale)
+        prefHeightProperty().bind(box.height * scale)
         backgroundProperty().bind(isFilled.toBinding {
             Background(
                 BackgroundFill(
@@ -88,8 +88,8 @@ class TrimPane(
             )
         })
 
-        userData = size.x to size.y
-        AnchorPane.setLeftAnchor(this, size.x * scale.value)
-        AnchorPane.setTopAnchor(this, size.y * scale.value)
+        userData = box.x to box.y
+        AnchorPane.setLeftAnchor(this, box.x * scale.value)
+        AnchorPane.setTopAnchor(this, box.y * scale.value)
     }
 }

@@ -80,6 +80,7 @@ import ktfx.listeners.onHiding
 import ktfx.listeners.snapshot
 import ktfx.minus
 import ktfx.runLater
+import ktfx.times
 import ktfx.util.toSwingImage
 import org.apache.commons.lang3.SystemUtils
 
@@ -374,16 +375,30 @@ class PlanoApp : Application(), Resources {
                                         gridPane {
                                             paddingAll = 10.0
                                             gap = 5.0
-                                            val size = Plano.calculate(
+                                            val mediaBox = Plano.calculate(
                                                 mediaWidth, mediaHeight,
                                                 trimWidth, trimHeight,
                                                 bleed, allowFlip
                                             )
 
-                                            circle(radius = 4.0, fill = COLOR_AMBER) row 0 col 0
-                                            label("${mediaWidth}x$mediaHeight") row 0 col 1
-                                            circle(radius = 4.0, fill = COLOR_RED) row 1 col 0
-                                            label("${size.trimSizes.size}pcs ${trimWidth + bleed * 2}x${trimHeight + bleed * 2}") row 1 col 1
+                                            flowPane {
+                                                prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - MoreButton.RADIUS * 2)
+                                                hgap = 10.0
+                                                hbox {
+                                                    alignment = Pos.CENTER_LEFT
+                                                    spacing = 5.0
+                                                    circle(radius = 4.0, fill = COLOR_AMBER)
+                                                    label("${mediaWidth}x$mediaHeight")
+                                                }
+                                                hbox {
+                                                    alignment = Pos.CENTER_LEFT
+                                                    spacing = 5.0
+                                                    circle(radius = 4.0, fill = COLOR_RED)
+                                                    label("${mediaBox.trimBoxes.size}") { id = R.style.label_red }
+                                                    label("${trimWidth + bleed * 2}x${trimHeight + bleed * 2}")
+                                                }
+                                            } row 0 col 0 fillHeight false
+
                                             lateinit var moreButton: Button
                                             moreButton = addChild(
                                                 MoreButton(this@PlanoApp) {
@@ -402,8 +417,7 @@ class PlanoApp : Application(), Resources {
                                                                 delay(500)
                                                                 moreButton.isVisible = true
                                                                 rootPane.jfxSnackbar(
-                                                                    getString(R.string._save)
-                                                                        .format(file.name),
+                                                                    getString(R.string._save).format(file.name),
                                                                     DURATION_SHORT,
                                                                     getString(R.string.btn_show_file)
                                                                 ) {
@@ -413,13 +427,15 @@ class PlanoApp : Application(), Resources {
                                                         }
                                                     }
                                                 }
-                                            ) row (0 to 2) col 2 align Pos.CENTER_RIGHT
+                                            ) row 0 col 1 align Pos.CENTER_RIGHT
                                             anchorPane {
-                                                addChild(MediaPane(size, scaleProperty, filledProperty, thickProperty))
-                                                size.trimSizes.forEach {
+                                                addChild(
+                                                    MediaPane(mediaBox, scaleProperty, filledProperty, thickProperty)
+                                                )
+                                                mediaBox.trimBoxes.forEach {
                                                     addChild(TrimPane(it, scaleProperty, filledProperty, thickProperty))
                                                 }
-                                            } row 2 col (0 to 3)
+                                            } row 1 col (0 to 2)
                                         }
                                     })
                                 }
