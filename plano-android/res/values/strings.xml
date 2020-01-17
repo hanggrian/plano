@@ -26,12 +26,13 @@
     <string name="calculate">Calculate</string>
     <string name="check_for_update">Check for update</string>
     <string name="clear">Clear</string>
-    <string name="dark_mode">Dark mode</string>
+    <string name="dark">Dark</string>
     <string name="delete">Delete</string>
     <string name="expand">Expand</string>
     <string name="fill_background">Fill background</string>
     <string name="info">Info</string>
     <string name="language">Language</string>
+    <string name="light">Light</string>
     <string name="media_box">Media box</string>
     <string name="minimize">Minimize</string>
     <string name="more">More</string>
@@ -42,9 +43,11 @@
     <string name="rotate">Rotate</string>
     <string name="save">Save</string>
     <string name="shrink">Shrink</string>
+    <string name="theme">Tema</string>
     <string name="thicken_border">Thicken border</string>
     <string name="trim_box">Trim box</string>
     <string name="unfill_background">Unfill background</string>
     <string name="unthicken_border">Unthicken border</string>
+    <string name="use_system_appearance">Use system appearance</string>
     <string name="zoom">Zoom</string>
 </resources>

@@ -5,13 +5,13 @@ interface Box {
     val height: Double
 }
 
-data class MediaBox(
+class MediaBox(
     override val width: Double,
     override val height: Double,
-    val trimBoxes: List<TrimBox>
-) : Box
+    trimBoxes: List<TrimBox>
+) : Box, List<TrimBox> by trimBoxes
 
-data class TrimBox(
+class TrimBox(
     val x: Double,
     val y: Double,
     override val width: Double,

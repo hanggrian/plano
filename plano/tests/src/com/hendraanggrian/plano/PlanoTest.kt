@@ -8,8 +8,8 @@ class PlanoTest {
 
     @Test fun a5inA3plus() {
         val mediaBox = Plano.calculate(48.7, 32.5, 21.0, 14.85)
-        assertEquals(4, mediaBox.trimBoxes.size)
-        Truth.assertThat(mediaBox.trimBoxes.map { it.x to it.y }).containsExactly(
+        assertEquals(4, mediaBox.size)
+        Truth.assertThat(mediaBox.map { it.x to it.y }).containsExactly(
             0.0 to 0.0,
             21.0 to 0.0,
             0.0 to 14.85,
@@ -19,8 +19,8 @@ class PlanoTest {
 
     @Test fun f4in79109() {
         val mediaBox = Plano.calculate(79.0, 109.0, 21.5, 33.0)
-        assertEquals(11, mediaBox.trimBoxes.size)
-        Truth.assertThat(mediaBox.trimBoxes.map { it.x to it.y }).containsExactly(
+        assertEquals(11, mediaBox.size)
+        Truth.assertThat(mediaBox.map { it.x to it.y }).containsExactly(
             0.0 to 0.0,
             21.5 to 0.0,
             0.0 to 33.0,

@@ -115,6 +115,7 @@
     -fx-graphic: url("../image/menu_more.png");
 }
 #btn-calculate {
+    -jfx-button-type: RAISED;
     -fx-background-color: -fx-accent;
     -fx-graphic: url("../image/btn_send.png");
 }

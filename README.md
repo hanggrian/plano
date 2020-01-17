@@ -1,20 +1,22 @@
 [![release](https://img.shields.io/github/release/hendraanggrian/plano.svg)](https://github.com/hendraanggrian/plano/releases)
-[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 Plano
 =====
-App to efficiently calculate paper usage for commercial printing use, available as desktop and Android app.
+Simple app that efficiently calculate paper usage for commercial printing use, available as desktop and Android app.
+Some of the features include:
+ * Multi-language (English and Bahasa Indonesia).
+ * Dark mode on all platforms, there is also option to detect OS appearance.
 
-![JavaFX][ss_javafx]
-![Android][ss_android]
+![JavaFX Screenshot][screenshot_javafx]
+![Android Screenshot][screenshot_android]
 
 Download
 --------
-Go to [homepage][homepage] to download Plano in several options:
+Go to [releases] to download Plano in several options:
  * apk - Android debug app, go to Setting > Security > check `Unknown sources` to install. 
- * exe - Windows 32-bit app archive, unpack in your `Program Files` directory.
- * dmg - macOS app, mount and move it to your `Applications` directory.
+ * exe - Windows archive, unpack in `Program Files` directory.
+ * dmg - macOS app, mount and move it to `Applications` directory.
  * jar - standalone Java app.
 
 License
@@ -33,6 +35,6 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
     
-[ss_javafx]: /art/ss_javafx.png
-[ss_android]: /art/ss_android.png
-[homepage]: https://hendraanggrian.com/plano
+[screenshot_javafx]: /art/screenshot_javafx.png
+[screenshot_android]: /art/screenshot_android.png
+[releases]: https://github.com/hendraanggrian/plano/releases

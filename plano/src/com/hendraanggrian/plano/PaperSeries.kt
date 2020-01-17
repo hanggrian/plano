@@ -1,6 +1,7 @@
 package com.hendraanggrian.plano
 
-@Suppress("EnumEntryName")
+import com.hendraanggrian.plano.util.toCleanString
+
 enum class PaperSeries {
     A0("A0", 118.9, 84.1),
     A1("A1", 84.1, 59.4),
@@ -51,23 +52,16 @@ enum class PaperSeries {
     constructor(width: Double, height: Double) {
         this.width = width
         this.height = height
-        this.title = "${width.tidy()} x ${height.tidy()}"
+        this.title = "${width.toCleanString()} x ${height.toCleanString()}"
     }
 
     constructor(titlePrefix: String, width: Double, height: Double) {
         this.width = width
         this.height = height
-        this.title = "$titlePrefix (${width.tidy()} x ${height.tidy()})"
+        this.title = "$titlePrefix (${width.toCleanString()} x ${height.toCleanString()})"
     }
 
     operator fun component1(): Double = width
     operator fun component2(): Double = height
     operator fun component3(): String = title
-
-    private fun Double.tidy(): String = toString().let {
-        when {
-            it.endsWith(".0") -> it.substringBeforeLast(".0")
-            else -> it
-        }
-    }
 }

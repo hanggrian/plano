@@ -13,19 +13,19 @@ import ktfx.times
 
 sealed class BoxPane(
     box: Box,
-    scale: DoubleProperty,
-    isFill: BooleanProperty,
-    isThick: BooleanProperty,
+    scaleProperty: DoubleProperty,
+    fillProperty: BooleanProperty,
+    thickProperty: BooleanProperty,
     backgroundStyleClass: String,
     borderStyleClass: String,
     borderThickStyleClass: String
 ) : Pane() {
     init {
-        prefWidthProperty().bind(box.width * scale)
-        prefHeightProperty().bind(box.height * scale)
+        prefWidthProperty().bind(box.width * scaleProperty)
+        prefHeightProperty().bind(box.height * scaleProperty)
 
-        if (isFill.value) styleClass += backgroundStyleClass
-        isFill.listener { _, _, newValue ->
+        if (fillProperty.value) styleClass += backgroundStyleClass
+        fillProperty.listener { _, _, newValue ->
             when {
                 newValue -> styleClass += backgroundStyleClass
                 else -> styleClass -= backgroundStyleClass
@@ -33,8 +33,8 @@ sealed class BoxPane(
         }
 
         styleClass += borderStyleClass
-        if (isThick.value) styleClass += borderThickStyleClass
-        isThick.listener { _, _, newValue ->
+        if (thickProperty.value) styleClass += borderThickStyleClass
+        thickProperty.listener { _, _, newValue ->
             when {
                 newValue -> styleClass += borderThickStyleClass
                 else -> styleClass -= borderThickStyleClass
@@ -43,28 +43,38 @@ sealed class BoxPane(
     }
 }
 
-class MediaBoxPane(box: MediaBox, scale: DoubleProperty, isFill: BooleanProperty, isThick: BooleanProperty) : BoxPane(
+class MediaBoxPane(
+    box: MediaBox,
+    scaleProperty: DoubleProperty,
+    fillProperty: BooleanProperty,
+    thickProperty: BooleanProperty
+) : BoxPane(
     box,
-    scale,
-    isFill,
-    isThick,
+    scaleProperty,
+    fillProperty,
+    thickProperty,
     R.style.box_media_background,
     R.style.box_media_border,
     R.style.box_media_border_thick
 )
 
-class TrimBoxPane(box: TrimBox, scale: DoubleProperty, isFill: BooleanProperty, isThick: BooleanProperty) : BoxPane(
+class TrimBoxPane(
+    box: TrimBox,
+    scaleProperty: DoubleProperty,
+    fillProperty: BooleanProperty,
+    thickProperty: BooleanProperty
+) : BoxPane(
     box,
-    scale,
-    isFill,
-    isThick,
+    scaleProperty,
+    fillProperty,
+    thickProperty,
     R.style.box_trim_background,
     R.style.box_trim_border,
     R.style.box_trim_border_thick
 ) {
     init {
         userData = box.x to box.y
-        AnchorPane.setLeftAnchor(this, box.x * scale.value)
-        AnchorPane.setTopAnchor(this, box.y * scale.value)
+        AnchorPane.setLeftAnchor(this, box.x * scaleProperty.value)
+        AnchorPane.setTopAnchor(this, box.y * scaleProperty.value)
     }
 }

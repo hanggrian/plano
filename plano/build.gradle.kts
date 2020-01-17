@@ -112,9 +112,21 @@ locale {
         en = "Reset"
         id = "Atur ulang"
     }
-    "dark_mode" {
-        en = "Dark mode"
-        id = "Mode gelap"
+    "theme" {
+        en = "Theme"
+        id = "Tema"
+    }
+    "use_system_appearance" {
+        en = "Use system appearance"
+        id = "Gunakan tampilan sistem"
+    }
+    "dark" {
+        en = "Dark"
+        id = "Gelap"
+    }
+    "light" {
+        en = "Light"
+        id = "Terang"
     }
     "language" {
         en = "Language"

@@ -17,8 +17,8 @@ import ktfx.text.pt
 
 class PlanoToolbar(
     resources: Resources,
-    expandedProperty: BooleanProperty,
-    filledProperty: BooleanProperty,
+    expandProperty: BooleanProperty,
+    fillProperty: BooleanProperty,
     thickProperty: BooleanProperty
 ) : KtfxJFXToolbar(), Resources by resources {
 
@@ -39,7 +39,7 @@ class PlanoToolbar(
             expandButton = addChild(
                 AdaptableRoundButton(
                     24,
-                    expandedProperty,
+                    expandProperty,
                     getString(R.string.shrink) to getString(R.string.expand),
                     R.style.btn_scale_expand to R.style.btn_scale_shrink
                 )
@@ -47,7 +47,7 @@ class PlanoToolbar(
             fillButton = addChild(
                 AdaptableRoundButton(
                     24,
-                    filledProperty,
+                    fillProperty,
                     getString(R.string.unfill_background) to getString(R.string.fill_background),
                     R.style.btn_background_fill to R.style.btn_background_unfill
                 )

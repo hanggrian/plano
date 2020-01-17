@@ -27,31 +27,28 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
     override fun getItemCount(): Int = size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val mediaSize = get(position)
+        val mediaBox = get(position)
         if (holder.card.isNotEmpty()) holder.card.removeAllViews()
         holder.card.addView(RelativeLayout(context).also { media ->
             ViewCompat.setBackground(media, ContextCompat.getDrawable(context, R.drawable.bg_media))
             media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             media.post {
-                media.layoutParams.height =
-                    (media.width * mediaSize.height / mediaSize.width).toInt()
+                media.layoutParams.height = (media.width * mediaBox.height / mediaBox.width).toInt()
                 media.requestLayout()
                 media.post {
-                    mediaSize.trimBoxes.forEach { trimSize ->
+                    mediaBox.forEach { trimBox ->
                         media.addView(View(context).also { trim ->
-                            ViewCompat.setBackground(
-                                trim, ContextCompat.getDrawable(context, R.drawable.bg_trim)
-                            )
-                            val widthRatio = media.width / mediaSize.width
-                            val heightRatio = media.height / mediaSize.height
+                            ViewCompat.setBackground(trim, ContextCompat.getDrawable(context, R.drawable.bg_trim))
+                            val widthRatio = media.width / mediaBox.width
+                            val heightRatio = media.height / mediaBox.height
                             trim.layoutParams = RelativeLayout.LayoutParams(
-                                (trimSize.width * widthRatio).toInt(),
-                                (trimSize.height * heightRatio).toInt()
+                                (trimBox.width * widthRatio).toInt(),
+                                (trimBox.height * heightRatio).toInt()
                             ).apply {
                                 addRule(RelativeLayout.ALIGN_PARENT_TOP)
                                 addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-                                leftMargin = (trimSize.x * widthRatio).toInt()
-                                topMargin = (trimSize.y * heightRatio).toInt()
+                                leftMargin = (trimBox.x * widthRatio).toInt()
+                                topMargin = (trimBox.y * heightRatio).toInt()
                             }
                         })
                     }
@@ -61,17 +58,13 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
     }
 
     fun put(element: MediaBox) {
-        if (isEmpty()) {
-            emptyData.value = false
-        }
+        if (isEmpty()) emptyData.value = false
         add(element)
         notifyItemInserted(size - 1)
     }
 
     fun putAll(elements: Collection<MediaBox>) {
-        if (isEmpty()) {
-            emptyData.value = false
-        }
+        if (isEmpty()) emptyData.value = false
         val start = size + 1
         addAll(elements)
         notifyItemRangeInserted(start, size)

@@ -1,25 +1,27 @@
 package com.hendraanggrian.plano
 
 import com.hendraanggrian.plano.controls.DoubleField
-import com.hendraanggrian.plano.controls.MediaBoxPane
-import com.hendraanggrian.plano.controls.MoreButton
 import com.hendraanggrian.plano.controls.MorePaperButton
 import com.hendraanggrian.plano.controls.PlanoToolbar
+import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.SimpleRoundButton
-import com.hendraanggrian.plano.controls.TrimBoxPane
 import com.hendraanggrian.plano.dialogs.AboutDialog
 import com.hendraanggrian.plano.dialogs.TextDialog
+import com.hendraanggrian.plano.util.THEME_DARK
+import com.hendraanggrian.plano.util.THEME_LIGHT
+import com.hendraanggrian.plano.util.THEME_SYSTEM
+import com.hendraanggrian.plano.util.getResource
+import com.hendraanggrian.plano.util.isDarkTheme
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
 import com.hendraanggrian.prefs.PrefsSaver
 import com.hendraanggrian.prefs.jvm.setDebug
 import com.hendraanggrian.prefs.jvm.userRoot
-import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXCheckBox
 import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.geometry.HPos
-import javafx.geometry.Pos
+import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
 import javafx.scene.control.ScrollPane
@@ -28,17 +30,11 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyCombination
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.FlowPane
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
 import javafx.stage.Stage
-import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ktfx.booleanBindingOf
 import ktfx.booleanPropertyOf
@@ -47,7 +43,6 @@ import ktfx.controls.gap
 import ktfx.controls.paddingAll
 import ktfx.controls.setMinSize
 import ktfx.controlsfx.isOsMac
-import ktfx.controlsfx.isOsWindows
 import ktfx.coroutines.onAction
 import ktfx.doublePropertyOf
 import ktfx.eq
@@ -76,12 +71,8 @@ import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.listeners.listener
 import ktfx.listeners.onHiding
-import ktfx.listeners.snapshot
 import ktfx.minus
 import ktfx.runLater
-import ktfx.text.pt
-import ktfx.times
-import ktfx.util.toSwingImage
 
 class PlanoApp : Application(), Resources {
 
@@ -92,25 +83,22 @@ class PlanoApp : Application(), Resources {
         const val SCALE_BIG = 4.0
 
         @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
-
-        fun getStyle(styleId: String): String = PlanoApp::class.java.getResource(styleId).toExternalForm()
     }
 
     private val scaleProperty = doublePropertyOf(SCALE_SMALL)
-    private val expandedProperty = booleanPropertyOf().apply {
+    private val expandProperty = booleanPropertyOf().apply {
         bind(scaleProperty eq SCALE_BIG)
         listener { _, _, newValue ->
-            expandedMenu.isSelected = newValue
+            expandMenu.isSelected = newValue
             outputPane.children.forEach {
                 val pane = it as Pane
-                val gridPane = pane.children.first() as GridPane
-                val anchorPane = gridPane.children.last() as AnchorPane
+                val resultPane = pane.children.first() as ResultPane
+                val anchorPane = resultPane.children.last() as AnchorPane
                 anchorPane.children.forEachIndexed { index, node ->
                     when (index) {
                         0 -> {
-                            node as Pane
-                            pane.prefWidth = gridPane.prefWidth
-                            pane.prefHeight = gridPane.prefHeight
+                            pane.prefWidth = resultPane.prefWidth
+                            pane.prefHeight = resultPane.prefHeight
                         }
                         else -> @Suppress("UNCHECKED_CAST") {
                             val (x, y) = node.userData as Pair<Double, Double>
@@ -123,14 +111,10 @@ class PlanoApp : Application(), Resources {
         }
     }
     private val fillProperty = booleanPropertyOf().apply {
-        listener { _, _, newValue ->
-            fillMenu.isSelected = newValue
-        }
+        listener { _, _, newValue -> fillMenu.isSelected = newValue }
     }
     private val thickProperty = booleanPropertyOf().apply {
-        listener { _, _, newValue ->
-            thickMenu.isSelected = newValue
-        }
+        listener { _, _, newValue -> thickMenu.isSelected = newValue }
     }
 
     private val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
@@ -140,20 +124,20 @@ class PlanoApp : Application(), Resources {
     private val bleedField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val allowFlipCheck = JFXCheckBox()
 
-    private lateinit var expandedMenu: CheckMenuItem
+    private lateinit var expandMenu: CheckMenuItem
     private lateinit var fillMenu: CheckMenuItem
     private lateinit var thickMenu: CheckMenuItem
-    private lateinit var rootPane: StackPane
     private lateinit var calculateButton: Button
-    private lateinit var outputPane: FlowPane
+    lateinit var rootPane: StackPane
+    lateinit var outputPane: FlowPane
 
     private lateinit var saver: PrefsSaver
     override lateinit var resourceBundle: ResourceBundle
 
-    @JvmField @BindPref("dark_mode") var darkMode = false
+    @JvmField @BindPref("theme") var theme = THEME_SYSTEM
     @JvmField @BindPref("language") var language = Language.ENGLISH.code
-    @JvmField @BindPref("is_expanded") var isExpanded = false
-    @JvmField @BindPref("is_filled") var isFilled = false
+    @JvmField @BindPref("is_expand") var isExpand = false
+    @JvmField @BindPref("is_fill") var isFill = false
     @JvmField @BindPref("is_thick") var isThick = false
     @JvmField @BindPref("media_width") var mediaWidth = 0.0
     @JvmField @BindPref("media_height") var mediaHeight = 0.0
@@ -173,35 +157,42 @@ class PlanoApp : Application(), Resources {
         stage.title = BuildConfig.NAME
         stage.setMinSize(750.0, 500.0)
         stage.onHiding {
-            isExpanded = expandedProperty.value
-            isFilled = fillProperty.value
+            isExpand = expandProperty.value
+            isFill = fillProperty.value
             isThick = thickProperty.value
             saver.save()
         }
-        stage.scene(fill = Color.TRANSPARENT) {
-            stylesheets.addAll(getStyle(R.style._plano), getStyle(R.style._plano_font))
-            if (darkMode) {
-                stylesheets += getStyle(R.style._plano_dark)
-            }
+        stage.scene {
+            stylesheets.addAll(getResource(R.style._plano), getResource(R.style._plano_font))
+            if (isDarkTheme(theme)) stylesheets += getResource(R.style._plano_dark)
             rootPane = stackPane {
                 vbox {
                     menuBar {
                         isUseSystemMenuBar = isOsMac()
                         "File" {
-                            checkMenuItem(getString(R.string.dark_mode)) {
-                                isSelected = darkMode
-                                onAction {
-                                    darkMode = !darkMode
-                                    saver.saveAsync()
-                                    when {
-                                        darkMode -> this@scene.stylesheets += getStyle(R.style._plano_dark)
-                                        else -> this@scene.stylesheets -= getStyle(R.style._plano_dark)
-                                    }
+                            menu(getString(R.string.theme)) {
+                                val themeGroup = ToggleGroup()
+                                radioMenuItem(getString(R.string.use_system_appearance)) {
+                                    toggleGroup = themeGroup
+                                    isSelected = theme == THEME_SYSTEM
+                                    onAction { setTheme(this@scene, THEME_SYSTEM) }
+                                }
+                                separatorMenuItem()
+                                radioMenuItem(getString(R.string.light)) {
+                                    toggleGroup = themeGroup
+                                    isSelected = theme == THEME_LIGHT
+                                    onAction { setTheme(this@scene, THEME_LIGHT) }
+                                }
+                                radioMenuItem(getString(R.string.dark)) {
+                                    toggleGroup = themeGroup
+                                    isSelected = theme == THEME_DARK
+                                    onAction { setTheme(this@scene, THEME_DARK) }
                                 }
                             }
                             menu(getString(R.string.language)) {
                                 val group = ToggleGroup()
-                                Language.values().forEach { lang ->
+                                Language.values().forEachIndexed { index, lang ->
+                                    if (index == 1) separatorMenuItem()
                                     radioMenuItem(lang.toLocale().displayLanguage) {
                                         toggleGroup = group
                                         isSelected = lang.code == language
@@ -209,7 +200,6 @@ class PlanoApp : Application(), Resources {
                                             language = lang.code
                                             TextDialog(
                                                 this@PlanoApp,
-                                                rootPane,
                                                 R.string.please_restart,
                                                 R.string._please_restart
                                             ).apply { setOnDialogClosed { stage.close() } }.show()
@@ -229,7 +219,7 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "View" {
-                            expandedMenu = checkMenuItem(getString(R.string.expand)) {
+                            expandMenu = checkMenuItem(getString(R.string.expand)) {
                                 accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.DIGIT1
                                 onAction { toggleExpand() }
                             }
@@ -261,11 +251,11 @@ class PlanoApp : Application(), Resources {
                         }
                         "Help" {
                             menuItem(getString(R.string.about)) {
-                                onAction { AboutDialog(this@PlanoApp, rootPane).show() }
+                                onAction { AboutDialog(this@PlanoApp).show() }
                             }
                         }
                     }
-                    addChild(PlanoToolbar(this@PlanoApp, expandedProperty, fillProperty, thickProperty)) {
+                    addChild(PlanoToolbar(this@PlanoApp, expandProperty, fillProperty, thickProperty)) {
                         clearButton.onAction { clear() }
                         clearButton.runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                         expandButton.onAction { toggleExpand() }
@@ -346,12 +336,9 @@ class PlanoApp : Application(), Resources {
 
                             calculateButton = addChild(SimpleRoundButton(24, getString(R.string.calculate))) {
                                 id = R.style.btn_calculate
-                                buttonType = JFXButton.ButtonType.RAISED
                                 disableProperty().bind(booleanBindingOf(
-                                    mediaWidthField.textProperty(),
-                                    mediaHeightField.textProperty(),
-                                    trimWidthField.textProperty(),
-                                    trimHeightField.textProperty()
+                                    mediaWidthField.textProperty(), mediaHeightField.textProperty(),
+                                    trimWidthField.textProperty(), trimHeightField.textProperty()
                                 ) {
                                     when {
                                         mediaWidthField.value <= 0.0 || mediaHeightField.value <= 0.0 -> true
@@ -368,83 +355,15 @@ class PlanoApp : Application(), Resources {
                                     allowFlip = allowFlipCheck.isSelected
 
                                     outputPane.children.add(0, ktfx.layouts.pane {
-                                        gridPane {
-                                            paddingAll = 10.0
-                                            val mediaBox = Plano.calculate(
+                                        addChild(
+                                            ResultPane(
+                                                this@PlanoApp,
                                                 mediaWidth, mediaHeight,
                                                 trimWidth, trimHeight,
-                                                bleed, allowFlip
+                                                bleed, allowFlip,
+                                                scaleProperty, fillProperty, thickProperty
                                             )
-
-                                            flowPane {
-                                                prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - MoreButton.RADIUS * 2)
-                                                hgap = 10.0
-                                                hbox {
-                                                    alignment = Pos.CENTER_LEFT
-                                                    spacing = 5.0
-                                                    circle(radius = 4.0) {
-                                                        id = R.style.circle_amber
-                                                    }
-                                                    label("$mediaWidth x $mediaHeight") {
-                                                        font = 11.pt
-                                                    }
-                                                }
-                                                hbox {
-                                                    alignment = Pos.CENTER_LEFT
-                                                    spacing = 5.0
-                                                    circle(radius = 4.0) {
-                                                        id = R.style.circle_red
-                                                    }
-                                                    label("${mediaBox.trimBoxes.size}") {
-                                                        id = R.style.label_red
-                                                        font = 11.pt
-                                                    }
-                                                    label("${trimWidth + bleed * 2} x ${trimHeight + bleed * 2}") {
-                                                        font = 11.pt
-                                                    }
-                                                }
-                                            } row 0 col 0 fillHeight false
-
-                                            lateinit var moreButton: Button
-                                            moreButton = addChild(
-                                                MoreButton(this@PlanoApp) {
-                                                    menuItem(getString(R.string.delete)) {
-                                                        onAction { outputPane.children -= this@pane }
-                                                    }
-                                                    menuItem(getString(R.string.save)) {
-                                                        onAction {
-                                                            moreButton.isVisible = false
-                                                            val file = ResultFile()
-                                                            @Suppress("LABEL_NAME_CLASH")
-                                                            this@gridPane.snapshot {
-                                                                ImageIO.write(it.image.toSwingImage(), "png", file)
-                                                            }
-                                                            GlobalScope.launch(Dispatchers.JavaFx) {
-                                                                delay(500)
-                                                                moreButton.isVisible = true
-                                                                rootPane.jfxSnackbar(
-                                                                    getString(R.string._save).format(file.name),
-                                                                    DURATION_SHORT,
-                                                                    getString(R.string.btn_show_directory)
-                                                                ) {
-                                                                    hostServices.showDocument(file.parentFile.toURI().toString())
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ) row 0 col 1 align Pos.CENTER_RIGHT
-                                            anchorPane {
-                                                addChild(
-                                                    MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
-                                                )
-                                                mediaBox.trimBoxes.forEach {
-                                                    addChild(
-                                                        TrimBoxPane(it, scaleProperty, fillProperty, thickProperty)
-                                                    )
-                                                }
-                                            } row 1 col (0 to 2)
-                                        }
+                                        )
                                     })
                                 }
                             } row row col (0 to 6) halign HPos.RIGHT
@@ -455,7 +374,7 @@ class PlanoApp : Application(), Resources {
                                 hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
                                 outputPane = flowPane {
                                     paddingAll = 10.0
-                                    prefWidthProperty().bind(this@scrollPane.widthProperty() - 10)
+                                    prefWidthProperty().bind(this@scrollPane.widthProperty() - 10) // minus vertical scrollbar width
                                 }
                             } anchorAll 0.0
                             borderPane {
@@ -470,10 +389,20 @@ class PlanoApp : Application(), Resources {
         }
         stage.show()
 
-        if (isExpanded) toggleExpand()
-        if (isFilled) toggleFill()
+        if (isExpand) toggleExpand()
+        if (isFill) toggleFill()
         if (isThick) toggleThick()
         mediaWidthField.requestFocus()
+    }
+
+    private fun setTheme(scene: Scene, theme: String) {
+        this@PlanoApp.theme = theme
+        saver.saveAsync()
+        val darkTheme = getResource(R.style._plano_dark)
+        when {
+            isDarkTheme(theme) -> if (darkTheme !in scene.stylesheets) scene.stylesheets += darkTheme
+            else -> scene.stylesheets -= darkTheme
+        }
     }
 
     private fun clear() {
@@ -501,21 +430,13 @@ class PlanoApp : Application(), Resources {
     }
 
     private suspend fun checkForUpdate() {
-        val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".jar") }
+        val release = withContext(Dispatchers.IO) { GitHubApi.getRelease("jar") }
         when {
             release.isNewerThan(BuildConfig.VERSION) -> rootPane.jfxSnackbar(
                 getString(R.string._update_available).format(BuildConfig.VERSION),
                 DURATION_LONG,
                 getString(R.string.btn_download)
-            ) {
-                hostServices.showDocument(release.assets.first {
-                    when {
-                        isOsMac() -> it.name.endsWith("dmg")
-                        isOsWindows() -> it.name.endsWith("exe")
-                        else -> it.name.endsWith("jar")
-                    }
-                }.downloadUrl)
-            }
+            ) { hostServices.showDocument(release.htmlUrl) }
             else -> rootPane.jfxSnackbar(getString(R.string._update_unavailable), DURATION_LONG)
         }
     }

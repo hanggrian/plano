@@ -1,10 +1,10 @@
 package com.hendraanggrian.plano.dialogs
 
+import com.hendraanggrian.plano.PlanoApp
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXDialog
 import javafx.scene.Node
-import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import ktfx.controls.paddingAll
 import ktfx.jfoenix.layouts.jfxButton
@@ -15,11 +15,8 @@ import ktfx.layouts.vbox
 import ktfx.listeners.onAction
 import ktfx.text.fontOf
 
-abstract class BaseDialog(
-    resources: Resources,
-    container: StackPane,
-    title: String
-) : JFXDialog(container, null, DialogTransition.CENTER), NodeManager, Resources by resources {
+abstract class BaseDialog(app: PlanoApp, title: String) :
+    JFXDialog(app.rootPane, null, DialogTransition.CENTER), NodeManager, Resources by app {
 
     private val contentPane: VBox
 
