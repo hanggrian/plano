@@ -114,6 +114,12 @@
 #menu-more {
     -fx-graphic: url("../image/menu_more.png");
 }
+#menu-rotate > .label {
+    -fx-graphic: url("../image/menu_rotate.png");
+}
+#menu-empty > .label {
+    -fx-graphic: url("../image/menu_empty.png");
+}
 #btn-calculate {
     -jfx-button-type: RAISED;
     -fx-background-color: -fx-accent;

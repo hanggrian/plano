@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import ktfx.controls.paddingAll
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.controls.jfxSnackbar
+import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.KtfxGridPane
 import ktfx.layouts.anchorPane
 import ktfx.layouts.circle
@@ -84,25 +85,27 @@ class ResultPane(
 
         lateinit var moreButton: Button
         moreButton = addChild(
-            MoreButton(app) {
-                menuItem(getString(R.string.delete)) {
-                    onAction { app.outputPane.children -= this@ResultPane.parent }
-                }
-                menuItem(getString(R.string.save)) {
-                    onAction {
-                        moreButton.isVisible = false
-                        val file = ResultFile()
-                        @Suppress("LABEL_NAME_CLASH")
-                        this@ResultPane.snapshot { ImageIO.write(it.image.toSwingImage(), "png", file) }
-                        GlobalScope.launch(Dispatchers.JavaFx) {
-                            delay(500)
-                            moreButton.isVisible = true
-                            app.rootPane.jfxSnackbar(
-                                getString(R.string._save).format(file.name),
-                                PlanoApp.DURATION_SHORT,
-                                getString(R.string.btn_show_directory)
-                            ) {
-                                app.hostServices.showDocument(file.parentFile.toURI().toString())
+            object : MoreButton(app) {
+                override fun KtfxContextMenu.onContextMenu() {
+                    menuItem(getString(R.string.delete)) {
+                        onAction { app.outputPane.children -= this@ResultPane.parent }
+                    }
+                    menuItem(getString(R.string.save)) {
+                        onAction {
+                            moreButton.isVisible = false
+                            val file = ResultFile()
+                            @Suppress("LABEL_NAME_CLASH")
+                            this@ResultPane.snapshot { ImageIO.write(it.image.toSwingImage(), "png", file) }
+                            GlobalScope.launch(Dispatchers.JavaFx) {
+                                delay(500)
+                                moreButton.isVisible = true
+                                app.rootPane.jfxSnackbar(
+                                    getString(R.string._save).format(file.name),
+                                    PlanoApp.DURATION_SHORT,
+                                    getString(R.string.btn_show_directory)
+                                ) {
+                                    app.hostServices.showDocument(file.parentFile.toURI().toString())
+                                }
                             }
                         }
                     }

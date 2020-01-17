@@ -216,6 +216,10 @@ locale {
         en = "C Series"
         id = "Seri C"
     }
+    "f_series" {
+        en = "F Series"
+        id = "Seri F"
+    }
     "others" {
         en = "Others"
         id = "Lain-lain"

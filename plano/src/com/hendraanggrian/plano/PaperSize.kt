@@ -2,7 +2,8 @@ package com.hendraanggrian.plano
 
 import com.hendraanggrian.plano.util.toCleanString
 
-enum class PaperSeries {
+/** Common paper sizes as documented on [Wikipedia](https://en.wikipedia.org/wiki/Paper_size). */
+enum class PaperSize {
     A0("A0", 118.9, 84.1),
     A1("A1", 84.1, 59.4),
     A2("A2", 59.4, 42.0),
@@ -37,12 +38,25 @@ enum class PaperSeries {
     C7("C7", 11.4, 8.1),
     C8("C8", 8.1, 5.7),
     C9("C9", 5.7, 4.0),
-    C10("C10", 4.0, 2.8);
+    C10("C10", 4.0, 2.8),
+
+    F0("F0", 132.1, 84.1),
+    F1("F1", 84.1, 66.0),
+    F2("F2", 66.0, 42.0),
+    F3("F3", 42.0, 33.0),
+    F4("F4", 33.0, 21.0),
+    F5("F5", 21.0, 16.5),
+    F6("F6", 16.5, 10.5),
+    F7("F7", 10.5, 8.2),
+    F8("F8", 8.2, 5.2),
+    F9("F9", 5.2, 4.1),
+    F10("F10", 4.1, 2.6);
 
     companion object {
-        val A: List<PaperSeries> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
-        val B: List<PaperSeries> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
-        val C: List<PaperSeries> = listOf(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10)
+        val SERIES_A: List<PaperSize> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
+        val SERIES_B: List<PaperSize> = listOf(B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10)
+        val SERIES_C: List<PaperSize> = listOf(C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, C10)
+        val SERIES_F: List<PaperSize> = listOf(F0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10)
     }
 
     val width: Double

@@ -4,5 +4,5 @@ const val RELEASE_GROUP = "com.$RELEASE_USER.$RELEASE_ARTIFACT"
 const val RELEASE_VERSION = "2.0"
 const val RELEASE_WEB = "https://github.com/$RELEASE_USER/$RELEASE_ARTIFACT"
 const val RELEASE_HOMEPAGE = "http://$RELEASE_USER.com/$RELEASE_ARTIFACT"
-const val RELEASE_DEBUG = true
+const val RELEASE_DEBUG = false
 const val RELEASE_NAME = "Plano"
