@@ -7,7 +7,8 @@ import kotlin.test.assertEquals
 class PlanoTest {
 
     @Test fun a5inA3plus() {
-        val mediaBox = Plano.calculate(48.7, 32.5, 21.0, 14.85)
+        val mediaBox = MediaBox(48.7, 32.5)
+        mediaBox.populate(21.0, 14.85)
         assertEquals(4, mediaBox.size)
         Truth.assertThat(mediaBox.map { it.x to it.y }).containsExactly(
             0.0 to 0.0,
@@ -18,7 +19,8 @@ class PlanoTest {
     }
 
     @Test fun f4in79109() {
-        val mediaBox = Plano.calculate(79.0, 109.0, 21.5, 33.0)
+        val mediaBox = MediaBox(79.0, 109.0)
+        mediaBox.populate(21.5, 33.0)
         assertEquals(11, mediaBox.size)
         Truth.assertThat(mediaBox.map { it.x to it.y }).containsExactly(
             0.0 to 0.0,

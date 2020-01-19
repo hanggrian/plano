@@ -22,7 +22,7 @@ class PlanoToolbar(
     thickProperty: BooleanProperty
 ) : KtfxJFXToolbar(), Resources by resources {
 
-    val clearButton: Button
+    val closeAllButton: Button
     val expandButton: Button
     val fillButton: Button
     val thickButton: Button
@@ -35,7 +35,7 @@ class PlanoToolbar(
             label(BuildConfig.NAME) { font = 24.pt }
         }
         rightItems {
-            clearButton = addChild(SimpleRoundButton(24, getString(R.string.clear))) { id = R.style.btn_clear }
+            closeAllButton = addChild(RoundButton(24, getString(R.string.close_all))) { id = R.style.btn_clear }
             expandButton = addChild(
                 AdaptableRoundButton(
                     24,

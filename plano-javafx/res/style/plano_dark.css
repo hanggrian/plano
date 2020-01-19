@@ -27,6 +27,9 @@
 }
 
 /* ID */
+#menu-close {
+    -fx-graphic: url("../image-dark/menu_close.png");
+}
 #menu-more {
     -fx-graphic: url("../image-dark/menu_more.png");
 }

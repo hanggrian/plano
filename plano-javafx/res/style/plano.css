@@ -10,7 +10,6 @@
 
     -fx-base: white;
     -fx-accent: -amber600;
-    -fx-focus-color: -fx-accent;
     -fx-font-family: "Roboto";
 }
 
@@ -110,6 +109,9 @@
 }
 #label-red {
     -fx-text-fill: -red500;
+}
+#menu-close {
+    -fx-graphic: url("../image/menu_close.png");
 }
 #menu-more {
     -fx-graphic: url("../image/menu_more.png");

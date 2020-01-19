@@ -14,12 +14,9 @@ import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
-import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
-import ktfx.or
 import ktfx.otherwise
-import ktfx.runLater
 import ktfx.stringPropertyOf
 import ktfx.then
 import ktfx.toStringBinding
@@ -49,53 +46,42 @@ open class AdaptableRoundButton(
     }
 }
 
-open class SimpleRoundButton(
+open class RoundButton(
     radius: Number,
     text: String
 ) : BaseRoundButton(radius, stringPropertyOf(text))
 
-open class MoreButton(
-    resources: Resources
-) : SimpleRoundButton(RADIUS, resources.getString(R.string.more)), Resources by resources {
+open class RoundMenuButton(
+    resources: Resources,
+    textId: String
+) : RoundButton(RADIUS, resources.getString(textId)), Resources by resources {
     companion object {
         const val RADIUS = 16
     }
+}
+
+open class RoundMenuPaperButton(
+    resources: Resources,
+    private val widthField: TextField,
+    private val heightField: TextField
+) : RoundMenuButton(resources, R.string.more) {
 
     init {
         id = R.style.menu_more
-        val contextMenu = contextMenu { onContextMenu() }
+        val contextMenu = contextMenu {
+            seriesMenu(R.string.a_series, PaperSize.SERIES_A)
+            seriesMenu(R.string.b_series, PaperSize.SERIES_B)
+            seriesMenu(R.string.c_series, PaperSize.SERIES_C)
+            seriesMenu(R.string.f_series, PaperSize.SERIES_F)
+        }
         onAction {
             if (!contextMenu.isShowing) {
-                contextMenu.show(this@MoreButton, Side.RIGHT, 0.0, 0.0)
+                contextMenu.show(this@RoundMenuPaperButton, Side.RIGHT, 0.0, 0.0)
             }
         }
     }
 
-    open fun KtfxContextMenu.onContextMenu() {
-    }
-}
-
-open class MorePaperButton(
-    resources: Resources,
-    private val widthField: TextField,
-    private val heightField: TextField
-) : MoreButton(resources) {
-
-    override fun KtfxContextMenu.onContextMenu() {
-        menuItem(getString(R.string.rotate)) {
-            id = R.style.menu_rotate
-            runLater { disableProperty().bind(widthField.textProperty().isEmpty or heightField.textProperty().isEmpty) }
-            onAction { widthField.text = heightField.text.also { heightField.text = widthField.text } }
-        }
-        separatorMenuItem()
-        seriesMenu(R.string.a_series, PaperSize.SERIES_A)
-        seriesMenu(R.string.b_series, PaperSize.SERIES_B)
-        seriesMenu(R.string.c_series, PaperSize.SERIES_C)
-        seriesMenu(R.string.f_series, PaperSize.SERIES_F)
-    }
-
     private fun KtfxContextMenu.seriesMenu(textId: String, series: List<PaperSize>) = menu(getString(textId)) {
-        id = R.style.menu_empty
         series.forEach { paperSize ->
             menuItem(paperSize.title) {
                 onAction {

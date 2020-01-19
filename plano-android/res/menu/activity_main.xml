@@ -5,9 +5,9 @@
     tools:ignore="AlwaysShowAction">
 
     <item
-        android:id="@+id/clearItem"
+        android:id="@+id/cloasAllItem"
         android:icon="@drawable/btn_clear"
-        android:title="@string/clear"
+        android:title="@string/close_all"
         android:visible="false"
         app:showAsAction="always" />
 

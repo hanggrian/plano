@@ -25,9 +25,9 @@
     <string name="c_series">C Series</string>
     <string name="calculate">Calculate</string>
     <string name="check_for_update">Check for update</string>
-    <string name="clear">Clear</string>
+    <string name="close">Close</string>
+    <string name="close_all">Close all</string>
     <string name="dark">Dark</string>
-    <string name="delete">Delete</string>
     <string name="expand">Expand</string>
     <string name="f_series">F Series</string>
     <string name="fill_background">Fill background</string>

@@ -85,13 +85,9 @@ class MainActivity : AppCompatActivity() {
 
                     getSystemService<InputMethodManager>()!!
                         .hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-                    adapter.put(
-                        Plano.calculate(
-                            mediaWidth.toDouble(), mediaHeight.toDouble(),
-                            trimWidth.toDouble(), trimHeight.toDouble(),
-                            bleed.toDouble()
-                        )
-                    )
+                    adapter.put(MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble()).apply {
+                        populate(trimWidth.toDouble(), trimHeight.toDouble(), bleed.toDouble())
+                    })
                 }
             }
         }
@@ -99,13 +95,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        clearItem = menu.findItem(R.id.clearItem)
+        clearItem = menu.findItem(R.id.cloasAllItem)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.clearItem -> {
+            R.id.cloasAllItem -> {
                 val temp = adapter.toList()
                 adapter.removeAll()
                 recyclerView.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {

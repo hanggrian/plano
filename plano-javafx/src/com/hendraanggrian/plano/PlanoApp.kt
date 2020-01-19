@@ -1,10 +1,10 @@
 package com.hendraanggrian.plano
 
 import com.hendraanggrian.plano.controls.DoubleField
-import com.hendraanggrian.plano.controls.MorePaperButton
 import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
-import com.hendraanggrian.plano.controls.SimpleRoundButton
+import com.hendraanggrian.plano.controls.RoundButton
+import com.hendraanggrian.plano.controls.RoundMenuPaperButton
 import com.hendraanggrian.plano.dialogs.AboutDialog
 import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.plano.util.THEME_DARK
@@ -52,6 +52,7 @@ import ktfx.launchApplication
 import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
+import ktfx.layouts.button
 import ktfx.layouts.checkMenuItem
 import ktfx.layouts.circle
 import ktfx.layouts.flowPane
@@ -117,7 +118,7 @@ class PlanoApp : Application(), Resources {
         listener { _, _, newValue -> thickMenu.isSelected = newValue }
     }
 
-    private val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
+    val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val mediaHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val trimWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val trimHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
@@ -147,7 +148,7 @@ class PlanoApp : Application(), Resources {
     @JvmField @BindPref("allow_flip") var allowFlip = false
 
     override fun init() {
-        Plano.DEBUG = BuildConfig.DEBUG
+        MediaBox.DEBUG = BuildConfig.DEBUG
         Prefs.setDebug(BuildConfig.DEBUG)
         saver = Prefs.userRoot().node(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
@@ -213,8 +214,8 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "Edit" {
-                            menuItem(getString(R.string.clear)) {
-                                onAction { clear() }
+                            menuItem(getString(R.string.close_all)) {
+                                onAction { closeAll() }
                                 runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                             }
                         }
@@ -256,8 +257,8 @@ class PlanoApp : Application(), Resources {
                         }
                     }
                     addChild(PlanoToolbar(this@PlanoApp, expandProperty, fillProperty, thickProperty)) {
-                        clearButton.onAction { clear() }
-                        clearButton.runLater { disableProperty().bind(outputPane.children.emptyBinding) }
+                        closeAllButton.onAction { closeAll() }
+                        closeAllButton.runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                         expandButton.onAction { toggleExpand() }
                         fillButton.onAction { toggleFill() }
                         thickButton.onAction { toggleThick() }
@@ -296,7 +297,9 @@ class PlanoApp : Application(), Resources {
                                 tooltip(getString(R.string._media_box))
                                 value = mediaHeight
                             } row row col 4
-                            addChild(MorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)) row row++ col 5
+                            addChild(
+                                RoundMenuPaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
+                            ) row row++ col 5
 
                             circle(radius = 6.0) {
                                 tooltip(getString(R.string._trim_box))
@@ -316,7 +319,9 @@ class PlanoApp : Application(), Resources {
                                 tooltip(getString(R.string._trim_box))
                                 value = trimHeight
                             } row row col 4
-                            addChild(MorePaperButton(this@PlanoApp, trimWidthField, trimHeightField)) row row++ col 5
+                            addChild(
+                                RoundMenuPaperButton(this@PlanoApp, trimWidthField, trimHeightField)
+                            ) row row++ col 5
 
                             label(getString(R.string.bleed)) {
                                 tooltip(getString(R.string._bleed))
@@ -334,7 +339,7 @@ class PlanoApp : Application(), Resources {
                                 isSelected = allowFlip
                             } row row++ col 2
 
-                            calculateButton = addChild(SimpleRoundButton(24, getString(R.string.calculate))) {
+                            calculateButton = addChild(RoundButton(24, getString(R.string.calculate))) {
                                 id = R.style.btn_calculate
                                 disableProperty().bind(booleanBindingOf(
                                     mediaWidthField.textProperty(), mediaHeightField.textProperty(),
@@ -367,6 +372,9 @@ class PlanoApp : Application(), Resources {
                                     })
                                 }
                             } row row col (0 to 6) halign HPos.RIGHT
+
+                            row++
+                            button("Test") row row col 0
                         }
                         anchorPane {
                             scrollPane {
@@ -405,7 +413,7 @@ class PlanoApp : Application(), Resources {
         }
     }
 
-    private fun clear() {
+    fun closeAll() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
         rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {

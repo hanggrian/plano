@@ -15,7 +15,7 @@ class PlanoApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Plano.DEBUG = BuildConfig.DEBUG
+        MediaBox.DEBUG = BuildConfig.DEBUG
         Prefs.setDebug(BuildConfig.DEBUG)
     }
 }

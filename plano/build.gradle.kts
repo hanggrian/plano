@@ -76,10 +76,6 @@ locale {
         en = "Zoom"
         id = "Perbesar"
     }
-    "clear" {
-        en = "Clear"
-        id = "Hapus semua"
-    }
     "_boxes_cleared" {
         en = "Boxes cleared."
         id = "Konten terhapus."
@@ -200,10 +196,6 @@ locale {
         en = "Info"
         id = "Jelaskan"
     }
-    "rotate" {
-        en = "Rotate"
-        id = "Putar"
-    }
     "a_series" {
         en = "A Series"
         id = "Seri A"
@@ -224,13 +216,21 @@ locale {
         en = "Others"
         id = "Lain-lain"
     }
+    "rotate" {
+        en = "Rotate"
+        id = "Putar"
+    }
+    "close" {
+        en = "Close"
+        id = "Tutup"
+    }
+    "close_all" {
+        en = "Close all"
+        id = "Tutup semua"
+    }
     "save" {
         en = "Save"
         id = "Simpan"
-    }
-    "delete" {
-        en = "Delete"
-        id = "Hapus"
     }
     "_save" {
         en = "Saved as %s"
