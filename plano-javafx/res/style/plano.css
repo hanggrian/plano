@@ -102,25 +102,26 @@
 
 /* ID */
 #circle-amber {
-    -fx-fill: -amber600;
+    -fx-fill: -fx-accent;
 }
 #circle-red {
     -fx-fill: -red500;
 }
-#label-red {
+#label-info {
+    -fx-font-family: "Roboto Condensed";
+}
+#label-red { // displaying trim boxes count
+    -fx-font-family: "Roboto Condensed Bold";
     -fx-text-fill: -red500;
+}
+#label-black { // saving result
+    -fx-text-fill: black;
 }
 #menu-close {
     -fx-graphic: url("../image/menu_close.png");
 }
 #menu-more {
     -fx-graphic: url("../image/menu_more.png");
-}
-#menu-rotate > .label {
-    -fx-graphic: url("../image/menu_rotate.png");
-}
-#menu-empty > .label {
-    -fx-graphic: url("../image/menu_empty.png");
 }
 #btn-calculate {
     -jfx-button-type: RAISED;

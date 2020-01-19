@@ -33,12 +33,6 @@
 #menu-more {
     -fx-graphic: url("../image-dark/menu_more.png");
 }
-#menu-rotate > .label {
-    -fx-graphic: url("../image-dark/menu_rotate.png");
-}
-#btn-calculate {
-    -fx-graphic: url("../image-dark/btn_send.png");
-}
 #btn-clear {
     -fx-graphic: url("../image-dark/btn_clear.png");
 }

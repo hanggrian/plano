@@ -18,7 +18,6 @@ import com.hendraanggrian.prefs.PrefsSaver
 import com.hendraanggrian.prefs.jvm.setDebug
 import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
-import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.geometry.HPos
 import javafx.scene.Scene
@@ -52,7 +51,6 @@ import ktfx.launchApplication
 import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
-import ktfx.layouts.button
 import ktfx.layouts.checkMenuItem
 import ktfx.layouts.circle
 import ktfx.layouts.flowPane
@@ -74,6 +72,7 @@ import ktfx.listeners.listener
 import ktfx.listeners.onHiding
 import ktfx.minus
 import ktfx.runLater
+import java.util.ResourceBundle
 
 class PlanoApp : Application(), Resources {
 
@@ -373,8 +372,8 @@ class PlanoApp : Application(), Resources {
                                 }
                             } row row col (0 to 6) halign HPos.RIGHT
 
-                            row++
-                            button("Test") row row col 0
+                            // avoid left pane being pushed out when right pane has a lot of contents
+                            runLater { minWidth = width }
                         }
                         anchorPane {
                             scrollPane {
@@ -382,7 +381,8 @@ class PlanoApp : Application(), Resources {
                                 hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
                                 outputPane = flowPane {
                                     paddingAll = 10.0
-                                    prefWidthProperty().bind(this@scrollPane.widthProperty() - 10) // minus vertical scrollbar width
+                                    // minus vertical scrollbar width
+                                    prefWidthProperty().bind(this@scrollPane.widthProperty() - 10)
                                 }
                             } anchorAll 0.0
                             borderPane {
@@ -403,6 +403,15 @@ class PlanoApp : Application(), Resources {
         mediaWidthField.requestFocus()
     }
 
+    fun closeAll() {
+        val children = outputPane.children.toList()
+        outputPane.children.clear()
+        rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
+            outputPane.children += children
+        }
+        mediaWidthField.requestFocus()
+    }
+
     private fun setTheme(scene: Scene, theme: String) {
         this@PlanoApp.theme = theme
         saver.saveAsync()
@@ -411,15 +420,6 @@ class PlanoApp : Application(), Resources {
             isDarkTheme(theme) -> if (darkTheme !in scene.stylesheets) scene.stylesheets += darkTheme
             else -> scene.stylesheets -= darkTheme
         }
-    }
-
-    fun closeAll() {
-        val children = outputPane.children.toList()
-        outputPane.children.clear()
-        rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
-            outputPane.children += children
-        }
-        mediaWidthField.requestFocus()
     }
 
     private fun toggleExpand() {

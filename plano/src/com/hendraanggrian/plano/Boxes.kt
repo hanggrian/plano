@@ -22,6 +22,27 @@ class MediaBox(
         var DEBUG = false // change according to BuildConfig
     }
 
+    private var _trimWidth: Double? = null
+    private var _trimHeight: Double? = null
+    private var _bleed: Double? = null
+    private var _allowFlip: Boolean? = null
+
+    fun rotate() {
+        width = height.also { height = width }
+        populate(_trimWidth!!, _trimHeight!!, _bleed!!, _allowFlip!!)
+    }
+
+    val trimWidth: Double get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
+
+    val trimHeight: Double get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
+
+    var allowFlip: Boolean
+        get() = checkNotNull(_allowFlip) { "Must call populate at least once" }
+        set(value) {
+            _allowFlip = value
+            populate(_trimWidth!!, _trimHeight!!, _bleed!!, value)
+        }
+
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
     fun populate(
         trimWidth: Double,
@@ -29,6 +50,10 @@ class MediaBox(
         bleed: Double = 0.0,
         allowFlip: Boolean = true
     ) {
+        _trimWidth = trimWidth
+        _trimHeight = trimHeight
+        _bleed = bleed
+        _allowFlip = allowFlip
         trimBoxes.clear()
         trimBoxes.addAll(mutableListOf<List<TrimBox>>().apply {
             add(

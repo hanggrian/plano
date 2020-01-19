@@ -9,11 +9,16 @@
 }
 
 @font-face {
-    font-family: "Roboto Light";
-    src: url("../font/Roboto-Light.ttf");
+    font-family: "Roboto Bold";
+    src: url("../font/Roboto-Bold.ttf");
 }
 
 @font-face {
-    font-family: "Roboto Bold";
-    src: url("../font/Roboto-Bold.ttf");
+    font-family: "Roboto Condensed";
+    src: url("../font/RobotoCondensed-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Condensed Bold";
+    src: url("../font/RobotoCondensed-Bold.ttf");
 }
