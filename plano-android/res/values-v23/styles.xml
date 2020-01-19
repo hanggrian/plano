@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.Plano" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">@color/media</item>
+        <item name="colorAccent">@color/amber</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">?colorPrimary</item>
     </style>

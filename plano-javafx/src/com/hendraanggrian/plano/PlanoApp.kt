@@ -18,6 +18,7 @@ import com.hendraanggrian.prefs.PrefsSaver
 import com.hendraanggrian.prefs.jvm.setDebug
 import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
+import java.util.ResourceBundle
 import javafx.application.Application
 import javafx.geometry.HPos
 import javafx.scene.Scene
@@ -72,7 +73,6 @@ import ktfx.listeners.listener
 import ktfx.listeners.onHiding
 import ktfx.minus
 import ktfx.runLater
-import java.util.ResourceBundle
 
 class PlanoApp : Application(), Resources {
 

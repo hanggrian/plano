@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/cloasAllItem"
-        android:icon="@drawable/btn_clear"
+        android:icon="@drawable/btn_close"
         android:title="@string/close_all"
         android:visible="false"
         app:showAsAction="always" />
