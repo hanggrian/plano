@@ -172,7 +172,7 @@ class PlanoApp : Application(), Resources {
                         "File" {
                             menu(getString(R.string.theme)) {
                                 val themeGroup = ToggleGroup()
-                                radioMenuItem(getString(R.string.use_system_appearance)) {
+                                radioMenuItem(getString(R.string.system_default)) {
                                     toggleGroup = themeGroup
                                     isSelected = theme == THEME_SYSTEM
                                     onAction { setTheme(this@scene, THEME_SYSTEM) }

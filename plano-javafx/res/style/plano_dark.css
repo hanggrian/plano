@@ -1,7 +1,7 @@
 .root {
-    -plano-border: black;
-    -plano-button-hover: rgba(255, 255, 255, 0.27);
-    -plano-dialog-overlay: rgba(255, 255, 255, 0.54);
+    -color-border: black;
+    -color-button-hover: rgba(255, 255, 255, 0.27);
+    -color-dialog-overlay: rgba(255, 255, 255, 0.54);
 
     -fx-base: black;
 }
@@ -23,7 +23,7 @@
 /* ScrollBar */
 .scroll-bar > .increment-button > .increment-arrow,
 .scroll-bar > .decrement-button > .decrement-arrow {
-    -fx-background-color: -plano-button-hover;
+    -fx-background-color: -color-button-hover;
 }
 
 /* ID */

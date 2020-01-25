@@ -44,11 +44,11 @@
     <string name="rotate">Rotate</string>
     <string name="save">Save</string>
     <string name="shrink">Shrink</string>
+    <string name="system_default">System default</string>
     <string name="theme">Theme</string>
     <string name="thicken_border">Thicken border</string>
     <string name="trim_box">Trim box</string>
     <string name="unfill_background">Unfill background</string>
     <string name="unthicken_border">Unthicken border</string>
-    <string name="use_system_appearance">Use system appearance</string>
     <string name="zoom">Zoom</string>
 </resources>

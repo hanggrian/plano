@@ -44,11 +44,11 @@
     <string name="rotate">Putar</string>
     <string name="save">Simpan</string>
     <string name="shrink">Menyusut</string>
+    <string name="system_default">Standar sistem</string>
     <string name="theme">Tema</string>
     <string name="thicken_border">Perbesar batasan</string>
     <string name="trim_box">Kotak potong</string>
     <string name="unfill_background">Kosongkan latar belakang</string>
     <string name="unthicken_border">Perkecil batasan</string>
-    <string name="use_system_appearance">Gunakan tampilan sistem</string>
     <string name="zoom">Perbesar</string>
 </resources>

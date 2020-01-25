@@ -112,9 +112,9 @@ locale {
         en = "Theme"
         id = "Tema"
     }
-    "use_system_appearance" {
-        en = "Use system appearance"
-        id = "Gunakan tampilan sistem"
+    "system_default" {
+        en = "System default"
+        id = "Standar sistem"
     }
     "dark" {
         en = "Dark"

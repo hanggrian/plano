@@ -1,17 +1,17 @@
 .root {
-    -plano-border: #e6e6e6;
-    -plano-button-hover: rgba(0, 0, 0, 0.27);
-    -plano-dialog-overlay: rgba(0, 0, 0, 0.54);
+    -color-border: #e6e6e6;
+    -color-button-hover: rgba(0, 0, 0, 0.27);
+    -color-dialog-overlay: rgba(0, 0, 0, 0.54);
 
     /* Amber 600 */
-    -amber: #ffb300;
-    -amber-light: #ffe54c;
+    -color-amber: #ffb300; // s
+    -color-amber-light: #ffe54c;
     /* Red 500 */
-    -red: #f44336;
-    -red-light: #ff7961;
+    -color-red: #f44336;
+    -color-red-light: #ff7961;
 
     -fx-base: white;
-    -fx-accent: -amber;
+    -fx-accent: -color-amber;
     -fx-font-family: "Roboto";
 }
 
@@ -36,7 +36,7 @@
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-width: 0 0 0 1;
-    -fx-border-color: -plano-border;
+    -fx-border-color: -color-border;
 }
 
 /* ToolBar */
@@ -46,7 +46,7 @@
     -fx-max-height: 64;
     -fx-padding: 0 20 0 20;
     -fx-border-width: 0 0 1 0;
-    -fx-border-color: -plano-border;
+    -fx-border-color: -color-border;
 }
 .jfx-tool-bar HBox {
     -fx-alignment: center;
@@ -58,7 +58,7 @@
     -fx-font-family: "Roboto Bold";
 }
 .button:hover {
-    -fx-background-color: -plano-button-hover;
+    -fx-background-color: -color-button-hover;
 }
 .jfx-button .jfx-rippler {
     -jfx-rippler-fill: -fx-accent;
@@ -69,7 +69,7 @@
     -fx-background-color: -fx-background;
 }
 .jfx-dialog-overlay-pane {
-    -fx-background-color: -plano-dialog-overlay;
+    -fx-background-color: -color-dialog-overlay;
 }
 
 /* CheckBox */
@@ -82,20 +82,20 @@
 
 /** MediaBox and TrimBox */
 .box-media-background {
-    -fx-background-color: -amber-light;
+    -fx-background-color: -color-amber-light;
 }
 .box-media-border {
-    -fx-border-color: -amber;
+    -fx-border-color: -color-amber;
     -fx-border-width: 2;
 }
 .box-media-border-thick {
     -fx-border-width: 4;
 }
 .box-trim-background {
-    -fx-background-color: -red-light;
+    -fx-background-color: -color-red-light;
 }
 .box-trim-border {
-    -fx-border-color: -red;
+    -fx-border-color: -color-red;
     -fx-border-width: 2;
 }
 .box-trim-border-thick {
@@ -106,15 +106,15 @@
 #circle-amber {
     -fx-fill: -fx-accent;
 }
-#circle-red {
-    -fx-fill: -red;
+#circle-color-red {
+    -fx-fill: -color-red;
 }
 #label-info {
     -fx-font-family: "Roboto Condensed";
 }
-#label-red { // displaying trim boxes count
+#label-color-red { // displaying trim boxes count
     -fx-font-family: "Roboto Condensed Bold";
-    -fx-text-fill: -red;
+    -fx-text-fill: -color-red;
 }
 #label-black { // saving result
     -fx-text-fill: black;
