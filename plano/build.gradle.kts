@@ -68,6 +68,43 @@ tasks {
 }
 
 locale {
+    "toggle_expand" {
+        en = "Toggle expand"
+        id = "Alihkan perkembangan"
+    }
+    "toggle_background" {
+        en = "Toggle background"
+        id = "Alihkan latar belakang"
+    }
+    "toggle_border" {
+        en = "Toggle border"
+        id = "Alihkan perbatasan"
+    }
+    "_expand_on" {
+        en = "Boxes expanded."
+        id = "Kotak diperbesar."
+    }
+    "_expand_off" {
+        en = "Boxes shrinked."
+        id = "Kotak diperkecil."
+    }
+    "_background_on" {
+        en = "Background filled."
+        id = "Latar belakang terisi."
+    }
+    "_background_off" {
+        en = "Background unfilled"
+        id = "Latar belakang dikosongkan."
+    }
+    "_border_on" {
+        en = "Border thicken."
+        id = "Perbatasan dipertebal."
+    }
+    "_border_off" {
+        en = "Border thinned."
+        id = "Perbatasan dipertipis."
+    }
+
     "minimize" {
         en = "Minimize"
         id = "Perkecil"
@@ -79,30 +116,6 @@ locale {
     "_boxes_cleared" {
         en = "Boxes cleared."
         id = "Konten terhapus."
-    }
-    "expand" {
-        en = "Expand"
-        id = "Memperluas"
-    }
-    "shrink" {
-        en = "Shrink"
-        id = "Menyusut"
-    }
-    "fill_background" {
-        en = "Fill background"
-        id = "Isi latar belakang"
-    }
-    "unfill_background" {
-        en = "Unfill background"
-        id = "Kosongkan latar belakang"
-    }
-    "thicken_border" {
-        en = "Thicken border"
-        id = "Perbesar batasan"
-    }
-    "unthicken_border" {
-        en = "Unthicken border"
-        id = "Perkecil batasan"
     }
     "reset" {
         en = "Reset"

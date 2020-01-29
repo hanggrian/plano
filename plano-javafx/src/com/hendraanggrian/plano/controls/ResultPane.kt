@@ -93,7 +93,7 @@ class ResultPane(
                 }
             }
         } row 0 col 0 fillHeight false
-        closeButton = addChild(RoundMenuButton(this, R.string.close)) {
+        closeButton = addChild(RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close)) {
             id = R.style.menu_close
             onAction { close() }
         } row 0 col 1
@@ -148,7 +148,7 @@ class ResultPane(
     }
 
     private fun populate(mediaBox: MediaBox) {
-        infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - RoundMenuButton.RADIUS * 2)
+        infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
         boxPaneContainer.children += MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
         mediaBox.forEach { boxPaneContainer.children += TrimBoxPane(it, scaleProperty, fillProperty, thickProperty) }
@@ -156,8 +156,6 @@ class ResultPane(
 
     private fun close() {
         app.outputPane.children -= this@ResultPane.parent
-        if (app.outputPane.children.isEmpty()) {
-            app.mediaWidthField.requestFocus()
-        }
+        app.rootPane.requestFocus()
     }
 }

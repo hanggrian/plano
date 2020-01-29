@@ -4,7 +4,7 @@ import com.hendraanggrian.plano.controls.DoubleField
 import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.RoundButton
-import com.hendraanggrian.plano.controls.RoundMenuPaperButton
+import com.hendraanggrian.plano.controls.RoundMorePaperButton
 import com.hendraanggrian.plano.dialogs.AboutDialog
 import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.plano.util.THEME_DARK
@@ -117,7 +117,7 @@ class PlanoApp : Application(), Resources {
         listener { _, _, newValue -> thickMenu.isSelected = newValue }
     }
 
-    val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val mediaHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val trimWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val trimHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
@@ -219,15 +219,15 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "View" {
-                            expandMenu = checkMenuItem(getString(R.string.expand)) {
+                            expandMenu = checkMenuItem(getString(R.string.toggle_expand)) {
                                 accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.DIGIT1
                                 onAction { toggleExpand() }
                             }
-                            fillMenu = checkMenuItem(getString(R.string.fill_background)) {
+                            fillMenu = checkMenuItem(getString(R.string.toggle_background)) {
                                 accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.DIGIT2
                                 onAction { toggleFill() }
                             }
-                            thickMenu = checkMenuItem(getString(R.string.thicken_border)) {
+                            thickMenu = checkMenuItem(getString(R.string.toggle_border)) {
                                 accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.DIGIT3
                                 onAction { toggleThick() }
                             }
@@ -297,7 +297,7 @@ class PlanoApp : Application(), Resources {
                                 value = mediaHeight
                             } row row col 4
                             addChild(
-                                RoundMenuPaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
+                                RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
                             ) row row++ col 5
 
                             circle(radius = 6.0) {
@@ -319,7 +319,7 @@ class PlanoApp : Application(), Resources {
                                 value = trimHeight
                             } row row col 4
                             addChild(
-                                RoundMenuPaperButton(this@PlanoApp, trimWidthField, trimHeightField)
+                                RoundMorePaperButton(this@PlanoApp, trimWidthField, trimHeightField)
                             ) row row++ col 5
 
                             label(getString(R.string.bleed)) {
@@ -338,7 +338,9 @@ class PlanoApp : Application(), Resources {
                                 isSelected = allowFlip
                             } row row++ col 2
 
-                            calculateButton = addChild(RoundButton(24, getString(R.string.calculate))) {
+                            calculateButton = addChild(
+                                RoundButton(this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate)
+                            ) {
                                 id = R.style.btn_calculate
                                 disableProperty().bind(booleanBindingOf(
                                     mediaWidthField.textProperty(), mediaHeightField.textProperty(),
@@ -397,9 +399,9 @@ class PlanoApp : Application(), Resources {
         }
         stage.show()
 
-        if (isExpand) toggleExpand()
-        if (isFill) toggleFill()
-        if (isThick) toggleThick()
+        if (isExpand) toggleExpand(false)
+        if (isFill) toggleFill(false)
+        if (isThick) toggleThick(false)
         mediaWidthField.requestFocus()
     }
 
@@ -422,19 +424,31 @@ class PlanoApp : Application(), Resources {
         }
     }
 
-    private fun toggleExpand() {
+    private fun toggleExpand(showSnackbar: Boolean = true) {
         scaleProperty.value = when (scaleProperty.value) {
             SCALE_SMALL -> SCALE_BIG
             else -> SCALE_SMALL
         }
+        if (showSnackbar) rootPane.jfxSnackbar(
+            getString(if (scaleProperty.value == SCALE_BIG) R.string._expand_on else R.string._expand_off),
+            DURATION_SHORT
+        )
     }
 
-    private fun toggleFill() {
+    private fun toggleFill(showSnackbar: Boolean = true) {
         fillProperty.value = !fillProperty.value
+        if (showSnackbar) rootPane.jfxSnackbar(
+            getString(if (fillProperty.value) R.string._background_on else R.string._background_off),
+            DURATION_SHORT
+        )
     }
 
-    private fun toggleThick() {
+    private fun toggleThick(showSnackbar: Boolean = true) {
         thickProperty.value = !thickProperty.value
+        if (showSnackbar) rootPane.jfxSnackbar(
+            getString(if (thickProperty.value) R.string._border_on else R.string._border_off),
+            DURATION_SHORT
+        )
     }
 
     private suspend fun checkForUpdate() {

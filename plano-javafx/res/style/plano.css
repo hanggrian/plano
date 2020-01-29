@@ -106,13 +106,13 @@
 #circle-amber {
     -fx-fill: -fx-accent;
 }
-#circle-color-red {
+#circle-red {
     -fx-fill: -color-red;
 }
 #label-info {
     -fx-font-family: "Roboto Condensed";
 }
-#label-color-red { // displaying trim boxes count
+#label-red { // displaying trim boxes count
     -fx-font-family: "Roboto Condensed Bold";
     -fx-text-fill: -color-red;
 }

@@ -5,66 +5,56 @@ import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
-import javafx.beans.value.ObservableValue
 import javafx.geometry.Side
 import javafx.scene.control.TextField
 import javafx.scene.shape.Circle
-import ktfx.given
+import ktfx.controls.maxSize
+import ktfx.controls.minSize
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.contextMenu
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
-import ktfx.otherwise
-import ktfx.stringPropertyOf
-import ktfx.then
 import ktfx.toStringBinding
 
-@Suppress("LeakingThis")
-sealed class BaseRoundButton(
-    radius: Number,
-    textBinding: ObservableValue<String>
-) : JFXButton() {
+open class RoundButton(
+    resources: Resources,
+    radius: Double,
+    tooltipId: String
+) : JFXButton(), Resources by resources {
+    companion object {
+        const val RADIUS_SMALL = 12.0
+        const val RADIUS_MEDIUM = 16.0
+        const val RADIUS_LARGE = 24.0
+    }
+
     init {
-        val r = radius.toDouble()
-        shape = Circle(r)
-        setMinSize(2 * r, 2 * r)
-        setMaxSize(2 * r, 2 * r)
-        tooltip { textProperty().bind(textBinding) }
+        shape = Circle(radius)
+        minSize = radius * 2
+        maxSize = radius * 2
+        @Suppress("LeakingThis") tooltip(getString(tooltipId))
     }
 }
 
 open class AdaptableRoundButton(
-    radius: Number,
+    resources: Resources,
+    radius: Double,
+    tooltipId: String,
     dependency: ObservableBooleanValue,
-    text: Pair<String, String>,
     id: Pair<String, String>
-) : BaseRoundButton(radius, given(dependency) then text.first otherwise text.second) {
+) : RoundButton(resources, radius, tooltipId) {
+
     init {
         idProperty().bind(dependency.toStringBinding { if (it) id.first else id.second })
     }
 }
 
-open class RoundButton(
-    radius: Number,
-    text: String
-) : BaseRoundButton(radius, stringPropertyOf(text))
-
-open class RoundMenuButton(
-    resources: Resources,
-    textId: String
-) : RoundButton(RADIUS, resources.getString(textId)), Resources by resources {
-    companion object {
-        const val RADIUS = 16
-    }
-}
-
-open class RoundMenuPaperButton(
+open class RoundMorePaperButton(
     resources: Resources,
     private val widthField: TextField,
     private val heightField: TextField
-) : RoundMenuButton(resources, R.string.more) {
+) : RoundButton(resources, RADIUS_MEDIUM, R.string.more) {
 
     init {
         id = R.style.menu_more
@@ -76,7 +66,7 @@ open class RoundMenuPaperButton(
         }
         onAction {
             if (!contextMenu.isShowing) {
-                contextMenu.show(this@RoundMenuPaperButton, Side.RIGHT, 0.0, 0.0)
+                contextMenu.show(this@RoundMorePaperButton, Side.RIGHT, 0.0, 0.0)
             }
         }
     }
