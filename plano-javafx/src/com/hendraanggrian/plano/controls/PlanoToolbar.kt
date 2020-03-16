@@ -35,9 +35,10 @@ class PlanoToolbar(
             label(BuildConfig.NAME) { font = 24.pt }
         }
         rightItems {
-            closeAllButton = addChild(RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all)) {
-                id = R.style.btn_close
-            }
+            closeAllButton =
+                addChild(RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all)) {
+                    id = R.style.btn_close
+                }
             expandButton = addChild(
                 AdaptableRoundButton(
                     resources,

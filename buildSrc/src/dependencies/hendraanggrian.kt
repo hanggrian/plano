@@ -1,4 +1,4 @@
-const val VERSION_KTFX = "8.7.1"
+const val VERSION_KTFX = "8.7.3"
 const val VERSION_PREFS = "0.2"
 const val VERSION_BUNDLER = "0.3-rc1"
 

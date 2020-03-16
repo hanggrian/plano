@@ -20,6 +20,8 @@ import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
 import java.util.ResourceBundle
 import javafx.application.Application
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleDoubleProperty
 import javafx.geometry.HPos
 import javafx.scene.Scene
 import javafx.scene.control.Button
@@ -37,14 +39,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.withContext
 import ktfx.booleanBindingOf
-import ktfx.booleanPropertyOf
 import ktfx.collections.emptyBinding
 import ktfx.controls.gap
-import ktfx.controls.paddingAll
+import ktfx.controls.paddings
+import ktfx.controls.rowConstraints
 import ktfx.controls.setMinSize
-import ktfx.controlsfx.isOsMac
 import ktfx.coroutines.onAction
-import ktfx.doublePropertyOf
 import ktfx.eq
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
@@ -53,7 +53,6 @@ import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
-import ktfx.layouts.circle
 import ktfx.layouts.flowPane
 import ktfx.layouts.gridPane
 import ktfx.layouts.hbox
@@ -62,17 +61,18 @@ import ktfx.layouts.menu
 import ktfx.layouts.menuBar
 import ktfx.layouts.menuItem
 import ktfx.layouts.radioMenuItem
-import ktfx.layouts.rowConstraints
 import ktfx.layouts.scene
 import ktfx.layouts.scrollPane
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.stackPane
+import ktfx.layouts.styledCircle
 import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.listeners.listener
 import ktfx.listeners.onHiding
 import ktfx.minus
 import ktfx.runLater
+import org.apache.commons.lang3.SystemUtils
 
 class PlanoApp : Application(), Resources {
 
@@ -85,8 +85,8 @@ class PlanoApp : Application(), Resources {
         @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
     }
 
-    private val scaleProperty = doublePropertyOf(SCALE_SMALL)
-    private val expandProperty = booleanPropertyOf().apply {
+    private val scaleProperty = SimpleDoubleProperty(SCALE_SMALL)
+    private val expandProperty = SimpleBooleanProperty().apply {
         bind(scaleProperty eq SCALE_BIG)
         listener { _, _, newValue ->
             expandMenu.isSelected = newValue
@@ -110,10 +110,10 @@ class PlanoApp : Application(), Resources {
             }
         }
     }
-    private val fillProperty = booleanPropertyOf().apply {
+    private val fillProperty = SimpleBooleanProperty().apply {
         listener { _, _, newValue -> fillMenu.isSelected = newValue }
     }
-    private val thickProperty = booleanPropertyOf().apply {
+    private val thickProperty = SimpleBooleanProperty().apply {
         listener { _, _, newValue -> thickMenu.isSelected = newValue }
     }
 
@@ -168,7 +168,7 @@ class PlanoApp : Application(), Resources {
             rootPane = stackPane {
                 vbox {
                     menuBar {
-                        isUseSystemMenuBar = isOsMac()
+                        isUseSystemMenuBar = SystemUtils.IS_OS_MAC_OSX
                         "File" {
                             menu(getString(R.string.theme)) {
                                 val themeGroup = ToggleGroup()
@@ -255,7 +255,9 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                     }
-                    addChild(PlanoToolbar(this@PlanoApp, expandProperty, fillProperty, thickProperty)) {
+                    addChild(
+                        PlanoToolbar(this@PlanoApp, expandProperty, fillProperty, thickProperty)
+                    ) {
                         closeAllButton.onAction { closeAll() }
                         closeAllButton.runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                         expandButton.onAction { toggleExpand() }
@@ -264,7 +266,7 @@ class PlanoApp : Application(), Resources {
                     }
                     hbox {
                         gridPane {
-                            paddingAll = 20.0
+                            paddings = 20.0
                             gap = 10.0
                             var row = 0
 
@@ -278,9 +280,8 @@ class PlanoApp : Application(), Resources {
                                 maxWidth = 250.0
                             } row row++ col (0 to 6)
 
-                            circle(radius = 6.0) {
+                            styledCircle(radius = 6.0, id = R.style.circle_amber) {
                                 tooltip(getString(R.string._media_box))
-                                id = R.style.circle_amber
                             } row row col 0
                             label(getString(R.string.media_box)) {
                                 tooltip(getString(R.string._media_box))
@@ -297,12 +298,13 @@ class PlanoApp : Application(), Resources {
                                 value = mediaHeight
                             } row row col 4
                             addChild(
-                                RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
+                                RoundMorePaperButton(
+                                    this@PlanoApp, mediaWidthField, mediaHeightField
+                                )
                             ) row row++ col 5
 
-                            circle(radius = 6.0) {
+                            styledCircle(radius = 6.0, id = R.style.circle_red) {
                                 tooltip(getString(R.string._trim_box))
-                                id = R.style.circle_red
                             } row row col 0
                             label(getString(R.string.trim_box)) {
                                 tooltip(getString(R.string._trim_box))
@@ -339,12 +341,16 @@ class PlanoApp : Application(), Resources {
                             } row row++ col 2
 
                             calculateButton = addChild(
-                                RoundButton(this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate)
+                                RoundButton(
+                                    this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate
+                                )
                             ) {
                                 id = R.style.btn_calculate
                                 disableProperty().bind(booleanBindingOf(
-                                    mediaWidthField.textProperty(), mediaHeightField.textProperty(),
-                                    trimWidthField.textProperty(), trimHeightField.textProperty()
+                                    mediaWidthField.textProperty(),
+                                    mediaHeightField.textProperty(),
+                                    trimWidthField.textProperty(),
+                                    trimHeightField.textProperty()
                                 ) {
                                     when {
                                         mediaWidthField.value <= 0.0 || mediaHeightField.value <= 0.0 -> true
@@ -382,16 +388,16 @@ class PlanoApp : Application(), Resources {
                                 isFitToWidth = true
                                 hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
                                 outputPane = flowPane {
-                                    paddingAll = 10.0
+                                    paddings = 10.0
                                     // minus vertical scrollbar width
                                     prefWidthProperty().bind(this@scrollPane.widthProperty() - 10)
                                 }
-                            } anchorAll 0.0
+                            } anchors 0.0
                             borderPane {
                                 label(getString(R.string.no_content))
                                 visibleProperty().bind(outputPane.children.emptyBinding)
                                 managedProperty().bind(outputPane.children.emptyBinding)
-                            } anchorAll 0.0
+                            } anchors 0.0
                         } hgrow true
                     } vgrow true
                 }
@@ -408,7 +414,11 @@ class PlanoApp : Application(), Resources {
     fun closeAll() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
-        rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
+        rootPane.jfxSnackbar(
+            getString(R.string._boxes_cleared),
+            DURATION_SHORT,
+            getString(R.string.btn_undo)
+        ) {
             outputPane.children += children
         }
         mediaWidthField.requestFocus()

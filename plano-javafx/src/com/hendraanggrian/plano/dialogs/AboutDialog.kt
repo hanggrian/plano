@@ -8,7 +8,8 @@ import ktfx.layouts.NodeManager
 import ktfx.layouts.label
 import ktfx.listeners.onAction
 
-class AboutDialog(private val app: PlanoApp) : BaseDialog(app, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
+class AboutDialog(private val app: PlanoApp) :
+    BaseDialog(app, "${BuildConfig.NAME} ${BuildConfig.VERSION}") {
 
     init {
         label(getString(R.string._about)) {

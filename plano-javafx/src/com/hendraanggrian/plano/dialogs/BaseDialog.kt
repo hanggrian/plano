@@ -6,7 +6,7 @@ import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXDialog
 import javafx.scene.Node
 import javafx.scene.layout.VBox
-import ktfx.controls.paddingAll
+import ktfx.controls.paddings
 import ktfx.jfoenix.layouts.jfxButton
 import ktfx.layouts.NodeManager
 import ktfx.layouts.buttonBar
@@ -21,11 +21,10 @@ abstract class BaseDialog(app: PlanoApp, title: String) :
     private val contentPane: VBox
 
     override fun <T : Node> addChild(child: T): T = child.also { contentPane.children += it }
-    override val childCount: Int get() = contentPane.children.size
 
     init {
         content = ktfx.layouts.vbox(20.0) {
-            paddingAll = 20.0
+            paddings = 20.0
             label(title) { font = fontOf("Roboto Medium", size = 22) }
             contentPane = vbox()
             buttonBar {

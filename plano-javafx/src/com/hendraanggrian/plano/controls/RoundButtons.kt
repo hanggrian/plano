@@ -71,14 +71,15 @@ open class RoundMorePaperButton(
         }
     }
 
-    private fun KtfxContextMenu.seriesMenu(textId: String, series: List<PaperSize>) = menu(getString(textId)) {
-        series.forEach { paperSize ->
-            menuItem(paperSize.title) {
-                onAction {
-                    widthField.text = paperSize.width.toString()
-                    heightField.text = paperSize.height.toString()
+    private fun KtfxContextMenu.seriesMenu(textId: String, series: List<PaperSize>) =
+        menu(getString(textId)) {
+            series.forEach { paperSize ->
+                menuItem(paperSize.title) {
+                    onAction {
+                        widthField.text = paperSize.width.toString()
+                        heightField.text = paperSize.height.toString()
+                    }
                 }
             }
         }
-    }
 }

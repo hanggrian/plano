@@ -15,7 +15,7 @@ class DoubleField : JFXTextField() {
     init {
         prefWidth = 50.0
         alignment = Pos.CENTER
-        textFormatter = TextFormatter<TextFormatter.Change?>(UnaryOperator<TextFormatter.Change?> { change ->
+        textFormatter = TextFormatter<TextFormatter.Change?>(UnaryOperator { change ->
             when {
                 PATTERN_DOUBLE.matcher(change!!.controlNewText).matches() -> change
                 else -> null

@@ -21,27 +21,27 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
-import ktfx.controls.paddingAll
+import ktfx.controls.paddings
+import ktfx.controls.toSwingImage
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.layouts.KtfxGridPane
 import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.checkMenuItem
-import ktfx.layouts.circle
 import ktfx.layouts.contextMenu
 import ktfx.layouts.flowPane
 import ktfx.layouts.hbox
-import ktfx.layouts.label
 import ktfx.layouts.menuItem
 import ktfx.layouts.pane
 import ktfx.layouts.separatorMenuItem
+import ktfx.layouts.styledCircle
+import ktfx.layouts.styledLabel
 import ktfx.listeners.onContextMenuRequested
 import ktfx.listeners.snapshot
 import ktfx.minus
 import ktfx.or
 import ktfx.times
-import ktfx.util.toSwingImage
 
 class ResultPane(
     private val app: PlanoApp,
@@ -63,7 +63,7 @@ class ResultPane(
     private val contextMenu: ContextMenu
 
     init {
-        paddingAll = 10.0
+        paddings = 10.0
         val mediaBox = MediaBox(mediaWidth, mediaHeight)
         mediaBox.populate(trimWidth, trimHeight, bleed, allowFlip)
 
@@ -71,26 +71,22 @@ class ResultPane(
             hgap = 10.0
             hbox {
                 alignment = Pos.CENTER_LEFT
-                circle(radius = 4.0) {
-                    id = R.style.circle_amber
-                }
+                styledCircle(radius = 4.0, id = R.style.circle_amber)
                 pane { minWidth = 5.0 }
-                infoLabels += label("${mediaWidth.toCleanString()} x ${mediaHeight.toCleanString()}") {
+                infoLabels += styledLabel(
+                    "${mediaWidth.toCleanString()} x ${mediaHeight.toCleanString()}",
                     id = R.style.label_info
-                }
+                )
             }
             hbox {
                 alignment = Pos.CENTER_LEFT
-                circle(radius = 4.0) {
-                    id = R.style.circle_red
-                }
-                label(" ${mediaBox.size}") {
-                    id = R.style.label_red
-                }
+                styledCircle(radius = 4.0, id = R.style.circle_red)
+                styledLabel(" ${mediaBox.size}", id = R.style.label_red)
                 pane { minWidth = 5.0 }
-                infoLabels += label("${(trimWidth + bleed * 2).toCleanString()} x ${(trimHeight + bleed * 2).toCleanString()}") {
+                infoLabels += styledLabel(
+                    "${(trimWidth + bleed * 2).toCleanString()} x ${(trimHeight + bleed * 2).toCleanString()}",
                     id = R.style.label_info
-                }
+                )
             }
         } row 0 col 0 fillHeight false
         closeButton = addChild(RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close)) {
@@ -119,10 +115,13 @@ class ResultPane(
             separatorMenuItem()
             menuItem(getString(R.string.save)) {
                 onAction {
-                    val isDarkTheme = getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
+                    val isDarkTheme =
+                        getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
                     if (isDarkTheme) infoLabels.forEach { it.id = R.style.label_black }
                     val file = ResultFile()
-                    this@ResultPane.snapshot { ImageIO.write(it.image.toSwingImage(), "png", file) }
+                    this@ResultPane.snapshot(null, {}) {
+                        ImageIO.write(it.image.toSwingImage(), "png", file)
+                    }
                     GlobalScope.launch(Dispatchers.JavaFx) {
                         delay(500)
                         if (isDarkTheme) infoLabels.forEach { it.id = null }
@@ -143,15 +142,29 @@ class ResultPane(
             contextMenu.show(scene.window)
         }
 
-        closeButton.visibleProperty().bind(this@ResultPane.hoverProperty() or contextMenu.showingProperty())
+        closeButton.visibleProperty()
+            .bind(this@ResultPane.hoverProperty() or contextMenu.showingProperty())
         populate(mediaBox)
     }
 
     private fun populate(mediaBox: MediaBox) {
-        infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
+        infoFlowPane.prefWrapLengthProperty()
+            .bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
-        boxPaneContainer.children += MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
-        mediaBox.forEach { boxPaneContainer.children += TrimBoxPane(it, scaleProperty, fillProperty, thickProperty) }
+        boxPaneContainer.children += MediaBoxPane(
+            mediaBox,
+            scaleProperty,
+            fillProperty,
+            thickProperty
+        )
+        mediaBox.forEach {
+            boxPaneContainer.children += TrimBoxPane(
+                it,
+                scaleProperty,
+                fillProperty,
+                thickProperty
+            )
+        }
     }
 
     private fun close() {

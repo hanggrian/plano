@@ -32,7 +32,6 @@ dependencies {
 
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
-    implementation(hendraanggrian("ktfx", "ktfx-controlsfx-commons", VERSION_KTFX))
 
     implementation(hendraanggrian("prefs", "prefs-jvm", VERSION_PREFS))
     kapt(hendraanggrian("prefs", "prefs-compiler", VERSION_PREFS))
