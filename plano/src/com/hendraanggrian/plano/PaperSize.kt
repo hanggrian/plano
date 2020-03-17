@@ -59,7 +59,7 @@ enum class PaperSize(titlePrefix: String, val width: Double, val height: Double)
         val SERIES_F: List<PaperSize> = listOf(F0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10)
     }
 
-    val title: String = "$titlePrefix \t${width.clean()} x ${height.clean()}"
+    val title: String = "$titlePrefix  \t${width.clean()} x ${height.clean()}"
 
     operator fun component1(): Double = width
     operator fun component2(): Double = height

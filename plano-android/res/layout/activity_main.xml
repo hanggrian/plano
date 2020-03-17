@@ -43,73 +43,114 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|bottom"
                 android:orientation="vertical"
                 android:paddingTop="?actionBarSize"
                 android:paddingBottom="@dimen/medium">
 
-                <TableRow android:gravity="center_vertical">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/mediaToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize">
 
-                    <ImageView
-                        style="@style/Circle"
-                        android:src="@drawable/ci_media" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        style="@style/Widget.Plano.TextView"
-                        android:text="@string/media_box" />
+                        <TextView
+                            android:id="@+id/mediaText"
+                            style="@style/Widget.Plano.TextView"
+                            android:text="@string/media_box" />
 
-                    <EditText
-                        android:id="@+id/mediaWidthText"
-                        style="@style/Widget.Plano.EditText" />
+                        <EditText
+                            android:id="@+id/mediaWidthEdit"
+                            style="@style/Widget.Plano.EditText" />
 
-                    <TextView
-                        style="@style/Widget.Plano.TextView"
-                        android:text="x" />
+                        <TextView
+                            style="@style/Widget.Plano.TextView"
+                            android:text="x" />
 
-                    <EditText
-                        android:id="@+id/mediaHeightText"
-                        style="@style/Widget.Plano.EditText" />
-                </TableRow>
+                        <EditText
+                            android:id="@+id/mediaHeightEdit"
+                            style="@style/Widget.Plano.EditText" />
+                    </LinearLayout>
+                </androidx.appcompat.widget.Toolbar>
 
-                <TableRow android:gravity="center_vertical">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/trimToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize">
 
-                    <ImageView
-                        style="@style/Circle"
-                        android:src="@drawable/ci_trim" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        style="@style/Widget.Plano.TextView"
-                        android:text="@string/trim_box" />
+                        <TextView
+                            android:id="@+id/trimText"
+                            style="@style/Widget.Plano.TextView"
+                            android:text="@string/trim_box" />
 
-                    <EditText
-                        android:id="@+id/trimWidthText"
-                        style="@style/Widget.Plano.EditText" />
+                        <EditText
+                            android:id="@+id/trimWidthEdit"
+                            style="@style/Widget.Plano.EditText" />
 
-                    <TextView
-                        style="@style/Widget.Plano.TextView"
-                        android:text="x" />
+                        <TextView
+                            style="@style/Widget.Plano.TextView"
+                            android:text="x" />
 
-                    <EditText
-                        android:id="@+id/trimHeightText"
-                        style="@style/Widget.Plano.EditText" />
-                </TableRow>
+                        <EditText
+                            android:id="@+id/trimHeightEdit"
+                            style="@style/Widget.Plano.EditText" />
+                    </LinearLayout>
+                </androidx.appcompat.widget.Toolbar>
 
-                <TableRow>
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/bleedToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize">
 
-                    <Space />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        style="@style/Widget.Plano.TextView"
-                        android:text="@string/bleed" />
+                        <TextView
+                            android:id="@+id/bleedText"
+                            style="@style/Widget.Plano.TextView"
+                            android:text="@string/bleed" />
 
-                    <EditText
-                        android:id="@+id/bleedText"
-                        style="@style/Widget.Plano.EditText" />
-                </TableRow>
-            </TableLayout>
+                        <EditText
+                            android:id="@+id/bleedEdit"
+                            style="@style/Widget.Plano.EditText" />
+                    </LinearLayout>
+                </androidx.appcompat.widget.Toolbar>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/allowFlipToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/allowFlipText"
+                            style="@style/Widget.Plano.TextView"
+                            android:text="@string/allow_flip" />
+
+                        <CheckBox
+                            android:id="@+id/allowFlipCheck"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </androidx.appcompat.widget.Toolbar>
+            </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
@@ -17,6 +18,7 @@ import com.hendraanggrian.bundler.Bundler
 import com.hendraanggrian.plano.controls.longSnackbar
 import com.hendraanggrian.plano.controls.snackbar
 import com.hendraanggrian.plano.dialogs.AboutDialogFragment
+import com.hendraanggrian.plano.util.clean
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
 import com.hendraanggrian.prefs.PrefsSaver
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     @JvmField @BindPref("trim_width") var trimWidth = 0f
     @JvmField @BindPref("trim_height") var trimHeight = 0f
     @JvmField @BindPref("bleed") var bleed = 0f
+    @JvmField @BindPref("allow_flip") var allowFlip = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     emptyText.visibility = View.VISIBLE
                     clearItem?.isVisible = false
                     appBar.setExpanded(true)
-                    mediaWidthText.requestFocus()
+                    mediaWidthEdit.requestFocus()
                 }
                 else -> {
                     emptyText.visibility = View.GONE
@@ -62,31 +65,36 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mediaWidthText.setText("$mediaWidth")
-        mediaHeightText.setText("$mediaHeight")
-        trimWidthText.setText("$trimWidth")
-        trimHeightText.setText("$trimHeight")
-        bleedText.setText("$bleed")
+        Toolbar.LayoutParams(mediaText.width, Toolbar.LayoutParams.WRAP_CONTENT).let {
+            trimText.layoutParams = it
+            bleedText.layoutParams = it
+        }
+
+        mediaWidthEdit.setText(mediaWidth.clean())
+        mediaHeightEdit.setText(mediaHeight.clean())
+        trimWidthEdit.setText(trimWidth.clean())
+        trimHeightEdit.setText(trimHeight.clean())
+        bleedEdit.setText(bleed.clean())
+        allowFlipCheck.isEnabled = allowFlip
 
         adapter = MainAdapter(viewModel.emptyData)
         recyclerView.adapter = adapter
         fab.setOnClickListener {
             when {
-                mediaWidthText.value <= 0 || mediaHeightText.value <= 0 ||
-                    trimWidthText.value <= 0 || trimHeightText.value <= 0 ->
+                mediaWidthEdit.value <= 0 || mediaHeightEdit.value <= 0 ||
+                    trimWidthEdit.value <= 0 || trimHeightEdit.value <= 0 ->
                     recyclerView.snackbar(getString(R.string._incomplete))
                 else -> {
-                    mediaWidth = mediaWidthText.value
-                    mediaHeight = mediaHeightText.value
-                    trimWidth = trimWidthText.value
-                    trimHeight = trimHeightText.value
-                    bleed = bleedText.value
+                    mediaWidth = mediaWidthEdit.value
+                    mediaHeight = mediaHeightEdit.value
+                    trimWidth = trimWidthEdit.value
+                    trimHeight = trimHeightEdit.value
+                    bleed = bleedEdit.value
                     saver.saveAsync()
 
-                    getSystemService<InputMethodManager>()!!
-                        .hideSoftInputFromWindow(fab.applicationWindowToken, 0)
+                    getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
                     adapter.put(MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble()).apply {
-                        populate(trimWidth.toDouble(), trimHeight.toDouble(), bleed.toDouble())
+                        populate(trimWidth, trimHeight, bleed.toDouble(), allowFlip)
                     })
                 }
             }
@@ -118,9 +126,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse(release.assets.first {
-                                    it.name.endsWith("apk")
-                                }.downloadUrl)
+                                Uri.parse(release.assets.first { it.name.endsWith("apk") }.downloadUrl)
                             )
                         )
                     }
