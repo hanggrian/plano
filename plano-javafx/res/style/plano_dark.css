@@ -4,6 +4,12 @@
     -color-dialog-overlay: rgba(255, 255, 255, 0.54);
 
     -fx-base: black;
+    -fx-background-color: #121212;
+}
+
+/* ToolBar */
+.jfx-tool-bar {
+    -fx-background-color: #1d1d1d;
 }
 
 /* TextField */

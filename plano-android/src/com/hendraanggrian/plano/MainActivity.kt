@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
+import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
@@ -65,9 +69,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        Toolbar.LayoutParams(mediaText.width, Toolbar.LayoutParams.WRAP_CONTENT).let {
-            trimText.layoutParams = it
-            bleedText.layoutParams = it
+        mediaToolbar.bindPaperSizes()
+        trimToolbar.bindPaperSizes()
+        mediaText.doOnLayout {
+            trimText.width = mediaText.width
+            bleedText.width = mediaText.width
         }
 
         mediaWidthEdit.setText(mediaWidth.clean())
@@ -75,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         trimWidthEdit.setText(trimWidth.clean())
         trimHeightEdit.setText(trimHeight.clean())
         bleedEdit.setText(bleed.clean())
-        allowFlipCheck.isEnabled = allowFlip
 
         adapter = MainAdapter(viewModel.emptyData)
         recyclerView.adapter = adapter
@@ -138,6 +143,26 @@ class MainActivity : AppCompatActivity() {
                 .show(supportFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun Toolbar.bindPaperSizes() {
+        menu.addSubMenu(getString(R.string.a_series)).apply { PaperSize.SERIES_A.forEach { add(it.title) } }
+        menu.addSubMenu(getString(R.string.b_series)).apply { PaperSize.SERIES_B.forEach { add(it.title) } }
+        menu.addSubMenu(getString(R.string.c_series)).apply { PaperSize.SERIES_C.forEach { add(it.title) } }
+        menu.addSubMenu(getString(R.string.f_series)).apply { PaperSize.SERIES_F.forEach { add(it.title) } }
+        setOnMenuItemClickListener { menu ->
+            if (menu.title.none { it.isDigit() }) return@setOnMenuItemClickListener false
+            val s = menu.title.toString()
+            (children.first() as ViewGroup).children.filterIsInstance<EditText>().forEachIndexed { index, t ->
+                t.setText(
+                    when (index) {
+                        0 -> s.substring(s.indexOf('\t') + 1, s.indexOf(" x "))
+                        else -> s.substringAfter(" x ")
+                    }
+                )
+            }
+            true
+        }
     }
 
     private val TextView.value: Float get() = text?.toString()?.toFloatOrNull() ?: 0f

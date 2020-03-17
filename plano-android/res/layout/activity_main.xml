@@ -46,6 +46,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="?colorPrimary"
                 android:orientation="vertical"
                 android:paddingTop="?actionBarSize"
                 android:paddingBottom="@dimen/medium">
@@ -59,6 +60,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ci_media" />
 
                         <TextView
                             android:id="@+id/mediaText"
@@ -89,6 +95,11 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical">
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ci_trim" />
+
                         <TextView
                             android:id="@+id/trimText"
                             style="@style/Widget.Plano.TextView"
@@ -118,6 +129,11 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical">
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ci_empty" />
+
                         <TextView
                             android:id="@+id/bleedText"
                             style="@style/Widget.Plano.TextView"
@@ -126,28 +142,6 @@
                         <EditText
                             android:id="@+id/bleedEdit"
                             style="@style/Widget.Plano.EditText" />
-                    </LinearLayout>
-                </androidx.appcompat.widget.Toolbar>
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/allowFlipToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:id="@+id/allowFlipText"
-                            style="@style/Widget.Plano.TextView"
-                            android:text="@string/allow_flip" />
-
-                        <CheckBox
-                            android:id="@+id/allowFlipCheck"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
                     </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
             </LinearLayout>
@@ -166,7 +160,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/medium"
         android:src="@drawable/btn_send"
+        app:backgroundTint="?colorAccent"
         app:fabSize="normal"
         app:layout_anchor="@id/appBar"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        app:tint="@android:color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
