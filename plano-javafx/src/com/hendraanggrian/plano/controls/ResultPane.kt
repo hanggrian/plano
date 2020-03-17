@@ -5,8 +5,8 @@ import com.hendraanggrian.plano.PlanoApp
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.ResultFile
+import com.hendraanggrian.plano.util.clean
 import com.hendraanggrian.plano.util.getResource
-import com.hendraanggrian.plano.util.toCleanString
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
 import javafx.geometry.Pos
@@ -148,9 +148,9 @@ class ResultPane(
     }
 
     private fun populate(mediaBox: MediaBox) {
-        mediaLabel.text = "${mediaBox.width.toCleanString()} x ${mediaBox.height.toCleanString()}"
+        mediaLabel.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimSizeLabel.text = " ${mediaBox.size}"
-        trimLabel.text = "${(trimWidth + bleed * 2).toCleanString()} x ${(trimHeight + bleed * 2).toCleanString()}"
+        trimLabel.text = "${(trimWidth + bleed * 2).clean()} x ${(trimHeight + bleed * 2).clean()}"
         infoFlowPane.prefWrapLengthProperty()
             .bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()

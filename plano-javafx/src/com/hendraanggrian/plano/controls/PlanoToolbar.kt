@@ -30,15 +30,14 @@ class PlanoToolbar(
     init {
         depth = 0
         leftItems {
-            imageView(R.image.ic_launcher)
+            imageView(R.image.ic_toolbar)
             region { prefWidth = 10.0 }
-            label(BuildConfig.NAME) { font = 24.pt }
+            label(BuildConfig.NAME) { font = 26.pt }
         }
         rightItems {
-            closeAllButton =
-                addChild(RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all)) {
-                    id = R.style.btn_close
-                }
+            closeAllButton = addChild(RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all)) {
+                id = R.style.btn_close
+            }
             expandButton = addChild(
                 AdaptableRoundButton(
                     resources,

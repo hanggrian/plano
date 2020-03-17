@@ -1,5 +1,6 @@
 package com.hendraanggrian.plano.controls
 
+import com.hendraanggrian.plano.util.clean
 import com.jfoenix.controls.JFXTextField
 import java.util.function.UnaryOperator
 import java.util.regex.Pattern
@@ -31,6 +32,6 @@ class DoubleField : JFXTextField() {
     var value: Double
         get() = text?.toDoubleOrNull() ?: 0.0
         set(value) {
-            text = value.toString()
+            text = value.clean()
         }
 }

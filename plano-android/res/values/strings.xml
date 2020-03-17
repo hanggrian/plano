@@ -28,9 +28,7 @@
     <string name="close">Close</string>
     <string name="close_all">Close all</string>
     <string name="dark">Dark</string>
-    <string name="expand">Expand</string>
     <string name="f_series">F Series</string>
-    <string name="fill_background">Fill background</string>
     <string name="info">Info</string>
     <string name="language">Language</string>
     <string name="light">Light</string>
@@ -43,12 +41,11 @@
     <string name="reset">Reset</string>
     <string name="rotate">Rotate</string>
     <string name="save">Save</string>
-    <string name="shrink">Shrink</string>
     <string name="system_default">System default</string>
     <string name="theme">Theme</string>
-    <string name="thicken_border">Thicken border</string>
+    <string name="toggle_background">Toggle background</string>
+    <string name="toggle_border">Toggle border</string>
+    <string name="toggle_expand">Toggle expand</string>
     <string name="trim_box">Trim box</string>
-    <string name="unfill_background">Unfill background</string>
-    <string name="unthicken_border">Unthicken border</string>
     <string name="zoom">Zoom</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -10,7 +10,7 @@ class PlanoTest {
         val mediaBox = MediaBox(48.7, 32.5)
         mediaBox.populate(21.0, 14.85)
         assertEquals(4, mediaBox.size)
-        Truth.assertThat(mediaBox.map { it.x to it.y }).containsExactly(
+        assertThat(mediaBox.map { it.x to it.y }).containsExactly(
             0.0 to 0.0,
             21.0 to 0.0,
             0.0 to 14.85,
@@ -22,7 +22,7 @@ class PlanoTest {
         val mediaBox = MediaBox(79.0, 109.0)
         mediaBox.populate(21.5, 33.0)
         assertEquals(11, mediaBox.size)
-        Truth.assertThat(mediaBox.map { it.x to it.y }).containsExactly(
+        assertThat(mediaBox.map { it.x to it.y }).containsExactly(
             0.0 to 0.0,
             21.5 to 0.0,
             0.0 to 33.0,

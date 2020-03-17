@@ -298,9 +298,7 @@ class PlanoApp : Application(), Resources {
                                 value = mediaHeight
                             } row row col 4
                             addChild(
-                                RoundMorePaperButton(
-                                    this@PlanoApp, mediaWidthField, mediaHeightField
-                                )
+                                RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
                             ) row row++ col 5
 
                             styledCircle(radius = 6.0, id = R.style.circle_red) {
@@ -405,9 +403,9 @@ class PlanoApp : Application(), Resources {
         }
         stage.show()
 
-        if (isExpand) toggleExpand(false)
-        if (isFill) toggleFill(false)
-        if (isThick) toggleThick(false)
+        if (isExpand) toggleExpand()
+        if (isFill) toggleFill()
+        if (isThick) toggleThick()
         mediaWidthField.requestFocus()
     }
 
@@ -434,31 +432,19 @@ class PlanoApp : Application(), Resources {
         }
     }
 
-    private fun toggleExpand(showSnackbar: Boolean = true) {
+    private fun toggleExpand() {
         scaleProperty.value = when (scaleProperty.value) {
             SCALE_SMALL -> SCALE_BIG
             else -> SCALE_SMALL
         }
-        if (showSnackbar) rootPane.jfxSnackbar(
-            getString(if (scaleProperty.value == SCALE_BIG) R.string._expand_on else R.string._expand_off),
-            DURATION_SHORT
-        )
     }
 
-    private fun toggleFill(showSnackbar: Boolean = true) {
+    private fun toggleFill() {
         fillProperty.value = !fillProperty.value
-        if (showSnackbar) rootPane.jfxSnackbar(
-            getString(if (fillProperty.value) R.string._background_on else R.string._background_off),
-            DURATION_SHORT
-        )
     }
 
-    private fun toggleThick(showSnackbar: Boolean = true) {
+    private fun toggleThick() {
         thickProperty.value = !thickProperty.value
-        if (showSnackbar) rootPane.jfxSnackbar(
-            getString(if (thickProperty.value) R.string._border_on else R.string._border_off),
-            DURATION_SHORT
-        )
     }
 
     private suspend fun checkForUpdate() {

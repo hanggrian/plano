@@ -80,30 +80,6 @@ locale {
         en = "Toggle border"
         id = "Alihkan perbatasan"
     }
-    "_expand_on" {
-        en = "Boxes expanded."
-        id = "Kotak diperbesar."
-    }
-    "_expand_off" {
-        en = "Boxes shrinked."
-        id = "Kotak diperkecil."
-    }
-    "_background_on" {
-        en = "Background filled."
-        id = "Latar belakang terisi."
-    }
-    "_background_off" {
-        en = "Background unfilled"
-        id = "Latar belakang dikosongkan."
-    }
-    "_border_on" {
-        en = "Border thicken."
-        id = "Perbatasan dipertebal."
-    }
-    "_border_off" {
-        en = "Border thinned."
-        id = "Perbatasan dipertipis."
-    }
 
     "minimize" {
         en = "Minimize"
@@ -182,20 +158,17 @@ locale {
         id = "Lebihan"
     }
     "_bleed" {
-        en =
-            "Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed."
-        id =
-            "Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman."
+        en = "Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed."
+        id = "Lebihan disebarkan di sekitar kotang potong. " +
+            "Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman."
     }
     "allow_flip" {
         en = "Allow flip"
         id = "Izinkan putar"
     }
     "_allow_flip" {
-        en =
-            "When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available."
-        id =
-            "Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi."
+        en = "When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available."
+        id = "Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi."
     }
     "calculate" {
         en = "Calculate"

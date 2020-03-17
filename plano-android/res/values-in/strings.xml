@@ -28,9 +28,7 @@
     <string name="close">Tutup</string>
     <string name="close_all">Tutup semua</string>
     <string name="dark">Gelap</string>
-    <string name="expand">Memperluas</string>
     <string name="f_series">Seri F</string>
-    <string name="fill_background">Isi latar belakang</string>
     <string name="info">Jelaskan</string>
     <string name="language">Bahasa</string>
     <string name="light">Terang</string>
@@ -43,12 +41,11 @@
     <string name="reset">Atur ulang</string>
     <string name="rotate">Putar</string>
     <string name="save">Simpan</string>
-    <string name="shrink">Menyusut</string>
     <string name="system_default">Standar sistem</string>
     <string name="theme">Tema</string>
-    <string name="thicken_border">Perbesar batasan</string>
+    <string name="toggle_background">Alihkan latar belakang</string>
+    <string name="toggle_border">Alihkan perbatasan</string>
+    <string name="toggle_expand">Alihkan perkembangan</string>
     <string name="trim_box">Kotak potong</string>
-    <string name="unfill_background">Kosongkan latar belakang</string>
-    <string name="unthicken_border">Perkecil batasan</string>
     <string name="zoom">Perbesar</string>
 </resources>
