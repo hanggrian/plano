@@ -47,16 +47,18 @@ class ResultPane(
     private val app: PlanoApp,
     mediaWidth: Double,
     mediaHeight: Double,
-    trimWidth: Double,
-    trimHeight: Double,
-    bleed: Double,
+    private val trimWidth: Double,
+    private val trimHeight: Double,
+    private val bleed: Double,
     allowFlip: Boolean,
     private val scaleProperty: DoubleProperty,
     private val fillProperty: BooleanProperty,
     private val thickProperty: BooleanProperty
 ) : KtfxGridPane(), Resources by app {
 
-    private val infoLabels = mutableListOf<Label>()
+    private val mediaLabel: Label
+    private val trimSizeLabel: Label
+    private val trimLabel: Label
     private val infoFlowPane: FlowPane
     private val boxPaneContainer: AnchorPane
     private val closeButton: Button
@@ -73,20 +75,14 @@ class ResultPane(
                 alignment = Pos.CENTER_LEFT
                 styledCircle(radius = 4.0, id = R.style.circle_amber)
                 pane { minWidth = 5.0 }
-                infoLabels += styledLabel(
-                    "${mediaWidth.toCleanString()} x ${mediaHeight.toCleanString()}",
-                    id = R.style.label_info
-                )
+                mediaLabel = styledLabel(id = R.style.label_info)
             }
             hbox {
                 alignment = Pos.CENTER_LEFT
                 styledCircle(radius = 4.0, id = R.style.circle_red)
-                styledLabel(" ${mediaBox.size}", id = R.style.label_red)
+                trimSizeLabel = styledLabel(id = R.style.label_red)
                 pane { minWidth = 5.0 }
-                infoLabels += styledLabel(
-                    "${(trimWidth + bleed * 2).toCleanString()} x ${(trimHeight + bleed * 2).toCleanString()}",
-                    id = R.style.label_info
-                )
+                trimLabel = styledLabel(id = R.style.label_info)
             }
         } row 0 col 0 fillHeight false
         closeButton = addChild(RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close)) {
@@ -115,16 +111,21 @@ class ResultPane(
             separatorMenuItem()
             menuItem(getString(R.string.save)) {
                 onAction {
-                    val isDarkTheme =
-                        getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
-                    if (isDarkTheme) infoLabels.forEach { it.id = R.style.label_black }
+                    val isDarkTheme = getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
+                    if (isDarkTheme) {
+                        mediaLabel.id = R.style.label_black
+                        trimLabel.id = R.style.label_black
+                    }
                     val file = ResultFile()
                     this@ResultPane.snapshot(null, {}) {
                         ImageIO.write(it.image.toSwingImage(), "png", file)
                     }
                     GlobalScope.launch(Dispatchers.JavaFx) {
                         delay(500)
-                        if (isDarkTheme) infoLabels.forEach { it.id = null }
+                        if (isDarkTheme) {
+                            mediaLabel.id = null
+                            trimLabel.id = null
+                        }
                         app.rootPane.jfxSnackbar(
                             getString(R.string._save).format(file.name),
                             PlanoApp.DURATION_SHORT,
@@ -142,28 +143,20 @@ class ResultPane(
             contextMenu.show(scene.window)
         }
 
-        closeButton.visibleProperty()
-            .bind(this@ResultPane.hoverProperty() or contextMenu.showingProperty())
+        closeButton.visibleProperty().bind(this@ResultPane.hoverProperty() or contextMenu.showingProperty())
         populate(mediaBox)
     }
 
     private fun populate(mediaBox: MediaBox) {
+        mediaLabel.text = "${mediaBox.width.toCleanString()} x ${mediaBox.height.toCleanString()}"
+        trimSizeLabel.text = " ${mediaBox.size}"
+        trimLabel.text = "${(trimWidth + bleed * 2).toCleanString()} x ${(trimHeight + bleed * 2).toCleanString()}"
         infoFlowPane.prefWrapLengthProperty()
             .bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
-        boxPaneContainer.children += MediaBoxPane(
-            mediaBox,
-            scaleProperty,
-            fillProperty,
-            thickProperty
-        )
+        boxPaneContainer.children += MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
         mediaBox.forEach {
-            boxPaneContainer.children += TrimBoxPane(
-                it,
-                scaleProperty,
-                fillProperty,
-                thickProperty
-            )
+            boxPaneContainer.children += TrimBoxPane(it, scaleProperty, fillProperty, thickProperty)
         }
     }
 
