@@ -3,15 +3,13 @@
     -color-button-hover: rgba(0, 0, 0, 0.27);
     -color-dialog-overlay: rgba(0, 0, 0, 0.54);
 
-    /* Amber 600 */
-    -color-amber: #ffb300; // s
-    -color-amber-light: #ffe54c;
-    /* Red 500 */
-    -color-red: #f44336;
-    -color-red-light: #ff7961;
+    -amber-500: #ffc107;
+    -amber-500-light: #fff350;
+    -red-500: #f44336;
+    -red-500-light: #ff7961;
 
     -fx-base: white;
-    -fx-accent: -color-amber;
+    -fx-accent: -amber-500;
     -fx-font-family: "Roboto";
 }
 
@@ -82,20 +80,20 @@
 
 /** MediaBox and TrimBox */
 .box-media-background {
-    -fx-background-color: -color-amber-light;
+    -fx-background-color: -amber-500-light;
 }
 .box-media-border {
-    -fx-border-color: -color-amber;
+    -fx-border-color: -amber-500;
     -fx-border-width: 2;
 }
 .box-media-border-thick {
     -fx-border-width: 4;
 }
 .box-trim-background {
-    -fx-background-color: -color-red-light;
+    -fx-background-color: -red-500-light;
 }
 .box-trim-border {
-    -fx-border-color: -color-red;
+    -fx-border-color: -red-500;
     -fx-border-width: 2;
 }
 .box-trim-border-thick {
@@ -107,14 +105,14 @@
     -fx-fill: -fx-accent;
 }
 #circle-red {
-    -fx-fill: -color-red;
+    -fx-fill: -red-500;
 }
 #label-info {
     -fx-font-family: "Roboto Condensed";
 }
 #label-red { // displaying trim boxes count
     -fx-font-family: "Roboto Condensed Bold";
-    -fx-text-fill: -color-red;
+    -fx-text-fill: -red-500;
 }
 #label-black { // saving result
     -fx-text-fill: black;

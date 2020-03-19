@@ -13,8 +13,7 @@ fun isDarkTheme(theme: String): Boolean = when (theme) {
     THEME_SYSTEM -> runCatching {
         when {
             SystemUtils.IS_OS_MAC_OSX -> {
-                val process =
-                    ProcessBuilder("defaults", "read", "-g", "AppleInterfaceStyle").start()
+                val process = ProcessBuilder("defaults", "read", "-g", "AppleInterfaceStyle").start()
                 val result = process.inputStream.reader(Charsets.UTF_8).use { it.readText() }
                 process.waitFor(3, TimeUnit.SECONDS)
                 THEME_DARK in result

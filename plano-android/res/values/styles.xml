@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.Plano" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorAccent">@color/amber</item>
+        <item name="colorAccent">@color/amber_500</item>
     </style>
 
     <style name="Circle">
@@ -20,6 +20,10 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+    <style name="Widget.Plano.TextView.Column" parent="Widget.Plano.TextView">
+        <item name="android:layout_width">80dp</item>
     </style>
 
     <style name="Widget.Plano.EditText" parent="Widget.AppCompat.EditText">

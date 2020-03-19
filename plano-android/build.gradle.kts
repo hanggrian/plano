@@ -80,6 +80,7 @@ dependencies {
     implementation(androidx("cardview", version = "1.0.0"))
     implementation(material("$VERSION_ANDROIDX-beta01"))
 
+    implementation(processPhoenix())
     implementation(preferencex())
 
     debugImplementation(squareup("leakcanary", "leakcanary-android", VERSION_LEAKCANARY))

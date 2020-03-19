@@ -54,7 +54,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/mediaToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -68,7 +68,7 @@
 
                         <TextView
                             android:id="@+id/mediaText"
-                            style="@style/Widget.Plano.TextView"
+                            style="@style/Widget.Plano.TextView.Column"
                             android:text="@string/media_box" />
 
                         <EditText
@@ -88,7 +88,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/trimToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,7 +102,7 @@
 
                         <TextView
                             android:id="@+id/trimText"
-                            style="@style/Widget.Plano.TextView"
+                            style="@style/Widget.Plano.TextView.Column"
                             android:text="@string/trim_box" />
 
                         <EditText
@@ -122,7 +122,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/bleedToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -136,7 +136,7 @@
 
                         <TextView
                             android:id="@+id/bleedText"
-                            style="@style/Widget.Plano.TextView"
+                            style="@style/Widget.Plano.TextView.Column"
                             android:text="@string/bleed" />
 
                         <EditText

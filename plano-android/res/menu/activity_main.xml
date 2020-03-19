@@ -5,20 +5,20 @@
     tools:ignore="AlwaysShowAction">
 
     <item
-        android:id="@+id/cloasAllItem"
+        android:id="@+id/closeAllItem"
         android:icon="@drawable/btn_close"
         android:title="@string/close_all"
         android:visible="false"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/backgroundMenu"
+        android:id="@+id/backgroundItem"
         android:icon="@drawable/btn_background_fill"
         android:title="@string/toggle_background"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/borderMenu"
+        android:id="@+id/borderItem"
         android:icon="@drawable/btn_border_thin"
         android:title="@string/toggle_border"
         app:showAsAction="always" />
@@ -31,6 +31,26 @@
 
     <item android:title="Settings">
         <menu>
+
+            <item android:title="@string/theme">
+                <menu>
+                    <group android:checkableBehavior="single">
+                        <item
+                            android:id="@+id/themeSystemItem"
+                            android:title="@string/system_default"
+                            app:showAsAction="never" />
+                        <item
+                            android:id="@+id/themeLightItem"
+                            android:title="@string/light"
+                            app:showAsAction="never" />
+                        <item
+                            android:id="@+id/themeDarkItem"
+                            android:title="@string/dark"
+                            app:showAsAction="never" />
+                    </group>
+                </menu>
+            </item>
+
             <item
                 android:id="@+id/checkForUpdateItem"
                 android:title="@string/check_for_update"

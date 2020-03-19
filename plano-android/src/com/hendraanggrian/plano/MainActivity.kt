@@ -11,7 +11,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: MainAdapter
     private lateinit var saver: PrefsSaver
 
+    @JvmField @BindPref("theme") var themeId = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     @JvmField @BindPref("media_width") var mediaWidth = 0f
     @JvmField @BindPref("media_height") var mediaHeight = 0f
     @JvmField @BindPref("trim_width") var trimWidth = 0f
@@ -69,6 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
         mediaToolbar.bindPaperSizes()
         trimToolbar.bindPaperSizes()
         mediaText.doOnLayout {
@@ -104,17 +108,26 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        if (themeId != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) AppCompatDelegate.setDefaultNightMode(themeId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
-        clearItem = menu.findItem(R.id.cloasAllItem)
+        clearItem = menu.findItem(R.id.closeAllItem)
+        menu.findItem(
+            when (themeId) {
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> R.id.themeSystemItem
+                AppCompatDelegate.MODE_NIGHT_NO -> R.id.themeLightItem
+                else -> R.id.themeDarkItem
+            }
+        ).isChecked = true
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.cloasAllItem -> {
+            R.id.closeAllItem -> {
                 val temp = adapter.toList()
                 adapter.removeAll()
                 recyclerView.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {
@@ -137,6 +150,15 @@ class MainActivity : AppCompatActivity() {
                     }
                     else -> recyclerView.longSnackbar(getString(R.string._update_unavailable))
                 }
+            }
+            R.id.themeSystemItem, R.id.themeLightItem, R.id.themeDarkItem -> {
+                themeId = when (item.itemId) {
+                    R.id.themeSystemItem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    R.id.themeLightItem -> AppCompatDelegate.MODE_NIGHT_NO
+                    else -> AppCompatDelegate.MODE_NIGHT_YES
+                }
+                saver.saveAsync()
+                AppCompatDelegate.setDefaultNightMode(themeId)
             }
             R.id.aboutItem -> AboutDialogFragment()
                 .also { it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this) }
