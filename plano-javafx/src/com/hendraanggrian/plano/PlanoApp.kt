@@ -14,8 +14,7 @@ import com.hendraanggrian.plano.util.getResource
 import com.hendraanggrian.plano.util.isDarkTheme
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
-import com.hendraanggrian.prefs.PrefsSaver
-import com.hendraanggrian.prefs.jvm.setDebug
+import com.hendraanggrian.prefs.bind
 import com.hendraanggrian.prefs.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
 import java.util.ResourceBundle
@@ -131,7 +130,7 @@ class PlanoApp : Application(), Resources {
     lateinit var rootPane: StackPane
     lateinit var outputPane: FlowPane
 
-    private lateinit var saver: PrefsSaver
+    private lateinit var saver: Prefs.Saver
     override lateinit var resourceBundle: ResourceBundle
 
     @JvmField @BindPref("theme") var theme = THEME_SYSTEM
@@ -148,7 +147,7 @@ class PlanoApp : Application(), Resources {
 
     override fun init() {
         MediaBox.DEBUG = BuildConfig.DEBUG
-        Prefs.setDebug(BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) Prefs.setLogger(Prefs.Logger.System)
         saver = Prefs.userRoot().node(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
     }
@@ -424,7 +423,7 @@ class PlanoApp : Application(), Resources {
 
     private fun setTheme(scene: Scene, theme: String) {
         this@PlanoApp.theme = theme
-        saver.saveAsync()
+        saver.save()
         val darkTheme = getResource(R.style._plano_dark)
         when {
             isDarkTheme(theme) -> if (darkTheme !in scene.stylesheets) scene.stylesheets += darkTheme

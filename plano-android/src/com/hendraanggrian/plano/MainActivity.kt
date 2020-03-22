@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import com.hendraanggrian.bundler.Bundler
@@ -27,7 +27,6 @@ import com.hendraanggrian.plano.dialogs.AboutDialogFragment
 import com.hendraanggrian.plano.util.clean
 import com.hendraanggrian.prefs.BindPref
 import com.hendraanggrian.prefs.Prefs
-import com.hendraanggrian.prefs.PrefsSaver
 import com.hendraanggrian.prefs.android.bind
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -39,9 +38,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private var clearItem: MenuItem? = null
     private lateinit var adapter: MainAdapter
-    private lateinit var saver: PrefsSaver
+    private lateinit var saver: Prefs.Saver
 
-    @JvmField @BindPref("theme") var themeId = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    @JvmField @BindPref("theme") var theme2 = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     @JvmField @BindPref("media_width") var mediaWidth = 0f
     @JvmField @BindPref("media_height") var mediaHeight = 0f
     @JvmField @BindPref("trim_width") var trimWidth = 0f
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         saver = Prefs.bind(this)
 
-        viewModel = ViewModelProviders.of(this).get()
+        viewModel = ViewModelProvider(this).get()
         viewModel.emptyData.observe(this) { isEmpty ->
             when {
                 isEmpty -> {
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                     trimWidth = trimWidthEdit.value
                     trimHeight = trimHeightEdit.value
                     bleed = bleedEdit.value
-                    saver.saveAsync()
+                    saver.save()
 
                     getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
                     adapter.put(MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble()).apply {
@@ -108,15 +107,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        if (themeId != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) AppCompatDelegate.setDefaultNightMode(themeId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
         clearItem = menu.findItem(R.id.closeAllItem)
         menu.findItem(
-            when (themeId) {
+            when (theme2) {
                 AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> R.id.themeSystemItem
                 AppCompatDelegate.MODE_NIGHT_NO -> R.id.themeLightItem
                 else -> R.id.themeDarkItem
@@ -152,13 +149,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.themeSystemItem, R.id.themeLightItem, R.id.themeDarkItem -> {
-                themeId = when (item.itemId) {
+                theme2 = when (item.itemId) {
                     R.id.themeSystemItem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                     R.id.themeLightItem -> AppCompatDelegate.MODE_NIGHT_NO
                     else -> AppCompatDelegate.MODE_NIGHT_YES
                 }
-                saver.saveAsync()
-                AppCompatDelegate.setDefaultNightMode(themeId)
+                saver.save()
+                AppCompatDelegate.setDefaultNightMode(theme2)
             }
             R.id.aboutItem -> AboutDialogFragment()
                 .also { it.arguments = Bundler.wrapExtras(AboutDialogFragment::class.java, this) }
