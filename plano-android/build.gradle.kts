@@ -75,10 +75,10 @@ dependencies {
     implementation(androidx("core", "core-ktx"))
     implementation(androidx("appcompat"))
     implementation(androidx("preference"))
-    implementation(androidx("coordinatorlayout", version = "$VERSION_ANDROIDX-beta01"))
-    implementation(androidx("recyclerview", version = "$VERSION_ANDROIDX-beta01"))
+    implementation(androidx("coordinatorlayout"))
+    implementation(androidx("recyclerview"))
     implementation(androidx("cardview", version = "1.0.0"))
-    implementation(material("$VERSION_ANDROIDX-beta01"))
+    implementation(material())
 
     implementation(processPhoenix())
     implementation(preferencex())

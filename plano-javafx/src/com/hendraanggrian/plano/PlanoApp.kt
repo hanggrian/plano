@@ -148,7 +148,7 @@ class PlanoApp : Application(), Resources {
     override fun init() {
         MediaBox.DEBUG = BuildConfig.DEBUG
         if (BuildConfig.DEBUG) Prefs.setLogger(Prefs.Logger.System)
-        saver = Prefs.userRoot().node(BuildConfig.GROUP.replace('.', '/')).bind(this)
+        saver = Prefs.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
     }
 

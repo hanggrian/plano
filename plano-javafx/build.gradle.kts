@@ -78,11 +78,7 @@ tasks {
         addField("HOMEPAGE", RELEASE_HOMEPAGE)
     }
 
-    named<Jar>("jar") {
-        manifest {
-            attributes(mapOf("Main-Class" to application.mainClassName))
-        }
-    }
+    named<Jar>("jar") { manifest { attributes(mapOf("Main-Class" to application.mainClassName)) } }
 
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         destinationDirectory.set(buildDir.resolve("releases"))

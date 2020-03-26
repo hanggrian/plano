@@ -37,8 +37,8 @@ import ktfx.layouts.pane
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.styledCircle
 import ktfx.layouts.styledLabel
+import ktfx.listeners.capture
 import ktfx.listeners.onContextMenuRequested
-import ktfx.listeners.snapshot
 import ktfx.minus
 import ktfx.or
 import ktfx.times
@@ -117,9 +117,7 @@ class ResultPane(
                         trimLabel.id = R.style.label_black
                     }
                     val file = ResultFile()
-                    this@ResultPane.snapshot(null, {}) {
-                        ImageIO.write(it.image.toSwingImage(), "png", file)
-                    }
+                    this@ResultPane.capture { ImageIO.write(it.image.toSwingImage(), "png", file) }
                     GlobalScope.launch(Dispatchers.JavaFx) {
                         delay(500)
                         if (isDarkTheme) {
