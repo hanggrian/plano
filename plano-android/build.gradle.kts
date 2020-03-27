@@ -77,7 +77,6 @@ dependencies {
     implementation(androidx("preference"))
     implementation(androidx("coordinatorlayout"))
     implementation(androidx("recyclerview"))
-    implementation(androidx("cardview", version = "1.0.0"))
     implementation(material())
 
     implementation(processPhoenix())

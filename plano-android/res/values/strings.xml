@@ -5,7 +5,6 @@
     <string name="_bleed">Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed.</string>
     <string name="_boxes_cleared">Boxes cleared.</string>
     <string name="_desc">Calculate how many trim boxes fit in a media box</string>
-    <string name="_incomplete">Media and trim size need to be filled.</string>
     <string name="_media_box">Source paper size, a direct parent of trim size.</string>
     <string name="_please_restart">Restart app to see effect.</string>
     <string name="_save">Saved as %s</string>

@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/emptyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:paddingTop="?actionBarSize"
                 android:paddingBottom="@dimen/medium">
 
-                <androidx.appcompat.widget.Toolbar
+                <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/mediaToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -66,7 +66,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/ci_media" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/mediaText"
                             style="@style/Widget.Plano.TextView.Column"
                             android:text="@string/media_box" />
@@ -75,7 +75,7 @@
                             android:id="@+id/mediaWidthEdit"
                             style="@style/Widget.Plano.EditText" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/Widget.Plano.TextView"
                             android:text="x" />
 
@@ -83,9 +83,9 @@
                             android:id="@+id/mediaHeightEdit"
                             style="@style/Widget.Plano.EditText" />
                     </LinearLayout>
-                </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.MaterialToolbar>
 
-                <androidx.appcompat.widget.Toolbar
+                <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/trimToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -100,7 +100,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/ci_trim" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/trimText"
                             style="@style/Widget.Plano.TextView.Column"
                             android:text="@string/trim_box" />
@@ -109,7 +109,7 @@
                             android:id="@+id/trimWidthEdit"
                             style="@style/Widget.Plano.EditText" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/Widget.Plano.TextView"
                             android:text="x" />
 
@@ -117,9 +117,9 @@
                             android:id="@+id/trimHeightEdit"
                             style="@style/Widget.Plano.EditText" />
                     </LinearLayout>
-                </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.MaterialToolbar>
 
-                <androidx.appcompat.widget.Toolbar
+                <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/bleedToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -134,7 +134,7 @@
                             android:layout_height="wrap_content"
                             android:src="@drawable/ci_empty" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/bleedText"
                             style="@style/Widget.Plano.TextView.Column"
                             android:text="@string/bleed" />
@@ -143,10 +143,10 @@
                             android:id="@+id/bleedEdit"
                             style="@style/Widget.Plano.EditText" />
                     </LinearLayout>
-                </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.MaterialToolbar>
             </LinearLayout>
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +13,6 @@
         android:layout_marginEnd="@dimen/medium"
         android:layout_marginBottom="@dimen/small"
         android:foreground="?selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
+        app:cardBackgroundColor="?colorPrimary"
         app:cardElevation="@dimen/small" />
 </FrameLayout>

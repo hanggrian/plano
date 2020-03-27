@@ -1,5 +1,7 @@
 package com.hendraanggrian.plano
 
+import java.io.Serializable
+
 interface Box {
     val width: Double
     val height: Double
@@ -10,13 +12,13 @@ class TrimBox(
     val y: Double,
     override val width: Double,
     override val height: Double
-) : Box
+) : Box, Serializable
 
 class MediaBox(
     override var width: Double,
     override var height: Double,
     private val trimBoxes: MutableList<TrimBox> = mutableListOf()
-) : Box, List<TrimBox> by trimBoxes {
+) : Box, List<TrimBox> by trimBoxes, Serializable {
 
     companion object {
         var DEBUG = false // change according to BuildConfig

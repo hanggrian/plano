@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Plano" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorAccent">@color/amber_500</item>
-        <item name="colorPrimary">#1d1d1d</item>
+        <item name="colorPrimary">#1e1e1e</item>
         <item name="colorPrimaryDark">#121212</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">?colorPrimaryDark</item>
     </style>
 </resources>

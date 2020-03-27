@@ -5,7 +5,6 @@
     <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman.</string>
     <string name="_boxes_cleared">Konten terhapus.</string>
     <string name="_desc">Hitung berapa banyak kotak potong dalam kotak media</string>
-    <string name="_incomplete">Kotak media dan potong perlu diisi.</string>
     <string name="_media_box">Sumber ukuran kertas, induk langsung dari ukuran potong.</string>
     <string name="_please_restart">Mulai ulang aplikasi untuk melihat perubahan.</string>
     <string name="_save">Terimpan sebagai %s</string>

@@ -29,37 +29,32 @@
         android:title="@string/allow_flip"
         app:showAsAction="never" />
 
-    <item android:title="Settings">
+    <item android:title="@string/theme">
         <menu>
-
-            <item android:title="@string/theme">
-                <menu>
-                    <group android:checkableBehavior="single">
-                        <item
-                            android:id="@+id/themeSystemItem"
-                            android:title="@string/system_default"
-                            app:showAsAction="never" />
-                        <item
-                            android:id="@+id/themeLightItem"
-                            android:title="@string/light"
-                            app:showAsAction="never" />
-                        <item
-                            android:id="@+id/themeDarkItem"
-                            android:title="@string/dark"
-                            app:showAsAction="never" />
-                    </group>
-                </menu>
-            </item>
-
-            <item
-                android:id="@+id/checkForUpdateItem"
-                android:title="@string/check_for_update"
-                app:showAsAction="never" />
-
-            <item
-                android:id="@+id/aboutItem"
-                android:title="@string/about"
-                app:showAsAction="never" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/themeSystemItem"
+                    android:title="@string/system_default"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/themeLightItem"
+                    android:title="@string/light"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/themeDarkItem"
+                    android:title="@string/dark"
+                    app:showAsAction="never" />
+            </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/checkForUpdateItem"
+        android:title="@string/check_for_update"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/aboutItem"
+        android:title="@string/about"
+        app:showAsAction="never" />
 </menu>

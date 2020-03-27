@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.isNotEmpty
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.hendraanggrian.plano.dialogs.ResultDialogFragment
 
-class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>(),
+class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     MutableList<MediaBox> by arrayListOf() {
     private lateinit var context: Context
 
@@ -29,7 +30,7 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
         val mediaBox = get(position)
         if (holder.card.isNotEmpty()) holder.card.removeAllViews()
         holder.card.addView(RelativeLayout(context).also { media ->
-            ViewCompat.setBackground(media, ContextCompat.getDrawable(context, R.drawable.bg_media))
+            ViewCompat.setBackground(media, ContextCompat.getDrawable(context, mediaBackground))
             media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             media.post {
                 media.layoutParams.height = (media.width * mediaBox.height / mediaBox.width).toInt()
@@ -37,7 +38,7 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
                 media.post {
                     mediaBox.forEach { trimBox ->
                         media.addView(View(context).also { trim ->
-                            ViewCompat.setBackground(trim, ContextCompat.getDrawable(context, R.drawable.bg_trim))
+                            ViewCompat.setBackground(trim, ContextCompat.getDrawable(context, trimBackground))
                             val widthRatio = media.width / mediaBox.width
                             val heightRatio = media.height / mediaBox.height
                             trim.layoutParams = RelativeLayout.LayoutParams(
@@ -54,27 +55,48 @@ class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
                 }
             }
         })
+        holder.card.setOnClickListener {
+            ResultDialogFragment()
+                .also { it.arguments = bundleOf("mediaBox" to mediaBox) }
+                .show((context as AppCompatActivity).supportFragmentManager, null)
+        }
     }
 
     fun put(element: MediaBox) {
-        if (isEmpty()) emptyData.value = false
+        if (isEmpty()) viewModel.emptyData.value = false
         add(element)
         notifyItemInserted(size - 1)
     }
 
     fun putAll(elements: Collection<MediaBox>) {
-        if (isEmpty()) emptyData.value = false
+        if (isEmpty()) viewModel.emptyData.value = false
         val start = size + 1
         addAll(elements)
         notifyItemRangeInserted(start, size)
     }
 
     fun removeAll() {
-        emptyData.value = true
+        viewModel.emptyData.value = true
         val size = size
         clear()
         notifyItemRangeRemoved(0, size)
     }
+
+    private val mediaBackground: Int
+        get() = when {
+            viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_media_fill_thick
+            !viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_media_unfill_thick
+            viewModel.fillData.value!! && !viewModel.thickData.value!! -> R.drawable.bg_media_fill_thin
+            else -> R.drawable.bg_media_unfill_thin
+        }
+
+    private val trimBackground: Int
+        get() = when {
+            viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_trim_fill_thick
+            !viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_trim_unfill_thick
+            viewModel.fillData.value!! && !viewModel.thickData.value!! -> R.drawable.bg_trim_fill_thin
+            else -> R.drawable.bg_trim_unfill_thin
+        }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val card: ViewGroup = itemView.findViewById(R.id.card)

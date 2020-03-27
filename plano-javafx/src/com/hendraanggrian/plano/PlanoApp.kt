@@ -133,8 +133,8 @@ class PlanoApp : Application(), Resources {
     private lateinit var saver: Prefs.Saver
     override lateinit var resourceBundle: ResourceBundle
 
-    @JvmField @BindPref("theme") var theme = THEME_SYSTEM
     @JvmField @BindPref("language") var language = Language.ENGLISH.code
+    @JvmField @BindPref("theme") var theme = THEME_SYSTEM
     @JvmField @BindPref("is_expand") var isExpand = false
     @JvmField @BindPref("is_fill") var isFill = false
     @JvmField @BindPref("is_thick") var isThick = false
