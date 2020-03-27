@@ -3,6 +3,8 @@ package com.hendraanggrian.plano
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -39,6 +41,14 @@ class MainActivity : AppCompatActivity() {
     private var clearItem: MenuItem? = null
     private lateinit var adapter: MainAdapter
     private lateinit var saver: Prefs.Saver
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            viewModel.validData.value = mediaWidthEdit.value <= 0 || mediaHeightEdit.value <= 0 ||
+                trimWidthEdit.value <= 0 || trimHeightEdit.value <= 0
+        }
+    }
 
     @JvmField @BindPref("theme") var theme2 = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     @JvmField @BindPref("media_width") var mediaWidth = 0f
@@ -55,57 +65,53 @@ class MainActivity : AppCompatActivity() {
         saver = Prefs.bind(this)
 
         viewModel = ViewModelProvider(this).get()
+        viewModel.validData.observe(this) { isValid ->
+            when {
+                isValid && !fab.isShown -> fab.show()
+                !isValid && fab.isShown -> fab.hide()
+            }
+        }
         viewModel.emptyData.observe(this) { isEmpty ->
+            emptyText.visibility = if (isEmpty) View.VISIBLE else View.GONE
+            clearItem?.isVisible = !isEmpty
             when {
                 isEmpty -> {
-                    emptyText.visibility = View.VISIBLE
-                    clearItem?.isVisible = false
                     appBar.setExpanded(true)
                     mediaWidthEdit.requestFocus()
                 }
-                else -> {
-                    emptyText.visibility = View.GONE
-                    clearItem?.isVisible = true
-                    recyclerView.scrollToPosition(adapter.size - 1)
-                }
+                else -> recyclerView.scrollToPosition(adapter.size - 1)
             }
         }
 
+        mediaWidthEdit.addTextChangedListener(textWatcher); mediaHeightEdit.addTextChangedListener(textWatcher)
+        trimWidthEdit.addTextChangedListener(textWatcher); trimHeightEdit.addTextChangedListener(textWatcher)
+        bleedEdit.addTextChangedListener(textWatcher)
+
         toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
-        mediaToolbar.bindPaperSizes()
-        trimToolbar.bindPaperSizes()
+        mediaToolbar.bindPaperSizes(); trimToolbar.bindPaperSizes()
         mediaText.doOnLayout {
             trimText.width = mediaText.width
             bleedText.width = mediaText.width
         }
 
-        mediaWidthEdit.setText(mediaWidth.clean())
-        mediaHeightEdit.setText(mediaHeight.clean())
-        trimWidthEdit.setText(trimWidth.clean())
-        trimHeightEdit.setText(trimHeight.clean())
+        mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
+        trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
         bleedEdit.setText(bleed.clean())
 
         adapter = MainAdapter(viewModel.emptyData)
         recyclerView.adapter = adapter
         fab.setOnClickListener {
-            when {
-                mediaWidthEdit.value <= 0 || mediaHeightEdit.value <= 0 ||
-                    trimWidthEdit.value <= 0 || trimHeightEdit.value <= 0 ->
-                    recyclerView.snackbar(getString(R.string._incomplete))
-                else -> {
-                    mediaWidth = mediaWidthEdit.value
-                    mediaHeight = mediaHeightEdit.value
-                    trimWidth = trimWidthEdit.value
-                    trimHeight = trimHeightEdit.value
-                    bleed = bleedEdit.value
-                    saver.save()
+            mediaWidth = mediaWidthEdit.value
+            mediaHeight = mediaHeightEdit.value
+            trimWidth = trimWidthEdit.value
+            trimHeight = trimHeightEdit.value
+            bleed = bleedEdit.value
+            saver.save()
 
-                    getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-                    adapter.put(MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble()).apply {
-                        populate(trimWidth, trimHeight, bleed.toDouble(), allowFlip)
-                    })
-                }
-            }
+            getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
+            adapter.put(MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble()).apply {
+                populate(trimWidth, trimHeight, bleed.toDouble(), allowFlip)
+            })
         }
     }
 

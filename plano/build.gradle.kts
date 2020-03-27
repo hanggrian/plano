@@ -258,10 +258,4 @@ locale {
         en = "CLOSE"
         id = "TUTUP"
     }
-
-    // android-only
-    "_incomplete" {
-        en = "Media and trim size need to be filled."
-        id = "Kotak media dan potong perlu diisi."
-    }
 }

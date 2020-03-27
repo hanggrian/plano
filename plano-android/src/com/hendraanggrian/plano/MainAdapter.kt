@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 class MainAdapter(private val emptyData: MutableLiveData<Boolean>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     MutableList<MediaBox> by arrayListOf() {
-
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
