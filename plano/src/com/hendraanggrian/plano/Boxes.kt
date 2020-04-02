@@ -29,21 +29,23 @@ class MediaBox(
     private var _bleed: Double? = null
     private var _allowFlip: Boolean? = null
 
-    fun rotate() {
-        width = height.also { height = width }
-        populate(_trimWidth!!, _trimHeight!!, _bleed!!, _allowFlip!!)
-    }
-
     val trimWidth: Double get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
 
-    val trimHeight: Double get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
+    val trimHeight: Double get() = checkNotNull(_trimHeight) { "Must call populate at least once" }
+
+    val bleed: Double get() = checkNotNull(_bleed) { "Must call populate at least once" }
 
     var allowFlip: Boolean
         get() = checkNotNull(_allowFlip) { "Must call populate at least once" }
         set(value) {
             _allowFlip = value
-            populate(_trimWidth!!, _trimHeight!!, _bleed!!, value)
+            populate(trimWidth, trimHeight, bleed, value)
         }
+
+    fun rotate() {
+        width = height.also { height = width }
+        populate(trimWidth, trimHeight, bleed, allowFlip)
+    }
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
     fun populate(

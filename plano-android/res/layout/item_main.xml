@@ -14,5 +14,71 @@
         android:layout_marginBottom="@dimen/small"
         android:foreground="?selectableItemBackground"
         app:cardBackgroundColor="?colorPrimary"
-        app:cardElevation="@dimen/small" />
+        app:cardElevation="@dimen/small">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:paddingTop="@dimen/small"
+                android:paddingEnd="@dimen/medium"
+                android:paddingRight="@dimen/medium"
+                android:paddingBottom="@dimen/small">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ci_media" />
+
+                <TextView
+                    android:id="@+id/mediaText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small"
+                    android:layout_marginLeft="@dimen/small"
+                    android:text="90x120"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/medium"
+                    android:layout_marginLeft="@dimen/medium"
+                    android:src="@drawable/ci_trim" />
+
+                <TextView
+                    android:id="@+id/trimCountText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small"
+                    android:layout_marginLeft="@dimen/small"
+                    android:text="4"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                    android:textColor="@color/red_500"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/trimText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small"
+                    android:layout_marginLeft="@dimen/small"
+                    android:text="90x120"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/mediaContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

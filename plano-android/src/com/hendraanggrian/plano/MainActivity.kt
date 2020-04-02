@@ -87,11 +87,9 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MainAdapter(viewModel)
         recyclerView.adapter = adapter
-        fab.setOnClickListener {
-            mediaWidth = mediaWidthEdit.value; mediaHeight = mediaHeightEdit.value
-            trimWidth = trimWidthEdit.value; trimHeight = trimHeightEdit.value
-            bleed = bleedEdit.value
 
+        fab.setOnClickListener {
+            adjust()
             getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
             val mediaBox = MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble())
             mediaBox.populate(trimWidth.toDouble(), trimHeight.toDouble(), bleed.toDouble(), allowFlip)
@@ -101,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        adjust()
         saver.save()
     }
 
@@ -187,6 +186,12 @@ class MainActivity : AppCompatActivity() {
             R.id.aboutItem -> AboutDialogFragment().show(supportFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun adjust() {
+        mediaWidth = mediaWidthEdit.value; mediaHeight = mediaHeightEdit.value
+        trimWidth = trimWidthEdit.value; trimHeight = trimHeightEdit.value
+        bleed = bleedEdit.value
     }
 
     private fun Toolbar.bindPaperSizes() {

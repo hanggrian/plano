@@ -15,7 +15,6 @@ import javafx.scene.control.ContextMenu
 import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.FlowPane
-import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -42,6 +41,7 @@ import ktfx.listeners.onContextMenuRequested
 import ktfx.minus
 import ktfx.or
 import ktfx.times
+import javax.imageio.ImageIO
 
 class ResultPane(
     private val app: PlanoApp,
@@ -149,8 +149,7 @@ class ResultPane(
         mediaLabel.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimSizeLabel.text = " ${mediaBox.size}"
         trimLabel.text = "${(trimWidth + bleed * 2).clean()} x ${(trimHeight + bleed * 2).clean()}"
-        infoFlowPane.prefWrapLengthProperty()
-            .bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
+        infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
         boxPaneContainer.children += MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
         mediaBox.forEach {

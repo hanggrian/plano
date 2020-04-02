@@ -24,9 +24,9 @@ dependencies {
     api(ktor("client-okhttp"))
     api(ktor("client-gson"))
     api(apache("maven-artifact", VERSION_MAVEN))
+    api(apache("commons-math3", VERSION_COMMONS_MATH))
 
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
-    testImplementation(apache("commons-math3", VERSION_COMMONS_MATH))
     testImplementation(google("truth", "truth", VERSION_TRUTH))
 
     configuration {
