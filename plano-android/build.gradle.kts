@@ -63,12 +63,12 @@ dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
-    implementation(hendraanggrian("prefs", "prefs-android", VERSION_PREFS))
-    kapt(hendraanggrian("prefs", "prefs-compiler", VERSION_PREFS))
+    implementation(hendraanggrian("prefy", "prefy-android", VERSION_PREFY))
+    kapt(hendraanggrian("prefy", "prefy-compiler", VERSION_PREFY))
     implementation(hendraanggrian("bundler", "bundler", VERSION_BUNDLER))
     kapt(hendraanggrian("bundler", "bundler-compiler", VERSION_BUNDLER))
 
-    implementation(androidx("multidex", version = VERSION_MULTIDEX))
+    // implementation(androidx("multidex", version = VERSION_MULTIDEX))
     implementation(androidx("lifecycle", "lifecycle-extensions", VERSION_LIFECYCLE))
     implementation(androidx("lifecycle", "lifecycle-viewmodel-ktx", VERSION_LIFECYCLE))
     implementation(androidx("lifecycle", "lifecycle-livedata-ktx", VERSION_LIFECYCLE))
@@ -82,7 +82,7 @@ dependencies {
     implementation(processPhoenix())
     implementation(preferencex())
 
-    debugImplementation(squareup("leakcanary", "leakcanary-android", VERSION_LEAKCANARY))
+    debugImplementation(leakCanary())
 
     configuration {
         invoke(ktlint())

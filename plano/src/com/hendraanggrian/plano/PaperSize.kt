@@ -3,7 +3,7 @@ package com.hendraanggrian.plano
 import com.hendraanggrian.plano.util.clean
 
 /** Common paper sizes as documented on [Wikipedia](https://en.wikipedia.org/wiki/Paper_size). */
-enum class PaperSize(titlePrefix: String, val width: Double, val height: Double) {
+enum class PaperSize(val title: String, val width: Double, val height: Double) {
     A0("A0", 118.9, 84.1),
     A1("A1", 84.1, 59.4),
     A2("A2", 59.4, 42.0),
@@ -59,9 +59,9 @@ enum class PaperSize(titlePrefix: String, val width: Double, val height: Double)
         val SERIES_F: List<PaperSize> = listOf(F0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10)
     }
 
-    val title: String = "$titlePrefix  \t${width.clean()} x ${height.clean()}"
+    val sizeText: String = "${width.clean()} x ${height.clean()}"
 
-    operator fun component1(): Double = width
-    operator fun component2(): Double = height
-    operator fun component3(): String = title
+    operator fun component1(): String = title
+    operator fun component2(): Double = width
+    operator fun component3(): Double = height
 }

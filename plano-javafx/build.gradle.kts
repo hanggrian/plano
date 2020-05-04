@@ -33,8 +33,8 @@ dependencies {
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
 
-    implementation(hendraanggrian("prefs", "prefs-jvm", VERSION_PREFS))
-    kapt(hendraanggrian("prefs", "prefs-compiler", VERSION_PREFS))
+    implementation(hendraanggrian("prefy", "prefy-jvm", VERSION_PREFY))
+    kapt(hendraanggrian("prefy", "prefy-compiler", VERSION_PREFY))
 
     configuration {
         invoke(ktlint())
@@ -105,11 +105,11 @@ packr {
     }
     windows32 {
         name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x86/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_241-x86"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_251-x86"
     }
     windows64 {
         name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x64/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_241-x64"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_251-x64"
     }
     isVerbose = true
     isAutoOpen = true

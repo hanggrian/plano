@@ -13,7 +13,7 @@ class PaperSizeTest {
     @Test fun fSeries() = PaperSize.SERIES_F.testSeries()
 
     private fun List<PaperSize>.testSeries() = filterIndexed { i, _ -> i != lastIndex }
-        .forEachIndexed { i, (width, _, _) ->
+        .forEachIndexed { i, (_, width, _) ->
             val next = get(i + 1)
             assertEquals(next.height, round(width / 2, 1, BigDecimal.ROUND_HALF_DOWN))
         }

@@ -12,10 +12,12 @@ import com.hendraanggrian.plano.util.THEME_LIGHT
 import com.hendraanggrian.plano.util.THEME_SYSTEM
 import com.hendraanggrian.plano.util.getResource
 import com.hendraanggrian.plano.util.isDarkTheme
-import com.hendraanggrian.prefs.BindPref
-import com.hendraanggrian.prefs.Prefs
-import com.hendraanggrian.prefs.bind
-import com.hendraanggrian.prefs.jvm.userRoot
+import com.hendraanggrian.prefy.BindPreference
+import com.hendraanggrian.prefy.PreferencesLogger
+import com.hendraanggrian.prefy.PreferencesSaver
+import com.hendraanggrian.prefy.Prefy
+import com.hendraanggrian.prefy.bind
+import com.hendraanggrian.prefy.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
 import java.util.ResourceBundle
 import javafx.application.Application
@@ -48,7 +50,6 @@ import ktfx.eq
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.launchApplication
-import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
 import ktfx.layouts.checkMenuItem
@@ -130,25 +131,25 @@ class PlanoApp : Application(), Resources {
     lateinit var rootPane: StackPane
     lateinit var outputPane: FlowPane
 
-    private lateinit var saver: Prefs.Saver
+    private lateinit var saver: PreferencesSaver
     override lateinit var resourceBundle: ResourceBundle
 
-    @JvmField @BindPref("language") var language = Language.ENGLISH.code
-    @JvmField @BindPref("theme") var theme = THEME_SYSTEM
-    @JvmField @BindPref("is_expand") var isExpand = false
-    @JvmField @BindPref("is_fill") var isFill = false
-    @JvmField @BindPref("is_thick") var isThick = false
-    @JvmField @BindPref("media_width") var mediaWidth = 0.0
-    @JvmField @BindPref("media_height") var mediaHeight = 0.0
-    @JvmField @BindPref("trim_width") var trimWidth = 0.0
-    @JvmField @BindPref("trim_height") var trimHeight = 0.0
-    @JvmField @BindPref("bleed") var bleed = 0.0
-    @JvmField @BindPref("allow_flip") var allowFlip = false
+    @JvmField @BindPreference("language") var language = Language.ENGLISH.code
+    @JvmField @BindPreference("theme") var theme = THEME_SYSTEM
+    @JvmField @BindPreference("is_expand") var isExpand = false
+    @JvmField @BindPreference("is_fill") var isFill = false
+    @JvmField @BindPreference("is_thick") var isThick = false
+    @JvmField @BindPreference("media_width") var mediaWidth = 0.0
+    @JvmField @BindPreference("media_height") var mediaHeight = 0.0
+    @JvmField @BindPreference("trim_width") var trimWidth = 0.0
+    @JvmField @BindPreference("trim_height") var trimHeight = 0.0
+    @JvmField @BindPreference("bleed") var bleed = 0.0
+    @JvmField @BindPreference("allow_flip") var allowFlip = false
 
     override fun init() {
         MediaBox.DEBUG = BuildConfig.DEBUG
-        if (BuildConfig.DEBUG) Prefs.setLogger(Prefs.Logger.System)
-        saver = Prefs.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
+        if (BuildConfig.DEBUG) Prefy.setLogger(PreferencesLogger.System)
+        saver = Prefy.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
     }
 
@@ -254,15 +255,13 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                     }
-                    addChild(
-                        PlanoToolbar(this@PlanoApp, expandProperty, fillProperty, thickProperty)
-                    ) {
+                    addChild(PlanoToolbar(this@PlanoApp, expandProperty, fillProperty, thickProperty).apply {
                         closeAllButton.onAction { closeAll() }
                         closeAllButton.runLater { disableProperty().bind(outputPane.children.emptyBinding) }
                         expandButton.onAction { toggleExpand() }
                         fillButton.onAction { toggleFill() }
                         thickButton.onAction { toggleThick() }
-                    }
+                    })
                     hbox {
                         gridPane {
                             paddings = 20.0
@@ -270,8 +269,8 @@ class PlanoApp : Application(), Resources {
                             var row = 0
 
                             rowConstraints {
-                                constraints() // description text
-                                repeat(4) { constraints { prefHeight = 32.0 } } // input form
+                                append() // description text
+                                repeat(4) { append { prefHeight = 32.0 } } // input form
                             }
 
                             label(getString(R.string._desc)) {
@@ -285,17 +284,17 @@ class PlanoApp : Application(), Resources {
                             label(getString(R.string.media_box)) {
                                 tooltip(getString(R.string._media_box))
                             } row row col 1
-                            addChild(mediaWidthField) {
+                            addChild(mediaWidthField.apply {
                                 tooltip(getString(R.string._media_box))
                                 value = mediaWidth
-                            } row row col 2
+                            }) row row col 2
                             label("x") {
                                 tooltip(getString(R.string._media_box))
                             } row row col 3
-                            addChild(mediaHeightField) {
+                            addChild(mediaHeightField.apply {
                                 tooltip(getString(R.string._media_box))
                                 value = mediaHeight
-                            } row row col 4
+                            }) row row col 4
                             addChild(
                                 RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
                             ) row row++ col 5
@@ -306,17 +305,17 @@ class PlanoApp : Application(), Resources {
                             label(getString(R.string.trim_box)) {
                                 tooltip(getString(R.string._trim_box))
                             } row row col 1
-                            addChild(trimWidthField) {
+                            addChild(trimWidthField.apply {
                                 tooltip(getString(R.string._trim_box))
                                 value = trimWidth
-                            } row row col 2
+                            }) row row col 2
                             label("x") {
                                 tooltip(getString(R.string._trim_box))
                             } row row col 3
-                            addChild(trimHeightField) {
+                            addChild(trimHeightField.apply {
                                 tooltip(getString(R.string._trim_box))
                                 value = trimHeight
-                            } row row col 4
+                            }) row row col 4
                             addChild(
                                 RoundMorePaperButton(this@PlanoApp, trimWidthField, trimHeightField)
                             ) row row++ col 5
@@ -324,58 +323,56 @@ class PlanoApp : Application(), Resources {
                             label(getString(R.string.bleed)) {
                                 tooltip(getString(R.string._bleed))
                             } row row col 1
-                            addChild(bleedField) {
+                            addChild(bleedField.apply {
                                 tooltip(getString(R.string._bleed))
                                 value = bleed
-                            } row row++ col 2
+                            }) row row++ col 2
 
                             label(getString(R.string.allow_flip)) {
                                 tooltip(getString(R.string._allow_flip))
                             } row row col 1
-                            addChild(allowFlipCheck) {
+                            addChild(allowFlipCheck.apply {
                                 tooltip(getString(R.string._allow_flip))
                                 isSelected = allowFlip
-                            } row row++ col 2
+                            }) row row++ col 2
 
                             calculateButton = addChild(
-                                RoundButton(
-                                    this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate
-                                )
-                            ) {
-                                id = R.style.btn_calculate
-                                disableProperty().bind(booleanBindingOf(
-                                    mediaWidthField.textProperty(),
-                                    mediaHeightField.textProperty(),
-                                    trimWidthField.textProperty(),
-                                    trimHeightField.textProperty()
-                                ) {
-                                    when {
-                                        mediaWidthField.value <= 0.0 || mediaHeightField.value <= 0.0 -> true
-                                        trimWidthField.value <= 0.0 || trimHeightField.value <= 0.0 -> true
-                                        else -> false
-                                    }
-                                })
-                                onAction {
-                                    mediaWidth = mediaWidthField.value
-                                    mediaHeight = mediaHeightField.value
-                                    trimWidth = trimWidthField.value
-                                    trimHeight = trimHeightField.value
-                                    bleed = bleedField.value
-                                    allowFlip = allowFlipCheck.isSelected
-
-                                    outputPane.children.add(0, ktfx.layouts.pane {
-                                        addChild(
-                                            ResultPane(
-                                                this@PlanoApp,
-                                                mediaWidth, mediaHeight,
-                                                trimWidth, trimHeight,
-                                                bleed, allowFlip,
-                                                scaleProperty, fillProperty, thickProperty
-                                            )
-                                        )
+                                RoundButton(this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate).apply {
+                                    id = R.style.btn_calculate
+                                    disableProperty().bind(booleanBindingOf(
+                                        mediaWidthField.textProperty(),
+                                        mediaHeightField.textProperty(),
+                                        trimWidthField.textProperty(),
+                                        trimHeightField.textProperty()
+                                    ) {
+                                        when {
+                                            mediaWidthField.value <= 0.0 || mediaHeightField.value <= 0.0 -> true
+                                            trimWidthField.value <= 0.0 || trimHeightField.value <= 0.0 -> true
+                                            else -> false
+                                        }
                                     })
+                                    onAction {
+                                        mediaWidth = mediaWidthField.value
+                                        mediaHeight = mediaHeightField.value
+                                        trimWidth = trimWidthField.value
+                                        trimHeight = trimHeightField.value
+                                        bleed = bleedField.value
+                                        allowFlip = allowFlipCheck.isSelected
+
+                                        outputPane.children.add(0, ktfx.layouts.pane {
+                                            addChild(
+                                                ResultPane(
+                                                    this@PlanoApp,
+                                                    mediaWidth, mediaHeight,
+                                                    trimWidth, trimHeight,
+                                                    bleed, allowFlip,
+                                                    scaleProperty, fillProperty, thickProperty
+                                                )
+                                            )
+                                        })
+                                    }
                                 }
-                            } row row col (0 to 6) halign HPos.RIGHT
+                            ) row row col (0 to 6) halign HPos.RIGHT
 
                             // avoid left pane being pushed out when right pane has a lot of contents
                             runLater { minWidth = width }

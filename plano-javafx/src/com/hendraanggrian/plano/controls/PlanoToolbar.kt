@@ -9,7 +9,6 @@ import ktfx.jfoenix.controls.depth
 import ktfx.jfoenix.layouts.KtfxJFXToolbar
 import ktfx.jfoenix.layouts.leftItems
 import ktfx.jfoenix.layouts.rightItems
-import ktfx.layouts.addChild
 import ktfx.layouts.imageView
 import ktfx.layouts.label
 import ktfx.layouts.region
@@ -35,9 +34,9 @@ class PlanoToolbar(
             label(BuildConfig.NAME) { font = 26.pt }
         }
         rightItems {
-            closeAllButton = addChild(RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all)) {
+            closeAllButton = addChild(RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all).apply {
                 id = R.style.btn_close
-            }
+            })
             expandButton = addChild(
                 AdaptableRoundButton(
                     resources,

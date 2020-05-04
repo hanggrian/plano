@@ -1,3 +1,3 @@
-const val VERSION_LEAKCANARY = "2.1"
+private const val VERSION_LEAKCANARY = "2.2"
 
-fun Dependencies.squareup(repo: String, module: String = repo, version: String) = "com.squareup.$repo:$module:$version"
+fun Dependencies.leakCanary() = "com.squareup.leakcanary:leakcanary-android:$VERSION_LEAKCANARY"

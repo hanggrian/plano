@@ -26,9 +26,10 @@ import com.hendraanggrian.plano.controls.longSnackbar
 import com.hendraanggrian.plano.controls.snackbar
 import com.hendraanggrian.plano.dialogs.AboutDialogFragment
 import com.hendraanggrian.plano.util.clean
-import com.hendraanggrian.prefs.BindPref
-import com.hendraanggrian.prefs.Prefs
-import com.hendraanggrian.prefs.android.bind
+import com.hendraanggrian.prefy.BindPreference
+import com.hendraanggrian.prefy.PreferencesSaver
+import com.hendraanggrian.prefy.Prefy
+import com.hendraanggrian.prefy.android.bind
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,7 +39,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: MainAdapter
-    private lateinit var saver: Prefs.Saver
+    private lateinit var saver: PreferencesSaver
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -51,21 +52,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @JvmField @BindPref("theme") var theme2 = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-    @JvmField @BindPref("is_fill") var isFill = false
-    @JvmField @BindPref("is_thick") var isThick = false
-    @JvmField @BindPref("media_width") var mediaWidth = 0f
-    @JvmField @BindPref("media_height") var mediaHeight = 0f
-    @JvmField @BindPref("trim_width") var trimWidth = 0f
-    @JvmField @BindPref("trim_height") var trimHeight = 0f
-    @JvmField @BindPref("bleed") var bleed = 0f
-    @JvmField @BindPref("allow_flip") var allowFlip = false
+    @JvmField @BindPreference("theme") var theme2 = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    @JvmField @BindPreference("is_fill") var isFill = false
+    @JvmField @BindPreference("is_thick") var isThick = false
+    @JvmField @BindPreference("media_width") var mediaWidth = 0f
+    @JvmField @BindPreference("media_height") var mediaHeight = 0f
+    @JvmField @BindPreference("trim_width") var trimWidth = 0f
+    @JvmField @BindPreference("trim_height") var trimHeight = 0f
+    @JvmField @BindPreference("bleed") var bleed = 0f
+    @JvmField @BindPreference("allow_flip") var allowFlip = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        saver = Prefs.bind(this)
+        saver = Prefy.bind(this)
         viewModel = ViewModelProvider(this).get()
         viewModel.fillData.value = isFill
         viewModel.thickData.value = isThick

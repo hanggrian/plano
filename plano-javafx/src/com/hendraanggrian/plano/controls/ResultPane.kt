@@ -15,6 +15,7 @@ import javafx.scene.control.ContextMenu
 import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.FlowPane
+import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -25,7 +26,6 @@ import ktfx.controls.toSwingImage
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.layouts.KtfxGridPane
-import ktfx.layouts.addChild
 import ktfx.layouts.anchorPane
 import ktfx.layouts.checkMenuItem
 import ktfx.layouts.contextMenu
@@ -41,7 +41,6 @@ import ktfx.listeners.onContextMenuRequested
 import ktfx.minus
 import ktfx.or
 import ktfx.times
-import javax.imageio.ImageIO
 
 class ResultPane(
     private val app: PlanoApp,
@@ -85,10 +84,10 @@ class ResultPane(
                 trimLabel = styledLabel(id = R.style.label_info)
             }
         } row 0 col 0 fillHeight false
-        closeButton = addChild(RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close)) {
+        closeButton = addChild(RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close).apply {
             id = R.style.menu_close
             onAction { close() }
-        } row 0 col 1
+        }) row 0 col 1
         boxPaneContainer = anchorPane() row 1 col (0 to 2)
 
         contextMenu = contextMenu {

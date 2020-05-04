@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano.util
 
-import org.apache.commons.math3.util.Precision.round
 import java.math.BigDecimal
+import org.apache.commons.math3.util.Precision.round
 
 fun Double.clean(): String = round(this, 1, BigDecimal.ROUND_HALF_DOWN).cleanInternal()
 
