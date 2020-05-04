@@ -59,7 +59,13 @@ enum class PaperSize(val title: String, val width: Double, val height: Double) {
         val SERIES_F: List<PaperSize> = listOf(F0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10)
     }
 
-    val sizeText: String = "${width.clean()} x ${height.clean()}"
+    val dimension: String = "${width.clean()} x ${height.clean()}"
+
+    val extendedTitle: String
+        get() {
+            val spaces = if (title.length > 2) " " else "    "
+            return "$title$spaces\t$dimension"
+        }
 
     operator fun component1(): String = title
     operator fun component2(): Double = width

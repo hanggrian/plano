@@ -14,6 +14,11 @@
 }
 
 @font-face {
+    font-family: "Roboto Black";
+    src: url("../font/Roboto-Black.ttf");
+}
+
+@font-face {
     font-family: "Roboto Condensed";
     src: url("../font/RobotoCondensed-Regular.ttf");
 }

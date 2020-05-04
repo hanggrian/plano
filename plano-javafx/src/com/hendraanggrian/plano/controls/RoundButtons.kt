@@ -16,11 +16,10 @@ import ktfx.layouts.contextMenu
 import ktfx.layouts.label
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
-import ktfx.layouts.text
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
+import ktfx.text.fontFamily
 import ktfx.text.fontWeight
-import ktfx.text.pt
 import ktfx.toStringBinding
 
 open class RoundButton(
@@ -79,10 +78,10 @@ open class RoundMorePaperButton(
     private fun KtfxContextMenu.seriesMenu(textId: String, series: List<PaperSize>) =
         menu(getString(textId)) {
             series.forEach { paperSize ->
-                menuItem(paperSize.sizeText) {
+                menuItem(paperSize.dimension) {
                     graphic = label(paperSize.title) {
-                        font = 14.pt
-                        fontWeight = FontWeight.BOLD
+                        fontFamily = "Roboto"
+                        fontWeight = FontWeight.BLACK
                     }
                     onAction {
                         widthField.text = paperSize.width.toString()

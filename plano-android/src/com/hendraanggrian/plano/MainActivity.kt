@@ -196,10 +196,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Toolbar.bindPaperSizes() {
-        menu.addSubMenu(getString(R.string.a_series)).apply { PaperSize.SERIES_A.forEach { add(it.title) } }
-        menu.addSubMenu(getString(R.string.b_series)).apply { PaperSize.SERIES_B.forEach { add(it.title) } }
-        menu.addSubMenu(getString(R.string.c_series)).apply { PaperSize.SERIES_C.forEach { add(it.title) } }
-        menu.addSubMenu(getString(R.string.f_series)).apply { PaperSize.SERIES_F.forEach { add(it.title) } }
+        menu.addSubMenu(getString(R.string.a_series)).apply { PaperSize.SERIES_A.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.b_series)).apply { PaperSize.SERIES_B.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.c_series)).apply { PaperSize.SERIES_C.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.f_series)).apply { PaperSize.SERIES_F.forEach { add(it.extendedTitle) } }
         setOnMenuItemClickListener { menu ->
             if (menu.title.none { it.isDigit() }) return@setOnMenuItemClickListener false
             val s = menu.title.toString()
