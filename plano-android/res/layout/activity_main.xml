@@ -39,14 +39,14 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="?colorPrimary"
+            app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?colorPrimary"
+                android:background="?android:colorBackground"
                 android:orientation="vertical"
                 android:paddingTop="?actionBarSize"
                 android:paddingBottom="@dimen/medium">

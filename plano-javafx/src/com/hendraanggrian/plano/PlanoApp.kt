@@ -44,7 +44,6 @@ import ktfx.collections.emptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddings
 import ktfx.controls.rowConstraints
-import ktfx.controls.setMinSize
 import ktfx.coroutines.onAction
 import ktfx.eq
 import ktfx.inputs.plus
@@ -72,6 +71,7 @@ import ktfx.listeners.listener
 import ktfx.listeners.onHiding
 import ktfx.minus
 import ktfx.runLater
+import ktfx.windows.setMinSize
 import org.apache.commons.lang3.SystemUtils
 
 class PlanoApp : Application(), Resources {
@@ -408,11 +408,7 @@ class PlanoApp : Application(), Resources {
     fun closeAll() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
-        rootPane.jfxSnackbar(
-            getString(R.string._boxes_cleared),
-            DURATION_SHORT,
-            getString(R.string.btn_undo)
-        ) {
+        rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
             outputPane.children += children
         }
         mediaWidthField.requestFocus()

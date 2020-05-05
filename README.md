@@ -7,7 +7,7 @@ Plano
 Simple app that efficiently calculate paper usage for commercial printing use, available as desktop and Android app.
 Some of the features include:
 * Multi-language (English and Bahasa Indonesia).
-* Dark mode on all platforms, there is also option to detect OS appearance.
+* Dark mode on all platforms.
  
 Thanks to [belajarcoreldraw.co](http://www.belajarcoreldraw.co/2013/08/software-portable-untuk-menghitung.html) for the idea.
 

@@ -31,11 +31,7 @@ class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<M
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mediaBox = get(position)
         if (holder.mediaContainer.isNotEmpty()) holder.mediaContainer.removeAllViews()
-        holder.mediaText.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
-        holder.trimCountText.text = mediaBox.size.toString()
-        holder.trimText.text = "${(mediaBox.trimWidth + mediaBox.bleed * 2).clean()} x " +
-            "${(mediaBox.trimHeight + mediaBox.bleed * 2).clean()}"
-        holder.mediaContainer.populate(mediaBox)
+        holder.populate(mediaBox)
         holder.card.setOnCreateContextMenuListener { menu, v, _ ->
             val itemCount = ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
             menu.setHeaderTitle(context.resources.getQuantityString(R.plurals.items, itemCount, itemCount))
@@ -44,13 +40,13 @@ class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<M
                 it.isChecked = mediaBox.allowFlip
                 it.setOnMenuItemClickListener {
                     mediaBox.allowFlip = !mediaBox.allowFlip
-                    holder.mediaContainer.populate(mediaBox)
+                    holder.populate(mediaBox)
                     false
                 }
             }
             menu.add(Menu.NONE, 2, 2, R.string.rotate).setOnMenuItemClickListener {
                 mediaBox.rotate()
-                holder.mediaContainer.populate(mediaBox)
+                holder.populate(mediaBox)
                 false
             }
         }
@@ -76,9 +72,14 @@ class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<M
         notifyItemRangeRemoved(0, size)
     }
 
-    private fun ViewGroup.populate(mediaBox: MediaBox) {
-        if (isNotEmpty()) removeAllViews()
-        addView(RelativeLayout(context).also { media ->
+    private fun ViewHolder.populate(mediaBox: MediaBox) {
+        mediaText.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
+        trimCountText.text = mediaBox.size.toString()
+        trimText.text = "${(mediaBox.trimWidth + mediaBox.bleed * 2).clean()} x " +
+            "${(mediaBox.trimHeight + mediaBox.bleed * 2).clean()}"
+
+        if (isNotEmpty()) mediaContainer.removeAllViews()
+        mediaContainer.addView(RelativeLayout(context).also { media ->
             ViewCompat.setBackground(media, ContextCompat.getDrawable(context, mediaBackground))
             media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
             media.post {

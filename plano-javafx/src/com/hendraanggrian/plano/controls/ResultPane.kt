@@ -41,6 +41,7 @@ import ktfx.listeners.onContextMenuRequested
 import ktfx.minus
 import ktfx.or
 import ktfx.times
+import ktfx.windows.moveTo
 
 class ResultPane(
     private val app: PlanoApp,
@@ -135,8 +136,7 @@ class ResultPane(
             }
         }
         onContextMenuRequested {
-            contextMenu.x = it.screenX
-            contextMenu.y = it.screenY
+            contextMenu.moveTo(it)
             contextMenu.show(scene.window)
         }
 
@@ -151,9 +151,7 @@ class ResultPane(
         infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
         boxPaneContainer.children += MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
-        mediaBox.forEach {
-            boxPaneContainer.children += TrimBoxPane(it, scaleProperty, fillProperty, thickProperty)
-        }
+        mediaBox.forEach { boxPaneContainer.children += TrimBoxPane(it, scaleProperty, fillProperty, thickProperty) }
     }
 
     private fun close() {

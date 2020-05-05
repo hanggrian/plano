@@ -4,15 +4,15 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.hendraanggrian.plano.BuildConfig
 import com.hendraanggrian.plano.R
 
 class AboutDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        AlertDialog.Builder(context!!)
+        MaterialAlertDialogBuilder(context!!)
             .setIcon(R.mipmap.ic_launcher)
             .setTitle("${BuildConfig.NAME} ${BuildConfig.VERSION_NAME}")
             .setMessage(getString(R.string._about))
