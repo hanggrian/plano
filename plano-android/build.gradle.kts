@@ -77,6 +77,8 @@ dependencies {
     implementation(androidx("preference"))
     implementation(androidx("coordinatorlayout"))
     implementation(androidx("recyclerview"))
+    implementation(androidx("room", "room-ktx", VERSION_ROOM))
+    kapt(androidx("room", "room-compiler", VERSION_ROOM))
     implementation(material())
 
     implementation(processPhoenix())

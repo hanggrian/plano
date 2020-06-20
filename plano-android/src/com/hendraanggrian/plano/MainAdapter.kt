@@ -15,10 +15,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
-import com.hendraanggrian.plano.util.clean
 
-class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<MainAdapter.ViewHolder>(),
-    MutableList<MediaBox> by arrayListOf() {
+class MainAdapter(private val viewModel: MainViewModel) :
+    RecyclerView.Adapter<MainAdapter.ViewHolder>(),
+    MutableList<MediaBox2> by arrayListOf() {
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,13 +52,13 @@ class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<M
         }
     }
 
-    fun put(element: MediaBox) {
+    fun put(element: MediaBox2) {
         if (isEmpty()) viewModel.emptyData.value = false
         add(element)
         notifyItemInserted(size - 1)
     }
 
-    fun putAll(elements: Collection<MediaBox>) {
+    fun putAll(elements: Collection<MediaBox2>) {
         if (isEmpty()) viewModel.emptyData.value = false
         val start = size + 1
         addAll(elements)
@@ -72,39 +72,43 @@ class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<M
         notifyItemRangeRemoved(0, size)
     }
 
-    private fun ViewHolder.populate(mediaBox: MediaBox) {
+    private fun ViewHolder.populate(mediaBox: MediaBox2) {
         mediaText.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimCountText.text = mediaBox.size.toString()
         trimText.text = "${(mediaBox.trimWidth + mediaBox.bleed * 2).clean()} x " +
             "${(mediaBox.trimHeight + mediaBox.bleed * 2).clean()}"
 
         if (isNotEmpty()) mediaContainer.removeAllViews()
-        mediaContainer.addView(RelativeLayout(context).also { media ->
-            ViewCompat.setBackground(media, ContextCompat.getDrawable(context, mediaBackground))
-            media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-            media.post {
-                media.layoutParams.height = (media.width * mediaBox.height / mediaBox.width).toInt()
-                media.requestLayout()
+        mediaContainer.addView(
+            RelativeLayout(context).also { media ->
+                ViewCompat.setBackground(media, ContextCompat.getDrawable(context, mediaBackground))
+                media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 media.post {
-                    mediaBox.forEach { trimBox ->
-                        media.addView(View(context).also { trim ->
-                            ViewCompat.setBackground(trim, ContextCompat.getDrawable(context, trimBackground))
-                            val widthRatio = media.width / mediaBox.width
-                            val heightRatio = media.height / mediaBox.height
-                            trim.layoutParams = RelativeLayout.LayoutParams(
-                                (trimBox.width * widthRatio).toInt(),
-                                (trimBox.height * heightRatio).toInt()
-                            ).apply {
-                                addRule(RelativeLayout.ALIGN_PARENT_TOP)
-                                addRule(RelativeLayout.ALIGN_PARENT_LEFT)
-                                leftMargin = (trimBox.x * widthRatio).toInt()
-                                topMargin = (trimBox.y * heightRatio).toInt()
-                            }
-                        })
+                    media.layoutParams.height = (media.width * mediaBox.height / mediaBox.width).toInt()
+                    media.requestLayout()
+                    media.post {
+                        mediaBox.forEach { trimBox ->
+                            media.addView(
+                                View(context).also { trim ->
+                                    ViewCompat.setBackground(trim, ContextCompat.getDrawable(context, trimBackground))
+                                    val widthRatio = media.width / mediaBox.width
+                                    val heightRatio = media.height / mediaBox.height
+                                    trim.layoutParams = RelativeLayout.LayoutParams(
+                                        (trimBox.width * widthRatio).toInt(),
+                                        (trimBox.height * heightRatio).toInt()
+                                    ).apply {
+                                        addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                                        addRule(RelativeLayout.ALIGN_PARENT_LEFT)
+                                        leftMargin = (trimBox.x * widthRatio).toInt()
+                                        topMargin = (trimBox.y * heightRatio).toInt()
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }
-        })
+        )
     }
 
     private val mediaBackground: Int

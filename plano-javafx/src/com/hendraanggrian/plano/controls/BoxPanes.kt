@@ -1,9 +1,9 @@
 package com.hendraanggrian.plano.controls
 
 import com.hendraanggrian.plano.Box
-import com.hendraanggrian.plano.MediaBox
+import com.hendraanggrian.plano.MediaBox2
 import com.hendraanggrian.plano.R
-import com.hendraanggrian.plano.TrimBox
+import com.hendraanggrian.plano.TrimBox2
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
 import javafx.scene.layout.AnchorPane
@@ -44,7 +44,7 @@ sealed class BoxPane(
 }
 
 class MediaBoxPane(
-    box: MediaBox,
+    box: MediaBox2,
     scaleProperty: DoubleProperty,
     fillProperty: BooleanProperty,
     thickProperty: BooleanProperty
@@ -59,7 +59,7 @@ class MediaBoxPane(
 )
 
 class TrimBoxPane(
-    box: TrimBox,
+    box: TrimBox2,
     scaleProperty: DoubleProperty,
     fillProperty: BooleanProperty,
     thickProperty: BooleanProperty

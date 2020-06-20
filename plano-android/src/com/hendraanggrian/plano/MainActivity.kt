@@ -25,7 +25,6 @@ import androidx.lifecycle.observe
 import com.hendraanggrian.plano.controls.longSnackbar
 import com.hendraanggrian.plano.controls.snackbar
 import com.hendraanggrian.plano.dialogs.AboutDialogFragment
-import com.hendraanggrian.plano.util.clean
 import com.hendraanggrian.prefy.BindPreference
 import com.hendraanggrian.prefy.PreferencesSaver
 import com.hendraanggrian.prefy.Prefy
@@ -92,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             adjust()
             getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-            val mediaBox = MediaBox(mediaWidth.toDouble(), mediaHeight.toDouble())
+            val mediaBox = MediaBox2(mediaWidth.toDouble(), mediaHeight.toDouble())
             mediaBox.populate(trimWidth.toDouble(), trimHeight.toDouble(), bleed.toDouble(), allowFlip)
             adapter.put(mediaBox)
         }
@@ -123,12 +122,12 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.fillData.observe(this) {
             isFill = it
-            backgroundItem.setIcon(if (isFill) R.drawable.btn_background_fill else R.drawable.btn_background_unfill)
+            backgroundItem.setIcon(if (isFill) R.drawable.btn_background_unfill else R.drawable.btn_background_fill)
             recyclerView.adapter!!.notifyDataSetChanged()
         }
         viewModel.thickData.observe(this) {
             isThick = it
-            borderItem.setIcon(if (isThick) R.drawable.btn_border_thick else R.drawable.btn_border_thin)
+            borderItem.setIcon(if (isThick) R.drawable.btn_border_thin else R.drawable.btn_border_thick)
             recyclerView.adapter!!.notifyDataSetChanged()
         }
 
@@ -170,17 +169,18 @@ class MainActivity : AppCompatActivity() {
             R.id.checkForUpdateItem -> GlobalScope.launch(Dispatchers.Main) {
                 val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".apk") }
                 when {
-                    release.isNewerThan(BuildConfig.VERSION_NAME) -> recyclerView.longSnackbar(
-                        getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
-                        getString(R.string.btn_download)
-                    ) {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse(release.assets.first { it.name.endsWith("apk") }.downloadUrl)
+                    release.isNewerThan(BuildConfig.VERSION_NAME) ->
+                        recyclerView.longSnackbar(
+                            getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
+                            getString(R.string.btn_download)
+                        ) {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(release.assets.first { it.name.endsWith("apk") }.downloadUrl)
+                                )
                             )
-                        )
-                    }
+                        }
                     else -> recyclerView.longSnackbar(getString(R.string._update_unavailable))
                 }
             }

@@ -1,7 +1,5 @@
 package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.util.clean
-
 /** Common paper sizes as documented on [Wikipedia](https://en.wikipedia.org/wiki/Paper_size). */
 enum class PaperSize(val title: String, val width: Double, val height: Double) {
     A0("A0", 118.9, 84.1),

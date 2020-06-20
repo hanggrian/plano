@@ -2,8 +2,8 @@ package com.hendraanggrian.plano.util
 
 import com.hendraanggrian.prefy.Prefy
 import com.hendraanggrian.prefy.jvm.userRoot
-import java.util.concurrent.TimeUnit
 import org.apache.commons.lang3.SystemUtils
+import java.util.concurrent.TimeUnit
 
 const val THEME_SYSTEM = "System"
 const val THEME_LIGHT = "Light"

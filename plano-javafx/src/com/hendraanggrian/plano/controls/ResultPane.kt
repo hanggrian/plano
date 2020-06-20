@@ -1,11 +1,11 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.MediaBox
+import com.hendraanggrian.plano.MediaBox2
 import com.hendraanggrian.plano.PlanoApp
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.ResultFile
-import com.hendraanggrian.plano.util.clean
+import com.hendraanggrian.plano.clean
 import com.hendraanggrian.plano.util.getResource
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
@@ -15,7 +15,6 @@ import javafx.scene.control.ContextMenu
 import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.FlowPane
-import javax.imageio.ImageIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -42,6 +41,7 @@ import ktfx.minus
 import ktfx.or
 import ktfx.times
 import ktfx.windows.moveTo
+import javax.imageio.ImageIO
 
 class ResultPane(
     private val app: PlanoApp,
@@ -66,7 +66,7 @@ class ResultPane(
 
     init {
         paddings = 10.0
-        val mediaBox = MediaBox(mediaWidth, mediaHeight)
+        val mediaBox = MediaBox2(mediaWidth, mediaHeight)
         mediaBox.populate(trimWidth, trimHeight, bleed, allowFlip)
 
         infoFlowPane = flowPane {
@@ -85,10 +85,12 @@ class ResultPane(
                 trimLabel = styledLabel(id = R.style.label_info)
             }
         } row 0 col 0 fillHeight false
-        closeButton = addChild(RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close).apply {
-            id = R.style.menu_close
-            onAction { close() }
-        }) row 0 col 1
+        closeButton = addChild(
+            RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close).apply {
+                id = R.style.menu_close
+                onAction { close() }
+            }
+        ) row 0 col 1
         boxPaneContainer = anchorPane() row 1 col (0 to 2)
 
         contextMenu = contextMenu {
@@ -144,7 +146,7 @@ class ResultPane(
         populate(mediaBox)
     }
 
-    private fun populate(mediaBox: MediaBox) {
+    private fun populate(mediaBox: MediaBox2) {
         mediaLabel.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimSizeLabel.text = " ${mediaBox.size}"
         trimLabel.text = "${(trimWidth + bleed * 2).clean()} x ${(trimHeight + bleed * 2).clean()}"

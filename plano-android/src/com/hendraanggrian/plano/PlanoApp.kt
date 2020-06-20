@@ -16,7 +16,7 @@ class PlanoApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        MediaBox.DEBUG = BuildConfig.DEBUG
+        MediaBox2.DEBUG = BuildConfig.DEBUG
         if (BuildConfig.DEBUG) Prefy.setLogger(PreferencesLogger.Android)
 
         val theme = Prefy[this].getInt("theme")

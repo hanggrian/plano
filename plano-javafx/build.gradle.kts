@@ -30,6 +30,11 @@ dependencies {
     api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-javafx", VERSION_COROUTINES))
 
+    api(exposed("core"))
+    api(exposed("dao"))
+    api(exposed("jdbc"))
+    api(sqliteJDBC())
+
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
 
