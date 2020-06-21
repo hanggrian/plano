@@ -153,16 +153,15 @@ class PlanoApp : Application(), Resources {
     @JvmField @BindPreference("allow_flip") var allowFlip = false
 
     override fun init() {
-        MediaBox2.DEBUG = BuildConfig.DEBUG
+        Plano.setDebug(BuildConfig.DEBUG)
         if (BuildConfig.DEBUG) Prefy.setLogger(PreferencesLogger.System)
+
         saver = Prefy.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
+
         Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
         transaction {
-            SchemaUtils.create(
-                MediaBoxes,
-                TrimBoxes
-            )
+            SchemaUtils.create(MediaBoxes, TrimBoxes)
             MediaBox.new {
                 width = 200.0
                 height = 100.0
