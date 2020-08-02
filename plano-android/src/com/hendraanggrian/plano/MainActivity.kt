@@ -22,9 +22,9 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
-import com.hendraanggrian.plano.controls.longSnackbar
-import com.hendraanggrian.plano.controls.snackbar
-import com.hendraanggrian.plano.dialogs.AboutDialogFragment
+import com.hendraanggrian.plano.util.longSnackbar
+import com.hendraanggrian.plano.util.snackbar
+import com.hendraanggrian.plano.about.AboutDialogFragment
 import com.hendraanggrian.prefy.BindPreference
 import com.hendraanggrian.prefy.PreferencesSaver
 import com.hendraanggrian.prefy.Prefy
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         bleedEdit.setText(bleed.clean())
 
         adapter = MainAdapter(viewModel)
-        recyclerView.adapter = adapter
+        recycler.adapter = adapter
 
         fab.setOnClickListener {
             adjust()
@@ -117,18 +117,18 @@ class MainActivity : AppCompatActivity() {
                     appBar.setExpanded(true)
                     mediaWidthEdit.requestFocus()
                 }
-                else -> recyclerView.scrollToPosition(adapter.size - 1)
+                else -> recycler.scrollToPosition(adapter.size - 1)
             }
         }
         viewModel.fillData.observe(this) {
             isFill = it
             backgroundItem.setIcon(if (isFill) R.drawable.btn_background_unfill else R.drawable.btn_background_fill)
-            recyclerView.adapter!!.notifyDataSetChanged()
+            recycler.adapter!!.notifyDataSetChanged()
         }
         viewModel.thickData.observe(this) {
             isThick = it
             borderItem.setIcon(if (isThick) R.drawable.btn_border_thin else R.drawable.btn_border_thick)
-            recyclerView.adapter!!.notifyDataSetChanged()
+            recycler.adapter!!.notifyDataSetChanged()
         }
 
         menu.findItem(R.id.flipItem).isChecked = allowFlip
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() {
             R.id.closeAllItem -> {
                 val temp = adapter.toList()
                 adapter.removeAll()
-                recyclerView.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {
+                recycler.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {
                     adapter.putAll(temp)
                 }
             }
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
                 val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".apk") }
                 when {
                     release.isNewerThan(BuildConfig.VERSION_NAME) ->
-                        recyclerView.longSnackbar(
+                        recycler.longSnackbar(
                             getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
                             getString(R.string.btn_download)
                         ) {
@@ -181,10 +181,11 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                         }
-                    else -> recyclerView.longSnackbar(getString(R.string._update_unavailable))
+                    else -> recycler.longSnackbar(getString(R.string._update_unavailable))
                 }
             }
-            R.id.aboutItem -> AboutDialogFragment().show(supportFragmentManager, null)
+            R.id.aboutItem -> AboutDialogFragment()
+                .show(supportFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -196,12 +197,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Toolbar.bindPaperSizes() {
-        menu.addSubMenu(getString(R.string.a_series)).apply { PaperSize.SERIES_A.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.b_series)).apply { PaperSize.SERIES_B.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.c_series)).apply { PaperSize.SERIES_C.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.f_series)).apply { PaperSize.SERIES_F.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.a_series)).run { PaperSize.SERIES_A.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.b_series)).run { PaperSize.SERIES_B.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.c_series)).run { PaperSize.SERIES_C.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.f_series)).run { PaperSize.SERIES_F.forEach { add(it.extendedTitle) } }
         setOnMenuItemClickListener { menu ->
-            if (menu.title.none { it.isDigit() }) return@setOnMenuItemClickListener false
+            if (menu.title.none { it.isDigit() }) {
+                return@setOnMenuItemClickListener false
+            }
             val s = menu.title.toString()
             (children.first() as ViewGroup).children.filterIsInstance<EditText>().forEachIndexed { index, t ->
                 t.setText(

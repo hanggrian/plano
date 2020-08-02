@@ -10,7 +10,7 @@
 
     -fx-base: white;
     -fx-accent: -amber-500;
-    -fx-font-family: "Roboto";
+    -fx-font-family: 'Roboto';
 }
 
 /* TextField */
@@ -27,7 +27,7 @@
 }
 .jfx-snackbar-action {
     -fx-text-fill: -fx-accent;
-    -fx-font-family: "Roboto Bold";
+    -fx-font-family: 'Roboto Bold';
 }
 
 /* ScrollPane */
@@ -53,7 +53,7 @@
 /* Button */
 .button {
     -fx-text-fill: -fx-accent;
-    -fx-font-family: "Roboto Bold";
+    -fx-font-family: 'Roboto Bold';
 }
 .button:hover {
     -fx-background-color: -color-button-hover;
@@ -107,26 +107,30 @@
 #circle-red {
     -fx-fill: -red-500;
 }
+#label-dialog-title {
+    -fx-font-family: 'Roboto Medium';
+    -fx-font-size: 22;
+}
 #label-info {
-    -fx-font-family: "Roboto Condensed";
+    -fx-font-family: 'Roboto Condensed';
 }
 #label-red { // displaying trim boxes count
-    -fx-font-family: "Roboto Condensed Bold";
+    -fx-font-family: 'Roboto Condensed Bold';
     -fx-text-fill: -red-500;
 }
 #label-black { // saving result
     -fx-text-fill: black;
 }
 #menu-close {
-    -fx-graphic: url("../image/menu_close.png");
+    -fx-graphic: url('../image/menu_close.png');
 }
 #menu-more {
-    -fx-graphic: url("../image/menu_more.png");
+    -fx-graphic: url('../image/menu_more.png');
 }
 #btn-calculate {
     -jfx-button-type: RAISED;
     -fx-background-color: -fx-accent;
-    -fx-graphic: url("../image/btn_send.png");
+    -fx-graphic: url('../image/btn_send.png');
 }
 #btn-calculate:hover {
     -fx-background-color: derive(-fx-accent, 50%);
@@ -135,23 +139,23 @@
     -fx-background-color: derive(-fx-accent, -50%);
 }
 #btn-close {
-    -fx-graphic: url("../image/btn_close.png");
+    -fx-graphic: url('../image/btn_close.png');
 }
 #btn-scale-expand {
-    -fx-graphic: url("../image/btn_scale_expand.png");
+    -fx-graphic: url('../image/btn_scale_expand.png');
 }
 #btn-scale-shrink {
-    -fx-graphic: url("../image/btn_scale_shrink.png");
+    -fx-graphic: url('../image/btn_scale_shrink.png');
 }
 #btn-background-fill {
-    -fx-graphic: url("../image/btn_background_fill.png");
+    -fx-graphic: url('../image/btn_background_fill.png');
 }
 #btn-background-unfill {
-    -fx-graphic: url("../image/btn_background_unfill.png");
+    -fx-graphic: url('../image/btn_background_unfill.png');
 }
 #btn-border-thick {
-    -fx-graphic: url("../image/btn_border_thick.png");
+    -fx-graphic: url('../image/btn_border_thick.png');
 }
 #btn-border-thin {
-    -fx-graphic: url("../image/btn_border_thin.png");
+    -fx-graphic: url('../image/btn_border_thin.png');
 }

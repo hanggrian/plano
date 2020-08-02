@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.hendraanggrian.plano.controls
+package com.hendraanggrian.plano.util
 
 import android.view.View
 import com.google.android.material.snackbar.Snackbar

@@ -31,13 +31,13 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             buildConfigField("String", "NAME", "\"$RELEASE_NAME\"")
-            buildConfigField("String", "HOMEPAGE", "\"$RELEASE_HOMEPAGE\"")
+            buildConfigField("String", "WEB", "\"$RELEASE_WEB\"")
         }
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             buildConfigField("String", "NAME", "\"$RELEASE_NAME\"")
-            buildConfigField("String", "HOMEPAGE", "\"$RELEASE_HOMEPAGE\"")
+            buildConfigField("String", "WEB", "\"$RELEASE_WEB\"")
         }
     }
     lintOptions {
@@ -82,7 +82,6 @@ dependencies {
     implementation(material())
 
     implementation(processPhoenix())
-    implementation(preferencex())
 
     debugImplementation(leakCanary())
 

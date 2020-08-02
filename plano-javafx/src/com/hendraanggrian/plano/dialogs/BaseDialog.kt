@@ -13,8 +13,6 @@ import ktfx.layouts.buttonBar
 import ktfx.layouts.label
 import ktfx.layouts.vbox
 import ktfx.listeners.onAction
-import ktfx.text.fontFamily
-import ktfx.text.fontSize
 
 abstract class BaseDialog(app: PlanoApp, title: String) :
     JFXDialog(app.rootPane, null, DialogTransition.CENTER), NodeManager, Resources by app {
@@ -27,10 +25,9 @@ abstract class BaseDialog(app: PlanoApp, title: String) :
         content = ktfx.layouts.vbox(20.0) {
             paddings = 20.0
             label(title) {
-                fontFamily = "Roboto Medium"
-                fontSize = 22.0
+                id = R.style.label_dialog_title
             }
-            contentPane = vbox()
+            contentPane = vbox(10.0)
             buttonBar {
                 onButtons()
                 jfxButton(getString(R.string.btn_close)) {

@@ -5,9 +5,6 @@ import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.RoundButton
 import com.hendraanggrian.plano.controls.RoundMorePaperButton
-import com.hendraanggrian.plano.data.MediaBox
-import com.hendraanggrian.plano.data.MediaBoxes
-import com.hendraanggrian.plano.data.TrimBoxes
 import com.hendraanggrian.plano.dialogs.AboutDialog
 import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.plano.util.THEME_DARK
@@ -23,8 +20,6 @@ import com.hendraanggrian.prefy.bind
 import com.hendraanggrian.prefy.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
 import javafx.application.Application
-import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleDoubleProperty
 import javafx.geometry.HPos
 import javafx.scene.Scene
 import javafx.scene.control.Button
@@ -42,11 +37,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.withContext
 import ktfx.booleanBindingOf
+import ktfx.booleanProperty
 import ktfx.collections.emptyBinding
 import ktfx.controls.gap
 import ktfx.controls.paddings
 import ktfx.controls.rowConstraints
 import ktfx.coroutines.onAction
+import ktfx.doubleProperty
 import ktfx.eq
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
@@ -75,9 +72,6 @@ import ktfx.minus
 import ktfx.runLater
 import ktfx.windows.setMinSize
 import org.apache.commons.lang3.SystemUtils
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.ResourceBundle
 
 class PlanoApp : Application(), Resources {
@@ -91,8 +85,8 @@ class PlanoApp : Application(), Resources {
         @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
     }
 
-    private val scaleProperty = SimpleDoubleProperty(SCALE_SMALL)
-    private val expandProperty = SimpleBooleanProperty().apply {
+    private val scaleProperty = doubleProperty(SCALE_SMALL)
+    private val expandProperty = booleanProperty {
         bind(scaleProperty eq SCALE_BIG)
         listener { _, _, newValue ->
             expandMenu.isSelected = newValue
@@ -116,10 +110,10 @@ class PlanoApp : Application(), Resources {
             }
         }
     }
-    private val fillProperty = SimpleBooleanProperty().apply {
+    private val fillProperty = booleanProperty {
         listener { _, _, newValue -> fillMenu.isSelected = newValue }
     }
-    private val thickProperty = SimpleBooleanProperty().apply {
+    private val thickProperty = booleanProperty {
         listener { _, _, newValue -> thickMenu.isSelected = newValue }
     }
 
@@ -159,14 +153,14 @@ class PlanoApp : Application(), Resources {
         saver = Prefy.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
 
-        Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
+        /*Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
         transaction {
             SchemaUtils.create(MediaBoxes, TrimBoxes)
             MediaBox.new {
                 width = 200.0
                 height = 100.0
             }
-        }
+        }*/
     }
 
     override fun start(stage: Stage) {
@@ -223,10 +217,6 @@ class PlanoApp : Application(), Resources {
                                     }
                                 }
                             }
-                            separatorMenuItem()
-                            menuItem(getString(R.string.check_for_update)) {
-                                onAction(Dispatchers.JavaFx) { checkForUpdate() }
-                            }
                         }
                         "Edit" {
                             menuItem(getString(R.string.close_all)) {
@@ -266,6 +256,10 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "Help" {
+                            menuItem(getString(R.string.check_for_update)) {
+                                onAction(Dispatchers.JavaFx) { checkForUpdate() }
+                            }
+                            separatorMenuItem()
                             menuItem(getString(R.string.about)) {
                                 onAction { AboutDialog(this@PlanoApp).show() }
                             }

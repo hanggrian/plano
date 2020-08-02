@@ -80,7 +80,7 @@ tasks {
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
         addField("USER", RELEASE_USER)
-        addField("HOMEPAGE", RELEASE_HOMEPAGE)
+        addField("WEB", RELEASE_WEB)
     }
 
     named<Jar>("jar") { manifest { attributes(mapOf("Main-Class" to application.mainClassName)) } }
@@ -110,11 +110,11 @@ packr {
     }
     windows32 {
         name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x86/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_251-x86"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_261-x86"
     }
     windows64 {
         name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x64/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_251-x64"
+        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_261-x64"
     }
     isVerbose = true
     isAutoOpen = true

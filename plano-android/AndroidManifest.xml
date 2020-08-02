@@ -19,11 +19,16 @@
         <activity
             android:name=".MainActivity"
             android:forceDarkAllowed="true"
+            android:screenOrientation="portrait"
             tools:targetApi="q">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".about.LicensesActivity"
+            android:forceDarkAllowed="true"
+            tools:targetApi="q" />
     </application>
 </manifest>
