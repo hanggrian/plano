@@ -8,8 +8,10 @@ object Plano {
     }
 
     fun calculate(
-        mediaWidth: Double, mediaHeight: Double,
-        trimWidth: Double, trimHeight: Double,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         bleed: Double,
         allowFlip: Boolean
     ): List<Result> = mutableListOf<List<Result>>().apply {
@@ -59,8 +61,10 @@ object Plano {
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(
-        mediaWidth: Double, mediaHeight: Double,
-        trimWidth: Double, trimHeight: Double,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         allowFlip: Boolean
     ): List<Result> {
         if (DEBUG) println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
@@ -86,8 +90,10 @@ object Plano {
 
     /** Columns are always flipped. */
     private fun radicalColumns(
-        mediaWidth: Double, mediaHeight: Double,
-        trimWidth: Double, trimHeight: Double,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         allowFlip: Boolean
     ): List<Result> {
         if (DEBUG) println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
@@ -111,8 +117,10 @@ object Plano {
 
     /** Rows are always flipped. */
     private fun radicalRows(
-        mediaWidth: Double, mediaHeight: Double,
-        trimWidth: Double, trimHeight: Double,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         allowFlip: Boolean
     ): List<Result> {
         if (DEBUG) println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
@@ -136,7 +144,8 @@ object Plano {
     }
 
     private fun MutableList<Result>.populate(
-        trimWidth: Double, trimHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         columns: Int,
         rows: Int
     ) {
@@ -154,8 +163,10 @@ object Plano {
     }
 
     private fun calculateFlippedColumns(
-        mediaWidth: Double, mediaHeight: Double,
-        trimWidth: Double, trimHeight: Double,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         columns: Int
     ): Int {
         var flippedColumns = 0
@@ -167,8 +178,10 @@ object Plano {
     }
 
     private fun calculateFlippedRows(
-        mediaWidth: Double, mediaHeight: Double,
-        trimWidth: Double, trimHeight: Double,
+        mediaWidth: Double,
+        mediaHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         rows: Int
     ): Int {
         var flippedRows = 0
@@ -180,7 +193,8 @@ object Plano {
     }
 
     private fun MutableList<Result>.populateFlippedColumns(
-        trimWidth: Double, trimHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         columns: Int,
         flippedColumns: Int
     ) {
@@ -191,7 +205,8 @@ object Plano {
     }
 
     private fun MutableList<Result>.populateFlippedRows(
-        trimWidth: Double, trimHeight: Double,
+        trimWidth: Double,
+        trimHeight: Double,
         rows: Int,
         flippedRows: Int
     ) {

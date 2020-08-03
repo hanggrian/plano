@@ -1,4 +1,4 @@
-package com.hendraanggrian.plano.about
+package com.hendraanggrian.plano.help
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -18,8 +18,7 @@ class LicensesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
-            return true
         }
-        return false
+        return super.onOptionsItemSelected(item)
     }
 }

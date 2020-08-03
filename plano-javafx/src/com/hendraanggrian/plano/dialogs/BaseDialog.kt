@@ -27,7 +27,7 @@ abstract class BaseDialog(app: PlanoApp, title: String) :
             label(title) {
                 id = R.style.label_dialog_title
             }
-            contentPane = vbox(10.0)
+            contentPane = vbox()
             buttonBar {
                 onButtons()
                 jfxButton(getString(R.string.btn_close)) {

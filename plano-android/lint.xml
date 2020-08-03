@@ -5,4 +5,11 @@
     <issue id="ContentDescription" severity="ignore" />
     <issue id="HardcodedText" severity="ignore" />
     <issue id="UnusedResources" severity="ignore" />
+    <issue id="Overdraw">
+        <ignore path="res/layout/item_about.xml" />
+        <ignore path="res/layout/item_license.xml" />
+    </issue>
+    <issue id="SetTextI18n">
+        <ignore path="src/com/hendraanggrian/plano/MainAdapter.kt"/>
+    </issue>
 </lint>

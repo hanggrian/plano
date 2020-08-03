@@ -11,13 +11,12 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/aboutToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@mipmap/ic_launcher"
-            app:title="@string/about" />
+            app:navigationIcon="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/aboutText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/medium"

@@ -1,6 +1,7 @@
 package com.hendraanggrian.plano
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -35,37 +36,57 @@ class MainAdapter(private val viewModel: MainViewModel) :
         holder.card.setOnCreateContextMenuListener { menu, v, _ ->
             val itemCount = ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
             menu.setHeaderTitle(context.resources.getQuantityString(R.plurals.items, itemCount, itemCount))
-            menu.add(Menu.NONE, 1, 1, R.string.allow_flip).let {
-                it.isCheckable = true
-                it.isChecked = mediaBox.allowFlip
-                it.setOnMenuItemClickListener {
+            menu.add(Menu.NONE, 0, 0, R.string.allow_flip).run {
+                isCheckable = true
+                isChecked = mediaBox.allowFlip
+                setOnMenuItemClickListener {
                     mediaBox.allowFlip = !mediaBox.allowFlip
                     holder.populate(mediaBox)
                     false
                 }
             }
-            menu.add(Menu.NONE, 2, 2, R.string.rotate).setOnMenuItemClickListener {
+            menu.add(Menu.NONE, 0, 0, R.string.rotate).setOnMenuItemClickListener {
                 mediaBox.rotate()
                 holder.populate(mediaBox)
                 false
+            }
+            menu.add(Menu.FIRST, 1, 1, R.string.close).setOnMenuItemClickListener {
+                delete(mediaBox)
+                false
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                menu.setGroupDividerEnabled(true)
             }
         }
     }
 
     fun put(element: MediaBox2) {
-        if (isEmpty()) viewModel.emptyData.value = false
+        if (isEmpty()) {
+            viewModel.emptyData.value = false
+        }
         add(element)
         notifyItemInserted(size - 1)
     }
 
     fun putAll(elements: Collection<MediaBox2>) {
-        if (isEmpty()) viewModel.emptyData.value = false
+        if (isEmpty()) {
+            viewModel.emptyData.value = false
+        }
         val start = size + 1
         addAll(elements)
         notifyItemRangeInserted(start, size)
     }
 
-    fun removeAll() {
+    fun delete(element: MediaBox2) {
+        val index = indexOf(element)
+        remove(element)
+        notifyItemRemoved(index)
+        if (isEmpty()) {
+            viewModel.emptyData.value = true
+        }
+    }
+
+    fun deleteAll() {
         viewModel.emptyData.value = true
         val size = size
         clear()

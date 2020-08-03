@@ -12,6 +12,10 @@ data class License(
                     "https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt"
                 ),
                 License(
+                    "Kotlin Coroutines",
+                    "https://github.com/Kotlin/kotlinx.coroutines/blob/master/LICENSE.txt"
+                ),
+                License(
                     "Ktor Asynchronous Web Framework",
                     "https://github.com/ktorio/ktor/blob/master/LICENSE"
                 ),

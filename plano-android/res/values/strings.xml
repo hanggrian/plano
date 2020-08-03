@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-08-03 01.33--><resources>
+2020-08-04 04.07--><resources>
     <string name="_about">Plano is an efficient paper size calculator app. See GitHub for more information.</string>
     <string name="_allow_flip">When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available.</string>
     <string name="_bleed">Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed.</string>
@@ -14,15 +14,11 @@
     <string name="_update_unavailable">You already have the latest version.</string>
     <string name="a_series">A Series</string>
     <string name="about">About</string>
-    <string name="about_option1">Version %s</string>
-    <string name="about_option2">Fork me on GitHub</string>
-    <string name="about_option3">Open-source licenses</string>
     <string name="allow_flip">Allow flip</string>
     <string name="b_series">B Series</string>
     <string name="bleed">Bleed</string>
     <string name="btn_close">CLOSE</string>
     <string name="btn_download">DOWNLOAD</string>
-    <string name="btn_github">GITHUB</string>
     <string name="btn_show_directory">SHOW DIRECTORY</string>
     <string name="btn_undo">UNDO</string>
     <string name="c_series">C Series</string>
@@ -32,6 +28,7 @@
     <string name="close_all">Close all</string>
     <string name="dark">Dark</string>
     <string name="f_series">F Series</string>
+    <string name="fork_me_on_github">Fork me on GitHub</string>
     <string name="info">Info</string>
     <string name="language">Language</string>
     <string name="light">Light</string>
@@ -39,6 +36,7 @@
     <string name="minimize">Minimize</string>
     <string name="more">More</string>
     <string name="no_content">No content</string>
+    <string name="open_source_licenses">Open-source licenses</string>
     <string name="others">Others</string>
     <string name="please_restart">Please restart</string>
     <string name="reset">Reset</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-08-03 01.33--><resources>
+2020-08-04 04.07--><resources>
     <string name="_about">Plano adalah aplikasi kalkulator ukuran kertas efisien. Lihat GitHub untuk informasi lebih.</string>
     <string name="_allow_flip">Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi.</string>
     <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman.</string>
@@ -14,15 +14,11 @@
     <string name="_update_unavailable">Tidak ada pembaruan.</string>
     <string name="a_series">Seri A</string>
     <string name="about">Tentang</string>
-    <string name="about_option1">Versi %s</string>
-    <string name="about_option2">Lihat di GitHub</string>
-    <string name="about_option3">Lisensi sumber terbuka</string>
     <string name="allow_flip">Izinkan putar</string>
     <string name="b_series">Seri B</string>
     <string name="bleed">Lebihan</string>
     <string name="btn_close">TUTUP</string>
     <string name="btn_download">UNDUH</string>
-    <string name="btn_github">GITHUB</string>
     <string name="btn_show_directory">TUNJUKKAN FOLDER</string>
     <string name="btn_undo">KEMBALIKAN</string>
     <string name="c_series">Seri C</string>
@@ -32,6 +28,7 @@
     <string name="close_all">Tutup semua</string>
     <string name="dark">Gelap</string>
     <string name="f_series">Seri F</string>
+    <string name="fork_me_on_github">Lihat di GitHub</string>
     <string name="info">Jelaskan</string>
     <string name="language">Bahasa</string>
     <string name="light">Terang</string>
@@ -39,6 +36,7 @@
     <string name="minimize">Perkecil</string>
     <string name="more">Lain-lain</string>
     <string name="no_content">Tidak ada konten</string>
+    <string name="open_source_licenses">Lisensi sumber terbuka</string>
     <string name="others">Lain-lain</string>
     <string name="please_restart">Mohon mulai ulang</string>
     <string name="reset">Atur ulang</string>

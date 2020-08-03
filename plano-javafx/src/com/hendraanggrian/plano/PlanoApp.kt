@@ -5,8 +5,9 @@ import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.RoundButton
 import com.hendraanggrian.plano.controls.RoundMorePaperButton
-import com.hendraanggrian.plano.dialogs.AboutDialog
 import com.hendraanggrian.plano.dialogs.TextDialog
+import com.hendraanggrian.plano.help.AboutDialog
+import com.hendraanggrian.plano.help.LicensesDialog
 import com.hendraanggrian.plano.util.THEME_DARK
 import com.hendraanggrian.plano.util.THEME_LIGHT
 import com.hendraanggrian.plano.util.THEME_SYSTEM
@@ -187,7 +188,6 @@ class PlanoApp : Application(), Resources {
                                     isSelected = theme == THEME_SYSTEM
                                     onAction { setTheme(this@scene, THEME_SYSTEM) }
                                 }
-                                separatorMenuItem()
                                 radioMenuItem(getString(R.string.light)) {
                                     toggleGroup = themeGroup
                                     isSelected = theme == THEME_LIGHT
@@ -201,8 +201,7 @@ class PlanoApp : Application(), Resources {
                             }
                             menu(getString(R.string.language)) {
                                 val group = ToggleGroup()
-                                Language.values().forEachIndexed { index, lang ->
-                                    if (index == 1) separatorMenuItem()
+                                Language.values().forEach { lang ->
                                     radioMenuItem(lang.toLocale().displayLanguage) {
                                         toggleGroup = group
                                         isSelected = lang.code == language
@@ -258,6 +257,12 @@ class PlanoApp : Application(), Resources {
                         "Help" {
                             menuItem(getString(R.string.check_for_update)) {
                                 onAction(Dispatchers.JavaFx) { checkForUpdate() }
+                            }
+                            menuItem(getString(R.string.fork_me_on_github)) {
+                                onAction { hostServices.showDocument(BuildConfig.WEB) }
+                            }
+                            menuItem(getString(R.string.open_source_licenses)) {
+                                onAction { LicensesDialog(this@PlanoApp).show() }
                             }
                             separatorMenuItem()
                             menuItem(getString(R.string.about)) {

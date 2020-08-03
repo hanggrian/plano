@@ -1,4 +1,4 @@
-package com.hendraanggrian.plano.about
+package com.hendraanggrian.plano.help
 
 import android.content.Context
 import android.view.LayoutInflater

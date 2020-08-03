@@ -49,11 +49,6 @@
     </item>
 
     <item
-        android:id="@+id/checkForUpdateItem"
-        android:title="@string/check_for_update"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/aboutItem"
         android:title="@string/about"
         app:showAsAction="never" />

@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".about.LicensesActivity"
+            android:name=".help.LicensesActivity"
             android:forceDarkAllowed="true"
             tools:targetApi="q" />
     </application>

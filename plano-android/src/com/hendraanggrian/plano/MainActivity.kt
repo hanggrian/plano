@@ -1,7 +1,5 @@
 package com.hendraanggrian.plano
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,18 +20,13 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
-import com.hendraanggrian.plano.util.longSnackbar
+import com.hendraanggrian.plano.help.AboutDialogFragment
 import com.hendraanggrian.plano.util.snackbar
-import com.hendraanggrian.plano.about.AboutDialogFragment
 import com.hendraanggrian.prefy.BindPreference
 import com.hendraanggrian.prefy.PreferencesSaver
 import com.hendraanggrian.prefy.Prefy
 import com.hendraanggrian.prefy.android.bind
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -146,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.closeAllItem -> {
                 val temp = adapter.toList()
-                adapter.removeAll()
+                adapter.deleteAll()
                 recycler.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {
                     adapter.putAll(temp)
                 }
@@ -166,26 +159,7 @@ class MainActivity : AppCompatActivity() {
                 saver.save()
                 AppCompatDelegate.setDefaultNightMode(theme2)
             }
-            R.id.checkForUpdateItem -> GlobalScope.launch(Dispatchers.Main) {
-                val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".apk") }
-                when {
-                    release.isNewerThan(BuildConfig.VERSION_NAME) ->
-                        recycler.longSnackbar(
-                            getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
-                            getString(R.string.btn_download)
-                        ) {
-                            startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(release.assets.first { it.name.endsWith("apk") }.downloadUrl)
-                                )
-                            )
-                        }
-                    else -> recycler.longSnackbar(getString(R.string._update_unavailable))
-                }
-            }
-            R.id.aboutItem -> AboutDialogFragment()
-                .show(supportFragmentManager, null)
+            R.id.aboutItem -> AboutDialogFragment().show(supportFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)
     }
