@@ -8,8 +8,8 @@ import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.Pane
+import ktfx.bindings.times
 import ktfx.listeners.listener
-import ktfx.times
 
 sealed class BoxPane(
     box: Box,

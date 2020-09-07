@@ -40,7 +40,7 @@ class AboutAdapter(private val onCheck: () -> View) : RecyclerView.Adapter<About
                         when {
                             release.isNewerThan(BuildConfig.VERSION_NAME) ->
                                 snackbarRoot.longSnackbar(
-                                    context.getString(R.string._update_available).format(BuildConfig.VERSION_NAME),
+                                    context.getString(R.string._update_available).format(release.name),
                                     context.getString(R.string.btn_download)
                                 ) {
                                     context.openUrl(release.assets.first { it.name.endsWith("apk") }.downloadUrl)

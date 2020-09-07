@@ -9,7 +9,6 @@ import com.hendraanggrian.plano.clean
 import com.hendraanggrian.plano.util.getResource
 import javafx.beans.property.BooleanProperty
 import javafx.beans.property.DoubleProperty
-import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.Label
@@ -20,7 +19,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
-import ktfx.controls.paddings
+import ktfx.bindings.minus
+import ktfx.bindings.or
+import ktfx.bindings.times
+import ktfx.controls.LEFT
+import ktfx.controls.insetsOf
 import ktfx.controls.toSwingImage
 import ktfx.coroutines.onAction
 import ktfx.jfoenix.controls.jfxSnackbar
@@ -37,9 +40,6 @@ import ktfx.layouts.styledCircle
 import ktfx.layouts.styledLabel
 import ktfx.listeners.capture
 import ktfx.listeners.onContextMenuRequested
-import ktfx.minus
-import ktfx.or
-import ktfx.times
 import ktfx.windows.moveTo
 import javax.imageio.ImageIO
 
@@ -65,33 +65,33 @@ class ResultPane(
     private val contextMenu: ContextMenu
 
     init {
-        paddings = 10.0
+        padding = insetsOf(10)
         val mediaBox = MediaBox2(mediaWidth, mediaHeight)
         mediaBox.populate(trimWidth, trimHeight, bleed, allowFlip)
 
         infoFlowPane = flowPane {
             hgap = 10.0
             hbox {
-                alignment = Pos.CENTER_LEFT
+                alignment = LEFT
                 styledCircle(radius = 4.0, id = R.style.circle_amber)
                 pane { minWidth = 5.0 }
                 mediaLabel = styledLabel(id = R.style.label_info)
             }
             hbox {
-                alignment = Pos.CENTER_LEFT
+                alignment = LEFT
                 styledCircle(radius = 4.0, id = R.style.circle_red)
                 trimSizeLabel = styledLabel(id = R.style.label_red)
                 pane { minWidth = 5.0 }
                 trimLabel = styledLabel(id = R.style.label_info)
             }
-        } row 0 col 0 fillHeight false
+        }.grid(0, 0).fillHeight(false)
         closeButton = addChild(
             RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close).apply {
                 id = R.style.menu_close
                 onAction { close() }
             }
-        ) row 0 col 1
-        boxPaneContainer = anchorPane() row 1 col (0 to 2)
+        ).grid(0, 1)
+        boxPaneContainer = anchorPane().grid(1, 0 to 2)
 
         contextMenu = contextMenu {
             menuItem(getString(R.string.rotate)) {

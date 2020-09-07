@@ -9,8 +9,7 @@ import javafx.geometry.Side
 import javafx.scene.control.TextField
 import javafx.scene.shape.Circle
 import javafx.scene.text.FontWeight
-import ktfx.controls.maxSize
-import ktfx.controls.minSize
+import ktfx.bindings.asString
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.contextMenu
 import ktfx.layouts.label
@@ -18,9 +17,7 @@ import ktfx.layouts.menu
 import ktfx.layouts.menuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
-import ktfx.text.fontFamily
-import ktfx.text.fontWeight
-import ktfx.toStringBinding
+import ktfx.text.fontOf
 
 open class RoundButton(
     resources: Resources,
@@ -35,8 +32,10 @@ open class RoundButton(
 
     init {
         shape = Circle(radius)
-        minSize = radius * 2
-        maxSize = radius * 2
+        (radius * 2).let {
+            setMinSize(it, it)
+            setMaxSize(it, it)
+        }
         @Suppress("LeakingThis") tooltip(getString(tooltipId))
     }
 }
@@ -50,7 +49,7 @@ open class AdaptableRoundButton(
 ) : RoundButton(resources, radius, tooltipId) {
 
     init {
-        idProperty().bind(dependency.toStringBinding { if (it) id.first else id.second })
+        idProperty().bind(dependency.asString { if (it) id.first else id.second })
     }
 }
 
@@ -80,8 +79,7 @@ open class RoundMorePaperButton(
             series.forEach { paperSize ->
                 menuItem(paperSize.dimension) {
                     graphic = label(paperSize.title) {
-                        fontFamily = "Roboto"
-                        fontWeight = FontWeight.BLACK
+                        font = fontOf("Roboto", FontWeight.BLACK)
                     }
                     onAction {
                         widthField.text = paperSize.width.toString()

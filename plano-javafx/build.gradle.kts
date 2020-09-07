@@ -1,4 +1,8 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.hendraanggrian.buildconfig.BuildConfigTask
+import com.hendraanggrian.packr.PackTask
 import com.hendraanggrian.packr.PackrExtension
+import com.hendraanggrian.r.RTask
 
 group = RELEASE_GROUP
 version = RELEASE_VERSION
@@ -69,13 +73,13 @@ tasks {
         args("-F", "src/**/*.kt")
     }
 
-    withType<com.hendraanggrian.r.RTask> {
+    withType<RTask> {
         resourcesDirectory = "res"
         configureCss()
         properties { isWriteResourceBundle = true }
     }
 
-    withType<com.hendraanggrian.buildconfig.BuildConfigTask> {
+    withType<BuildConfigTask> {
         appName = RELEASE_NAME
         artifactId = RELEASE_ARTIFACT
         debug = RELEASE_DEBUG
@@ -85,21 +89,21 @@ tasks {
 
     named<Jar>("jar") { manifest { attributes(mapOf("Main-Class" to application.mainClassName)) } }
 
-    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    named<ShadowJar>("shadowJar") {
         destinationDirectory.set(buildDir.resolve("releases"))
         archiveBaseName.set(RELEASE_ARTIFACT)
         archiveVersion.set(RELEASE_VERSION)
         archiveClassifier.set(null as String?)
     }
 
-    withType<com.hendraanggrian.packr.PackTask> {
+    withType<PackTask> {
         dependsOn("installDist")
     }
 }
 
 packr {
-    mainClass = application.mainClassName
     executable = RELEASE_NAME
+    mainClass = application.mainClassName
     classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
     resources = files("res")
     minimizeJre = PackrExtension.MINIMIZATION_HARD

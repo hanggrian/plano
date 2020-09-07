@@ -6,7 +6,7 @@ import com.hendraanggrian.plano.Resources
 import com.jfoenix.controls.JFXDialog
 import javafx.scene.Node
 import javafx.scene.layout.VBox
-import ktfx.controls.paddings
+import ktfx.controls.insetsOf
 import ktfx.jfoenix.layouts.jfxButton
 import ktfx.layouts.NodeManager
 import ktfx.layouts.buttonBar
@@ -23,7 +23,7 @@ abstract class BaseDialog(app: PlanoApp, title: String) :
 
     init {
         content = ktfx.layouts.vbox(20.0) {
-            paddings = 20.0
+            padding = insetsOf(20)
             label(title) {
                 id = R.style.label_dialog_title
             }

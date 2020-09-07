@@ -2,10 +2,9 @@ package com.hendraanggrian.plano.controls
 
 import com.hendraanggrian.plano.clean
 import com.jfoenix.controls.JFXTextField
-import javafx.geometry.Pos
 import javafx.scene.control.TextFormatter
+import ktfx.controls.CENTER
 import ktfx.coroutines.listener
-import java.util.function.UnaryOperator
 import java.util.regex.Pattern
 
 class DoubleField : JFXTextField() {
@@ -15,15 +14,13 @@ class DoubleField : JFXTextField() {
 
     init {
         prefWidth = 50.0
-        alignment = Pos.CENTER
-        textFormatter = TextFormatter<TextFormatter.Change?>(
-            UnaryOperator { change ->
-                when {
-                    PATTERN_DOUBLE.matcher(change!!.controlNewText).matches() -> change
-                    else -> null
-                }
+        alignment = CENTER
+        textFormatter = TextFormatter<TextFormatter.Change?> { change ->
+            when {
+                PATTERN_DOUBLE.matcher(change!!.controlNewText).matches() -> change
+                else -> null
             }
-        )
+        }
         focusedProperty().listener { _, _, focused ->
             if (focused && text?.isNotEmpty() == true) {
                 selectAll()
