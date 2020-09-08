@@ -60,7 +60,6 @@ val configuration = configurations.register("ktlint")
 
 dependencies {
     api(project(":$RELEASE_ARTIFACT"))
-    api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-android", VERSION_COROUTINES))
 
     implementation(hendraanggrian("prefy", "prefy-android", VERSION_PREFY))

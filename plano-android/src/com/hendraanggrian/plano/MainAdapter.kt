@@ -36,11 +36,20 @@ class MainAdapter(private val viewModel: MainViewModel) :
         holder.card.setOnCreateContextMenuListener { menu, v, _ ->
             val itemCount = ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
             menu.setHeaderTitle(context.resources.getQuantityString(R.plurals.items, itemCount, itemCount))
-            menu.add(Menu.NONE, 0, 0, R.string.allow_flip).run {
+            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_column).run {
                 isCheckable = true
-                isChecked = mediaBox.allowFlip
+                isChecked = mediaBox.allowFlipColumn
                 setOnMenuItemClickListener {
-                    mediaBox.allowFlip = !mediaBox.allowFlip
+                    mediaBox.allowFlipColumn = !mediaBox.allowFlipColumn
+                    holder.populate(mediaBox)
+                    false
+                }
+            }
+            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_row).run {
+                isCheckable = true
+                isChecked = mediaBox.allowFlipRow
+                setOnMenuItemClickListener {
+                    mediaBox.allowFlipRow = !mediaBox.allowFlipRow
                     holder.populate(mediaBox)
                     false
                 }

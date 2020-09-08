@@ -2,9 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/flipItem"
+        android:id="@+id/flipColumnItem"
         android:checkable="true"
-        android:title="@string/allow_flip" />
+        android:title="@string/allow_flip_column" />
+
+    <item
+        android:id="@+id/flipRowItem"
+        android:checkable="true"
+        android:title="@string/allow_flip_row" />
 
     <item
         android:id="@+id/rotate"

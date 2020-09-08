@@ -27,7 +27,8 @@ class MediaBox2(
     private var _trimWidth: Double? = null
     private var _trimHeight: Double? = null
     private var _bleed: Double? = null
-    private var _allowFlip: Boolean? = null
+    private var _allowFlipColumn: Boolean? = null
+    private var _allowFlipRow: Boolean? = null
 
     val trimWidth: Double get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
 
@@ -35,16 +36,23 @@ class MediaBox2(
 
     val bleed: Double get() = checkNotNull(_bleed) { "Must call populate at least once" }
 
-    var allowFlip: Boolean
-        get() = checkNotNull(_allowFlip) { "Must call populate at least once" }
+    var allowFlipColumn: Boolean
+        get() = checkNotNull(_allowFlipColumn) { "Must call populate at least once" }
         set(value) {
-            _allowFlip = value
-            populate(trimWidth, trimHeight, bleed, value)
+            _allowFlipColumn = value
+            populate(trimWidth, trimHeight, bleed, value, allowFlipRow)
+        }
+
+    var allowFlipRow: Boolean
+        get() = checkNotNull(_allowFlipRow) { "Must call populate at least once" }
+        set(value) {
+            _allowFlipRow = value
+            populate(trimWidth, trimHeight, bleed, allowFlipColumn, value)
         }
 
     fun rotate() {
         width = height.also { height = width }
-        populate(trimWidth, trimHeight, bleed, allowFlip)
+        populate(trimWidth, trimHeight, bleed, allowFlipColumn, allowFlipRow)
     }
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
@@ -52,58 +60,78 @@ class MediaBox2(
         trimWidth: Double,
         trimHeight: Double,
         bleed: Double = 0.0,
-        allowFlip: Boolean = true
+        allowFlipColumn: Boolean = true,
+        allowFlipRow: Boolean = true
     ) {
         _trimWidth = trimWidth
         _trimHeight = trimHeight
         _bleed = bleed
-        _allowFlip = allowFlip
+        _allowFlipColumn = allowFlipColumn
+        _allowFlipRow = allowFlipRow
         trimBoxes.clear()
         trimBoxes.addAll(
             mutableListOf<List<TrimBox2>>().apply {
                 add(
                     traditional(
-                        width, height,
-                        trimWidth + bleed * 2, trimHeight + bleed * 2,
-                        allowFlip
+                        width,
+                        height,
+                        trimWidth + bleed * 2,
+                        trimHeight + bleed * 2,
+                        allowFlipColumn,
+                        allowFlipRow
                     )
                 )
                 add(
                     traditional(
-                        width, height,
-                        trimHeight + bleed * 2, trimWidth + bleed * 2,
-                        allowFlip
+                        width,
+                        height,
+                        trimHeight + bleed * 2,
+                        trimWidth + bleed * 2,
+                        allowFlipColumn,
+                        allowFlipRow
                     )
                 )
-                add(
-                    radicalColumns(
-                        width, height,
-                        trimWidth + bleed * 2, trimHeight + bleed * 2,
-                        allowFlip
+                if (allowFlipColumn) {
+                    add(
+                        radicalColumns(
+                            width,
+                            height,
+                            trimWidth + bleed * 2,
+                            trimHeight + bleed * 2,
+                            allowFlipRow
+                        )
                     )
-                )
-                add(
-                    radicalColumns(
-                        width, height,
-                        trimHeight + bleed * 2, trimWidth + bleed * 2,
-                        allowFlip
+                    add(
+                        radicalColumns(
+                            width,
+                            height,
+                            trimHeight + bleed * 2,
+                            trimWidth + bleed * 2,
+                            allowFlipRow
+                        )
                     )
-                )
-                add(
-                    radicalRows(
-                        width, height,
-                        trimWidth + bleed * 2, trimHeight + bleed * 2,
-                        allowFlip
+                }
+                if (allowFlipRow) {
+                    add(
+                        radicalRows(
+                            width,
+                            height,
+                            trimWidth + bleed * 2,
+                            trimHeight + bleed * 2,
+                            allowFlipColumn
+                        )
                     )
-                )
-                add(
-                    radicalRows(
-                        width, height,
-                        trimHeight + bleed * 2, trimWidth + bleed * 2,
-                        allowFlip
+                    add(
+                        radicalRows(
+                            width,
+                            height,
+                            trimHeight + bleed * 2,
+                            trimWidth + bleed * 2,
+                            allowFlipColumn
+                        )
                     )
-                )
-            }.maxBy { it.size }!!
+                }
+            }.maxByOrNull { it.size }!!
         )
     }
 
@@ -113,24 +141,26 @@ class MediaBox2(
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
-        allowFlip: Boolean
+        allowFlipColumn: Boolean,
+        allowFlipRow: Boolean
     ): List<TrimBox2> {
         if (DEBUG) println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
-
         val sizes = mutableListOf<TrimBox2>()
         val columns = (mediaWidth / trimWidth).toInt()
         val rows = (mediaHeight / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
-        if (allowFlip) {
-            val flippedColumns = calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
-            val flippedRows = calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        if (allowFlipColumn) {
+            val flippedColumns = measureFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+            if (flippedColumns > 0) {
+                sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+            }
+        }
 
-            when {
-                flippedColumns > flippedRows ->
-                    sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
-                flippedRows > flippedColumns ->
-                    sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+        if (allowFlipRow) {
+            val flippedRows = measureFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+            if (flippedRows > 0) {
+                sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
             }
         }
         return sizes
@@ -142,20 +172,18 @@ class MediaBox2(
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
-        allowFlip: Boolean
+        allowFlipRow: Boolean
     ): List<TrimBox2> {
         if (DEBUG) println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
-
         val sizes = mutableListOf<TrimBox2>()
         val columns = ((mediaWidth - trimHeight) / trimWidth).toInt()
         val rows = (mediaHeight / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
-        if (allowFlip) {
-            val flippedColumns = calculateFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
-            val flippedRows = calculateFlippedRows(rows, mediaWidth - trimHeight, mediaHeight, trimWidth, trimHeight)
-
-            sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+        val flippedColumns = measureFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+        if (allowFlipRow) {
+            val flippedRows = measureFlippedRows(rows, mediaWidth - trimHeight, mediaHeight, trimWidth, trimHeight)
             if (flippedRows > 0) {
                 sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
             }
@@ -169,21 +197,19 @@ class MediaBox2(
         mediaHeight: Double,
         trimWidth: Double,
         trimHeight: Double,
-        allowFlip: Boolean
+        allowFlipColumn: Boolean
     ): List<TrimBox2> {
         if (DEBUG) println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
-
         val sizes = mutableListOf<TrimBox2>()
         val columns = (mediaWidth / trimWidth).toInt()
         val rows = ((mediaHeight - trimWidth) / trimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight)
 
-        if (allowFlip) {
+        val flippedRows = measureFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+        if (allowFlipColumn) {
             val flippedColumns =
-                calculateFlippedColumns(columns, mediaWidth, mediaHeight - trimWidth, trimWidth, trimHeight)
-            val flippedRows = calculateFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
-
-            sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+                measureFlippedColumns(columns, mediaWidth, mediaHeight - trimWidth, trimWidth, trimHeight)
             if (flippedColumns > 0) {
                 sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
             }
@@ -210,7 +236,7 @@ class MediaBox2(
         }
     }
 
-    private fun calculateFlippedColumns(
+    private fun measureFlippedColumns(
         columns: Int,
         mediaWidth: Double,
         mediaHeight: Double,
@@ -225,7 +251,7 @@ class MediaBox2(
         return flippedColumns
     }
 
-    private fun calculateFlippedRows(
+    private fun measureFlippedRows(
         rows: Int,
         mediaWidth: Double,
         mediaHeight: Double,

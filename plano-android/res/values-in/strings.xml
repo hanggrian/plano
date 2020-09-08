@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-08-04 04.07--><resources>
+2020-09-09 02.27--><resources>
     <string name="_about">Plano adalah aplikasi kalkulator ukuran kertas efisien. Lihat GitHub untuk informasi lebih.</string>
     <string name="_allow_flip">Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi.</string>
     <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman.</string>
@@ -15,6 +15,8 @@
     <string name="a_series">Seri A</string>
     <string name="about">Tentang</string>
     <string name="allow_flip">Izinkan putar</string>
+    <string name="allow_flip_column">Izinkan putar kolom</string>
+    <string name="allow_flip_row">Izinkan putar baris</string>
     <string name="b_series">Seri B</string>
     <string name="bleed">Lebihan</string>
     <string name="btn_close">TUTUP</string>
@@ -31,6 +33,8 @@
     <string name="fork_me_on_github">Lihat di GitHub</string>
     <string name="info">Jelaskan</string>
     <string name="language">Bahasa</string>
+    <string name="last_column">Kolom terakhir</string>
+    <string name="last_row">Baris terakhir</string>
     <string name="light">Terang</string>
     <string name="media_box">Kotak media</string>
     <string name="minimize">Perkecil</string>
@@ -39,6 +43,7 @@
     <string name="open_source_licenses">Lisensi sumber terbuka</string>
     <string name="others">Lain-lain</string>
     <string name="please_restart">Mohon mulai ulang</string>
+    <string name="preferences">Preferensi</string>
     <string name="reset">Atur ulang</string>
     <string name="rotate">Putar</string>
     <string name="save">Simpan</string>

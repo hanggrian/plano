@@ -31,7 +31,6 @@ val configuration = configurations.register("ktlint")
 
 dependencies {
     api(project(":$RELEASE_ARTIFACT"))
-    api(kotlin("stdlib", VERSION_KOTLIN))
     api(kotlinx("coroutines-javafx", VERSION_COROUTINES))
 
     api(exposed("core"))

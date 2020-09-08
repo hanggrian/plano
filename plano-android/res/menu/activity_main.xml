@@ -24,9 +24,15 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/flipItem"
+        android:id="@+id/flipColumnItem"
         android:checkable="true"
-        android:title="@string/allow_flip"
+        android:title="@string/allow_flip_column"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/flipRowItem"
+        android:checkable="true"
+        android:title="@string/allow_flip_row"
         app:showAsAction="never" />
 
     <item android:title="@string/theme">

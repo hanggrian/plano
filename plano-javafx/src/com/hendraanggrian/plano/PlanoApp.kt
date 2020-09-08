@@ -122,7 +122,8 @@ class PlanoApp : Application(), Resources {
     private val trimWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val trimHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val bleedField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val allowFlipCheck = JFXCheckBox()
+    private val allowFlipColumnCheck = JFXCheckBox()
+    private val allowFlipRowCheck = JFXCheckBox()
 
     private lateinit var expandMenu: CheckMenuItem
     private lateinit var fillMenu: CheckMenuItem
@@ -144,7 +145,8 @@ class PlanoApp : Application(), Resources {
     @JvmField @BindPreference("trim_width") var trimWidth = 0.0
     @JvmField @BindPreference("trim_height") var trimHeight = 0.0
     @JvmField @BindPreference("bleed") var bleed = 0.0
-    @JvmField @BindPreference("allow_flip") var allowFlip = false
+    @JvmField @BindPreference("allow_flip_column") var allowFlipColumn = false
+    @JvmField @BindPreference("allow_flip_row") var allowFlipRow = false
 
     override fun init() {
         Plano.setDebug(BuildConfig.DEBUG)
@@ -180,37 +182,39 @@ class PlanoApp : Application(), Resources {
                     menuBar {
                         isUseSystemMenuBar = SystemUtils.IS_OS_MAC_OSX
                         "File" {
-                            menu(getString(R.string.theme)) {
-                                val themeGroup = ToggleGroup()
-                                radioMenuItem(getString(R.string.system_default)) {
-                                    toggleGroup = themeGroup
-                                    isSelected = theme == THEME_SYSTEM
-                                    onAction { setTheme(this@scene, THEME_SYSTEM) }
+                            menu(getString(R.string.preferences)) {
+                                menu(getString(R.string.theme)) {
+                                    val themeGroup = ToggleGroup()
+                                    radioMenuItem(getString(R.string.system_default)) {
+                                        toggleGroup = themeGroup
+                                        isSelected = theme == THEME_SYSTEM
+                                        onAction { setTheme(this@scene, THEME_SYSTEM) }
+                                    }
+                                    radioMenuItem(getString(R.string.light)) {
+                                        toggleGroup = themeGroup
+                                        isSelected = theme == THEME_LIGHT
+                                        onAction { setTheme(this@scene, THEME_LIGHT) }
+                                    }
+                                    radioMenuItem(getString(R.string.dark)) {
+                                        toggleGroup = themeGroup
+                                        isSelected = theme == THEME_DARK
+                                        onAction { setTheme(this@scene, THEME_DARK) }
+                                    }
                                 }
-                                radioMenuItem(getString(R.string.light)) {
-                                    toggleGroup = themeGroup
-                                    isSelected = theme == THEME_LIGHT
-                                    onAction { setTheme(this@scene, THEME_LIGHT) }
-                                }
-                                radioMenuItem(getString(R.string.dark)) {
-                                    toggleGroup = themeGroup
-                                    isSelected = theme == THEME_DARK
-                                    onAction { setTheme(this@scene, THEME_DARK) }
-                                }
-                            }
-                            menu(getString(R.string.language)) {
-                                val group = ToggleGroup()
-                                Language.values().forEach { lang ->
-                                    radioMenuItem(lang.toLocale().displayLanguage) {
-                                        toggleGroup = group
-                                        isSelected = lang.code == language
-                                        onAction {
-                                            language = lang.code
-                                            TextDialog(
-                                                this@PlanoApp,
-                                                R.string.please_restart,
-                                                R.string._please_restart
-                                            ).apply { setOnDialogClosed { stage.close() } }.show()
+                                menu(getString(R.string.language)) {
+                                    val group = ToggleGroup()
+                                    Language.values().forEach { lang ->
+                                        radioMenuItem(lang.toLocale().displayLanguage) {
+                                            toggleGroup = group
+                                            isSelected = lang.code == language
+                                            onAction {
+                                                language = lang.code
+                                                TextDialog(
+                                                    this@PlanoApp,
+                                                    R.string.please_restart,
+                                                    R.string._please_restart
+                                                ).apply { setOnDialogClosed { stage.close() } }.show()
+                                            }
                                         }
                                     }
                                 }
@@ -359,11 +363,19 @@ class PlanoApp : Application(), Resources {
                                 tooltip(getString(R.string._allow_flip))
                             }.grid(row, 1)
                             addChild(
-                                allowFlipCheck.apply {
+                                allowFlipColumnCheck.apply {
+                                    text = getString(R.string.last_column)
                                     tooltip(getString(R.string._allow_flip))
-                                    isSelected = allowFlip
+                                    isSelected = allowFlipColumn
                                 }
-                            ).grid(row++, 2)
+                            ).grid(row++, 2 to 4)
+                            addChild(
+                                allowFlipRowCheck.apply {
+                                    text = getString(R.string.last_row)
+                                    tooltip(getString(R.string._allow_flip))
+                                    isSelected = allowFlipRow
+                                }
+                            ).grid(row++, 2 to 4)
 
                             calculateButton = addChild(
                                 RoundButton(this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate).apply {
@@ -388,7 +400,8 @@ class PlanoApp : Application(), Resources {
                                         trimWidth = trimWidthField.value
                                         trimHeight = trimHeightField.value
                                         bleed = bleedField.value
-                                        allowFlip = allowFlipCheck.isSelected
+                                        allowFlipColumn = allowFlipColumnCheck.isSelected
+                                        allowFlipRow = allowFlipRowCheck.isSelected
 
                                         outputPane.children.add(
                                             0,
@@ -398,7 +411,7 @@ class PlanoApp : Application(), Resources {
                                                         this@PlanoApp,
                                                         mediaWidth, mediaHeight,
                                                         trimWidth, trimHeight,
-                                                        bleed, allowFlip,
+                                                        bleed, allowFlipColumn, allowFlipRow,
                                                         scaleProperty, fillProperty, thickProperty
                                                     )
                                                 )

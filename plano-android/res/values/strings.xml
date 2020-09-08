@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-08-04 04.07--><resources>
+2020-09-09 02.27--><resources>
     <string name="_about">Plano is an efficient paper size calculator app. See GitHub for more information.</string>
     <string name="_allow_flip">When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available.</string>
     <string name="_bleed">Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed.</string>
@@ -15,6 +15,8 @@
     <string name="a_series">A Series</string>
     <string name="about">About</string>
     <string name="allow_flip">Allow flip</string>
+    <string name="allow_flip_column">Allow flip column</string>
+    <string name="allow_flip_row">Allow flip row</string>
     <string name="b_series">B Series</string>
     <string name="bleed">Bleed</string>
     <string name="btn_close">CLOSE</string>
@@ -31,6 +33,8 @@
     <string name="fork_me_on_github">Fork me on GitHub</string>
     <string name="info">Info</string>
     <string name="language">Language</string>
+    <string name="last_column">Last column</string>
+    <string name="last_row">Last row</string>
     <string name="light">Light</string>
     <string name="media_box">Media box</string>
     <string name="minimize">Minimize</string>
@@ -39,6 +43,7 @@
     <string name="open_source_licenses">Open-source licenses</string>
     <string name="others">Others</string>
     <string name="please_restart">Please restart</string>
+    <string name="preferences">Preferences</string>
     <string name="reset">Reset</string>
     <string name="rotate">Rotate</string>
     <string name="save">Save</string>

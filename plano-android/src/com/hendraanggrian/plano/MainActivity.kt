@@ -52,7 +52,8 @@ class MainActivity : AppCompatActivity() {
     @JvmField @BindPreference("trim_width") var trimWidth = 0f
     @JvmField @BindPreference("trim_height") var trimHeight = 0f
     @JvmField @BindPreference("bleed") var bleed = 0f
-    @JvmField @BindPreference("allow_flip") var allowFlip = false
+    @JvmField @BindPreference("allow_flip_column") var allowFlipColumn = false
+    @JvmField @BindPreference("allow_flip_row") var allowFlipRow = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +86,13 @@ class MainActivity : AppCompatActivity() {
             adjust()
             getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
             val mediaBox = MediaBox2(mediaWidth.toDouble(), mediaHeight.toDouble())
-            mediaBox.populate(trimWidth.toDouble(), trimHeight.toDouble(), bleed.toDouble(), allowFlip)
+            mediaBox.populate(
+                trimWidth.toDouble(),
+                trimHeight.toDouble(),
+                bleed.toDouble(),
+                allowFlipColumn,
+                allowFlipRow
+            )
             adapter.put(mediaBox)
         }
     }
@@ -124,7 +131,8 @@ class MainActivity : AppCompatActivity() {
             recycler.adapter!!.notifyDataSetChanged()
         }
 
-        menu.findItem(R.id.flipItem).isChecked = allowFlip
+        menu.findItem(R.id.flipColumnItem).isChecked = allowFlipColumn
+        menu.findItem(R.id.flipRowItem).isChecked = allowFlipRow
         menu.findItem(
             when (theme2) {
                 AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> R.id.themeSystemItem
@@ -146,9 +154,13 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.backgroundItem -> viewModel.fillData.value = !isFill
             R.id.borderItem -> viewModel.thickData.value = !isThick
-            R.id.flipItem -> {
-                allowFlip = !allowFlip
-                item.isChecked = allowFlip
+            R.id.flipColumnItem -> {
+                allowFlipColumn = !allowFlipColumn
+                item.isChecked = allowFlipColumn
+            }
+            R.id.flipRowItem -> {
+                allowFlipRow = !allowFlipRow
+                item.isChecked = allowFlipRow
             }
             R.id.themeSystemItem, R.id.themeLightItem, R.id.themeDarkItem -> {
                 theme2 = when (item.itemId) {

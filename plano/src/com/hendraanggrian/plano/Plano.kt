@@ -13,51 +13,64 @@ object Plano {
         trimWidth: Double,
         trimHeight: Double,
         bleed: Double,
-        allowFlip: Boolean
+        allowFlipColumn: Boolean,
+        allowFlipRow: Boolean
     ): List<Result> = mutableListOf<List<Result>>().apply {
         add(
             traditional(
-                mediaWidth, mediaHeight,
-                trimWidth + bleed * 2, trimHeight + bleed * 2,
-                allowFlip
+                mediaWidth,
+                mediaHeight,
+                trimWidth + bleed * 2,
+                trimHeight + bleed * 2,
+                allowFlipColumn
             )
         )
         add(
             traditional(
-                mediaWidth, mediaHeight,
-                trimHeight + bleed * 2, trimWidth + bleed * 2,
-                allowFlip
+                mediaWidth,
+                mediaHeight,
+                trimHeight + bleed * 2,
+                trimWidth + bleed * 2,
+                allowFlipColumn
             )
         )
         add(
             radicalColumns(
-                mediaWidth, mediaHeight,
-                trimWidth + bleed * 2, trimHeight + bleed * 2,
-                allowFlip
+                mediaWidth,
+                mediaHeight,
+                trimWidth + bleed * 2,
+                trimHeight + bleed * 2,
+                allowFlipColumn
             )
         )
         add(
             radicalColumns(
-                mediaWidth, mediaHeight,
-                trimHeight + bleed * 2, trimWidth + bleed * 2,
-                allowFlip
+                mediaWidth,
+                mediaHeight,
+                trimHeight + bleed * 2,
+                trimWidth + bleed * 2,
+                allowFlipColumn
             )
         )
         add(
             radicalRows(
-                mediaWidth, mediaHeight,
-                trimWidth + bleed * 2, trimHeight + bleed * 2,
-                allowFlip
+                mediaWidth,
+                mediaHeight,
+                trimWidth + bleed * 2,
+                trimHeight + bleed * 2,
+                allowFlipColumn
             )
         )
         add(
             radicalRows(
-                mediaWidth, mediaHeight,
-                trimHeight + bleed * 2, trimWidth + bleed * 2,
-                allowFlip
+                mediaWidth,
+                mediaHeight,
+                trimHeight + bleed * 2,
+                trimWidth + bleed * 2,
+                allowFlipColumn
             )
         )
-    }.maxBy { it.size }!!
+    }.maxByOrNull { it.size }!!
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(

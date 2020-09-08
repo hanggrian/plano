@@ -50,7 +50,8 @@ class ResultPane(
     private val trimWidth: Double,
     private val trimHeight: Double,
     private val bleed: Double,
-    allowFlip: Boolean,
+    allowFlipColumn: Boolean,
+    allowFlipRow: Boolean,
     private val scaleProperty: DoubleProperty,
     private val fillProperty: BooleanProperty,
     private val thickProperty: BooleanProperty
@@ -67,7 +68,7 @@ class ResultPane(
     init {
         padding = insetsOf(10)
         val mediaBox = MediaBox2(mediaWidth, mediaHeight)
-        mediaBox.populate(trimWidth, trimHeight, bleed, allowFlip)
+        mediaBox.populate(trimWidth, trimHeight, bleed, allowFlipColumn, allowFlipRow)
 
         infoFlowPane = flowPane {
             hgap = 10.0
@@ -100,10 +101,17 @@ class ResultPane(
                     populate(mediaBox)
                 }
             }
-            checkMenuItem(getString(R.string.allow_flip)) {
-                isSelected = mediaBox.allowFlip
+            checkMenuItem(getString(R.string.allow_flip_column)) {
+                isSelected = mediaBox.allowFlipColumn
                 onAction {
-                    mediaBox.allowFlip = !mediaBox.allowFlip
+                    mediaBox.allowFlipColumn = !mediaBox.allowFlipColumn
+                    populate(mediaBox)
+                }
+            }
+            checkMenuItem(getString(R.string.allow_flip_row)) {
+                isSelected = mediaBox.allowFlipRow
+                onAction {
+                    mediaBox.allowFlipRow = !mediaBox.allowFlipRow
                     populate(mediaBox)
                 }
             }
