@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-09-09 02.27--><resources>
+2020-09-09 03.46--><resources>
     <string name="_about">Plano is an efficient paper size calculator app. See GitHub for more information.</string>
     <string name="_allow_flip">When activated, trim boxes may be flipped in order to achieve highest number of trim boxes available.</string>
     <string name="_bleed">Bleed is distributed around trim boxes. It is an extra area in the paper that can be safely trimmed.</string>

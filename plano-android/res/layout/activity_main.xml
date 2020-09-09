@@ -119,6 +119,42 @@
                             style="@style/Widget.Plano.EditText" />
                     </LinearLayout>
                 </com.google.android.material.appbar.MaterialToolbar>
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/allowFlipToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ci_empty" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/allowFlipText"
+                            style="@style/Widget.Plano.TextView.Column"
+                            android:text="@string/allow_flip" />
+
+                        <CheckBox
+                            android:id="@+id/allowFlipColumnCheck"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/last_column" />
+
+                        <CheckBox
+                            android:id="@+id/allowFlipRowCheck"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:text="@string/last_row" />
+                    </LinearLayout>
+                </com.google.android.material.appbar.MaterialToolbar>
             </LinearLayout>
 
             <com.google.android.material.appbar.MaterialToolbar

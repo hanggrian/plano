@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-09-09 02.27--><resources>
+2020-09-09 03.46--><resources>
     <string name="_about">Plano adalah aplikasi kalkulator ukuran kertas efisien. Lihat GitHub untuk informasi lebih.</string>
     <string name="_allow_flip">Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi.</string>
     <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman.</string>

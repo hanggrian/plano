@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
         trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
         bleedEdit.setText(bleed.clean())
+        allowFlipColumnCheck.isChecked = allowFlipColumn; allowFlipRowCheck.isChecked = allowFlipRow
 
         adapter = MainAdapter(viewModel)
         recycler.adapter = adapter
@@ -131,8 +132,6 @@ class MainActivity : AppCompatActivity() {
             recycler.adapter!!.notifyDataSetChanged()
         }
 
-        menu.findItem(R.id.flipColumnItem).isChecked = allowFlipColumn
-        menu.findItem(R.id.flipRowItem).isChecked = allowFlipRow
         menu.findItem(
             when (theme2) {
                 AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> R.id.themeSystemItem
@@ -154,14 +153,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.backgroundItem -> viewModel.fillData.value = !isFill
             R.id.borderItem -> viewModel.thickData.value = !isThick
-            R.id.flipColumnItem -> {
-                allowFlipColumn = !allowFlipColumn
-                item.isChecked = allowFlipColumn
-            }
-            R.id.flipRowItem -> {
-                allowFlipRow = !allowFlipRow
-                item.isChecked = allowFlipRow
-            }
             R.id.themeSystemItem, R.id.themeLightItem, R.id.themeDarkItem -> {
                 theme2 = when (item.itemId) {
                     R.id.themeSystemItem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
@@ -180,6 +171,7 @@ class MainActivity : AppCompatActivity() {
         mediaWidth = mediaWidthEdit.value; mediaHeight = mediaHeightEdit.value
         trimWidth = trimWidthEdit.value; trimHeight = trimHeightEdit.value
         bleed = bleedEdit.value
+        allowFlipColumn = allowFlipColumnCheck.isChecked; allowFlipRow = allowFlipRowCheck.isChecked
     }
 
     private fun Toolbar.bindPaperSizes() {
