@@ -44,7 +44,7 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/mediaText"
                             style="@style/Widget.Plano.TextView.Column"
-                            android:text="@string/media_box" />
+                            android:text="@string/media_size" />
 
                         <EditText
                             android:id="@+id/mediaWidthEdit"
@@ -78,7 +78,7 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/trimText"
                             style="@style/Widget.Plano.TextView.Column"
-                            android:text="@string/trim_box" />
+                            android:text="@string/trim_size" />
 
                         <EditText
                             android:id="@+id/trimWidthEdit"

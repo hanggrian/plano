@@ -3,8 +3,12 @@ package com.hendraanggrian.plano
 import java.io.Serializable
 
 interface Box {
+
     val width: Double
+
     val height: Double
+
+    val dimension: String get() = "${width.clean()} x ${height.clean()}"
 }
 
 class TrimBox2(

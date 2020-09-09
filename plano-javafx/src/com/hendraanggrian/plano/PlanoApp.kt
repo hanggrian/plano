@@ -5,6 +5,11 @@ import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.RoundButton
 import com.hendraanggrian.plano.controls.RoundMorePaperButton
+import com.hendraanggrian.plano.data.RecentMediaBox
+import com.hendraanggrian.plano.data.RecentMediaBoxes
+import com.hendraanggrian.plano.data.RecentTrimBox
+import com.hendraanggrian.plano.data.RecentTrimBoxes
+import com.hendraanggrian.plano.data.saveRecentBoxes
 import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.plano.help.AboutDialog
 import com.hendraanggrian.plano.help.LicensesDialog
@@ -72,6 +77,10 @@ import ktfx.listeners.onHiding
 import ktfx.runLater
 import ktfx.windows.minSize
 import org.apache.commons.lang3.SystemUtils
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.ResourceBundle
 
 class PlanoApp : Application(), Resources {
@@ -155,14 +164,8 @@ class PlanoApp : Application(), Resources {
         saver = Prefy.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
 
-        /*Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
-        transaction {
-            SchemaUtils.create(MediaBoxes, TrimBoxes)
-            MediaBox.new {
-                width = 200.0
-                height = 100.0
-            }
-        }*/
+        Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
+        transaction { SchemaUtils.create(RecentMediaBoxes, RecentTrimBoxes) }
     }
 
     override fun start(stage: Stage) {
@@ -182,6 +185,14 @@ class PlanoApp : Application(), Resources {
                     menuBar {
                         isUseSystemMenuBar = SystemUtils.IS_OS_MAC_OSX
                         "File" {
+                            menuItem(getString(R.string.clear_recent_sizes)) {
+                                onAction {
+                                    transaction {
+                                        RecentMediaBoxes.deleteAll()
+                                        RecentTrimBoxes.deleteAll()
+                                    }
+                                }
+                            }
                             menu(getString(R.string.preferences)) {
                                 menu(getString(R.string.theme)) {
                                     val themeGroup = ToggleGroup()
@@ -300,58 +311,53 @@ class PlanoApp : Application(), Resources {
                             }.grid(row++, 0 to 6)
 
                             styledCircle(radius = 6.0, id = R.style.circle_amber) {
-                                tooltip(getString(R.string._media_box))
+                                tooltip(getString(R.string._media_size))
                             }.grid(row, 0)
-                            label(getString(R.string.media_box)) {
-                                tooltip(getString(R.string._media_box))
-                            }.grid(row, 1)
+                            label(getString(R.string.media_size)) { tooltip(getString(R.string._media_size)) }
+                                .grid(row, 1)
                             addChild(
                                 mediaWidthField.apply {
-                                    tooltip(getString(R.string._media_box))
+                                    tooltip(getString(R.string._media_size))
                                     value = mediaWidth
                                 }
                             ).grid(row, 2)
-                            label("x") {
-                                tooltip(getString(R.string._media_box))
-                            }.grid(row, 3)
+                            label("x") { tooltip(getString(R.string._media_size)) }.grid(row, 3)
                             addChild(
                                 mediaHeightField.apply {
-                                    tooltip(getString(R.string._media_box))
+                                    tooltip(getString(R.string._media_size))
                                     value = mediaHeight
                                 }
                             ).grid(row, 4)
                             addChild(
-                                RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField)
+                                RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField) {
+                                    RecentMediaBox.all()
+                                }
                             ).grid(row++, 5)
 
                             styledCircle(radius = 6.0, id = R.style.circle_red) {
-                                tooltip(getString(R.string._trim_box))
+                                tooltip(getString(R.string._trim_size))
                             }.grid(row, 0)
-                            label(getString(R.string.trim_box)) {
-                                tooltip(getString(R.string._trim_box))
-                            }.grid(row, 1)
+                            label(getString(R.string.trim_size)) { tooltip(getString(R.string._trim_size)) }.grid(row, 1)
                             addChild(
                                 trimWidthField.apply {
-                                    tooltip(getString(R.string._trim_box))
+                                    tooltip(getString(R.string._trim_size))
                                     value = trimWidth
                                 }
                             ).grid(row, 2)
-                            label("x") {
-                                tooltip(getString(R.string._trim_box))
-                            }.grid(row, 3)
+                            label("x") { tooltip(getString(R.string._trim_size)) }.grid(row, 3)
                             addChild(
                                 trimHeightField.apply {
-                                    tooltip(getString(R.string._trim_box))
+                                    tooltip(getString(R.string._trim_size))
                                     value = trimHeight
                                 }
                             ).grid(row, 4)
                             addChild(
-                                RoundMorePaperButton(this@PlanoApp, trimWidthField, trimHeightField)
+                                RoundMorePaperButton(this@PlanoApp, trimWidthField, trimHeightField) {
+                                    RecentTrimBox.all()
+                                }
                             ).grid(row++, 5)
 
-                            label(getString(R.string.bleed)) {
-                                tooltip(getString(R.string._bleed))
-                            }.grid(row, 1)
+                            label(getString(R.string.bleed)) { tooltip(getString(R.string._bleed)) }.grid(row, 1)
                             addChild(
                                 bleedField.apply {
                                     tooltip(getString(R.string._bleed))
@@ -359,9 +365,8 @@ class PlanoApp : Application(), Resources {
                                 }
                             ).grid(row++, 2)
 
-                            label(getString(R.string.allow_flip)) {
-                                tooltip(getString(R.string._allow_flip))
-                            }.grid(row, 1)
+                            label(getString(R.string.allow_flip)) { tooltip(getString(R.string._allow_flip)) }
+                                .grid(row, 1)
                             addChild(
                                 allowFlipColumnCheck.apply {
                                     text = getString(R.string.last_column)
@@ -402,7 +407,6 @@ class PlanoApp : Application(), Resources {
                                         bleed = bleedField.value
                                         allowFlipColumn = allowFlipColumnCheck.isSelected
                                         allowFlipRow = allowFlipRowCheck.isSelected
-
                                         outputPane.children.add(
                                             0,
                                             ktfx.layouts.pane {
@@ -417,6 +421,7 @@ class PlanoApp : Application(), Resources {
                                                 )
                                             }
                                         )
+                                        saveRecentBoxes(mediaWidth, mediaHeight, trimWidth, trimHeight)
                                     }
                                 }
                             ).grid(row, 0 to 6).halign(H_RIGHT)

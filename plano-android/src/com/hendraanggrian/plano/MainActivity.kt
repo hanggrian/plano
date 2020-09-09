@@ -20,6 +20,8 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
+import com.hendraanggrian.plano.data.PlanoDatabase
+import com.hendraanggrian.plano.data.saveRecentBoxes
 import com.hendraanggrian.plano.help.AboutDialogFragment
 import com.hendraanggrian.plano.util.snackbar
 import com.hendraanggrian.prefy.BindPreference
@@ -27,8 +29,14 @@ import com.hendraanggrian.prefy.PreferencesSaver
 import com.hendraanggrian.prefy.Prefy
 import com.hendraanggrian.prefy.android.bind
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var db: PlanoDatabase
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: MainAdapter
     private lateinit var saver: PreferencesSaver
@@ -59,6 +67,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        db = PlanoDatabase.getInstance(this)
         saver = Prefy.bind(this)
         viewModel = ViewModelProvider(this).get()
         viewModel.fillData.value = isFill
@@ -69,7 +79,9 @@ class MainActivity : AppCompatActivity() {
         bleedEdit.addTextChangedListener(textWatcher)
 
         toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
-        mediaToolbar.bindPaperSizes(); trimToolbar.bindPaperSizes()
+        mediaToolbar.prepare()
+        trimToolbar.prepare()
+        ensureToolbars()
         mediaText.doOnLayout {
             trimText.width = mediaText.width
             bleedText.width = mediaText.width
@@ -95,6 +107,18 @@ class MainActivity : AppCompatActivity() {
                 allowFlipRow
             )
             adapter.put(mediaBox)
+
+            runBlocking {
+                GlobalScope.launch(Dispatchers.IO) {
+                    saveRecentBoxes(
+                        mediaWidth.toDouble(),
+                        mediaHeight.toDouble(),
+                        trimWidth.toDouble(),
+                        trimHeight.toDouble()
+                    )
+                }.join()
+                ensureToolbars()
+            }
         }
     }
 
@@ -174,24 +198,47 @@ class MainActivity : AppCompatActivity() {
         allowFlipColumn = allowFlipColumnCheck.isChecked; allowFlipRow = allowFlipRowCheck.isChecked
     }
 
-    private fun Toolbar.bindPaperSizes() {
-        menu.addSubMenu(getString(R.string.a_series)).run { PaperSize.SERIES_A.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.b_series)).run { PaperSize.SERIES_B.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.c_series)).run { PaperSize.SERIES_C.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.f_series)).run { PaperSize.SERIES_F.forEach { add(it.extendedTitle) } }
+    private fun ensureToolbars() {
+        val history = GlobalScope.async(Dispatchers.IO) { db.historyMediaBox().all() to db.historyTrimBox().all() }
+        runBlocking {
+            val (mediaBoxes, trimBoxes) = history.await()
+            mediaToolbar.updatePaperSizes { mediaBoxes }
+            trimToolbar.updatePaperSizes { trimBoxes }
+        }
+    }
+
+    private fun Toolbar.updatePaperSizes(historyProvider: () -> Iterable<Box>) {
+        menu.clear()
+        // history
+        historyProvider().reversed().forEach { menu.add(it.dimension) }
+        // standard paper sizes
+        menu.addSubMenu(getString(R.string.a_series))
+            .run { StandardPaperSize.SERIES_A.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.b_series))
+            .run { StandardPaperSize.SERIES_B.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.c_series))
+            .run { StandardPaperSize.SERIES_C.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.f_series))
+            .run { StandardPaperSize.SERIES_F.forEach { add(it.extendedTitle) } }
+    }
+
+    private fun Toolbar.prepare() {
+        // messy custom implementation
         setOnMenuItemClickListener { menu ->
             if (menu.title.none { it.isDigit() }) {
                 return@setOnMenuItemClickListener false
             }
             val s = menu.title.toString()
-            (children.first() as ViewGroup).children.filterIsInstance<EditText>().forEachIndexed { index, t ->
-                t.setText(
-                    when (index) {
-                        0 -> s.substring(s.indexOf('\t') + 1, s.indexOf(" x "))
-                        else -> s.substringAfter(" x ")
-                    }
-                )
-            }
+            (children.first() as ViewGroup).children
+                .filterIsInstance<EditText>()
+                .forEachIndexed { index, t ->
+                    t.setText(
+                        when (index) {
+                            0 -> s.substring(s.indexOf('\t') + 1, s.indexOf(" x "))
+                            else -> s.substringAfter(" x ")
+                        }
+                    )
+                }
             true
         }
     }

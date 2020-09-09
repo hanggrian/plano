@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2020-09-09 03.46--><resources>
+2020-09-10 03.57--><resources>
     <string name="_about">Plano adalah aplikasi kalkulator ukuran kertas efisien. Lihat GitHub untuk informasi lebih.</string>
     <string name="_allow_flip">Ketika dinyalakan, kotak potong bisa dimiringkan untuk mencapai jumlah kotak potong tertinggi.</string>
     <string name="_bleed">Lebihan disebarkan di sekitar kotang potong. Lebihan adalah area ekstra di kertas yang dapat dipotong secara aman.</string>
     <string name="_boxes_cleared">Konten terhapus.</string>
     <string name="_desc">Hitung berapa banyak kotak potong dalam kotak media.</string>
-    <string name="_media_box">Sumber ukuran kertas, induk langsung dari ukuran potong.</string>
+    <string name="_media_size">Sumber ukuran kertas, induk langsung dari ukuran potong.</string>
     <string name="_please_restart">Mulai ulang aplikasi untuk melihat perubahan.</string>
     <string name="_save">Tersimpan sebagai %s.</string>
-    <string name="_trim_box">Ukuran target kertas yang akan dipotong.</string>
+    <string name="_trim_size">Ukuran target kertas yang akan dipotong.</string>
     <string name="_update_available">Plano versi %s tersedia.</string>
     <string name="_update_unavailable">Tidak ada pembaruan.</string>
     <string name="a_series">Seri A</string>
@@ -26,6 +26,7 @@
     <string name="c_series">Seri C</string>
     <string name="calculate">Kalkulasi</string>
     <string name="check_for_update">Cek pembaruan</string>
+    <string name="clear_recent_sizes">Hapus Ukuran Terkini</string>
     <string name="close">Tutup</string>
     <string name="close_all">Tutup semua</string>
     <string name="dark">Gelap</string>
@@ -36,7 +37,7 @@
     <string name="last_column">Kolom terakhir</string>
     <string name="last_row">Baris terakhir</string>
     <string name="light">Terang</string>
-    <string name="media_box">Kotak media</string>
+    <string name="media_size">Ukuran media</string>
     <string name="minimize">Perkecil</string>
     <string name="more">Lain-lain</string>
     <string name="no_content">Tidak ada konten</string>
@@ -47,11 +48,11 @@
     <string name="reset">Atur ulang</string>
     <string name="rotate">Putar</string>
     <string name="save">Simpan</string>
-    <string name="system_default">Standar sistem</string>
+    <string name="system_default">Standar Sistem</string>
     <string name="theme">Tema</string>
     <string name="toggle_background">Alihkan latar belakang</string>
     <string name="toggle_border">Alihkan perbatasan</string>
     <string name="toggle_expand">Alihkan perkembangan</string>
-    <string name="trim_box">Kotak potong</string>
+    <string name="trim_size">Ukuran potong</string>
     <string name="zoom">Perbesar</string>
 </resources>

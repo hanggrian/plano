@@ -1,23 +1,28 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.PaperSize
+import com.hendraanggrian.plano.Box
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
+import com.hendraanggrian.plano.StandardPaperSize
 import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
-import javafx.geometry.Side
 import javafx.scene.control.TextField
 import javafx.scene.shape.Circle
 import javafx.scene.text.FontWeight
 import ktfx.bindings.asString
+import ktfx.controls.SIDE_RIGHT
+import ktfx.coroutines.onShowing
 import ktfx.layouts.KtfxContextMenu
 import ktfx.layouts.contextMenu
 import ktfx.layouts.label
 import ktfx.layouts.menu
 import ktfx.layouts.menuItem
+import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
 import ktfx.text.fontOf
+import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.transactions.transaction
 
 open class RoundButton(
     resources: Resources,
@@ -56,29 +61,52 @@ open class AdaptableRoundButton(
 open class RoundMorePaperButton(
     resources: Resources,
     private val widthField: TextField,
-    private val heightField: TextField
+    private val heightField: TextField,
+    historyProvider: Transaction.() -> Iterable<Box>
 ) : RoundButton(resources, RADIUS_MEDIUM, R.string.more) {
+
+    internal companion object {
+        const val PERSISTENT = "PERSISTENT"
+    }
 
     init {
         id = R.style.menu_more
         val contextMenu = contextMenu {
-            seriesMenu(R.string.a_series, PaperSize.SERIES_A)
-            seriesMenu(R.string.b_series, PaperSize.SERIES_B)
-            seriesMenu(R.string.c_series, PaperSize.SERIES_C)
-            seriesMenu(R.string.f_series, PaperSize.SERIES_F)
+            onShowing {
+                items.removeAll(items.filter { it.userData != PERSISTENT })
+                transaction {
+                    historyProvider().forEach { box ->
+                        items.add(
+                            0,
+                            ktfx.layouts.menuItem(box.dimension) {
+                                onAction {
+                                    widthField.text = box.width.toString()
+                                    heightField.text = box.height.toString()
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+            separatorMenuItem { userData = PERSISTENT }
+            standardPaperSizesMenu(R.string.a_series, StandardPaperSize.SERIES_A)
+            standardPaperSizesMenu(R.string.b_series, StandardPaperSize.SERIES_B)
+            standardPaperSizesMenu(R.string.c_series, StandardPaperSize.SERIES_C)
+            standardPaperSizesMenu(R.string.f_series, StandardPaperSize.SERIES_F)
         }
         onAction {
             if (!contextMenu.isShowing) {
-                contextMenu.show(this@RoundMorePaperButton, Side.RIGHT, 0.0, 0.0)
+                contextMenu.show(this@RoundMorePaperButton, SIDE_RIGHT, 0.0, 0.0)
             }
         }
     }
 
-    private fun KtfxContextMenu.seriesMenu(textId: String, series: List<PaperSize>) =
+    private fun KtfxContextMenu.standardPaperSizesMenu(textId: String, series: List<StandardPaperSize>) =
         menu(getString(textId)) {
+            userData = PERSISTENT
             series.forEach { paperSize ->
                 menuItem(paperSize.dimension) {
-                    graphic = label(paperSize.title) {
+                    graphic = label(paperSize.name) {
                         font = fontOf("Roboto", FontWeight.BLACK)
                     }
                     onAction {
