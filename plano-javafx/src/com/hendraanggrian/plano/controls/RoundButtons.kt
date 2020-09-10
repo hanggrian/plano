@@ -1,9 +1,9 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.Box
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
-import com.hendraanggrian.plano.StandardPaperSize
+import com.hendraanggrian.plano.Size
+import com.hendraanggrian.plano.StandardSize
 import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
 import javafx.scene.control.TextField
@@ -62,7 +62,7 @@ open class RoundMorePaperButton(
     resources: Resources,
     private val widthField: TextField,
     private val heightField: TextField,
-    historyProvider: Transaction.() -> Iterable<Box>
+    historyProvider: Transaction.() -> Iterable<Size>
 ) : RoundButton(resources, RADIUS_MEDIUM, R.string.more) {
 
     internal companion object {
@@ -75,13 +75,13 @@ open class RoundMorePaperButton(
             onShowing {
                 items.removeAll(items.filter { it.userData != PERSISTENT })
                 transaction {
-                    historyProvider().forEach { box ->
+                    historyProvider().forEach { size ->
                         items.add(
                             0,
-                            ktfx.layouts.menuItem(box.dimension) {
+                            ktfx.layouts.menuItem(size.dimension) {
                                 onAction {
-                                    widthField.text = box.width.toString()
-                                    heightField.text = box.height.toString()
+                                    widthField.text = size.width.toString()
+                                    heightField.text = size.height.toString()
                                 }
                             }
                         )
@@ -89,10 +89,10 @@ open class RoundMorePaperButton(
                 }
             }
             separatorMenuItem { userData = PERSISTENT }
-            standardPaperSizesMenu(R.string.a_series, StandardPaperSize.SERIES_A)
-            standardPaperSizesMenu(R.string.b_series, StandardPaperSize.SERIES_B)
-            standardPaperSizesMenu(R.string.c_series, StandardPaperSize.SERIES_C)
-            standardPaperSizesMenu(R.string.f_series, StandardPaperSize.SERIES_F)
+            standardPaperSizesMenu(R.string.a_series, StandardSize.SERIES_A)
+            standardPaperSizesMenu(R.string.b_series, StandardSize.SERIES_B)
+            standardPaperSizesMenu(R.string.c_series, StandardSize.SERIES_C)
+            standardPaperSizesMenu(R.string.f_series, StandardSize.SERIES_F)
         }
         onAction {
             if (!contextMenu.isShowing) {
@@ -101,7 +101,7 @@ open class RoundMorePaperButton(
         }
     }
 
-    private fun KtfxContextMenu.standardPaperSizesMenu(textId: String, series: List<StandardPaperSize>) =
+    private fun KtfxContextMenu.standardPaperSizesMenu(textId: String, series: List<StandardSize>) =
         menu(getString(textId)) {
             userData = PERSISTENT
             series.forEach { paperSize ->

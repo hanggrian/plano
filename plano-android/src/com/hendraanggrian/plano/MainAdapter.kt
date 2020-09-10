@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter(private val viewModel: MainViewModel) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>(),
-    MutableList<MediaBox2> by arrayListOf() {
+    MutableList<MediaSize> by arrayListOf() {
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -69,7 +69,7 @@ class MainAdapter(private val viewModel: MainViewModel) :
         }
     }
 
-    fun put(element: MediaBox2) {
+    fun put(element: MediaSize) {
         if (isEmpty()) {
             viewModel.emptyData.value = false
         }
@@ -77,7 +77,7 @@ class MainAdapter(private val viewModel: MainViewModel) :
         notifyItemInserted(size - 1)
     }
 
-    fun putAll(elements: Collection<MediaBox2>) {
+    fun putAll(elements: Collection<MediaSize>) {
         if (isEmpty()) {
             viewModel.emptyData.value = false
         }
@@ -86,7 +86,7 @@ class MainAdapter(private val viewModel: MainViewModel) :
         notifyItemRangeInserted(start, size)
     }
 
-    fun delete(element: MediaBox2) {
+    fun delete(element: MediaSize) {
         val index = indexOf(element)
         remove(element)
         notifyItemRemoved(index)
@@ -102,7 +102,7 @@ class MainAdapter(private val viewModel: MainViewModel) :
         notifyItemRangeRemoved(0, size)
     }
 
-    private fun ViewHolder.populate(mediaBox: MediaBox2) {
+    private fun ViewHolder.populate(mediaBox: MediaSize) {
         mediaText.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimCountText.text = mediaBox.size.toString()
         trimText.text = "${(mediaBox.trimWidth + mediaBox.bleed * 2).clean()} x " +

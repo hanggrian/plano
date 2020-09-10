@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano.data
 
-import com.hendraanggrian.plano.Box
+import com.hendraanggrian.plano.Size
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -11,7 +11,7 @@ object MediaBoxes : IntIdTable() {
     val height = double("height")
 }
 
-class MediaBox(id: EntityID<Int>) : IntEntity(id), Box {
+class MediaBox(id: EntityID<Int>) : IntEntity(id), Size {
     companion object : IntEntityClass<MediaBox>(MediaBoxes)
 
     override var width by MediaBoxes.width

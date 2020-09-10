@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
 import com.hendraanggrian.plano.data.PlanoDatabase
-import com.hendraanggrian.plano.data.saveRecentBoxes
+import com.hendraanggrian.plano.data.saveRecentSizes
 import com.hendraanggrian.plano.help.AboutDialogFragment
 import com.hendraanggrian.plano.util.snackbar
 import com.hendraanggrian.prefy.BindPreference
@@ -98,19 +98,19 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             adjust()
             getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-            val mediaBox = MediaBox2(mediaWidth.toDouble(), mediaHeight.toDouble())
-            mediaBox.populate(
+            val mediaSize = MediaSize(mediaWidth.toDouble(), mediaHeight.toDouble())
+            mediaSize.populate(
                 trimWidth.toDouble(),
                 trimHeight.toDouble(),
                 bleed.toDouble(),
                 allowFlipColumn,
                 allowFlipRow
             )
-            adapter.put(mediaBox)
+            adapter.put(mediaSize)
 
             runBlocking {
                 GlobalScope.launch(Dispatchers.IO) {
-                    saveRecentBoxes(
+                    saveRecentSizes(
                         mediaWidth.toDouble(),
                         mediaHeight.toDouble(),
                         trimWidth.toDouble(),
@@ -199,27 +199,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ensureToolbars() {
-        val history = GlobalScope.async(Dispatchers.IO) { db.historyMediaBox().all() to db.historyTrimBox().all() }
+        val history = GlobalScope.async(Dispatchers.IO) { db.recentMedia().all() to db.recentTrim().all() }
         runBlocking {
-            val (mediaBoxes, trimBoxes) = history.await()
-            mediaToolbar.updatePaperSizes { mediaBoxes }
-            trimToolbar.updatePaperSizes { trimBoxes }
+            val (mediaSizes, trimSizes) = history.await()
+            mediaToolbar.updatePaperSizes { mediaSizes }
+            trimToolbar.updatePaperSizes { trimSizes }
         }
     }
 
-    private fun Toolbar.updatePaperSizes(historyProvider: () -> Iterable<Box>) {
+    private fun Toolbar.updatePaperSizes(historyProvider: () -> Iterable<Size>) {
         menu.clear()
         // history
         historyProvider().reversed().forEach { menu.add(it.dimension) }
         // standard paper sizes
         menu.addSubMenu(getString(R.string.a_series))
-            .run { StandardPaperSize.SERIES_A.forEach { add(it.extendedTitle) } }
+            .run { StandardSize.SERIES_A.forEach { add(it.extendedTitle) } }
         menu.addSubMenu(getString(R.string.b_series))
-            .run { StandardPaperSize.SERIES_B.forEach { add(it.extendedTitle) } }
+            .run { StandardSize.SERIES_B.forEach { add(it.extendedTitle) } }
         menu.addSubMenu(getString(R.string.c_series))
-            .run { StandardPaperSize.SERIES_C.forEach { add(it.extendedTitle) } }
+            .run { StandardSize.SERIES_C.forEach { add(it.extendedTitle) } }
         menu.addSubMenu(getString(R.string.f_series))
-            .run { StandardPaperSize.SERIES_F.forEach { add(it.extendedTitle) } }
+            .run { StandardSize.SERIES_F.forEach { add(it.extendedTitle) } }
     }
 
     private fun Toolbar.prepare() {

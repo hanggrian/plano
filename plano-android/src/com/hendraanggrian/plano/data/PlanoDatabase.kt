@@ -6,10 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 /** As seen in https://github.com/android/sunflower. */
-@Database(entities = [RecentMediaBox::class, RecentTrimBox::class], version = 1, exportSchema = false)
+@Database(entities = [RecentMediaSize::class, RecentTrimSize::class], version = 1, exportSchema = false)
 abstract class PlanoDatabase : RoomDatabase() {
-    abstract fun historyMediaBox(): RecentMediaBoxes
-    abstract fun historyTrimBox(): RecentTrimBoxes
+    abstract fun recentMedia(): RecentMediaSizes
+    abstract fun recentTrim(): RecentTrimSizes
 
     companion object {
         // For Singleton instantiation

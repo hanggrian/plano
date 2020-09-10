@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano.controls
 
-import com.hendraanggrian.plano.MediaBox2
+import com.hendraanggrian.plano.MediaSize
 import com.hendraanggrian.plano.PlanoApp
 import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
@@ -67,7 +67,7 @@ class ResultPane(
 
     init {
         padding = insetsOf(10)
-        val mediaBox = MediaBox2(mediaWidth, mediaHeight)
+        val mediaBox = MediaSize(mediaWidth, mediaHeight)
         mediaBox.populate(trimWidth, trimHeight, bleed, allowFlipColumn, allowFlipRow)
 
         infoFlowPane = flowPane {
@@ -116,9 +116,6 @@ class ResultPane(
                 }
             }
             separatorMenuItem()
-            menuItem(getString(R.string.close)) { onAction { close() } }
-            menuItem(getString(R.string.close_all)) { onAction { app.closeAll() } }
-            separatorMenuItem()
             menuItem(getString(R.string.save)) {
                 onAction {
                     val isDarkTheme = getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
@@ -154,14 +151,14 @@ class ResultPane(
         populate(mediaBox)
     }
 
-    private fun populate(mediaBox: MediaBox2) {
+    private fun populate(mediaBox: MediaSize) {
         mediaLabel.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimSizeLabel.text = " ${mediaBox.size}"
         trimLabel.text = "${(trimWidth + bleed * 2).clean()} x ${(trimHeight + bleed * 2).clean()}"
         infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
-        boxPaneContainer.children += MediaBoxPane(mediaBox, scaleProperty, fillProperty, thickProperty)
-        mediaBox.forEach { boxPaneContainer.children += TrimBoxPane(it, scaleProperty, fillProperty, thickProperty) }
+        boxPaneContainer.children += MediaSizePane(mediaBox, scaleProperty, fillProperty, thickProperty)
+        mediaBox.forEach { boxPaneContainer.children += TrimSizePane(it, scaleProperty, fillProperty, thickProperty) }
     }
 
     private fun close() {

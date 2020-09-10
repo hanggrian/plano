@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano.data
 
-import com.hendraanggrian.plano.Box
+import com.hendraanggrian.plano.Size
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -14,7 +14,7 @@ object TrimBoxes : IntIdTable() {
     val mediaBox = reference("media_box", MediaBoxes)
 }
 
-class TrimBox(id: EntityID<Int>) : IntEntity(id), Box {
+class TrimBox(id: EntityID<Int>) : IntEntity(id), Size {
     companion object : IntEntityClass<TrimBox>(TrimBoxes)
 
     var x by TrimBoxes.x

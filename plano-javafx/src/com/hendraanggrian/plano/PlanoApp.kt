@@ -5,11 +5,11 @@ import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.RoundButton
 import com.hendraanggrian.plano.controls.RoundMorePaperButton
-import com.hendraanggrian.plano.data.RecentMediaBox
-import com.hendraanggrian.plano.data.RecentMediaBoxes
-import com.hendraanggrian.plano.data.RecentTrimBox
-import com.hendraanggrian.plano.data.RecentTrimBoxes
-import com.hendraanggrian.plano.data.saveRecentBoxes
+import com.hendraanggrian.plano.data.RecentMediaSize
+import com.hendraanggrian.plano.data.RecentMediaSizes
+import com.hendraanggrian.plano.data.RecentTrimSize
+import com.hendraanggrian.plano.data.RecentTrimSizes
+import com.hendraanggrian.plano.data.saveRecentSizes
 import com.hendraanggrian.plano.dialogs.TextDialog
 import com.hendraanggrian.plano.help.AboutDialog
 import com.hendraanggrian.plano.help.LicensesDialog
@@ -165,7 +165,7 @@ class PlanoApp : Application(), Resources {
         resourceBundle = Language.ofCode(language).toResourcesBundle()
 
         Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
-        transaction { SchemaUtils.create(RecentMediaBoxes, RecentTrimBoxes) }
+        transaction { SchemaUtils.create(RecentMediaSizes, RecentTrimSizes) }
     }
 
     override fun start(stage: Stage) {
@@ -188,8 +188,8 @@ class PlanoApp : Application(), Resources {
                             menuItem(getString(R.string.clear_recent_sizes)) {
                                 onAction {
                                     transaction {
-                                        RecentMediaBoxes.deleteAll()
-                                        RecentTrimBoxes.deleteAll()
+                                        RecentMediaSizes.deleteAll()
+                                        RecentTrimSizes.deleteAll()
                                     }
                                 }
                             }
@@ -330,7 +330,7 @@ class PlanoApp : Application(), Resources {
                             ).grid(row, 4)
                             addChild(
                                 RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField) {
-                                    RecentMediaBox.all()
+                                    RecentMediaSize.all()
                                 }
                             ).grid(row++, 5)
 
@@ -353,7 +353,7 @@ class PlanoApp : Application(), Resources {
                             ).grid(row, 4)
                             addChild(
                                 RoundMorePaperButton(this@PlanoApp, trimWidthField, trimHeightField) {
-                                    RecentTrimBox.all()
+                                    RecentTrimSize.all()
                                 }
                             ).grid(row++, 5)
 
@@ -421,7 +421,7 @@ class PlanoApp : Application(), Resources {
                                                 )
                                             }
                                         )
-                                        saveRecentBoxes(mediaWidth, mediaHeight, trimWidth, trimHeight)
+                                        saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
                                     }
                                 }
                             ).grid(row, 0 to 6).halign(H_RIGHT)
