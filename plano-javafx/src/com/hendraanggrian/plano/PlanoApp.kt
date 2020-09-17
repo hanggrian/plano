@@ -41,6 +41,7 @@ import javafx.stage.Stage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.withContext
+import ktfx.bindings.asAny
 import ktfx.bindings.booleanBindingOf
 import ktfx.bindings.eq
 import ktfx.bindings.isEmpty
@@ -53,6 +54,7 @@ import ktfx.coroutines.onAction
 import ktfx.doublePropertyOf
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
+import ktfx.jfoenix.layouts.jfxToggleNode
 import ktfx.launchApplication
 import ktfx.layouts.anchorPane
 import ktfx.layouts.borderPane
@@ -73,7 +75,6 @@ import ktfx.layouts.styledCircle
 import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.listeners.listener
-import ktfx.listeners.onHiding
 import ktfx.runLater
 import ktfx.windows.minSize
 import org.apache.commons.lang3.SystemUtils
@@ -131,6 +132,21 @@ class PlanoApp : Application(), Resources {
     private val trimWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val trimHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
     private val bleedField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val gapHorizontalField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val gapVerticalField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val gapLinkToggle = jfxToggleNode {
+        idProperty().bind(
+            this@jfxToggleNode.selectedProperty().asAny {
+                if (it) R.style.menu_link_on else R.style.menu_link_off
+            }
+        )
+        selectedProperty().listener {
+            when {
+                isSelected -> gapHorizontalField.textProperty().bindBidirectional(gapVerticalField.textProperty())
+                else -> gapHorizontalField.textProperty().unbindBidirectional(gapVerticalField.textProperty())
+            }
+        }
+    }
     private val allowFlipColumnCheck = JFXCheckBox()
     private val allowFlipRowCheck = JFXCheckBox()
 
@@ -154,6 +170,9 @@ class PlanoApp : Application(), Resources {
     @JvmField @BindPreference("trim_width") var trimWidth = 0.0
     @JvmField @BindPreference("trim_height") var trimHeight = 0.0
     @JvmField @BindPreference("bleed") var bleed = 0.0
+    @JvmField @BindPreference("gap_horizontal") var gapHorizontal = 0.0
+    @JvmField @BindPreference("gap_vertical") var gapVertical = 0.0
+    @JvmField @BindPreference("gap_link") var gapLink = false
     @JvmField @BindPreference("allow_flip_column") var allowFlipColumn = false
     @JvmField @BindPreference("allow_flip_row") var allowFlipRow = false
 
@@ -171,12 +190,6 @@ class PlanoApp : Application(), Resources {
     override fun start(stage: Stage) {
         stage.title = BuildConfig.NAME
         stage.minSize = 750 to 500
-        stage.onHiding {
-            isExpand = expandProperty.value
-            isFill = fillProperty.value
-            isThick = thickProperty.value
-            saver.save()
-        }
         stage.scene {
             stylesheets.addAll(getResource(R.style._plano), getResource(R.style._plano_font))
             if (isDarkTheme(theme)) stylesheets += getResource(R.style._plano_dark)
@@ -193,6 +206,7 @@ class PlanoApp : Application(), Resources {
                                     }
                                 }
                             }
+                            separatorMenuItem()
                             menu(getString(R.string.preferences)) {
                                 menu(getString(R.string.theme)) {
                                     val themeGroup = ToggleGroup()
@@ -308,79 +322,94 @@ class PlanoApp : Application(), Resources {
                             label(getString(R.string._desc)) {
                                 isWrapText = true
                                 maxWidth = 250.0
-                            }.grid(row++, 0 to 6)
+                            }.grid(row++, 0 to 7)
 
                             styledCircle(radius = 6.0, id = R.style.circle_amber) {
                                 tooltip(getString(R.string._media_size))
                             }.grid(row, 0)
                             label(getString(R.string.media_size)) { tooltip(getString(R.string._media_size)) }
-                                .grid(row, 1)
+                                .grid(row, 1 to 2)
                             addChild(
                                 mediaWidthField.apply {
                                     tooltip(getString(R.string._media_size))
                                     value = mediaWidth
                                 }
-                            ).grid(row, 2)
-                            label("x") { tooltip(getString(R.string._media_size)) }.grid(row, 3)
+                            ).grid(row, 3)
+                            label("×") { tooltip(getString(R.string._media_size)) }.grid(row, 4)
                             addChild(
                                 mediaHeightField.apply {
                                     tooltip(getString(R.string._media_size))
                                     value = mediaHeight
                                 }
-                            ).grid(row, 4)
+                            ).grid(row, 5)
                             addChild(
                                 RoundMorePaperButton(this@PlanoApp, mediaWidthField, mediaHeightField) {
                                     RecentMediaSize.all()
                                 }
-                            ).grid(row++, 5)
+                            ).grid(row++, 6)
 
                             styledCircle(radius = 6.0, id = R.style.circle_red) {
                                 tooltip(getString(R.string._trim_size))
                             }.grid(row, 0)
-                            label(getString(R.string.trim_size)) { tooltip(getString(R.string._trim_size)) }.grid(row, 1)
+                            label(getString(R.string.trim_size)) { tooltip(getString(R.string._trim_size)) }
+                                .grid(row, 1 to 2)
                             addChild(
                                 trimWidthField.apply {
                                     tooltip(getString(R.string._trim_size))
                                     value = trimWidth
                                 }
-                            ).grid(row, 2)
-                            label("x") { tooltip(getString(R.string._trim_size)) }.grid(row, 3)
+                            ).grid(row, 3)
+                            label("×") { tooltip(getString(R.string._trim_size)) }.grid(row, 4)
                             addChild(
                                 trimHeightField.apply {
                                     tooltip(getString(R.string._trim_size))
                                     value = trimHeight
                                 }
-                            ).grid(row, 4)
+                            ).grid(row, 5)
                             addChild(
                                 RoundMorePaperButton(this@PlanoApp, trimWidthField, trimHeightField) {
                                     RecentTrimSize.all()
                                 }
-                            ).grid(row++, 5)
+                            ).grid(row++, 6)
 
-                            label(getString(R.string.bleed)) { tooltip(getString(R.string._bleed)) }.grid(row, 1)
+                            label(getString(R.string.gap)) { tooltip(getString(R.string._gap)) }.grid(row, 1)
+                            label("↔︎︎") { tooltip(getString(R.string._gap)) }.grid(row, 2).halign(H_RIGHT)
                             addChild(
-                                bleedField.apply {
-                                    tooltip(getString(R.string._bleed))
-                                    value = bleed
+                                gapHorizontalField.apply {
+                                    tooltip(getString(R.string._gap))
+                                    value = gapHorizontal
                                 }
-                            ).grid(row++, 2)
+                            ).grid(row, 3)
+                            label("↕︎") { tooltip(getString(R.string._gap)) }.grid(row, 4)
+                            addChild(
+                                gapVerticalField.apply {
+                                    tooltip(getString(R.string._gap))
+                                    value = gapVertical
+                                }
+                            ).grid(row, 5)
+                            addChild(
+                                gapLinkToggle.apply {
+                                    tooltip(getString(R.string._gap))
+                                    isSelected = gapLink
+                                }
+                            ).grid(row++, 6)
 
                             label(getString(R.string.allow_flip)) { tooltip(getString(R.string._allow_flip)) }
-                                .grid(row, 1)
+                                .grid(row, 1 to 2)
                             addChild(
                                 allowFlipColumnCheck.apply {
                                     text = getString(R.string.last_column)
                                     tooltip(getString(R.string._allow_flip))
                                     isSelected = allowFlipColumn
                                 }
-                            ).grid(row++, 2 to 4)
+                            ).grid(row++, 3 to 4)
                             addChild(
                                 allowFlipRowCheck.apply {
                                     text = getString(R.string.last_row)
                                     tooltip(getString(R.string._allow_flip))
                                     isSelected = allowFlipRow
                                 }
-                            ).grid(row++, 2 to 4)
+                            ).grid(row++, 3 to 4)
 
                             calculateButton = addChild(
                                 RoundButton(this@PlanoApp, RoundButton.RADIUS_LARGE, R.string.calculate).apply {
@@ -400,22 +429,16 @@ class PlanoApp : Application(), Resources {
                                         }
                                     )
                                     onAction {
-                                        mediaWidth = mediaWidthField.value
-                                        mediaHeight = mediaHeightField.value
-                                        trimWidth = trimWidthField.value
-                                        trimHeight = trimHeightField.value
-                                        bleed = bleedField.value
-                                        allowFlipColumn = allowFlipColumnCheck.isSelected
-                                        allowFlipRow = allowFlipRowCheck.isSelected
                                         outputPane.children.add(
                                             0,
                                             ktfx.layouts.pane {
                                                 addChild(
                                                     ResultPane(
                                                         this@PlanoApp,
-                                                        mediaWidth, mediaHeight,
-                                                        trimWidth, trimHeight,
-                                                        bleed, allowFlipColumn, allowFlipRow,
+                                                        mediaWidthField.value, mediaHeightField.value,
+                                                        trimWidthField.value, trimHeightField.value,
+                                                        bleedField.value,
+                                                        allowFlipColumnCheck.isSelected, allowFlipRowCheck.isSelected,
                                                         scaleProperty, fillProperty, thickProperty
                                                     )
                                                 )
@@ -424,7 +447,7 @@ class PlanoApp : Application(), Resources {
                                         saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
                                     }
                                 }
-                            ).grid(row, 0 to 6).halign(H_RIGHT)
+                            ).grid(row, 0 to 7).halign(H_RIGHT)
 
                             // avoid left pane being pushed out when right pane has a lot of contents
                             runLater { minWidth = width }
@@ -455,6 +478,17 @@ class PlanoApp : Application(), Resources {
         if (isFill) toggleFill()
         if (isThick) toggleThick()
         mediaWidthField.requestFocus()
+    }
+
+    override fun stop() {
+        isExpand = expandProperty.value; isFill = fillProperty.value; isThick = thickProperty.value
+        mediaWidth = mediaWidthField.value; mediaHeight = mediaHeightField.value
+        trimWidth = trimWidthField.value; trimHeight = trimHeightField.value
+        bleed = bleedField.value
+        gapHorizontal = gapHorizontalField.value; gapVertical = gapVerticalField.value
+        gapLink = gapLinkToggle.isSelected
+        allowFlipColumn = allowFlipColumnCheck.isSelected; allowFlipRow = allowFlipRowCheck.isSelected
+        saver.save()
     }
 
     fun closeAll() {

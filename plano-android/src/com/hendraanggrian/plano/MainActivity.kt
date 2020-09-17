@@ -60,6 +60,9 @@ class MainActivity : AppCompatActivity() {
     @JvmField @BindPreference("trim_width") var trimWidth = 0f
     @JvmField @BindPreference("trim_height") var trimHeight = 0f
     @JvmField @BindPreference("bleed") var bleed = 0f
+    @JvmField @BindPreference("gap_horizontal") var gapHorizontal = 0f
+    @JvmField @BindPreference("gap_vertical") var gapVertical = 0f
+    @JvmField @BindPreference("gap_link") var gapLink = false
     @JvmField @BindPreference("allow_flip_column") var allowFlipColumn = false
     @JvmField @BindPreference("allow_flip_row") var allowFlipRow = false
 
@@ -76,20 +79,20 @@ class MainActivity : AppCompatActivity() {
 
         mediaWidthEdit.addTextChangedListener(textWatcher); mediaHeightEdit.addTextChangedListener(textWatcher)
         trimWidthEdit.addTextChangedListener(textWatcher); trimHeightEdit.addTextChangedListener(textWatcher)
-        bleedEdit.addTextChangedListener(textWatcher)
+        gapHorizontalEdit.addTextChangedListener(textWatcher); gapVerticalEdit.addTextChangedListener(textWatcher)
 
         toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
         mediaToolbar.prepare()
         trimToolbar.prepare()
         ensureToolbars()
-        mediaText.doOnLayout {
+        /*mediaText.doOnLayout {
             trimText.width = mediaText.width
             bleedText.width = mediaText.width
-        }
+        }*/
 
         mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
         trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
-        bleedEdit.setText(bleed.clean())
+        gapHorizontalEdit.setText(bleed.clean()); gapVerticalEdit.setText(bleed.clean())
         allowFlipColumnCheck.isChecked = allowFlipColumn; allowFlipRowCheck.isChecked = allowFlipRow
 
         adapter = MainAdapter(viewModel)
@@ -111,10 +114,8 @@ class MainActivity : AppCompatActivity() {
             runBlocking {
                 GlobalScope.launch(Dispatchers.IO) {
                     saveRecentSizes(
-                        mediaWidth.toDouble(),
-                        mediaHeight.toDouble(),
-                        trimWidth.toDouble(),
-                        trimHeight.toDouble()
+                        mediaWidth.toDouble(), mediaHeight.toDouble(),
+                        trimWidth.toDouble(), trimHeight.toDouble()
                     )
                 }.join()
                 ensureToolbars()
@@ -194,7 +195,8 @@ class MainActivity : AppCompatActivity() {
     private fun adjust() {
         mediaWidth = mediaWidthEdit.value; mediaHeight = mediaHeightEdit.value
         trimWidth = trimWidthEdit.value; trimHeight = trimHeightEdit.value
-        bleed = bleedEdit.value
+        gapHorizontal = gapHorizontalEdit.value; gapVertical = gapVerticalEdit.value
+        // gaplink
         allowFlipColumn = allowFlipColumnCheck.isChecked; allowFlipRow = allowFlipRowCheck.isChecked
     }
 

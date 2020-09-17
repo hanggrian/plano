@@ -13,12 +13,17 @@
     -fx-font-family: 'Roboto';
 }
 
-/* TextField */
 .jfx-text-field {
     -jfx-focus-color: -fx-accent;
 }
 
-/* Snackbar */
+.jfx-toggle-node {
+    -jfx-toggle-color: rgba(0, 0, 0, 0.27);
+}
+.jfx-toggle-node .jfx-rippler {
+    -jfx-rippler-fill: -fx-accent;
+}
+
 .jfx-snackbar-content {
     -fx-background-color: derive(black, 26.4%);
 }
@@ -30,14 +35,12 @@
     -fx-font-family: 'Roboto Bold';
 }
 
-/* ScrollPane */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-border-width: 0 0 0 1;
     -fx-border-color: -color-border;
 }
 
-/* ToolBar */
 .jfx-tool-bar {
     -fx-min-height: 64;
     -fx-pref-height: 64;
@@ -50,7 +53,6 @@
     -fx-alignment: center;
 }
 
-/* Button */
 .button {
     -fx-text-fill: -fx-accent;
     -fx-font-family: 'Roboto Bold';
@@ -62,7 +64,6 @@
     -jfx-rippler-fill: -fx-accent;
 }
 
-/* Dialog */
 .jfx-dialog-overlay-pane > StackPane {
     -fx-background-color: -fx-background;
 }
@@ -70,7 +71,6 @@
     -fx-background-color: -color-dialog-overlay;
 }
 
-/* CheckBox */
 .jfx-check-box {
     -jfx-checked-color: -fx-accent;
 }
@@ -78,7 +78,6 @@
     -fx-border-color: -fx-background;
 }
 
-/** MediaBox and TrimBox */
 .box-media-background {
     -fx-background-color: -amber-500-light;
 }
@@ -126,6 +125,12 @@
 }
 #menu-more {
     -fx-graphic: url('../image/menu_more.png');
+}
+#menu-link-on {
+    -fx-graphic: url('../image/menu_link_on.png');
+}
+#menu-link-off {
+    -fx-graphic: url('../image/menu_link_off.png');
 }
 #btn-calculate {
     -jfx-button-type: RAISED;

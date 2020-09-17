@@ -19,142 +19,174 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/medium"
+                android:paddingLeft="@dimen/medium"
+                android:paddingTop="?actionBarSize"
+                android:paddingEnd="@dimen/medium"
+                android:paddingRight="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:useDefaultMargins="true">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ci_media" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/mediaText"
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:layout_columnSpan="2"
+                    android:text="@string/media_size" />
+
+                <EditText
+                    android:id="@+id/mediaWidthEdit"
+                    style="@style/Widget.Plano.EditText"
+                    android:layout_row="0"
+                    android:layout_column="3" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="0"
+                    android:layout_column="4"
+                    android:text="×" />
+
+                <EditText
+                    android:id="@+id/mediaHeightEdit"
+                    style="@style/Widget.Plano.EditText"
+                    android:layout_row="0"
+                    android:layout_column="5" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ci_trim" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/trimText"
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_columnSpan="2"
+                    android:text="@string/trim_size" />
+
+                <EditText
+                    android:id="@+id/trimWidthEdit"
+                    style="@style/Widget.Plano.EditText"
+                    android:layout_row="1"
+                    android:layout_column="3" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="1"
+                    android:layout_column="4"
+                    android:text="×" />
+
+                <EditText
+                    android:id="@+id/trimHeightEdit"
+                    style="@style/Widget.Plano.EditText"
+                    android:layout_row="1"
+                    android:layout_column="5" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/gapText"
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="2"
+                    android:layout_column="1"
+                    android:text="@string/gap" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="2"
+                    android:layout_column="2"
+                    android:layout_gravity="end"
+                    android:text="↔︎︎" />
+
+                <EditText
+                    android:id="@+id/gapHorizontalEdit"
+                    style="@style/Widget.Plano.EditText"
+                    android:layout_row="2"
+                    android:layout_column="3" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_row="2"
+                    android:layout_column="4"
+                    android:text="↕︎" />
+
+                <EditText
+                    android:id="@+id/gapVerticalEdit"
+                    style="@style/Widget.Plano.EditText"
+                    android:layout_row="2"
+                    android:layout_column="5" />
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:src="@drawable/ic_github" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/allowFlipText"
+                    style="@style/Widget.Plano.TextView"
+                    android:layout_height="wrap_content"
+                    android:layout_row="3"
+                    android:layout_column="1"
+                    android:layout_columnSpan="2"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/allow_flip" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="3"
+                    android:layout_column="3"
+                    android:layout_columnSpan="3"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/allowFlipColumnCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_column" />
+
+                    <CheckBox
+                        android:id="@+id/allowFlipRowCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:text="@string/last_row" />
+                </LinearLayout>
+            </GridLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingTop="?actionBarSize"
-                android:paddingBottom="@dimen/medium">
+                android:paddingBottom="@dimen/medium"
+                android:visibility="gone">
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/mediaToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ci_media" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/mediaText"
-                            style="@style/Widget.Plano.TextView.Column"
-                            android:text="@string/media_size" />
-
-                        <EditText
-                            android:id="@+id/mediaWidthEdit"
-                            style="@style/Widget.Plano.EditText" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/Widget.Plano.TextView"
-                            android:text="x" />
-
-                        <EditText
-                            android:id="@+id/mediaHeightEdit"
-                            style="@style/Widget.Plano.EditText" />
-                    </LinearLayout>
-                </com.google.android.material.appbar.MaterialToolbar>
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/trimToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ci_trim" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/trimText"
-                            style="@style/Widget.Plano.TextView.Column"
-                            android:text="@string/trim_size" />
-
-                        <EditText
-                            android:id="@+id/trimWidthEdit"
-                            style="@style/Widget.Plano.EditText" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/Widget.Plano.TextView"
-                            android:text="x" />
-
-                        <EditText
-                            android:id="@+id/trimHeightEdit"
-                            style="@style/Widget.Plano.EditText" />
-                    </LinearLayout>
-                </com.google.android.material.appbar.MaterialToolbar>
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/bleedToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ci_empty" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/bleedText"
-                            style="@style/Widget.Plano.TextView.Column"
-                            android:text="@string/bleed" />
-
-                        <EditText
-                            android:id="@+id/bleedEdit"
-                            style="@style/Widget.Plano.EditText" />
-                    </LinearLayout>
-                </com.google.android.material.appbar.MaterialToolbar>
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/allowFlipToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ci_empty" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/allowFlipText"
-                            style="@style/Widget.Plano.TextView.Column"
-                            android:text="@string/allow_flip" />
-
-                        <CheckBox
-                            android:id="@+id/allowFlipColumnCheck"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/last_column" />
-
-                        <CheckBox
-                            android:id="@+id/allowFlipRowCheck"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:text="@string/last_row" />
-                    </LinearLayout>
-                </com.google.android.material.appbar.MaterialToolbar>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <com.google.android.material.appbar.MaterialToolbar

@@ -6,13 +6,11 @@
     -fx-base: black;
 }
 
-/* TextField */
 .text-field {
     -fx-text-inner-color: white;
     -fx-highlight-text-fill: black;
 }
 
-/* Snackbar */
 .jfx-snackbar-content {
     -fx-background-color: white;
 }
@@ -20,7 +18,6 @@
     -fx-text-fill: black;
 }
 
-/* ScrollBar */
 .scroll-bar > .increment-button > .increment-arrow,
 .scroll-bar > .decrement-button > .decrement-arrow {
     -fx-background-color: -color-button-hover;
@@ -32,6 +29,12 @@
 }
 #menu-more {
     -fx-graphic: url('../image-dark/menu_more.png');
+}
+#menu-link-on {
+    -fx-graphic: url('../image-dark/menu_link_on.png');
+}
+#menu-link-off {
+    -fx-graphic: url('../image-dark/menu_link_off.png');
 }
 #btn-close {
     -fx-graphic: url('../image-dark/btn_close.png');

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     repositories {
         google()
@@ -23,15 +25,9 @@ allprojects {
         maven("https://kotlin.bintray.com/kotlinx")
     }
     tasks {
-        withType<Delete> {
-            delete(files("out"))
-        }
-        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions.jvmTarget = "1.8"
-        }
+        withType<Delete> { delete(files("out")) }
+        withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
     }
 }
 
-tasks.register<Delete>("clean") {
-    delete(buildDir)
-}
+tasks.register<Delete>("clean") { delete(buildDir) }

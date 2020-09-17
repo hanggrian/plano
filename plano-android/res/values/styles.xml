@@ -21,14 +21,6 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-    </style>
-
-    <style name="Widget.Plano.TextView.Column" parent="Widget.Plano.TextView">
-        <item name="android:layout_width">80dp</item>
     </style>
 
     <style name="Widget.Plano.EditText" parent="Widget.AppCompat.EditText">
