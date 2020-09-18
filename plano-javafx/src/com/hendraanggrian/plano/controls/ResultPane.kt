@@ -49,7 +49,8 @@ class ResultPane(
     mediaHeight: Double,
     private val trimWidth: Double,
     private val trimHeight: Double,
-    private val bleed: Double,
+    gapHorizontal: Double,
+    gapVertical: Double,
     allowFlipColumn: Boolean,
     allowFlipRow: Boolean,
     private val scaleProperty: DoubleProperty,
@@ -68,7 +69,7 @@ class ResultPane(
     init {
         padding = insetsOf(10)
         val mediaBox = MediaSize(mediaWidth, mediaHeight)
-        mediaBox.populate(trimWidth, trimHeight, bleed, allowFlipColumn, allowFlipRow)
+        mediaBox.populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
 
         infoFlowPane = flowPane {
             hgap = 10.0
@@ -154,7 +155,7 @@ class ResultPane(
     private fun populate(mediaBox: MediaSize) {
         mediaLabel.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimSizeLabel.text = " ${mediaBox.size}"
-        trimLabel.text = "${(trimWidth + bleed * 2).clean()} x ${(trimHeight + bleed * 2).clean()}"
+        trimLabel.text = "${trimWidth.clean()} x ${trimHeight.clean()}"
         infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
         boxPaneContainer.children += MediaSizePane(mediaBox, scaleProperty, fillProperty, thickProperty)

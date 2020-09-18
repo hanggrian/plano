@@ -14,7 +14,8 @@ class MediaSize(
 
     private var _trimWidth: Double? = null
     private var _trimHeight: Double? = null
-    private var _bleed: Double? = null
+    private var _gapHorizontal: Double? = null
+    private var _gapVertical: Double? = null
     private var _allowFlipColumn: Boolean? = null
     private var _allowFlipRow: Boolean? = null
 
@@ -22,99 +23,92 @@ class MediaSize(
 
     val trimHeight: Double get() = checkNotNull(_trimHeight) { "Must call populate at least once" }
 
-    val bleed: Double get() = checkNotNull(_bleed) { "Must call populate at least once" }
+    val gapHorizontal: Double get() = checkNotNull(_gapHorizontal) { "Must call populate at least once" }
+
+    val gapVertical: Double get() = checkNotNull(_gapVertical) { "Must call populate at least once" }
 
     var allowFlipColumn: Boolean
         get() = checkNotNull(_allowFlipColumn) { "Must call populate at least once" }
         set(value) {
             _allowFlipColumn = value
-            populate(trimWidth, trimHeight, bleed, value, allowFlipRow)
+            populate(trimWidth, trimHeight, gapHorizontal, gapVertical, value, allowFlipRow)
         }
 
     var allowFlipRow: Boolean
         get() = checkNotNull(_allowFlipRow) { "Must call populate at least once" }
         set(value) {
             _allowFlipRow = value
-            populate(trimWidth, trimHeight, bleed, allowFlipColumn, value)
+            populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, value)
         }
 
     fun rotate() {
         width = height.also { height = width }
-        populate(trimWidth, trimHeight, bleed, allowFlipColumn, allowFlipRow)
+        populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
     }
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
     fun populate(
         trimWidth: Double,
         trimHeight: Double,
-        bleed: Double = 0.0,
-        allowFlipColumn: Boolean = true,
-        allowFlipRow: Boolean = true
+        gapHorizontal: Double,
+        gapVertical: Double,
+        allowFlipColumn: Boolean,
+        allowFlipRow: Boolean
     ) {
-        _trimWidth = trimWidth
-        _trimHeight = trimHeight
-        _bleed = bleed
-        _allowFlipColumn = allowFlipColumn
-        _allowFlipRow = allowFlipRow
+        _trimWidth = trimWidth; _trimHeight = trimHeight
+        _gapHorizontal = gapHorizontal; _gapVertical = gapVertical
+        _allowFlipColumn = allowFlipColumn; _allowFlipRow = allowFlipRow
         trimBoxes.clear()
         trimBoxes.addAll(
             mutableListOf<List<TrimSize>>().apply {
                 add(
                     traditional(
-                        width,
-                        height,
-                        trimWidth + bleed * 2,
-                        trimHeight + bleed * 2,
-                        allowFlipColumn,
-                        allowFlipRow
+                        width, height,
+                        trimWidth, trimHeight,
+                        gapHorizontal, gapVertical,
+                        allowFlipColumn, allowFlipRow
                     )
                 )
                 add(
                     traditional(
-                        width,
-                        height,
-                        trimHeight + bleed * 2,
-                        trimWidth + bleed * 2,
-                        allowFlipColumn,
-                        allowFlipRow
+                        width, height,
+                        trimHeight, trimWidth,
+                        gapHorizontal, gapVertical,
+                        allowFlipColumn, allowFlipRow
                     )
                 )
                 if (allowFlipColumn) {
                     add(
-                        radicalColumns(
-                            width,
-                            height,
-                            trimWidth + bleed * 2,
-                            trimHeight + bleed * 2,
+                        alwaysFlipColumn(
+                            width, height,
+                            trimWidth, trimHeight,
+                            gapHorizontal, gapVertical,
                             allowFlipRow
                         )
                     )
                     add(
-                        radicalColumns(
-                            width,
-                            height,
-                            trimHeight + bleed * 2,
-                            trimWidth + bleed * 2,
+                        alwaysFlipColumn(
+                            width, height,
+                            trimHeight, trimWidth,
+                            gapHorizontal, gapVertical,
                             allowFlipRow
                         )
                     )
                 }
                 if (allowFlipRow) {
                     add(
-                        radicalRows(
-                            width,
-                            height,
-                            trimWidth + bleed * 2,
-                            trimHeight + bleed * 2,
+                        alwaysFlipRow(
+                            width, height,
+                            trimWidth, trimHeight,
+                            gapHorizontal, gapVertical,
                             allowFlipColumn
                         )
                     )
                     add(
-                        radicalRows(
-                            width,
-                            height,
-                            trimHeight + bleed * 2,
-                            trimWidth + bleed * 2,
+                        alwaysFlipRow(
+                            width, height,
+                            trimHeight, trimWidth,
+                            gapHorizontal, gapVertical,
                             allowFlipColumn
                         )
                     )
@@ -125,81 +119,86 @@ class MediaSize(
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(
-        mediaWidth: Double,
-        mediaHeight: Double,
-        trimWidth: Double,
-        trimHeight: Double,
-        allowFlipColumn: Boolean,
-        allowFlipRow: Boolean
+        mwidth: Double,
+        mheight: Double,
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double,
+        fcolumn: Boolean,
+        frow: Boolean
     ): List<TrimSize> {
-        if (DEBUG) println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        if (DEBUG) println("Calculating traditionally ${mwidth}x$mheight - ${twidth}x$theight:")
         val sizes = mutableListOf<TrimSize>()
-        val columns = (mediaWidth / trimWidth).toInt()
-        val rows = (mediaHeight / trimHeight).toInt()
-        sizes.populate(columns, rows, trimWidth, trimHeight)
+        val columns = (mwidth / (twidth + hgap)).toInt()
+        val rows = (mheight / (theight + vgap)).toInt()
+        sizes.populate(columns, rows, twidth, theight, hgap, vgap)
 
-        if (allowFlipColumn) {
-            val flippedColumns = measureFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        if (fcolumn) {
+            val flippedColumns = measureFlippedColumns(columns, mwidth, mheight, twidth, theight, hgap, vgap)
             if (flippedColumns > 0) {
-                sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+                sizes.populateFlippedColumns(columns, flippedColumns, twidth, theight, hgap, vgap)
             }
         }
 
-        if (allowFlipRow) {
-            val flippedRows = measureFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
+        if (frow) {
+            val flippedRows = measureFlippedRows(rows, mwidth, mheight, twidth, theight, hgap, vgap)
             if (flippedRows > 0) {
-                sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+                sizes.populateFlippedRows(rows, flippedRows, twidth, theight, hgap, vgap)
             }
         }
         return sizes
     }
 
     /** Columns are always flipped. */
-    private fun radicalColumns(
-        mediaWidth: Double,
-        mediaHeight: Double,
-        trimWidth: Double,
-        trimHeight: Double,
-        allowFlipRow: Boolean
+    private fun alwaysFlipColumn(
+        mwidth: Double,
+        mheight: Double,
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double,
+        frow: Boolean
     ): List<TrimSize> {
-        if (DEBUG) println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        if (DEBUG) println("Calculating radical column ${mwidth}x$mheight - ${twidth}x$theight:")
         val sizes = mutableListOf<TrimSize>()
-        val columns = ((mediaWidth - trimHeight) / trimWidth).toInt()
-        val rows = (mediaHeight / trimHeight).toInt()
-        sizes.populate(columns, rows, trimWidth, trimHeight)
+        val columns = ((mwidth - theight + vgap) / (twidth + hgap)).toInt()
+        val rows = (mheight / (theight + vgap)).toInt()
+        sizes.populate(columns, rows, twidth, theight, hgap, vgap)
 
-        val flippedColumns = measureFlippedColumns(columns, mediaWidth, mediaHeight, trimWidth, trimHeight)
-        sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
-        if (allowFlipRow) {
-            val flippedRows = measureFlippedRows(rows, mediaWidth - trimHeight, mediaHeight, trimWidth, trimHeight)
+        val flippedColumns = measureFlippedColumns(columns, mwidth, mheight, twidth, theight, hgap, vgap)
+        sizes.populateFlippedColumns(columns, flippedColumns, twidth, theight, hgap, vgap)
+        if (frow) {
+            val flippedRows = measureFlippedRows(rows, mwidth - theight, mheight, twidth, theight, hgap, vgap)
             if (flippedRows > 0) {
-                sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
+                sizes.populateFlippedRows(rows, flippedRows, twidth, theight, hgap, vgap)
             }
         }
         return sizes
     }
 
     /** Rows are always flipped. */
-    private fun radicalRows(
-        mediaWidth: Double,
-        mediaHeight: Double,
-        trimWidth: Double,
-        trimHeight: Double,
-        allowFlipColumn: Boolean
+    private fun alwaysFlipRow(
+        mwdith: Double,
+        mheight: Double,
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double,
+        fcolumn: Boolean
     ): List<TrimSize> {
-        if (DEBUG) println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        if (DEBUG) println("Calculating radical row ${mwdith}x$mheight - ${twidth}x$theight:")
         val sizes = mutableListOf<TrimSize>()
-        val columns = (mediaWidth / trimWidth).toInt()
-        val rows = ((mediaHeight - trimWidth) / trimHeight).toInt()
-        sizes.populate(columns, rows, trimWidth, trimHeight)
+        val columns = (mwdith / (twidth + hgap)).toInt()
+        val rows = ((mheight - twidth + hgap) / (theight + vgap)).toInt()
+        sizes.populate(columns, rows, twidth, theight, hgap, vgap)
 
-        val flippedRows = measureFlippedRows(rows, mediaWidth, mediaHeight, trimWidth, trimHeight)
-        sizes.populateFlippedRows(rows, flippedRows, trimWidth, trimHeight)
-        if (allowFlipColumn) {
-            val flippedColumns =
-                measureFlippedColumns(columns, mediaWidth, mediaHeight - trimWidth, trimWidth, trimHeight)
+        val flippedRows = measureFlippedRows(rows, mwdith, mheight, twidth, theight, hgap, vgap)
+        sizes.populateFlippedRows(rows, flippedRows, twidth, theight, hgap, vgap)
+        if (fcolumn) {
+            val flippedColumns = measureFlippedColumns(columns, mwdith, mheight - twidth, twidth, theight, hgap, vgap)
             if (flippedColumns > 0) {
-                sizes.populateFlippedColumns(columns, flippedColumns, trimWidth, trimHeight)
+                sizes.populateFlippedColumns(columns, flippedColumns, twidth, theight, hgap, vgap)
             }
         }
         return sizes
@@ -208,32 +207,36 @@ class MediaSize(
     private fun MutableList<TrimSize>.populate(
         columns: Int,
         rows: Int,
-        trimWidth: Double,
-        trimHeight: Double
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double
     ) {
         if (DEBUG) {
             println("* columns: $columns")
             println("* rows: $rows")
         }
         for (column in 0 until columns) {
-            val x = column * trimWidth
+            val x = column * (twidth + hgap)
             for (row in 0 until rows) {
-                val y = row * trimHeight
-                this += TrimSize(x, y, trimWidth, trimHeight)
+                val y = row * (theight + vgap)
+                this += TrimSize(x, y, twidth, theight)
             }
         }
     }
 
     private fun measureFlippedColumns(
         columns: Int,
-        mediaWidth: Double,
-        mediaHeight: Double,
-        trimWidth: Double,
-        trimHeight: Double
+        mwidth: Double,
+        mheight: Double,
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double
     ): Int {
         var flippedColumns = 0
-        if (columns > 0 && mediaWidth - trimWidth * columns >= trimHeight) {
-            flippedColumns = (mediaHeight / trimWidth).toInt()
+        if (columns > 0 && mwidth - ((twidth + hgap) * columns) >= theight + vgap) {
+            flippedColumns = (mheight / (twidth + hgap)).toInt()
         }
         if (DEBUG) println("* flippedColumns: $flippedColumns")
         return flippedColumns
@@ -241,14 +244,16 @@ class MediaSize(
 
     private fun measureFlippedRows(
         rows: Int,
-        mediaWidth: Double,
-        mediaHeight: Double,
-        trimWidth: Double,
-        trimHeight: Double
+        mwidth: Double,
+        mheight: Double,
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double
     ): Int {
         var flippedRows = 0
-        if (rows > 0 && mediaHeight - trimHeight * rows >= trimWidth) {
-            flippedRows = (mediaWidth / trimHeight).toInt()
+        if (rows > 0 && mheight - ((theight + vgap) * rows) >= twidth + hgap) {
+            flippedRows = (mwidth / (theight + vgap)).toInt()
         }
         if (DEBUG) println("* flippedRows: $flippedRows")
         return flippedRows
@@ -257,24 +262,30 @@ class MediaSize(
     private fun MutableList<TrimSize>.populateFlippedColumns(
         columns: Int,
         flippedColumns: Int,
-        trimWidth: Double,
-        trimHeight: Double
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double
     ) {
-        val x = trimWidth * columns
+        val x = (twidth + hgap) * columns - hgap + vgap
         for (leftover in 0 until flippedColumns) {
-            this += TrimSize(x, leftover * trimWidth, trimHeight, trimWidth)
+            val y = leftover * (twidth + hgap)
+            this += TrimSize(x, y, theight, twidth)
         }
     }
 
     private fun MutableList<TrimSize>.populateFlippedRows(
         rows: Int,
         flippedRows: Int,
-        trimWidth: Double,
-        trimHeight: Double
+        twidth: Double,
+        theight: Double,
+        hgap: Double,
+        vgap: Double
     ) {
-        val y = trimHeight * rows
+        val y = (theight + vgap) * rows - vgap + hgap
         for (leftover in 0 until flippedRows) {
-            this += TrimSize(leftover * trimHeight, y, trimHeight, trimWidth)
+            val x = leftover * (theight + vgap)
+            this += TrimSize(x, y, theight, twidth)
         }
     }
 }

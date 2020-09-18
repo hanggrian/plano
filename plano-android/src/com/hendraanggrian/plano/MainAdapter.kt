@@ -105,8 +105,7 @@ class MainAdapter(private val viewModel: MainViewModel) :
     private fun ViewHolder.populate(mediaBox: MediaSize) {
         mediaText.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimCountText.text = mediaBox.size.toString()
-        trimText.text = "${(mediaBox.trimWidth + mediaBox.bleed * 2).clean()} x " +
-            "${(mediaBox.trimHeight + mediaBox.bleed * 2).clean()}"
+        trimText.text = "${mediaBox.trimWidth.clean()} x ${mediaBox.trimHeight.clean()}"
 
         if (isNotEmpty()) mediaContainer.removeAllViews()
         mediaContainer.addView(

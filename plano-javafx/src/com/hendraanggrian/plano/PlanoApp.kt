@@ -437,7 +437,7 @@ class PlanoApp : Application(), Resources {
                                                         this@PlanoApp,
                                                         mediaWidthField.value, mediaHeightField.value,
                                                         trimWidthField.value, trimHeightField.value,
-                                                        bleedField.value,
+                                                        gapHorizontalField.value, gapVerticalField.value,
                                                         allowFlipColumnCheck.isSelected, allowFlipRowCheck.isSelected,
                                                         scaleProperty, fillProperty, thickProperty
                                                     )

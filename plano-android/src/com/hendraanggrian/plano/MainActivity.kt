@@ -16,7 +16,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.children
-import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.lifecycle.observe
@@ -59,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     @JvmField @BindPreference("media_height") var mediaHeight = 0f
     @JvmField @BindPreference("trim_width") var trimWidth = 0f
     @JvmField @BindPreference("trim_height") var trimHeight = 0f
-    @JvmField @BindPreference("bleed") var bleed = 0f
     @JvmField @BindPreference("gap_horizontal") var gapHorizontal = 0f
     @JvmField @BindPreference("gap_vertical") var gapVertical = 0f
     @JvmField @BindPreference("gap_link") var gapLink = false
@@ -92,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
         mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
         trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
-        gapHorizontalEdit.setText(bleed.clean()); gapVerticalEdit.setText(bleed.clean())
+        gapHorizontalEdit.setText(gapHorizontal.clean()); gapVerticalEdit.setText(gapVertical.clean())
         allowFlipColumnCheck.isChecked = allowFlipColumn; allowFlipRowCheck.isChecked = allowFlipRow
 
         adapter = MainAdapter(viewModel)
@@ -103,11 +101,9 @@ class MainActivity : AppCompatActivity() {
             getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
             val mediaSize = MediaSize(mediaWidth.toDouble(), mediaHeight.toDouble())
             mediaSize.populate(
-                trimWidth.toDouble(),
-                trimHeight.toDouble(),
-                bleed.toDouble(),
-                allowFlipColumn,
-                allowFlipRow
+                trimWidth.toDouble(), trimHeight.toDouble(),
+                gapHorizontal.toDouble(), gapVertical.toDouble(),
+                allowFlipColumn, allowFlipRow
             )
             adapter.put(mediaSize)
 
