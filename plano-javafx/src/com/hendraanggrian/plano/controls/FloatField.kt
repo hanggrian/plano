@@ -7,7 +7,7 @@ import ktfx.controls.CENTER
 import ktfx.coroutines.listener
 import java.util.regex.Pattern
 
-class DoubleField : JFXTextField() {
+class FloatField : JFXTextField() {
     private companion object {
         val PATTERN_DOUBLE: Pattern = Pattern.compile("\\d*|\\d+\\.\\d*")
     }
@@ -28,8 +28,8 @@ class DoubleField : JFXTextField() {
         }
     }
 
-    var value: Double
-        get() = text?.toDoubleOrNull() ?: 0.0
+    var value: Float
+        get() = text?.toFloatOrNull() ?: 0f
         set(value) {
             text = value.clean()
         }

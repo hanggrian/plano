@@ -1,9 +1,6 @@
 package com.hendraanggrian.plano
 
-data class License(
-    val name: String,
-    val url: String
-) {
+data class License(val name: String, val url: String) {
     companion object {
         fun listAll(vararg additionalLicenses: Pair<String, String>): List<License> {
             val licenses = mutableListOf(

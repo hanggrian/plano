@@ -7,10 +7,10 @@ import kotlin.test.assertEquals
 class PlanoTest {
 
     @Test fun a5inA3plus() {
-        val mediaBox = MediaSize(48.7, 32.5)
-        mediaBox.populate(21.0, 14.85, 0.0, 0.0, false, false)
+        val mediaBox = MediaSize(48.5f, 32.5f)
+        mediaBox.populate(21f, 14.85f, 0f, 0f, false, false)
         assertEquals(4, mediaBox.size)
-        assertThat(mediaBox.map { it.x to it.y }).containsExactly(
+        assertThat(mediaBox.mapAsDouble()).containsExactly(
             0.0 to 0.0,
             21.0 to 0.0,
             0.0 to 14.85,
@@ -19,10 +19,10 @@ class PlanoTest {
     }
 
     @Test fun f4in79109() {
-        val mediaBox = MediaSize(79.0, 109.0)
-        mediaBox.populate(21.5, 33.0, 0.0, 0.0, true, true)
+        val mediaBox = MediaSize(79f, 109f)
+        mediaBox.populate(21.5f, 33f, 0f, 0f, true, true)
         assertEquals(11, mediaBox.size)
-        assertThat(mediaBox.map { it.x to it.y }).containsExactly(
+        assertThat(mediaBox.mapAsDouble()).containsExactly(
             0.0 to 0.0,
             21.5 to 0.0,
             0.0 to 33.0,
@@ -36,4 +36,7 @@ class PlanoTest {
             43.0 to 86.0
         )
     }
+
+    /** Convert to double for assertion accuracy. */
+    private fun MediaSize.mapAsDouble() = map { it.x.toString().toDouble() to it.y.toString().toDouble() }
 }

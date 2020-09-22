@@ -99,20 +99,13 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             adjust()
             getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-            val mediaSize = MediaSize(mediaWidth.toDouble(), mediaHeight.toDouble())
-            mediaSize.populate(
-                trimWidth.toDouble(), trimHeight.toDouble(),
-                gapHorizontal.toDouble(), gapVertical.toDouble(),
-                allowFlipColumn, allowFlipRow
-            )
+            val mediaSize = MediaSize(mediaWidth, mediaHeight)
+            mediaSize.populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
             adapter.put(mediaSize)
 
             runBlocking {
                 GlobalScope.launch(Dispatchers.IO) {
-                    saveRecentSizes(
-                        mediaWidth.toDouble(), mediaHeight.toDouble(),
-                        trimWidth.toDouble(), trimHeight.toDouble()
-                    )
+                    saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
                 }.join()
                 ensureToolbars()
             }

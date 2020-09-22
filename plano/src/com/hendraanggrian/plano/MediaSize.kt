@@ -3,8 +3,8 @@ package com.hendraanggrian.plano
 import java.io.Serializable
 
 class MediaSize(
-    override var width: Double,
-    override var height: Double,
+    override var width: Float,
+    override var height: Float,
     private val trimBoxes: MutableList<TrimSize> = mutableListOf()
 ) : Size, List<TrimSize> by trimBoxes, Serializable {
 
@@ -12,20 +12,20 @@ class MediaSize(
         var DEBUG = false // change according to BuildConfig
     }
 
-    private var _trimWidth: Double? = null
-    private var _trimHeight: Double? = null
-    private var _gapHorizontal: Double? = null
-    private var _gapVertical: Double? = null
+    private var _trimWidth: Float? = null
+    private var _trimHeight: Float? = null
+    private var _gapHorizontal: Float? = null
+    private var _gapVertical: Float? = null
     private var _allowFlipColumn: Boolean? = null
     private var _allowFlipRow: Boolean? = null
 
-    val trimWidth: Double get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
+    val trimWidth: Float get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
 
-    val trimHeight: Double get() = checkNotNull(_trimHeight) { "Must call populate at least once" }
+    val trimHeight: Float get() = checkNotNull(_trimHeight) { "Must call populate at least once" }
 
-    val gapHorizontal: Double get() = checkNotNull(_gapHorizontal) { "Must call populate at least once" }
+    val gapHorizontal: Float get() = checkNotNull(_gapHorizontal) { "Must call populate at least once" }
 
-    val gapVertical: Double get() = checkNotNull(_gapVertical) { "Must call populate at least once" }
+    val gapVertical: Float get() = checkNotNull(_gapVertical) { "Must call populate at least once" }
 
     var allowFlipColumn: Boolean
         get() = checkNotNull(_allowFlipColumn) { "Must call populate at least once" }
@@ -48,10 +48,10 @@ class MediaSize(
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
     fun populate(
-        trimWidth: Double,
-        trimHeight: Double,
-        gapHorizontal: Double,
-        gapVertical: Double,
+        trimWidth: Float,
+        trimHeight: Float,
+        gapHorizontal: Float,
+        gapVertical: Float,
         allowFlipColumn: Boolean,
         allowFlipRow: Boolean
     ) {
@@ -119,12 +119,12 @@ class MediaSize(
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(
-        mwidth: Double,
-        mheight: Double,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double,
+        mwidth: Float,
+        mheight: Float,
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float,
         fcolumn: Boolean,
         frow: Boolean
     ): List<TrimSize> {
@@ -152,12 +152,12 @@ class MediaSize(
 
     /** Columns are always flipped. */
     private fun alwaysFlipColumn(
-        mwidth: Double,
-        mheight: Double,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double,
+        mwidth: Float,
+        mheight: Float,
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float,
         frow: Boolean
     ): List<TrimSize> {
         if (DEBUG) println("Calculating radical column ${mwidth}x$mheight - ${twidth}x$theight:")
@@ -179,12 +179,12 @@ class MediaSize(
 
     /** Rows are always flipped. */
     private fun alwaysFlipRow(
-        mwdith: Double,
-        mheight: Double,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double,
+        mwdith: Float,
+        mheight: Float,
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float,
         fcolumn: Boolean
     ): List<TrimSize> {
         if (DEBUG) println("Calculating radical row ${mwdith}x$mheight - ${twidth}x$theight:")
@@ -207,10 +207,10 @@ class MediaSize(
     private fun MutableList<TrimSize>.populate(
         columns: Int,
         rows: Int,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float
     ) {
         if (DEBUG) {
             println("* columns: $columns")
@@ -227,12 +227,12 @@ class MediaSize(
 
     private fun measureFlippedColumns(
         columns: Int,
-        mwidth: Double,
-        mheight: Double,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double
+        mwidth: Float,
+        mheight: Float,
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float
     ): Int {
         var flippedColumns = 0
         if (columns > 0 && mwidth - ((twidth + hgap) * columns) >= theight + vgap) {
@@ -244,12 +244,12 @@ class MediaSize(
 
     private fun measureFlippedRows(
         rows: Int,
-        mwidth: Double,
-        mheight: Double,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double
+        mwidth: Float,
+        mheight: Float,
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float
     ): Int {
         var flippedRows = 0
         if (rows > 0 && mheight - ((theight + vgap) * rows) >= twidth + hgap) {
@@ -262,10 +262,10 @@ class MediaSize(
     private fun MutableList<TrimSize>.populateFlippedColumns(
         columns: Int,
         flippedColumns: Int,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float
     ) {
         val x = (twidth + hgap) * columns - hgap + vgap
         for (leftover in 0 until flippedColumns) {
@@ -277,10 +277,10 @@ class MediaSize(
     private fun MutableList<TrimSize>.populateFlippedRows(
         rows: Int,
         flippedRows: Int,
-        twidth: Double,
-        theight: Double,
-        hgap: Double,
-        vgap: Double
+        twidth: Float,
+        theight: Float,
+        hgap: Float,
+        vgap: Float
     ) {
         val y = (theight + vgap) * rows - vgap + hgap
         for (leftover in 0 until flippedRows) {

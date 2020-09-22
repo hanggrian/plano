@@ -7,8 +7,8 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 object MediaBoxes : IntIdTable() {
-    val width = double("width")
-    val height = double("height")
+    val width = float("width")
+    val height = float("height")
 }
 
 class MediaBox(id: EntityID<Int>) : IntEntity(id), Size {

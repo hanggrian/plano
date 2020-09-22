@@ -45,12 +45,12 @@ import javax.imageio.ImageIO
 
 class ResultPane(
     private val app: PlanoApp,
-    mediaWidth: Double,
-    mediaHeight: Double,
-    private val trimWidth: Double,
-    private val trimHeight: Double,
-    gapHorizontal: Double,
-    gapVertical: Double,
+    mediaWidth: Float,
+    mediaHeight: Float,
+    private val trimWidth: Float,
+    private val trimHeight: Float,
+    gapHorizontal: Float,
+    gapVertical: Float,
     allowFlipColumn: Boolean,
     allowFlipRow: Boolean,
     private val scaleProperty: DoubleProperty,

@@ -9,8 +9,8 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object RecentMediaSizes : IntIdTable() {
-    val width = double("width")
-    val height = double("height")
+    val width = float("width")
+    val height = float("height")
 }
 
 class RecentMediaSize(id: EntityID<Int>) : IntEntity(id), Size {
@@ -18,7 +18,7 @@ class RecentMediaSize(id: EntityID<Int>) : IntEntity(id), Size {
     override var height by RecentMediaSizes.height
 
     companion object : IntEntityClass<RecentMediaSize>(RecentMediaSizes) {
-        fun contains(width: Double, height: Double): Boolean =
+        fun contains(width: Float, height: Float): Boolean =
             !find { RecentMediaSizes.width.eq(width) and RecentMediaSizes.height.eq(height) }
                 .empty()
 
@@ -27,8 +27,8 @@ class RecentMediaSize(id: EntityID<Int>) : IntEntity(id), Size {
 }
 
 object RecentTrimSizes : IntIdTable() {
-    val width = double("width")
-    val height = double("height")
+    val width = float("width")
+    val height = float("height")
 }
 
 class RecentTrimSize(id: EntityID<Int>) : IntEntity(id), Size {
@@ -36,7 +36,7 @@ class RecentTrimSize(id: EntityID<Int>) : IntEntity(id), Size {
     override var height by RecentTrimSizes.height
 
     companion object : IntEntityClass<RecentTrimSize>(RecentTrimSizes) {
-        fun contains(width: Double, height: Double): Boolean =
+        fun contains(width: Float, height: Float): Boolean =
             !find { RecentTrimSizes.width.eq(width) and RecentTrimSizes.height.eq(height) }
                 .empty()
 
@@ -44,7 +44,7 @@ class RecentTrimSize(id: EntityID<Int>) : IntEntity(id), Size {
     }
 }
 
-fun saveRecentSizes(mediaWidth: Double, mediaHeight: Double, trimWidth: Double, trimHeight: Double) {
+fun saveRecentSizes(mediaWidth: Float, mediaHeight: Float, trimWidth: Float, trimHeight: Float) {
     transaction {
         if (!RecentMediaSize.contains(mediaWidth, mediaHeight)) {
             RecentMediaSize.new { width = mediaWidth; height = mediaHeight }

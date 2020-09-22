@@ -1,6 +1,6 @@
 package com.hendraanggrian.plano
 
-import com.hendraanggrian.plano.controls.DoubleField
+import com.hendraanggrian.plano.controls.FloatField
 import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
 import com.hendraanggrian.plano.controls.RoundButton
@@ -127,13 +127,13 @@ class PlanoApp : Application(), Resources {
         listener { _, _, newValue -> thickMenu.isSelected = newValue }
     }
 
-    private val mediaWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val mediaHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val trimWidthField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val trimHeightField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val bleedField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val gapHorizontalField = DoubleField().apply { onAction { calculateButton.fire() } }
-    private val gapVerticalField = DoubleField().apply { onAction { calculateButton.fire() } }
+    private val mediaWidthField = FloatField().apply { onAction { calculateButton.fire() } }
+    private val mediaHeightField = FloatField().apply { onAction { calculateButton.fire() } }
+    private val trimWidthField = FloatField().apply { onAction { calculateButton.fire() } }
+    private val trimHeightField = FloatField().apply { onAction { calculateButton.fire() } }
+    private val bleedField = FloatField().apply { onAction { calculateButton.fire() } }
+    private val gapHorizontalField = FloatField().apply { onAction { calculateButton.fire() } }
+    private val gapVerticalField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapLinkToggle = jfxToggleNode {
         idProperty().bind(
             this@jfxToggleNode.selectedProperty().asAny {
@@ -165,13 +165,12 @@ class PlanoApp : Application(), Resources {
     @JvmField @BindPreference("is_expand") var isExpand = false
     @JvmField @BindPreference("is_fill") var isFill = false
     @JvmField @BindPreference("is_thick") var isThick = false
-    @JvmField @BindPreference("media_width") var mediaWidth = 0.0
-    @JvmField @BindPreference("media_height") var mediaHeight = 0.0
-    @JvmField @BindPreference("trim_width") var trimWidth = 0.0
-    @JvmField @BindPreference("trim_height") var trimHeight = 0.0
-    @JvmField @BindPreference("bleed") var bleed = 0.0
-    @JvmField @BindPreference("gap_horizontal") var gapHorizontal = 0.0
-    @JvmField @BindPreference("gap_vertical") var gapVertical = 0.0
+    @JvmField @BindPreference("media_width") var mediaWidth = 0f
+    @JvmField @BindPreference("media_height") var mediaHeight = 0f
+    @JvmField @BindPreference("trim_width") var trimWidth = 0f
+    @JvmField @BindPreference("trim_height") var trimHeight = 0f
+    @JvmField @BindPreference("gap_horizontal") var gapHorizontal = 0f
+    @JvmField @BindPreference("gap_vertical") var gapVertical = 0f
     @JvmField @BindPreference("gap_link") var gapLink = false
     @JvmField @BindPreference("allow_flip_column") var allowFlipColumn = false
     @JvmField @BindPreference("allow_flip_row") var allowFlipRow = false
@@ -429,6 +428,7 @@ class PlanoApp : Application(), Resources {
                                         }
                                     )
                                     onAction {
+                                        stop()
                                         outputPane.children.add(
                                             0,
                                             ktfx.layouts.pane {
@@ -444,7 +444,10 @@ class PlanoApp : Application(), Resources {
                                                 )
                                             }
                                         )
-                                        saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
+                                        saveRecentSizes(
+                                            mediaWidthField.value, mediaHeightField.value,
+                                            trimWidthField.value, trimHeightField.value
+                                        )
                                     }
                                 }
                             ).grid(row, 0 to 7).halign(H_RIGHT)
@@ -484,7 +487,6 @@ class PlanoApp : Application(), Resources {
         isExpand = expandProperty.value; isFill = fillProperty.value; isThick = thickProperty.value
         mediaWidth = mediaWidthField.value; mediaHeight = mediaHeightField.value
         trimWidth = trimWidthField.value; trimHeight = trimHeightField.value
-        bleed = bleedField.value
         gapHorizontal = gapHorizontalField.value; gapVertical = gapVerticalField.value
         gapLink = gapLinkToggle.isSelected
         allowFlipColumn = allowFlipColumnCheck.isSelected; allowFlipRow = allowFlipRowCheck.isSelected

@@ -1,54 +1,54 @@
 package com.hendraanggrian.plano
 
 /** Common paper sizes as documented on [Wikipedia](https://en.wikipedia.org/wiki/Paper_size). */
-enum class StandardSize(override val width: Double, override val height: Double) : Size {
-    A0(118.9, 84.1),
-    A1(84.1, 59.4),
-    A2(59.4, 42.0),
-    A3(42.0, 29.7),
-    A4(29.7, 21.0),
-    A5(21.0, 14.8),
-    A6(14.8, 10.5),
-    A7(10.5, 7.4),
-    A8(7.4, 5.2),
-    A9(5.2, 3.7),
-    A10(3.7, 2.6),
+enum class StandardSize(override val width: Float, override val height: Float) : Size {
+    A0(118.9f, 84.1f),
+    A1(84.1f, 59.4f),
+    A2(59.4f, 42f),
+    A3(42f, 29.7f),
+    A4(29.7f, 21f),
+    A5(21f, 14.8f),
+    A6(14.8f, 10.5f),
+    A7(10.5f, 7.4f),
+    A8(7.4f, 5.2f),
+    A9(5.2f, 3.7f),
+    A10(3.7f, 2.6f),
 
-    B0(141.4, 100.0),
-    B1(100.0, 70.7),
-    B2(70.7, 50.0),
-    B3(50.0, 35.3),
-    B4(35.3, 25.0),
-    B5(25.0, 17.6),
-    B6(17.6, 12.5),
-    B7(12.5, 8.8),
-    B8(8.8, 6.2),
-    B9(6.2, 4.4),
-    B10(4.4, 3.1),
+    B0(141.4f, 100f),
+    B1(100f, 70.7f),
+    B2(70.7f, 50f),
+    B3(50f, 35.3f),
+    B4(35.3f, 25f),
+    B5(25f, 17.6f),
+    B6(17.6f, 12.5f),
+    B7(12.5f, 8.8f),
+    B8(8.8f, 6.2f),
+    B9(6.2f, 4.4f),
+    B10(4.4f, 3.1f),
 
-    C0(129.7, 91.7),
-    C1(91.7, 64.8),
-    C2(64.8, 45.8),
-    C3(45.8, 32.4),
-    C4(32.4, 22.9),
-    C5(22.9, 16.2),
-    C6(16.2, 11.4),
-    C7(11.4, 8.1),
-    C8(8.1, 5.7),
-    C9(5.7, 4.0),
-    C10(4.0, 2.8),
+    C0(129.7f, 91.7f),
+    C1(91.7f, 64.8f),
+    C2(64.8f, 45.8f),
+    C3(45.8f, 32.4f),
+    C4(32.4f, 22.9f),
+    C5(22.9f, 16.2f),
+    C6(16.2f, 11.4f),
+    C7(11.4f, 8.1f),
+    C8(8.1f, 5.7f),
+    C9(5.7f, 4f),
+    C10(4f, 2.8f),
 
-    F0(132.1, 84.1),
-    F1(84.1, 66.0),
-    F2(66.0, 42.0),
-    F3(42.0, 33.0),
-    F4(33.0, 21.0),
-    F5(21.0, 16.5),
-    F6(16.5, 10.5),
-    F7(10.5, 8.2),
-    F8(8.2, 5.2),
-    F9(5.2, 4.1),
-    F10(4.1, 2.6);
+    F0(132.1f, 84.1f),
+    F1(84.1f, 66f),
+    F2(66f, 42f),
+    F3(42f, 33f),
+    F4(33f, 21f),
+    F5(21f, 16.5f),
+    F6(16.5f, 10.5f),
+    F7(10.5f, 8.2f),
+    F8(8.2f, 5.2f),
+    F9(5.2f, 4.1f),
+    F10(4.1f, 2.6f);
 
     companion object {
         val SERIES_A: List<StandardSize> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
@@ -65,6 +65,6 @@ enum class StandardSize(override val width: Double, override val height: Double)
         }
 
     operator fun component1(): String = name
-    operator fun component2(): Double = width
-    operator fun component3(): Double = height
+    operator fun component2(): Float = width
+    operator fun component3(): Float = height
 }

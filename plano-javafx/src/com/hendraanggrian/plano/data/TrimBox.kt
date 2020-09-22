@@ -7,10 +7,10 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 object TrimBoxes : IntIdTable() {
-    val x = double("x")
-    val y = double("y")
-    val width = double("width")
-    val height = double("height")
+    val x = float("x")
+    val y = float("y")
+    val width = float("width")
+    val height = float("height")
     val mediaBox = reference("media_box", MediaBoxes)
 }
 

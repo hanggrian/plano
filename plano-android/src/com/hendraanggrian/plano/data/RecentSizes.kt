@@ -11,8 +11,8 @@ import com.hendraanggrian.plano.Size
 
 @Entity(tableName = "recent_media_sizes")
 data class RecentMediaSize(
-    override val width: Double,
-    override val height: Double
+    override val width: Float,
+    override val height: Float
 ) : Size {
 
     @PrimaryKey(autoGenerate = true) var id: Long = 0
@@ -24,7 +24,7 @@ interface RecentMediaSizes {
     @Insert suspend fun insertAll(vararg sizes: RecentMediaSize)
     @Delete suspend fun delete(user: RecentMediaSize)
 
-    suspend fun contains(width: Double, height: Double): Boolean =
+    suspend fun contains(width: Float, height: Float): Boolean =
         all().any { it.width == width && it.height == height }
 
     suspend fun limitSize() = all().reversed().drop(5).forEach { delete(it) }
@@ -32,8 +32,8 @@ interface RecentMediaSizes {
 
 @Entity(tableName = "recent_trim_sizes")
 data class RecentTrimSize(
-    override val width: Double,
-    override val height: Double
+    override val width: Float,
+    override val height: Float
 ) : Size {
 
     @PrimaryKey(autoGenerate = true) var id: Long = 0
@@ -45,13 +45,13 @@ interface RecentTrimSizes {
     @Insert suspend fun insertAll(vararg sizes: RecentTrimSize)
     @Delete suspend fun delete(user: RecentTrimSize)
 
-    suspend fun contains(width: Double, height: Double): Boolean =
+    suspend fun contains(width: Float, height: Float): Boolean =
         all().any { it.width == width && it.height == height }
 
     suspend fun limitSize() = all().reversed().drop(5).forEach { delete(it) }
 }
 
-suspend fun Context.saveRecentSizes(mediaWidth: Double, mediaHeight: Double, trimWidth: Double, trimHeight: Double) {
+suspend fun Context.saveRecentSizes(mediaWidth: Float, mediaHeight: Float, trimWidth: Float, trimHeight: Float) {
     val db = PlanoDatabase.getInstance(this@saveRecentSizes)
     if (!db.recentMedia().contains(mediaWidth, mediaHeight)) {
         db.recentMedia().insertAll(RecentMediaSize(mediaWidth, mediaHeight))
