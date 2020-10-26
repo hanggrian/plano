@@ -136,9 +136,7 @@ class PlanoApp : Application(), Resources {
     private val gapVerticalField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapLinkToggle = jfxToggleNode {
         idProperty().bind(
-            this@jfxToggleNode.selectedProperty().asAny {
-                if (it) R.style.menu_link_on else R.style.menu_link_off
-            }
+            this@jfxToggleNode.selectedProperty().asAny { if (it) R.style.menu_link_on else R.style.menu_link_off }
         )
         selectedProperty().listener {
             when {

@@ -4,5 +4,6 @@
     <color name="amber_500_light">#fff350</color>
     <color name="red_500">#f44336</color>
     <color name="red_500_light">#ff7961</color>
+    <color name="selected_background">#66000000</color>
     <color name="toolbar_color">@android:color/white</color>
 </resources>

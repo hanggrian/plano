@@ -83,10 +83,6 @@ class MainActivity : AppCompatActivity() {
         mediaToolbar.prepare()
         trimToolbar.prepare()
         ensureToolbars()
-        /*mediaText.doOnLayout {
-            trimText.width = mediaText.width
-            bleedText.width = mediaText.width
-        }*/
 
         mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
         trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
@@ -95,21 +91,6 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MainAdapter(viewModel)
         recycler.adapter = adapter
-
-        fab.setOnClickListener {
-            adjust()
-            getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
-            val mediaSize = MediaSize(mediaWidth, mediaHeight)
-            mediaSize.populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
-            adapter.put(mediaSize)
-
-            runBlocking {
-                GlobalScope.launch(Dispatchers.IO) {
-                    saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
-                }.join()
-                ensureToolbars()
-            }
-        }
     }
 
     override fun onDestroy() {
@@ -179,6 +160,21 @@ class MainActivity : AppCompatActivity() {
             R.id.aboutItem -> AboutDialogFragment().show(supportFragmentManager, null)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun calculate(v: View) {
+        adjust()
+        getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
+        val mediaSize = MediaSize(mediaWidth, mediaHeight)
+        mediaSize.populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
+        adapter.put(mediaSize)
+
+        runBlocking {
+            GlobalScope.launch(Dispatchers.IO) {
+                saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
+            }.join()
+            ensureToolbars()
+        }
     }
 
     private fun adjust() {

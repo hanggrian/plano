@@ -64,6 +64,15 @@
                     android:layout_row="0"
                     android:layout_column="5" />
 
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="6"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="@dimen/small"
+                    android:src="@drawable/ic_more" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -98,6 +107,15 @@
                     android:layout_row="1"
                     android:layout_column="5" />
 
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="6"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="@dimen/small"
+                    android:src="@drawable/ic_more" />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/gapText"
                     style="@style/Widget.Plano.TextView"
@@ -130,12 +148,6 @@
                     android:layout_row="2"
                     android:layout_column="5" />
 
-                <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="end|center_vertical"
-                    android:src="@drawable/ic_github" />
-
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/allowFlipText"
                     style="@style/Widget.Plano.TextView"
@@ -151,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_row="3"
                     android:layout_column="3"
-                    android:layout_columnSpan="3"
+                    android:layout_columnSpan="4"
                     android:orientation="horizontal">
 
                     <CheckBox

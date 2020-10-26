@@ -13,6 +13,7 @@ android {
         multiDexEnabled = true
         applicationId = RELEASE_GROUP
         versionName = RELEASE_VERSION
+        buildConfigField("String", "VERSION_NAME", "\"$RELEASE_VERSION\"") // probably Android gradle plugin 4.1.0 bug
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
