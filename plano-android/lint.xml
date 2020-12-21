@@ -12,4 +12,9 @@
     <issue id="SetTextI18n">
         <ignore path="src/com/hendraanggrian/plano/MainAdapter.kt"/>
     </issue>
+    <issue id="LockedOrientationActivity">
+        <ignore path="AndroidManifest.xml"/>
+    </issue>
+
+    <issue id="ObsoleteLintCustomCheck" severity="ignore"/> <!-- probably gradle bugs -->
 </lint>

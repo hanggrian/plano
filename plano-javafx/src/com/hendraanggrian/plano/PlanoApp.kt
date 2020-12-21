@@ -131,7 +131,6 @@ class PlanoApp : Application(), Resources {
     private val mediaHeightField = FloatField().apply { onAction { calculateButton.fire() } }
     private val trimWidthField = FloatField().apply { onAction { calculateButton.fire() } }
     private val trimHeightField = FloatField().apply { onAction { calculateButton.fire() } }
-    private val bleedField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapHorizontalField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapVerticalField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapLinkToggle = jfxToggleNode {
@@ -195,6 +194,10 @@ class PlanoApp : Application(), Resources {
                     menuBar {
                         isUseSystemMenuBar = SystemUtils.IS_OS_MAC_OSX
                         "File" {
+                            menuItem(getString(R.string.check_for_update)) {
+                                onAction(Dispatchers.JavaFx) { checkForUpdate() }
+                            }
+                            separatorMenuItem()
                             menuItem(getString(R.string.clear_recent_sizes)) {
                                 onAction {
                                     transaction {
@@ -203,7 +206,6 @@ class PlanoApp : Application(), Resources {
                                     }
                                 }
                             }
-                            separatorMenuItem()
                             menu(getString(R.string.preferences)) {
                                 menu(getString(R.string.theme)) {
                                     val themeGroup = ToggleGroup()
@@ -280,9 +282,6 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "Help" {
-                            menuItem(getString(R.string.check_for_update)) {
-                                onAction(Dispatchers.JavaFx) { checkForUpdate() }
-                            }
                             menuItem(getString(R.string.fork_me_on_github)) {
                                 onAction { hostServices.showDocument(BuildConfig.WEB) }
                             }
