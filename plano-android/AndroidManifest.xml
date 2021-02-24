@@ -10,7 +10,6 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Plano"
-        android:roundIcon="@mipmap/ic_launcher_rounded"
         android:supportsRtl="false"
         android:theme="@style/Theme.Plano"
         android:usesCleartextTraffic="true"

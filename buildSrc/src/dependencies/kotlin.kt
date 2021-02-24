@@ -1,4 +1,4 @@
-const val VERSION_KOTLIN = "1.4.20"
+const val VERSION_KOTLIN = "1.4.21"
 const val VERSION_COROUTINES = "1.4.2"
 const val VERSION_EXPOSED = "0.25.1"
 
