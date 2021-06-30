@@ -4,24 +4,26 @@
 
 Plano
 =====
+
 Simple app that efficiently calculate paper usage for commercial printing use, available as desktop and Android app.
 Some of the features include:
 * Multi-language (English and Bahasa Indonesia).
 * Dark mode on all platforms.
- 
+
 Thanks to [belajarcoreldraw.co](http://www.belajarcoreldraw.co/2013/08/software-portable-untuk-menghitung.html) for the idea.
 
-![JavaFX Screenshot][screenshot_javafx]
-![Android Screenshot][screenshot_android]
+![][screenshot_javafx]
+![][screenshot_android]
 
 Download
 --------
+
 Go to [releases] to download Plano in several options:
-* apk - Android debug app, go to Setting > Security > check `Unknown sources` to install. 
+* apk - Android debug app, go to Setting > Security > check `Unknown sources` to install.
 * exe - Windows archive, unpack in `Program Files` directory.
 * dmg - macOS app, mount and move it to `Applications` directory.
 * jar - standalone Java app.
-    
-[screenshot_javafx]: /art/screenshot_javafx.png
-[screenshot_android]: /art/screenshot_android.png
+
+[screenshot_javafx]: art/screenshot_javafx.png
+[screenshot_android]: art/screenshot_android.png
 [releases]: https://github.com/hendraanggrian/plano/releases
