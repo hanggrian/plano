@@ -12,18 +12,14 @@ Some of the features include:
 
 Thanks to [belajarcoreldraw.co](http://www.belajarcoreldraw.co/2013/08/software-portable-untuk-menghitung.html) for the idea.
 
-![][screenshot_javafx]
-![][screenshot_android]
+![](art/screenshot_javafx.png)
+![](art/screenshot_android.png)
 
 Download
 --------
 
-Go to [releases] to download Plano in several options:
+Go to [releases](https://github.com/hendraanggrian/plano/releases) to download Plano in several options:
 * apk - Android debug app, go to Setting > Security > check `Unknown sources` to install.
 * exe - Windows archive, unpack in `Program Files` directory.
 * dmg - macOS app, mount and move it to `Applications` directory.
 * jar - standalone Java app.
-
-[screenshot_javafx]: art/screenshot_javafx.png
-[screenshot_android]: art/screenshot_android.png
-[releases]: https://github.com/hendraanggrian/plano/releases
