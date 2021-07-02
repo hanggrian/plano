@@ -1,6 +1,6 @@
-[![release](https://img.shields.io/github/release/hendraanggrian/plano.svg)](https://github.com/hendraanggrian/plano/releases)
-[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
-[![license](https://img.shields.io/github/license/hendraanggrian/plano)](http://www.apache.org/licenses/LICENSE-2.0)
+[![version](https://img.shields.io/github/release/hendraanggrian/plano)](https://github.com/hendraanggrian/plano/releases)
+[![analysis](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081)](https://ktlint.github.io)
+[![license](https://img.shields.io/github/license/hendraanggrian/plano)](https://github.com/hendraanggrian/plano/blob/main/LICENSE)
 
 Plano
 =====
@@ -12,8 +12,8 @@ Some of the features include:
 
 Thanks to [belajarcoreldraw.co](http://www.belajarcoreldraw.co/2013/08/software-portable-untuk-menghitung.html) for the idea.
 
-![](art/screenshot_javafx.png)
-![](art/screenshot_android.png)
+![](images/screenshot_javafx.png)
+![](images/screenshot_android.png)
 
 Download
 --------
