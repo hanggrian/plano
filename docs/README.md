@@ -1,6 +1,5 @@
 [![version](https://img.shields.io/github/release/hendraanggrian/plano)](https://github.com/hendraanggrian/plano/releases)
 [![analysis](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081)](https://ktlint.github.io)
-[![license](https://img.shields.io/github/license/hendraanggrian/plano)](https://github.com/hendraanggrian/plano/blob/main/LICENSE)
 
 Plano
 =====
