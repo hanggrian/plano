@@ -5,7 +5,6 @@ Plano
 =====
 
 Simple app that efficiently calculate paper usage for commercial printing use, available as desktop and Android app.
-Some of the features include:
 * Multi-language (English and Bahasa Indonesia).
 * Dark mode on all platforms.
 

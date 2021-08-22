@@ -1,5 +1,10 @@
 package com.hendraanggrian.plano
 
+import com.hendraanggrian.auto.prefs.BindPreference
+import com.hendraanggrian.auto.prefs.PreferencesLogger
+import com.hendraanggrian.auto.prefs.PreferencesSaver
+import com.hendraanggrian.auto.prefs.Prefs
+import com.hendraanggrian.auto.prefs.jvm.userRoot
 import com.hendraanggrian.plano.controls.FloatField
 import com.hendraanggrian.plano.controls.PlanoToolbar
 import com.hendraanggrian.plano.controls.ResultPane
@@ -18,12 +23,6 @@ import com.hendraanggrian.plano.util.THEME_LIGHT
 import com.hendraanggrian.plano.util.THEME_SYSTEM
 import com.hendraanggrian.plano.util.getResource
 import com.hendraanggrian.plano.util.isDarkTheme
-import com.hendraanggrian.prefy.BindPreference
-import com.hendraanggrian.prefy.PreferencesLogger
-import com.hendraanggrian.prefy.PreferencesSaver
-import com.hendraanggrian.prefy.Prefy
-import com.hendraanggrian.prefy.bind
-import com.hendraanggrian.prefy.jvm.userRoot
 import com.jfoenix.controls.JFXCheckBox
 import javafx.application.Application
 import javafx.scene.Scene
@@ -53,7 +52,6 @@ import ktfx.controls.rowConstraints
 import ktfx.coroutines.onAction
 import ktfx.doublePropertyOf
 import ktfx.inputs.plus
-import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.jfoenix.layouts.jfxToggleNode
 import ktfx.launchApplication
 import ktfx.layouts.anchorPane
@@ -92,7 +90,8 @@ class PlanoApp : Application(), Resources {
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
 
-        @JvmStatic fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
+        @JvmStatic
+        fun main(args: Array<String>) = launchApplication<PlanoApp>(*args)
     }
 
     private val scaleProperty = doublePropertyOf(SCALE_SMALL)
@@ -135,7 +134,7 @@ class PlanoApp : Application(), Resources {
     private val gapVerticalField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapLinkToggle = jfxToggleNode {
         idProperty().bind(
-            this@jfxToggleNode.selectedProperty().asAny { if (it) R.style.menu_link_on else R.style.menu_link_off }
+            this@jfxToggleNode.selectedProperty().asAny { if (it) R.image.menu_link_on else R.image.menu_link_off }
         )
         selectedProperty().listener {
             when {
@@ -174,9 +173,9 @@ class PlanoApp : Application(), Resources {
 
     override fun init() {
         Plano.setDebug(BuildConfig.DEBUG)
-        if (BuildConfig.DEBUG) Prefy.setLogger(PreferencesLogger.System)
+        if (BuildConfig.DEBUG) Prefs.setLogger(PreferencesLogger.System)
 
-        saver = Prefy.userRoot(BuildConfig.GROUP.replace('.', '/')).bind(this)
+        saver = Prefs.bind(Prefs.userRoot(BuildConfig.GROUP.replace('.', '/')), this)
         resourceBundle = Language.ofCode(language).toResourcesBundle()
 
         Database.connect("jdbc:sqlite:/${SystemUtils.USER_HOME}/.plano.db", "org.sqlite.JDBC")
@@ -493,9 +492,9 @@ class PlanoApp : Application(), Resources {
     fun closeAll() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
-        rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
+        /*rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
             outputPane.children += children
-        }
+        }*/
         mediaWidthField.requestFocus()
     }
 
@@ -526,13 +525,13 @@ class PlanoApp : Application(), Resources {
 
     private suspend fun checkForUpdate() {
         val release = withContext(Dispatchers.IO) { GitHubApi.getRelease("jar") }
-        when {
+        /*when {
             release.isNewerThan(BuildConfig.VERSION) -> rootPane.jfxSnackbar(
                 getString(R.string._update_available).format(release.name),
                 DURATION_LONG,
                 getString(R.string.btn_download)
             ) { hostServices.showDocument(release.htmlUrl) }
             else -> rootPane.jfxSnackbar(getString(R.string._update_unavailable), DURATION_LONG)
-        }
+        }*/
     }
 }

@@ -1,25 +1,20 @@
 package com.hendraanggrian.plano
 
-import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.hendraanggrian.prefy.PreferencesLogger
-import com.hendraanggrian.prefy.Prefy
-import com.hendraanggrian.prefy.android.Android
-import com.hendraanggrian.prefy.android.get
+import androidx.multidex.MultiDexApplication
+import com.hendraanggrian.auto.prefs.PreferencesLogger
+import com.hendraanggrian.auto.prefs.Prefs
+import com.hendraanggrian.auto.prefs.android.Android
+import com.hendraanggrian.auto.prefs.android.preferences
 
-class PlanoApp : Application() {
-
-    /*override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-    }*/
+class PlanoApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
         Plano.setDebug(BuildConfig.DEBUG)
-        if (BuildConfig.DEBUG) Prefy.setLogger(PreferencesLogger.Android)
+        if (BuildConfig.DEBUG) Prefs.setLogger(PreferencesLogger.Android)
 
-        val theme = Prefy[this].getInt("theme")
+        val theme = preferences.getInt("theme")
         if (theme != null && theme != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
             AppCompatDelegate.setDefaultNightMode(theme)
         }

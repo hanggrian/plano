@@ -6,7 +6,8 @@ import kotlin.test.assertEquals
 
 class PlanoTest {
 
-    @Test fun a5inA3plus() {
+    @Test
+    fun a5inA3plus() {
         val mediaBox = MediaSize(48.5f, 32.5f)
         mediaBox.populate(21f, 14.85f, 0f, 0f, false, false)
         assertEquals(4, mediaBox.size)
@@ -18,7 +19,8 @@ class PlanoTest {
         )
     }
 
-    @Test fun f4in79109() {
+    @Test
+    fun f4in79109() {
         val mediaBox = MediaSize(79f, 109f)
         mediaBox.populate(21.5f, 33f, 0f, 0f, true, true)
         assertEquals(11, mediaBox.size)

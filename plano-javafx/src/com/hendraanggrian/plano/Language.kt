@@ -18,7 +18,7 @@ enum class Language(private val nativeLocale: Locale) {
 
     fun toLocale(): Locale = nativeLocale
 
-    @JvmOverloads fun toString(showCurrency: Boolean = false): String = nativeLocale
+    fun asString(showCurrency: Boolean = false): String = nativeLocale
         .getDisplayLanguage(nativeLocale)
         .let {
             when {

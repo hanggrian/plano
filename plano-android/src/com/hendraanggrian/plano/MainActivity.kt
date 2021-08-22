@@ -18,15 +18,13 @@ import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.lifecycle.observe
+import com.hendraanggrian.auto.prefs.BindPreference
+import com.hendraanggrian.auto.prefs.PreferencesSaver
+import com.hendraanggrian.auto.prefs.android.bindPreferences
 import com.hendraanggrian.plano.data.PlanoDatabase
 import com.hendraanggrian.plano.data.saveRecentSizes
 import com.hendraanggrian.plano.help.AboutDialogFragment
 import com.hendraanggrian.plano.util.snackbar
-import com.hendraanggrian.prefy.BindPreference
-import com.hendraanggrian.prefy.PreferencesSaver
-import com.hendraanggrian.prefy.Prefy
-import com.hendraanggrian.prefy.android.bind
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -70,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         db = PlanoDatabase.getInstance(this)
-        saver = Prefy.bind(this)
+        saver = bindPreferences()
         viewModel = ViewModelProvider(this).get()
         viewModel.fillData.value = isFill
         viewModel.thickData.value = isThick

@@ -2,32 +2,35 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
+        mavenCentral()
+        gradlePluginPortal()
         google()
-        jcenter()
+        maven(REPOSITORIES_OSSRH_SNAPSHOTS)
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
     dependencies {
         classpath(kotlin("gradle-plugin", VERSION_KOTLIN))
-        classpath(android())
-        classpath(hendraanggrian("r-gradle-plugin", VERSION_PLUGIN_R))
-        classpath(hendraanggrian("buildconfig-gradle-plugin", VERSION_PLUGIN_BUILDCONFIG))
-        classpath(hendraanggrian("locale-gradle-plugin", VERSION_PLUGIN_LOCALE))
-        classpath(hendraanggrian("packr-gradle-plugin", VERSION_PLUGIN_PACKR))
-        classpath(shadow())
-        classpath(gitPublish())
+        classpath(javafx)
+        classpath(android)
+        classpath(`git-publish`)
+        classpath(hendraanggrian("generating-gradle-plugin", VERSION_PLUGIN_GENERATING))
+        classpath(hendraanggrian("localization-gradle-plugin", VERSION_PLUGIN_LOCALIZATION))
+        classpath(hendraanggrian("packaging-gradle-plugin", VERSION_PLUGIN_PACKAGING))
+
+        classpath(hendraanggrian("javapoet-ktx", version = "0.1-SNAPSHOT"))
+        classpath("com.badlogicgames.packr:packr:2.2-SNAPSHOT")
+        classpath("com.google.gradle:osdetector-gradle-plugin:1.7.0")
     }
 }
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
-        jcenter()
+        maven(REPOSITORIES_OSSRH_SNAPSHOTS)
         maven("https://kotlin.bintray.com/kotlinx")
     }
     tasks {
-        withType<Delete> { delete(files("out")) }
         withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
     }
 }
-
-tasks.register<Delete>("clean") { delete(buildDir) }

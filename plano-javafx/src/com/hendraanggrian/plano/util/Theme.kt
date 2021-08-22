@@ -1,7 +1,7 @@
 package com.hendraanggrian.plano.util
 
-import com.hendraanggrian.prefy.Prefy
-import com.hendraanggrian.prefy.jvm.userRoot
+import com.hendraanggrian.auto.prefs.Prefs
+import com.hendraanggrian.auto.prefs.jvm.userRoot
 import org.apache.commons.lang3.SystemUtils
 import java.util.concurrent.TimeUnit
 
@@ -18,7 +18,7 @@ fun isDarkTheme(theme: String): Boolean = when (theme) {
                 process.waitFor(3, TimeUnit.SECONDS)
                 THEME_DARK in result
             }
-            SystemUtils.IS_OS_WINDOWS_10 -> Prefy.userRoot(
+            SystemUtils.IS_OS_WINDOWS_10 -> Prefs.userRoot(
                 "Software",
                 "Microsoft",
                 "Windows",

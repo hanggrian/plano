@@ -26,7 +26,6 @@ import ktfx.controls.LEFT
 import ktfx.controls.insetsOf
 import ktfx.controls.toSwingImage
 import ktfx.coroutines.onAction
-import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.layouts.KtfxGridPane
 import ktfx.layouts.anchorPane
 import ktfx.layouts.checkMenuItem
@@ -132,13 +131,13 @@ class ResultPane(
                             mediaLabel.id = null
                             trimLabel.id = null
                         }
-                        app.rootPane.jfxSnackbar(
+                        /*app.rootPane.jfxSnackbar(
                             getString(R.string._save).format(file.name),
                             PlanoApp.DURATION_SHORT,
                             getString(R.string.btn_show_directory)
                         ) {
                             app.hostServices.showDocument(file.parentFile.toURI().toString())
-                        }
+                        }*/
                     }
                 }
             }

@@ -240,6 +240,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/medium"
+        android:onClick="calculate"
         android:src="@drawable/btn_send"
         app:backgroundTint="?colorAccent"
         app:fabSize="normal"

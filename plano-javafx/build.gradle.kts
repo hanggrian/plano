@@ -1,125 +1,87 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.hendraanggrian.buildconfig.BuildConfigTask
-import com.hendraanggrian.packr.PackTask
-import com.hendraanggrian.packr.PackrExtension
-import com.hendraanggrian.r.RTask
-
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 plugins {
+    java
+    javafx
+    application
     kotlin("jvm")
     kotlin("kapt")
-    idea
-    hendraanggrian("r")
-    hendraanggrian("buildconfig")
-    hendraanggrian("packr")
-    shadow
-    application
+    hendraanggrian("generating")
+    hendraanggrian("packaging")
 }
 
-application.mainClassName = "$RELEASE_GROUP.PlanoApp"
+javafx {
+    modules("javafx.controls")
+}
+
+application {
+    mainClass.set("$RELEASE_GROUP.plano.PlanoApp")
+}
 
 sourceSets {
-    getByName("main") {
+    main {
         java.srcDir("src")
         resources.srcDir("res")
     }
 }
 
-val configuration = configurations.register("ktlint")
+ktlint()
 
 dependencies {
     api(project(":$RELEASE_ARTIFACT"))
     api(kotlin("reflect", VERSION_KOTLIN))
     api(kotlinx("coroutines-javafx", VERSION_COROUTINES))
-
     api(exposed("core"))
     api(exposed("dao"))
     api(exposed("jdbc"))
     api(sqliteJDBC())
-
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
-    implementation(hendraanggrian("ktfx", "ktfx-jfoenix", VERSION_KTFX))
-
-    implementation(hendraanggrian("prefy", "prefy-jvm", VERSION_PREFY))
-    kapt(hendraanggrian("prefy", "prefy-compiler", VERSION_PREFY))
-
-    configuration {
-        invoke(ktlint())
-    }
+    implementation(hendraanggrian("ktfx", "jfoenix", VERSION_KTFX))
+    implementation(hendraanggrian("auto", "prefs-jvm", VERSION_PREFS))
+    kapt(hendraanggrian("auto", "prefs-compiler", VERSION_PREFS))
 }
 
 tasks {
-    val ktlint by registering(JavaExec::class) {
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
-        inputs.dir("src")
-        outputs.dir("src")
-        description = "Check Kotlin code style."
-        classpath(configuration.get())
-        main = "com.pinterest.ktlint.Main"
-        args("src/**/*.kt")
-    }
-    "check" {
-        dependsOn(ktlint.get())
-    }
-    register<JavaExec>("ktlintFormat") {
-        group = "formatting"
-        inputs.dir("src")
-        outputs.dir("src")
-        description = "Fix Kotlin code style deviations."
-        classpath(configuration.get())
-        main = "com.pinterest.ktlint.Main"
-        args("-F", "src/**/*.kt")
+    withType<Jar> {
+        duplicatesStrategy = DuplicatesStrategy.WARN // Gradle 7 bug
     }
 
-    withType<RTask> {
-        resourcesDirectory = "res"
+    generateR {
+        packageName.set("$RELEASE_GROUP.$RELEASE_ARTIFACT")
+        resourcesDirectory.set(projectDir.resolve("res"))
         configureCss()
         properties { isWriteResourceBundle = true }
     }
-
-    withType<BuildConfigTask> {
-        appName = RELEASE_NAME
-        artifactId = RELEASE_ARTIFACT
-        debug = RELEASE_DEBUG
-        addField("USER", RELEASE_USER)
-        addField("WEB", RELEASE_WEB)
+    generateBuildConfig {
+        packageName.set("$RELEASE_GROUP.$RELEASE_ARTIFACT")
+        appName.set("Plano")
+        artifactId.set(RELEASE_ARTIFACT)
+        debug.set(RELEASE_DEBUG)
+        addField("USER", "hendraanggrian")
+        addField("WEB", RELEASE_GITHUB)
     }
 
-    named<Jar>("jar") { manifest { attributes(mapOf("Main-Class" to application.mainClassName)) } }
-
-    named<ShadowJar>("shadowJar") {
-        destinationDirectory.set(buildDir.resolve("releases"))
-        archiveBaseName.set(RELEASE_ARTIFACT)
-        archiveVersion.set(RELEASE_VERSION)
-        archiveClassifier.set(null as String?)
+    packMacOS {
+        appName.set("$RELEASE_ARTIFACT-$RELEASE_VERSION/Plano.app")
+        icon.set(rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns"))
+        bundleId.set(RELEASE_GROUP)
     }
-
-    withType<PackTask> {
+    packWindows32 {
+        appName.set("$RELEASE_ARTIFACT-$RELEASE_VERSION-x86/Plano")
+        jdk.set("/Volumes/Media/Windows JDK/jdk1.8.0_271-x86")
+    }
+    packWindows64 {
+        appName.set("$RELEASE_ARTIFACT-$RELEASE_VERSION-x64/Plano")
+        jdk.set("/Volumes/Media/Windows JDK/jdk1.8.0_271-x64")
+    }
+    withType<com.hendraanggrian.packaging.PackTask> {
         dependsOn("installDist")
     }
 }
 
-packr {
-    executable = RELEASE_NAME
-    mainClass = application.mainClassName
-    classpath = files("build/install/$RELEASE_ARTIFACT-javafx/lib")
-    resources = files("res")
-    minimizeJre = PackrExtension.MINIMIZATION_HARD
-    macOS {
-        name = "$RELEASE_ARTIFACT-$RELEASE_VERSION/$RELEASE_NAME.app"
-        icon = rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns")
-        bundleId = RELEASE_GROUP
-    }
-    windows32 {
-        name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x86/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_271-x86"
-    }
-    windows64 {
-        name = "$RELEASE_ARTIFACT-$RELEASE_VERSION-x64/$RELEASE_NAME"
-        jdk = "/Volumes/Media/Windows JDK/jdk1.8.0_271-x64"
-    }
-    isVerbose = true
-    isAutoOpen = true
+packaging {
+    minimizeJre.set("hard")
+    verbose.set(true)
+    autoOpen.set(true)
 }

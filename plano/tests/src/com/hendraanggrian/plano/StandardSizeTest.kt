@@ -7,10 +7,17 @@ import kotlin.test.assertEquals
 
 class StandardSizeTest {
 
-    @Test fun aSeries() = StandardSize.SERIES_A.testSeries()
-    @Test fun bSeries() = StandardSize.SERIES_B.testSeries()
-    @Test fun cSeries() = StandardSize.SERIES_B.testSeries()
-    @Test fun fSeries() = StandardSize.SERIES_F.testSeries()
+    @Test
+    fun aSeries() = StandardSize.SERIES_A.testSeries()
+
+    @Test
+    fun bSeries() = StandardSize.SERIES_B.testSeries()
+
+    @Test
+    fun cSeries() = StandardSize.SERIES_B.testSeries()
+
+    @Test
+    fun fSeries() = StandardSize.SERIES_F.testSeries()
 
     private fun List<StandardSize>.testSeries() = filterIndexed { i, _ -> i != lastIndex }
         .forEachIndexed { i, (_, width, _) ->

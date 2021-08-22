@@ -18,8 +18,7 @@ import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter(private val viewModel: MainViewModel) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>(),
-    MutableList<MediaSize> by arrayListOf() {
+    RecyclerView.Adapter<MainAdapter.ViewHolder>(), MutableList<MediaSize> by arrayListOf() {
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
