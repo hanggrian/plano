@@ -34,11 +34,11 @@ dependencies {
 }
 
 tasks {
-    withType<com.hendraanggrian.localization.LocalizeJvmTask> {
+    localizeJvm {
         resourceName.set("string")
         outputDirectory.set(projectDir.resolve("../$RELEASE_ARTIFACT-javafx/res"))
     }
-    withType<com.hendraanggrian.localization.LocalizeAndroidTask> {
+    localizeAndroid {
         defaultLocale.set(Locale.ENGLISH)
         outputDirectory.set(projectDir.resolve("../$RELEASE_ARTIFACT-android/res"))
     }

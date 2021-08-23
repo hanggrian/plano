@@ -12,11 +12,16 @@ plugins {
 }
 
 javafx {
-    modules("javafx.controls")
+    sdk = System.getenv("JAVAFX_HOME")
+    modules("javafx.controls", "javafx.swing")
 }
 
 application {
     mainClass.set("$RELEASE_GROUP.plano.PlanoApp")
+    applicationDefaultJvmArgs = listOf(
+        "--module-path=${System.getenv("JAVAFX_HOME")}/lib",
+        "--add-modules=javafx.controls,javafx.swing"
+    )
 }
 
 sourceSets {

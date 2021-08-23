@@ -52,6 +52,7 @@ import ktfx.controls.rowConstraints
 import ktfx.coroutines.onAction
 import ktfx.doublePropertyOf
 import ktfx.inputs.plus
+import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.jfoenix.layouts.jfxToggleNode
 import ktfx.launchApplication
 import ktfx.layouts.anchorPane
@@ -74,6 +75,7 @@ import ktfx.layouts.tooltip
 import ktfx.layouts.vbox
 import ktfx.listeners.listener
 import ktfx.runLater
+import ktfx.time.seconds
 import ktfx.windows.minSize
 import org.apache.commons.lang3.SystemUtils
 import org.jetbrains.exposed.sql.Database
@@ -85,8 +87,8 @@ import java.util.ResourceBundle
 class PlanoApp : Application(), Resources {
 
     companion object {
-        const val DURATION_SHORT = 3000L
-        const val DURATION_LONG = 6000L
+        val DURATION_SHORT = 3.seconds
+        val DURATION_LONG = 6.seconds
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
 
@@ -134,7 +136,7 @@ class PlanoApp : Application(), Resources {
     private val gapVerticalField = FloatField().apply { onAction { calculateButton.fire() } }
     private val gapLinkToggle = jfxToggleNode {
         idProperty().bind(
-            this@jfxToggleNode.selectedProperty().asAny { if (it) R.image.menu_link_on else R.image.menu_link_off }
+            this@jfxToggleNode.selectedProperty().asAny { if (it) R.style.menu_link_on else R.style.menu_link_off }
         )
         selectedProperty().listener {
             when {
@@ -143,8 +145,8 @@ class PlanoApp : Application(), Resources {
             }
         }
     }
-    private val allowFlipColumnCheck = JFXCheckBox()
-    private val allowFlipRowCheck = JFXCheckBox()
+    private val allowFlipRightCheck = JFXCheckBox()
+    private val allowFlipBottomCheck = JFXCheckBox()
 
     private lateinit var expandMenu: CheckMenuItem
     private lateinit var fillMenu: CheckMenuItem
@@ -281,7 +283,7 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "Help" {
-                            menuItem(getString(R.string.fork_me_on_github)) {
+                            menuItem(getString(R.string.view_on_github)) {
                                 onAction { hostServices.showDocument(BuildConfig.WEB) }
                             }
                             menuItem(getString(R.string.open_source_licenses)) {
@@ -392,15 +394,15 @@ class PlanoApp : Application(), Resources {
                             label(getString(R.string.allow_flip)) { tooltip(getString(R.string._allow_flip)) }
                                 .grid(row, 1 to 2)
                             addChild(
-                                allowFlipColumnCheck.apply {
-                                    text = getString(R.string.last_column)
+                                allowFlipRightCheck.apply {
+                                    text = getString(R.string.right)
                                     tooltip(getString(R.string._allow_flip))
                                     isSelected = allowFlipColumn
                                 }
                             ).grid(row++, 3 to 4)
                             addChild(
-                                allowFlipRowCheck.apply {
-                                    text = getString(R.string.last_row)
+                                allowFlipBottomCheck.apply {
+                                    text = getString(R.string.bottom)
                                     tooltip(getString(R.string._allow_flip))
                                     isSelected = allowFlipRow
                                 }
@@ -434,7 +436,7 @@ class PlanoApp : Application(), Resources {
                                                         mediaWidthField.value, mediaHeightField.value,
                                                         trimWidthField.value, trimHeightField.value,
                                                         gapHorizontalField.value, gapVerticalField.value,
-                                                        allowFlipColumnCheck.isSelected, allowFlipRowCheck.isSelected,
+                                                        allowFlipRightCheck.isSelected, allowFlipBottomCheck.isSelected,
                                                         scaleProperty, fillProperty, thickProperty
                                                     )
                                                 )
@@ -485,16 +487,16 @@ class PlanoApp : Application(), Resources {
         trimWidth = trimWidthField.value; trimHeight = trimHeightField.value
         gapHorizontal = gapHorizontalField.value; gapVertical = gapVerticalField.value
         gapLink = gapLinkToggle.isSelected
-        allowFlipColumn = allowFlipColumnCheck.isSelected; allowFlipRow = allowFlipRowCheck.isSelected
+        allowFlipColumn = allowFlipRightCheck.isSelected; allowFlipRow = allowFlipBottomCheck.isSelected
         saver.save()
     }
 
     fun closeAll() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
-        /*rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
+        rootPane.jfxSnackbar(getString(R.string._boxes_cleared), DURATION_SHORT, getString(R.string.btn_undo)) {
             outputPane.children += children
-        }*/
+        }
         mediaWidthField.requestFocus()
     }
 
@@ -525,13 +527,13 @@ class PlanoApp : Application(), Resources {
 
     private suspend fun checkForUpdate() {
         val release = withContext(Dispatchers.IO) { GitHubApi.getRelease("jar") }
-        /*when {
+        when {
             release.isNewerThan(BuildConfig.VERSION) -> rootPane.jfxSnackbar(
                 getString(R.string._update_available).format(release.name),
                 DURATION_LONG,
                 getString(R.string.btn_download)
             ) { hostServices.showDocument(release.htmlUrl) }
             else -> rootPane.jfxSnackbar(getString(R.string._update_unavailable), DURATION_LONG)
-        }*/
+        }
     }
 }

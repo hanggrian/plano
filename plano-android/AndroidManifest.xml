@@ -12,13 +12,12 @@
         android:label="Plano"
         android:supportsRtl="false"
         android:theme="@style/Theme.Plano"
-        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="m">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
             android:forceDarkAllowed="true"
-            android:screenOrientation="portrait"
             tools:targetApi="q">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

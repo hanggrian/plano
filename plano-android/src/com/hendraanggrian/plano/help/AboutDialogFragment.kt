@@ -21,7 +21,6 @@ class AboutDialogFragment : BottomSheetDialogFragment() {
         aboutToolbar = view.findViewById(R.id.aboutToolbar)
         aboutToolbar.title = "${BuildConfig.NAME} ${BuildConfig.VERSION_NAME}"
         aboutRecycler = view.findViewById(R.id.aboutRecycler)
-        aboutRecycler.setHasFixedSize(true)
         aboutRecycler.adapter = AboutAdapter {
             dismiss()
             (activity as MainActivity).fab

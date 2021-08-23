@@ -13,7 +13,7 @@ import io.ktor.http.takeFrom
 import org.apache.maven.artifact.versioning.ComparableVersion
 
 object GitHubApi {
-    private const val endPoint = "https://api.github.com"
+    private const val endpoint = "https://api.github.com"
     private val client: HttpClient = HttpClient(OkHttp) {
         install(JsonFeature) {
             serializer = GsonSerializer()
@@ -27,7 +27,7 @@ object GitHubApi {
     private fun HttpRequestBuilder.apiUrl(path: String) {
         header(HttpHeaders.CacheControl, "no-cache")
         url {
-            takeFrom(endPoint)
+            takeFrom(endpoint)
             encodedPath = path
         }
     }

@@ -4,6 +4,7 @@ import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.Resources
 import com.hendraanggrian.plano.Size
 import com.hendraanggrian.plano.StandardSize
+import com.hendraanggrian.plano.clean
 import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
 import javafx.scene.control.TextField
@@ -80,8 +81,8 @@ open class RoundMorePaperButton(
                             0,
                             ktfx.layouts.menuItem(size.dimension) {
                                 onAction {
-                                    widthField.text = size.width.toString()
-                                    heightField.text = size.height.toString()
+                                    widthField.text = size.width.clean()
+                                    heightField.text = size.height.clean()
                                 }
                             }
                         )

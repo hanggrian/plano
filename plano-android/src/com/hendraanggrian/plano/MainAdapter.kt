@@ -17,8 +17,8 @@ import androidx.core.view.get
 import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
 
-class MainAdapter(private val viewModel: MainViewModel) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>(), MutableList<MediaSize> by arrayListOf() {
+class MainAdapter(private val viewModel: MainViewModel, private val items: MutableList<MediaSize>) :
+    RecyclerView.Adapter<MainAdapter.ViewHolder>(), MutableList<MediaSize> by items {
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,20 +35,20 @@ class MainAdapter(private val viewModel: MainViewModel) :
         holder.card.setOnCreateContextMenuListener { menu, v, _ ->
             val itemCount = ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
             menu.setHeaderTitle(context.resources.getQuantityString(R.plurals.items, itemCount, itemCount))
-            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_column).run {
+            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_right).run {
                 isCheckable = true
-                isChecked = mediaBox.allowFlipColumn
+                isChecked = mediaBox.allowFlipRight
                 setOnMenuItemClickListener {
-                    mediaBox.allowFlipColumn = !mediaBox.allowFlipColumn
+                    mediaBox.allowFlipRight = !mediaBox.allowFlipRight
                     holder.populate(mediaBox)
                     false
                 }
             }
-            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_row).run {
+            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_bottom).run {
                 isCheckable = true
-                isChecked = mediaBox.allowFlipRow
+                isChecked = mediaBox.allowFlipBottom
                 setOnMenuItemClickListener {
-                    mediaBox.allowFlipRow = !mediaBox.allowFlipRow
+                    mediaBox.allowFlipBottom = !mediaBox.allowFlipBottom
                     holder.populate(mediaBox)
                     false
                 }

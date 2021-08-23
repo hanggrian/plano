@@ -52,7 +52,7 @@ class AboutAdapter(private val onCheck: () -> View) : RecyclerView.Adapter<About
             }
             1 -> {
                 holder.image.setImageResource(R.drawable.ic_github)
-                holder.text.setText(R.string.fork_me_on_github)
+                holder.text.setText(R.string.view_on_github)
                 holder.itemView.setOnClickListener {
                     context.openUrl(BuildConfig.WEB)
                 }

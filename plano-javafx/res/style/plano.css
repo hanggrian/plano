@@ -106,6 +106,10 @@
 #circle-red {
     -fx-fill: -red-500;
 }
+#label-title {
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 26;
+}
 #label-dialog-title {
     -fx-font-family: 'Roboto Medium';
     -fx-font-size: 22;

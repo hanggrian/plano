@@ -12,7 +12,6 @@ import ktfx.jfoenix.layouts.rightItems
 import ktfx.layouts.imageView
 import ktfx.layouts.label
 import ktfx.layouts.region
-import ktfx.text.pt
 
 class PlanoToolbar(
     resources: Resources,
@@ -31,7 +30,7 @@ class PlanoToolbar(
         leftItems {
             imageView(R.image.ic_toolbar)
             region { prefWidth = 10.0 }
-            label(BuildConfig.NAME) { font = 26.pt }
+            label(BuildConfig.NAME) { id = R.style.label_title }
         }
         rightItems {
             closeAllButton = addChild(

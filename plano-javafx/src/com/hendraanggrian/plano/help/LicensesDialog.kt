@@ -11,8 +11,7 @@ class LicensesDialog(app: PlanoApp) : BaseDialog(app, app.getString(R.string.ope
 
     init {
         License.listAll(
-            "Ktfx"
-                to "https://github.com/hendraanggrian/ktfx/blob/master/LICENSE"
+            "Ktfx" to "https://github.com/hendraanggrian/ktfx/blob/master/LICENSE"
         ).forEach { license ->
             hyperlink(license.name) {
                 onAction { app.hostServices.showDocument(license.url) }

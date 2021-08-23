@@ -8,16 +8,12 @@ class MediaSize(
     private val trimBoxes: MutableList<TrimSize> = mutableListOf()
 ) : Size, List<TrimSize> by trimBoxes, Serializable {
 
-    companion object {
-        var DEBUG = false // change according to BuildConfig
-    }
-
     private var _trimWidth: Float? = null
     private var _trimHeight: Float? = null
     private var _gapHorizontal: Float? = null
     private var _gapVertical: Float? = null
-    private var _allowFlipColumn: Boolean? = null
-    private var _allowFlipRow: Boolean? = null
+    private var _allowFlipRight: Boolean? = null
+    private var _allowFlipBottom: Boolean? = null
 
     val trimWidth: Float get() = checkNotNull(_trimWidth) { "Must call populate at least once" }
 
@@ -27,23 +23,23 @@ class MediaSize(
 
     val gapVertical: Float get() = checkNotNull(_gapVertical) { "Must call populate at least once" }
 
-    var allowFlipColumn: Boolean
-        get() = checkNotNull(_allowFlipColumn) { "Must call populate at least once" }
+    var allowFlipRight: Boolean
+        get() = checkNotNull(_allowFlipRight) { "Must call populate at least once" }
         set(value) {
-            _allowFlipColumn = value
-            populate(trimWidth, trimHeight, gapHorizontal, gapVertical, value, allowFlipRow)
+            _allowFlipRight = value
+            populate(trimWidth, trimHeight, gapHorizontal, gapVertical, value, allowFlipBottom)
         }
 
-    var allowFlipRow: Boolean
-        get() = checkNotNull(_allowFlipRow) { "Must call populate at least once" }
+    var allowFlipBottom: Boolean
+        get() = checkNotNull(_allowFlipBottom) { "Must call populate at least once" }
         set(value) {
-            _allowFlipRow = value
-            populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, value)
+            _allowFlipBottom = value
+            populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipRight, value)
         }
 
     fun rotate() {
         width = height.also { height = width }
-        populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
+        populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipRight, allowFlipBottom)
     }
 
     /** Using the total of 6 possible calculations, determine the most efficient of them. */
@@ -52,12 +48,12 @@ class MediaSize(
         trimHeight: Float,
         gapHorizontal: Float,
         gapVertical: Float,
-        allowFlipColumn: Boolean,
-        allowFlipRow: Boolean
+        allowFlipRight: Boolean,
+        allowFlipBottom: Boolean
     ) {
         _trimWidth = trimWidth; _trimHeight = trimHeight
         _gapHorizontal = gapHorizontal; _gapVertical = gapVertical
-        _allowFlipColumn = allowFlipColumn; _allowFlipRow = allowFlipRow
+        _allowFlipRight = allowFlipRight; _allowFlipBottom = allowFlipBottom
         trimBoxes.clear()
         trimBoxes.addAll(
             mutableListOf<List<TrimSize>>().apply {
@@ -66,7 +62,7 @@ class MediaSize(
                         width, height,
                         trimWidth, trimHeight,
                         gapHorizontal, gapVertical,
-                        allowFlipColumn, allowFlipRow
+                        allowFlipRight, allowFlipBottom
                     )
                 )
                 add(
@@ -74,42 +70,42 @@ class MediaSize(
                         width, height,
                         trimHeight, trimWidth,
                         gapHorizontal, gapVertical,
-                        allowFlipColumn, allowFlipRow
+                        allowFlipRight, allowFlipBottom
                     )
                 )
-                if (allowFlipColumn) {
+                if (allowFlipRight) {
                     add(
-                        alwaysFlipColumn(
+                        alwaysFlipRight(
                             width, height,
                             trimWidth, trimHeight,
                             gapHorizontal, gapVertical,
-                            allowFlipRow
+                            allowFlipBottom
                         )
                     )
                     add(
-                        alwaysFlipColumn(
+                        alwaysFlipRight(
                             width, height,
                             trimHeight, trimWidth,
                             gapHorizontal, gapVertical,
-                            allowFlipRow
+                            allowFlipBottom
                         )
                     )
                 }
-                if (allowFlipRow) {
+                if (allowFlipBottom) {
                     add(
-                        alwaysFlipRow(
+                        alwaysFlipBottom(
                             width, height,
                             trimWidth, trimHeight,
                             gapHorizontal, gapVertical,
-                            allowFlipColumn
+                            allowFlipRight
                         )
                     )
                     add(
-                        alwaysFlipRow(
+                        alwaysFlipBottom(
                             width, height,
                             trimHeight, trimWidth,
                             gapHorizontal, gapVertical,
-                            allowFlipColumn
+                            allowFlipRight
                         )
                     )
                 }
@@ -119,86 +115,115 @@ class MediaSize(
 
     /** Lay columns and rows, then search for optional leftovers. */
     private fun traditional(
-        mwidth: Float,
-        mheight: Float,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float,
-        fcolumn: Boolean,
-        frow: Boolean
+        mediaWidth: Float,
+        mediaHeight: Float,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float,
+        flipRight: Boolean,
+        flipBottom: Boolean
     ): List<TrimSize> {
-        if (DEBUG) println("Calculating traditionally ${mwidth}x$mheight - ${twidth}x$theight:")
+        if (Plano.DEBUG) println("Calculating traditionally ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        val finalTrimWidth = trimWidth + horizontalGap
+        val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
-        val columns = (mwidth / (twidth + hgap)).toInt()
-        val rows = (mheight / (theight + vgap)).toInt()
-        sizes.populate(columns, rows, twidth, theight, hgap, vgap)
-
-        if (fcolumn) {
-            val flippedColumns = measureFlippedColumns(columns, mwidth, mheight, twidth, theight, hgap, vgap)
-            if (flippedColumns > 0) {
-                sizes.populateFlippedColumns(columns, flippedColumns, twidth, theight, hgap, vgap)
+        val columns = (mediaWidth / finalTrimWidth).toInt()
+        val rows = (mediaHeight / finalTrimHeight).toInt()
+        sizes.populate(columns, rows, trimWidth, trimHeight, horizontalGap, verticalGap)
+        if (flipRight) {
+            val flippedRights = measureFlippedRights(
+                columns,
+                mediaWidth,
+                mediaHeight,
+                trimWidth,
+                trimHeight,
+                horizontalGap,
+                verticalGap
+            )
+            if (flippedRights.first > 0) {
+                sizes.populateFlippedRights(columns, flippedRights, trimWidth, trimHeight, horizontalGap, verticalGap)
             }
         }
-
-        if (frow) {
-            val flippedRows = measureFlippedRows(rows, mwidth, mheight, twidth, theight, hgap, vgap)
-            if (flippedRows > 0) {
-                sizes.populateFlippedRows(rows, flippedRows, twidth, theight, hgap, vgap)
+        if (flipBottom) {
+            val flippedBottoms =
+                measureFlippedBottoms(rows, mediaWidth, mediaHeight, trimWidth, trimHeight, horizontalGap, verticalGap)
+            if (flippedBottoms.second > 0) {
+                sizes.populateFlippedBottoms(rows, flippedBottoms, trimWidth, trimHeight, horizontalGap, verticalGap)
             }
         }
         return sizes
     }
 
     /** Columns are always flipped. */
-    private fun alwaysFlipColumn(
-        mwidth: Float,
-        mheight: Float,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float,
-        frow: Boolean
+    private fun alwaysFlipRight(
+        mediaWidth: Float,
+        mediaHeight: Float,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float,
+        flipBottom: Boolean
     ): List<TrimSize> {
-        if (DEBUG) println("Calculating radical column ${mwidth}x$mheight - ${twidth}x$theight:")
+        if (Plano.DEBUG) println("Calculating radical column ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        val finalTrimWidth = trimWidth + horizontalGap
+        val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
-        val columns = ((mwidth - theight + vgap) / (twidth + hgap)).toInt()
-        val rows = (mheight / (theight + vgap)).toInt()
-        sizes.populate(columns, rows, twidth, theight, hgap, vgap)
-
-        val flippedColumns = measureFlippedColumns(columns, mwidth, mheight, twidth, theight, hgap, vgap)
-        sizes.populateFlippedColumns(columns, flippedColumns, twidth, theight, hgap, vgap)
-        if (frow) {
-            val flippedRows = measureFlippedRows(rows, mwidth - theight, mheight, twidth, theight, hgap, vgap)
-            if (flippedRows > 0) {
-                sizes.populateFlippedRows(rows, flippedRows, twidth, theight, hgap, vgap)
+        val columns = ((mediaWidth - finalTrimHeight) / finalTrimWidth).toInt()
+        val rows = (mediaHeight / finalTrimHeight).toInt()
+        sizes.populate(columns, rows, trimWidth, trimHeight, horizontalGap, verticalGap)
+        val flippedColumns =
+            measureFlippedRights(columns, mediaWidth, mediaHeight, trimWidth, trimHeight, horizontalGap, verticalGap)
+        sizes.populateFlippedRights(columns, flippedColumns, trimWidth, trimHeight, horizontalGap, verticalGap)
+        if (flipBottom) {
+            val flippedBottoms = measureFlippedBottoms(
+                rows,
+                mediaWidth - trimHeight,
+                mediaHeight,
+                trimWidth,
+                trimHeight,
+                horizontalGap,
+                verticalGap
+            )
+            if (flippedBottoms.second > 0) {
+                sizes.populateFlippedBottoms(rows, flippedBottoms, trimWidth, trimHeight, horizontalGap, verticalGap)
             }
         }
         return sizes
     }
 
     /** Rows are always flipped. */
-    private fun alwaysFlipRow(
-        mwdith: Float,
-        mheight: Float,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float,
-        fcolumn: Boolean
+    private fun alwaysFlipBottom(
+        mediaWidth: Float,
+        mediaHeight: Float,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float,
+        flipRight: Boolean
     ): List<TrimSize> {
-        if (DEBUG) println("Calculating radical row ${mwdith}x$mheight - ${twidth}x$theight:")
+        if (Plano.DEBUG) println("Calculating radical row ${mediaWidth}x$mediaHeight - ${trimWidth}x$trimHeight:")
+        val finalTrimWidth = trimWidth + horizontalGap
+        val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
-        val columns = (mwdith / (twidth + hgap)).toInt()
-        val rows = ((mheight - twidth + hgap) / (theight + vgap)).toInt()
-        sizes.populate(columns, rows, twidth, theight, hgap, vgap)
-
-        val flippedRows = measureFlippedRows(rows, mwdith, mheight, twidth, theight, hgap, vgap)
-        sizes.populateFlippedRows(rows, flippedRows, twidth, theight, hgap, vgap)
-        if (fcolumn) {
-            val flippedColumns = measureFlippedColumns(columns, mwdith, mheight - twidth, twidth, theight, hgap, vgap)
-            if (flippedColumns > 0) {
-                sizes.populateFlippedColumns(columns, flippedColumns, twidth, theight, hgap, vgap)
+        val columns = (mediaWidth / finalTrimWidth).toInt()
+        val rows = ((mediaHeight - finalTrimWidth) / finalTrimHeight).toInt()
+        sizes.populate(columns, rows, trimWidth, trimHeight, horizontalGap, verticalGap)
+        val flippedBottoms =
+            measureFlippedBottoms(rows, mediaWidth, mediaHeight, trimWidth, trimHeight, horizontalGap, verticalGap)
+        sizes.populateFlippedBottoms(rows, flippedBottoms, trimWidth, trimHeight, horizontalGap, verticalGap)
+        if (flipRight) {
+            val flippedRights = measureFlippedRights(
+                columns,
+                mediaWidth,
+                mediaHeight - trimWidth,
+                trimWidth,
+                trimHeight,
+                horizontalGap,
+                verticalGap
+            )
+            if (flippedRights.first > 0) {
+                sizes.populateFlippedRights(columns, flippedRights, trimWidth, trimHeight, horizontalGap, verticalGap)
             }
         }
         return sizes
@@ -207,85 +232,115 @@ class MediaSize(
     private fun MutableList<TrimSize>.populate(
         columns: Int,
         rows: Int,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float
     ) {
-        if (DEBUG) {
+        if (Plano.DEBUG) {
             println("* columns: $columns")
             println("* rows: $rows")
         }
+        val finalTrimWidth = trimWidth + horizontalGap
+        val finalTrimHeight = trimHeight + verticalGap
         for (column in 0 until columns) {
-            val x = column * (twidth + hgap)
+            val x = column * finalTrimWidth
             for (row in 0 until rows) {
-                val y = row * (theight + vgap)
-                this += TrimSize(x, y, twidth, theight)
+                val y = row * finalTrimHeight
+                this += TrimSize(x, y, trimWidth, trimHeight)
             }
         }
     }
 
-    private fun measureFlippedColumns(
+    private fun measureFlippedRights(
         columns: Int,
-        mwidth: Float,
-        mheight: Float,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float
-    ): Int {
-        var flippedColumns = 0
-        if (columns > 0 && mwidth - ((twidth + hgap) * columns) >= theight + vgap) {
-            flippedColumns = (mheight / (twidth + hgap)).toInt()
+        mediaWidth: Float,
+        mediaHeight: Float,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float
+    ): Pair<Int, Int> {
+        var flippedRightColumns = 0
+        var flippedRightRows = 0
+        if (columns > 0) {
+            val finalTrimWidth = trimWidth + horizontalGap
+            val finalTrimHeight = trimHeight + verticalGap
+            flippedRightColumns = ((mediaWidth - columns * finalTrimWidth) / finalTrimHeight).toInt()
+            if (flippedRightColumns > 0) {
+                flippedRightRows = (mediaHeight / finalTrimWidth).toInt()
+            }
         }
-        if (DEBUG) println("* flippedColumns: $flippedColumns")
-        return flippedColumns
+        if (Plano.DEBUG) {
+            println("* flippedRightRows: $flippedRightRows")
+            println("* flippedRightColumns: $flippedRightColumns")
+        }
+        return flippedRightColumns to flippedRightRows
     }
 
-    private fun measureFlippedRows(
+    private fun measureFlippedBottoms(
         rows: Int,
-        mwidth: Float,
-        mheight: Float,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float
-    ): Int {
-        var flippedRows = 0
-        if (rows > 0 && mheight - ((theight + vgap) * rows) >= twidth + hgap) {
-            flippedRows = (mwidth / (theight + vgap)).toInt()
+        mediaWidth: Float,
+        mediaHeight: Float,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float
+    ): Pair<Int, Int> {
+        var flippedBottomColumns = 0
+        var flippedBottomRows = 0
+        if (rows > 0) {
+            val finalTrimWidth = trimWidth + horizontalGap
+            val finalTrimHeight = trimHeight + verticalGap
+            flippedBottomRows = ((mediaHeight - rows * finalTrimHeight) / finalTrimWidth).toInt()
+            if (flippedBottomRows > 0) {
+                flippedBottomColumns = (mediaWidth / finalTrimHeight).toInt()
+            }
         }
-        if (DEBUG) println("* flippedRows: $flippedRows")
-        return flippedRows
+        if (Plano.DEBUG) {
+            println("* flippedBottomRows: $flippedBottomRows")
+            println("* flippedBottomColumns: $flippedBottomColumns")
+        }
+        return flippedBottomColumns to flippedBottomRows
     }
 
-    private fun MutableList<TrimSize>.populateFlippedColumns(
+    private fun MutableList<TrimSize>.populateFlippedRights(
         columns: Int,
-        flippedColumns: Int,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float
+        flippedRights: Pair<Int, Int>,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float
     ) {
-        val x = (twidth + hgap) * columns - hgap + vgap
-        for (leftover in 0 until flippedColumns) {
-            val y = leftover * (twidth + hgap)
-            this += TrimSize(x, y, theight, twidth)
+        val finalTrimWidth = trimWidth + horizontalGap
+        val finalTrimHeight = trimHeight + verticalGap
+        val startX = columns * finalTrimWidth - horizontalGap + verticalGap
+        for (flippedRightColumn in 0 until flippedRights.first) {
+            val x = startX + flippedRightColumn * finalTrimHeight
+            for (flippedRightRow in 0 until flippedRights.second) {
+                val y = flippedRightRow * finalTrimWidth
+                this += TrimSize(x, y, trimHeight, trimWidth)
+            }
         }
     }
 
-    private fun MutableList<TrimSize>.populateFlippedRows(
+    private fun MutableList<TrimSize>.populateFlippedBottoms(
         rows: Int,
-        flippedRows: Int,
-        twidth: Float,
-        theight: Float,
-        hgap: Float,
-        vgap: Float
+        flippedBottoms: Pair<Int, Int>,
+        trimWidth: Float,
+        trimHeight: Float,
+        horizontalGap: Float,
+        verticalGap: Float
     ) {
-        val y = (theight + vgap) * rows - vgap + hgap
-        for (leftover in 0 until flippedRows) {
-            val x = leftover * (theight + vgap)
-            this += TrimSize(x, y, theight, twidth)
+        val finalTrimWidth = trimWidth + horizontalGap
+        val finalTrimHeight = trimHeight + verticalGap
+        val startY = rows * finalTrimHeight - verticalGap + horizontalGap
+        for (flippedBottomRow in 0 until flippedBottoms.second) {
+            val y = startY + flippedBottomRow * finalTrimWidth
+            for (flippedBottomColumn in 0 until flippedBottoms.first) {
+                val x = flippedBottomColumn * finalTrimHeight
+                this += TrimSize(x, y, trimHeight, trimWidth)
+            }
         }
     }
 }

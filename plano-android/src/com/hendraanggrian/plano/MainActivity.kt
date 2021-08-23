@@ -18,6 +18,9 @@ import androidx.core.content.getSystemService
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import com.hendraanggrian.auto.bundles.BindState
+import com.hendraanggrian.auto.bundles.restoreStates
+import com.hendraanggrian.auto.bundles.saveStates
 import com.hendraanggrian.auto.prefs.BindPreference
 import com.hendraanggrian.auto.prefs.PreferencesSaver
 import com.hendraanggrian.auto.prefs.android.bindPreferences
@@ -25,7 +28,10 @@ import com.hendraanggrian.plano.data.PlanoDatabase
 import com.hendraanggrian.plano.data.saveRecentSizes
 import com.hendraanggrian.plano.help.AboutDialogFragment
 import com.hendraanggrian.plano.util.snackbar
+import kotlinx.android.synthetic.main.activity_licenses.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.recycler
+import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -35,7 +41,7 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity() {
     private lateinit var db: PlanoDatabase
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: MainAdapter
+    private lateinit var recyclerAdapter: MainAdapter
     private lateinit var saver: PreferencesSaver
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
@@ -58,9 +64,10 @@ class MainActivity : AppCompatActivity() {
     @JvmField @BindPreference("trim_height") var trimHeight = 0f
     @JvmField @BindPreference("gap_horizontal") var gapHorizontal = 0f
     @JvmField @BindPreference("gap_vertical") var gapVertical = 0f
-    @JvmField @BindPreference("gap_link") var gapLink = false
     @JvmField @BindPreference("allow_flip_column") var allowFlipColumn = false
     @JvmField @BindPreference("allow_flip_row") var allowFlipRow = false
+
+    @JvmField @BindState var recyclerItems: ArrayList<MediaSize>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,16 +92,26 @@ class MainActivity : AppCompatActivity() {
         mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
         trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
         gapHorizontalEdit.setText(gapHorizontal.clean()); gapVerticalEdit.setText(gapVertical.clean())
-        allowFlipColumnCheck.isChecked = allowFlipColumn; allowFlipRowCheck.isChecked = allowFlipRow
+        allowFlipRightCheck.isChecked = allowFlipColumn; allowFlipBottomCheck.isChecked = allowFlipRow
 
-        adapter = MainAdapter(viewModel)
-        recycler.adapter = adapter
+        if (savedInstanceState != null) {
+            restoreStates(savedInstanceState)
+        } else {
+            recyclerItems = arrayListOf()
+        }
+        recyclerAdapter = MainAdapter(viewModel, recyclerItems!!)
+        recycler.adapter = recyclerAdapter
     }
 
     override fun onDestroy() {
         super.onDestroy()
         adjust()
         saver.save()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        saveStates(outState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -111,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                     appBar.setExpanded(true)
                     mediaWidthEdit.requestFocus()
                 }
-                else -> recycler.scrollToPosition(adapter.size - 1)
+                else -> recycler.scrollToPosition(recyclerAdapter.size - 1)
             }
         }
         viewModel.fillData.observe(this) {
@@ -138,10 +155,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.closeAllItem -> {
-                val temp = adapter.toList()
-                adapter.deleteAll()
+                val temp = recyclerAdapter.toList()
+                recyclerAdapter.deleteAll()
                 recycler.snackbar(getString(R.string._boxes_cleared), getString(R.string.btn_undo)) {
-                    adapter.putAll(temp)
+                    recyclerAdapter.putAll(temp)
                 }
             }
             R.id.backgroundItem -> viewModel.fillData.value = !isFill
@@ -165,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
         val mediaSize = MediaSize(mediaWidth, mediaHeight)
         mediaSize.populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
-        adapter.put(mediaSize)
+        recyclerAdapter.put(mediaSize)
 
         runBlocking {
             GlobalScope.launch(Dispatchers.IO) {
@@ -180,7 +197,7 @@ class MainActivity : AppCompatActivity() {
         trimWidth = trimWidthEdit.value; trimHeight = trimHeightEdit.value
         gapHorizontal = gapHorizontalEdit.value; gapVertical = gapVerticalEdit.value
         // gaplink
-        allowFlipColumn = allowFlipColumnCheck.isChecked; allowFlipRow = allowFlipRowCheck.isChecked
+        allowFlipColumn = allowFlipRightCheck.isChecked; allowFlipRow = allowFlipBottomCheck.isChecked
     }
 
     private fun ensureToolbars() {
@@ -197,14 +214,10 @@ class MainActivity : AppCompatActivity() {
         // history
         historyProvider().reversed().forEach { menu.add(it.dimension) }
         // standard paper sizes
-        menu.addSubMenu(getString(R.string.a_series))
-            .run { StandardSize.SERIES_A.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.b_series))
-            .run { StandardSize.SERIES_B.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.c_series))
-            .run { StandardSize.SERIES_C.forEach { add(it.extendedTitle) } }
-        menu.addSubMenu(getString(R.string.f_series))
-            .run { StandardSize.SERIES_F.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.a_series)).run { StandardSize.SERIES_A.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.b_series)).run { StandardSize.SERIES_B.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.c_series)).run { StandardSize.SERIES_C.forEach { add(it.extendedTitle) } }
+        menu.addSubMenu(getString(R.string.f_series)).run { StandardSize.SERIES_F.forEach { add(it.extendedTitle) } }
     }
 
     private fun Toolbar.prepare() {

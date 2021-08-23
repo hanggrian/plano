@@ -21,8 +21,8 @@ data class License(val name: String, val url: String) {
                     "https://github.com/apache/commons-math/blob/master/LICENSE.txt"
                 ),
                 License(
-                    "Prefy",
-                    "https://github.com/hendraanggrian/prefy/blob/master/LICENSE"
+                    "Prefs",
+                    "https://github.com/hendraanggrian/prefs/blob/master/LICENSE"
                 )
             )
             licenses += additionalLicenses.map { License(it.first, it.second) }

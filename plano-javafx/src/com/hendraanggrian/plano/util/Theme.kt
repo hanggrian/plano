@@ -25,7 +25,7 @@ fun isDarkTheme(theme: String): Boolean = when (theme) {
                 "CurrentVersion",
                 "Themes",
                 "Personalize"
-            ).getBoolean("AppsUseLightTheme")?.not() ?: false
+            ).getBoolean("AppsUseLightTheme").not()
             else -> false
         }
     }.getOrDefault(false)

@@ -1,6 +1,5 @@
 package com.hendraanggrian.plano
 
-import java.util.Currency
 import java.util.Locale
 import java.util.ResourceBundle
 
@@ -17,15 +16,6 @@ enum class Language(private val nativeLocale: Locale) {
     val code: String get() = nativeLocale.language
 
     fun toLocale(): Locale = nativeLocale
-
-    fun asString(showCurrency: Boolean = false): String = nativeLocale
-        .getDisplayLanguage(nativeLocale)
-        .let {
-            when {
-                showCurrency -> "${Currency.getInstance(nativeLocale).symbol} - $it"
-                else -> it
-            }
-        }
 
     fun toResourcesBundle(): ResourceBundle = ResourceBundle.getBundle("string_$code")
 

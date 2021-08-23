@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 buildscript {
     repositories {
         mavenCentral()
@@ -29,8 +27,5 @@ allprojects {
         google()
         maven(REPOSITORIES_OSSRH_SNAPSHOTS)
         maven("https://kotlin.bintray.com/kotlinx")
-    }
-    tasks {
-        withType<KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
     }
 }

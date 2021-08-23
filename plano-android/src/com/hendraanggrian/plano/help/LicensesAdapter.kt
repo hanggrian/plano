@@ -17,8 +17,8 @@ class LicensesAdapter : RecyclerView.Adapter<LicensesAdapter.ViewHolder>() {
             to "https://android.googlesource.com/platform/frameworks/support/+/androidx-master-dev/LICENSE.txt",
         "Android Material Components"
             to "https://github.com/material-components/material-components-android/blob/master/LICENSE",
-        "Bundler"
-            to "https://github.com/hendraanggrian/bundler/blob/master/LICENSE",
+        "Bundles"
+            to "https://github.com/hendraanggrian/bundles/blob/master/LICENSE",
         "Process Phoenix"
             to "https://github.com/JakeWharton/ProcessPhoenix/blob/master/LICENSE.txt"
     )

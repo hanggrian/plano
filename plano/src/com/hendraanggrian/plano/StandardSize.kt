@@ -57,7 +57,7 @@ enum class StandardSize(override val width: Float, override val height: Float) :
         val SERIES_F: List<StandardSize> = listOf(F0, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10)
     }
 
-    /** For android menu. */
+    /** For Android menu. */
     val extendedTitle: String
         get() {
             val spaces = if (name.length > 2) " " else "    "

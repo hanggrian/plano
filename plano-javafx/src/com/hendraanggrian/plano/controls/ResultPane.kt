@@ -26,6 +26,7 @@ import ktfx.controls.LEFT
 import ktfx.controls.insetsOf
 import ktfx.controls.toSwingImage
 import ktfx.coroutines.onAction
+import ktfx.jfoenix.controls.jfxSnackbar
 import ktfx.layouts.KtfxGridPane
 import ktfx.layouts.anchorPane
 import ktfx.layouts.checkMenuItem
@@ -101,14 +102,14 @@ class ResultPane(
                     populate(mediaBox)
                 }
             }
-            checkMenuItem(getString(R.string.allow_flip_column)) {
+            checkMenuItem(getString(R.string.allow_flip_right)) {
                 isSelected = mediaBox.allowFlipColumn
                 onAction {
                     mediaBox.allowFlipColumn = !mediaBox.allowFlipColumn
                     populate(mediaBox)
                 }
             }
-            checkMenuItem(getString(R.string.allow_flip_row)) {
+            checkMenuItem(getString(R.string.allow_flip_bottom)) {
                 isSelected = mediaBox.allowFlipRow
                 onAction {
                     mediaBox.allowFlipRow = !mediaBox.allowFlipRow
@@ -131,13 +132,13 @@ class ResultPane(
                             mediaLabel.id = null
                             trimLabel.id = null
                         }
-                        /*app.rootPane.jfxSnackbar(
+                        app.rootPane.jfxSnackbar(
                             getString(R.string._save).format(file.name),
                             PlanoApp.DURATION_SHORT,
                             getString(R.string.btn_show_directory)
                         ) {
                             app.hostServices.showDocument(file.parentFile.toURI().toString())
-                        }*/
+                        }
                     }
                 }
             }

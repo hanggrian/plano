@@ -167,18 +167,18 @@
                     android:orientation="horizontal">
 
                     <CheckBox
-                        android:id="@+id/allowFlipColumnCheck"
+                        android:id="@+id/allowFlipRightCheck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_column" />
+                        android:text="@string/right" />
 
                     <CheckBox
-                        android:id="@+id/allowFlipRowCheck"
+                        android:id="@+id/allowFlipBottomCheck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="16dp"
-                        android:text="@string/last_row" />
+                        android:text="@string/bottom" />
                 </LinearLayout>
             </GridLayout>
 
@@ -246,5 +246,6 @@
         app:fabSize="normal"
         app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|end"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        tools:ignore="UsingOnClickInXml" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
