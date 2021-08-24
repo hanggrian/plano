@@ -1,20 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <lint>
-    <issue id="Autofill" severity="ignore" />
-    <issue id="LabelFor" severity="ignore" />
-    <issue id="ContentDescription" severity="ignore" />
-    <issue id="HardcodedText" severity="ignore" />
-    <issue id="UnusedResources" severity="ignore" />
-    <issue id="Overdraw">
-        <ignore path="res/layout/item_about.xml" />
-        <ignore path="res/layout/item_license.xml" />
-    </issue>
-    <issue id="SetTextI18n">
-        <ignore path="src/com/hendraanggrian/plano/MainAdapter.kt"/>
-    </issue>
-    <issue id="LockedOrientationActivity">
-        <ignore path="AndroidManifest.xml"/>
-    </issue>
-
-    <issue id="ObsoleteLintCustomCheck" severity="ignore"/> <!-- probably gradle bugs -->
+    <issue id="UsingOnClickInXml" severity="ignore" />
 </lint>

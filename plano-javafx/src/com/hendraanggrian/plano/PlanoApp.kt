@@ -25,6 +25,7 @@ import com.hendraanggrian.plano.util.getResource
 import com.hendraanggrian.plano.util.isDarkTheme
 import com.jfoenix.controls.JFXCheckBox
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.CheckMenuItem
@@ -194,11 +195,19 @@ class PlanoApp : Application(), Resources {
                 vbox {
                     menuBar {
                         isUseSystemMenuBar = SystemUtils.IS_OS_MAC_OSX
-                        "File" {
-                            menuItem(getString(R.string.check_for_update)) {
-                                onAction(Dispatchers.JavaFx) { checkForUpdate() }
+                        if (!isUseSystemMenuBar) {
+                            "File" {
+                                menuItem(getString(R.string.quit)) {
+                                    accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.Q
+                                    onAction { Platform.exit() }
+                                }
                             }
-                            separatorMenuItem()
+                        }
+                        "Edit" {
+                            menuItem(getString(R.string.close_all)) {
+                                onAction { closeAll() }
+                                runLater { disableProperty().bind(outputPane.children.isEmpty) }
+                            }
                             menuItem(getString(R.string.clear_recent_sizes)) {
                                 onAction {
                                     transaction {
@@ -207,6 +216,7 @@ class PlanoApp : Application(), Resources {
                                     }
                                 }
                             }
+                            separatorMenuItem()
                             menu(getString(R.string.preferences)) {
                                 menu(getString(R.string.theme)) {
                                     val themeGroup = ToggleGroup()
@@ -245,12 +255,6 @@ class PlanoApp : Application(), Resources {
                                 }
                             }
                         }
-                        "Edit" {
-                            menuItem(getString(R.string.close_all)) {
-                                onAction { closeAll() }
-                                runLater { disableProperty().bind(outputPane.children.isEmpty) }
-                            }
-                        }
                         "View" {
                             expandMenu = checkMenuItem(getString(R.string.toggle_expand)) {
                                 accelerator = KeyCombination.SHORTCUT_DOWN + KeyCode.DIGIT1
@@ -283,6 +287,9 @@ class PlanoApp : Application(), Resources {
                             }
                         }
                         "Help" {
+                            menuItem(getString(R.string.check_for_update)) {
+                                onAction(Dispatchers.JavaFx) { checkForUpdate() }
+                            }
                             menuItem(getString(R.string.view_on_github)) {
                                 onAction { hostServices.showDocument(BuildConfig.WEB) }
                             }

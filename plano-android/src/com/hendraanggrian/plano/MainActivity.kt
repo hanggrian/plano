@@ -177,6 +177,9 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun moreSizes(v: View) {
+    }
+
     fun calculate(v: View) {
         adjust()
         getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
@@ -185,9 +188,8 @@ class MainActivity : AppCompatActivity() {
         recyclerAdapter.put(mediaSize)
 
         runBlocking {
-            GlobalScope.launch(Dispatchers.IO) {
-                saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight)
-            }.join()
+            GlobalScope.launch(Dispatchers.IO) { saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight) }
+                .join()
             ensureToolbars()
         }
     }

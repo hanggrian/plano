@@ -10,24 +10,39 @@
         <item name="colorPrimary">@color/amber_500</item>
     </style>
 
-    <style name="Circle">
+    <style name="Widget.Plano.Circle" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
+        <item name="layout_gravity">center_vertical</item>
     </style>
 
     <style name="Widget.Plano.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+        <item name="layout_gravity">center_vertical</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
     </style>
 
     <style name="Widget.Plano.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:layout_width">72dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_gravity">fill</item>
+        <item name="layout_columnWeight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:selectAllOnFocus">true</item>
+    </style>
+
+    <style name="Widget.Plano.EditText.Landscape" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+        </item>
         <item name="android:inputType">numberDecimal</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="android:selectAllOnFocus">true</item>

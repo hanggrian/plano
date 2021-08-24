@@ -51,6 +51,7 @@ dependencies {
     implementation(androidx("lifecycle", "lifecycle-livedata-ktx", VERSION_LIFECYCLE))
     implementation(androidx("core", "core-ktx"))
     implementation(androidx("appcompat"))
+    implementation(androidx("gridlayout", "gridlayout", version = "1.0.0"))
     implementation(androidx("preference", "preference-ktx", version = "1.1.1"))
     implementation(androidx("coordinatorlayout", version = "1.1.0"))
     implementation(androidx("recyclerview", version = "1.2.1"))

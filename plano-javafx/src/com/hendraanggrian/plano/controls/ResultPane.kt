@@ -103,16 +103,16 @@ class ResultPane(
                 }
             }
             checkMenuItem(getString(R.string.allow_flip_right)) {
-                isSelected = mediaBox.allowFlipColumn
+                isSelected = mediaBox.allowFlipRight
                 onAction {
-                    mediaBox.allowFlipColumn = !mediaBox.allowFlipColumn
+                    mediaBox.allowFlipRight = !mediaBox.allowFlipRight
                     populate(mediaBox)
                 }
             }
             checkMenuItem(getString(R.string.allow_flip_bottom)) {
-                isSelected = mediaBox.allowFlipRow
+                isSelected = mediaBox.allowFlipBottom
                 onAction {
-                    mediaBox.allowFlipRow = !mediaBox.allowFlipRow
+                    mediaBox.allowFlipBottom = !mediaBox.allowFlipBottom
                     populate(mediaBox)
                 }
             }

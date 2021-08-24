@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2021-08-23 23.22--><resources>
-    <string name="preferences">Preferences</string>
+2021-08-25 04.27--><resources>
+    <string name="quit">Quit</string>
     <string name="clear_recent_sizes">Clear Recent Sizes</string>
-    <string name="toggle_expand">Toggle Expand</string>
-    <string name="toggle_background">Toggle Background</string>
-    <string name="toggle_border">Toggle Border</string>
-    <string name="minimize">Minimize</string>
-    <string name="zoom">Zoom</string>
-    <string name="_boxes_cleared">Boxes cleared.</string>
-    <string name="reset">Reset</string>
+    <string name="language">Language</string>
     <string name="theme">Theme</string>
     <string name="system_default">System Default</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
-    <string name="language">Language</string>
-    <string name="about">About</string>
+    <string name="preferences">Preferences</string>
+    <string name="toggle_expand">Toggle Expand</string>
+    <string name="toggle_background">Toggle Background</string>
+    <string name="toggle_border">Toggle Border</string>
+    <string name="reset">Reset</string>
+    <string name="minimize">Minimize</string>
+    <string name="zoom">Zoom</string>
     <string name="check_for_update">Check for Update</string>
     <string name="view_on_github">View on GitHub</string>
     <string name="open_source_licenses">Open-source Licenses</string>
+    <string name="about">About</string>
+    <string name="_boxes_cleared">Boxes cleared.</string>
     <string name="_update_available">Plano version %s is available.</string>
     <string name="_update_unavailable">You already have the latest version.</string>
     <string name="_desc">Calculate how many trim boxes fit in a media box.</string>

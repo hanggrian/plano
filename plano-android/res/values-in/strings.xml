@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Generated file by locale-gradle-plugin, do not edit manually!
-2021-08-23 23.22--><resources>
-    <string name="preferences">Preferensi</string>
+2021-08-25 04.27--><resources>
+    <string name="quit">Keluar</string>
     <string name="clear_recent_sizes">Hapus Ukuran Terkini</string>
-    <string name="toggle_expand">Alihkan Perkembangan</string>
-    <string name="toggle_background">Alihkan Latar Belakang</string>
-    <string name="toggle_border">Alihkan Perbatasan</string>
-    <string name="minimize">Perkecil</string>
-    <string name="zoom">Perbesar</string>
-    <string name="_boxes_cleared">Konten terhapus.</string>
-    <string name="reset">Atur Ulang</string>
+    <string name="language">Bahasa</string>
     <string name="theme">Tema</string>
     <string name="system_default">Standar Sistem</string>
     <string name="dark">Gelap</string>
     <string name="light">Terang</string>
-    <string name="language">Bahasa</string>
-    <string name="about">Tentang</string>
+    <string name="preferences">Preferensi</string>
+    <string name="toggle_expand">Alihkan Perkembangan</string>
+    <string name="toggle_background">Alihkan Latar Belakang</string>
+    <string name="toggle_border">Alihkan Perbatasan</string>
+    <string name="reset">Atur Ulang</string>
+    <string name="minimize">Perkecil</string>
+    <string name="zoom">Perbesar</string>
     <string name="check_for_update">Cek Pembaruan</string>
     <string name="view_on_github">Lihat di GitHub</string>
     <string name="open_source_licenses">Lisensi Sumber Terbuka</string>
+    <string name="about">Tentang</string>
+    <string name="_boxes_cleared">Konten terhapus.</string>
     <string name="_update_available">Plano versi %s tersedia.</string>
     <string name="_update_unavailable">Tidak ada pembaruan.</string>
     <string name="_desc">Hitung berapa banyak kotak potong dalam kotak media.</string>

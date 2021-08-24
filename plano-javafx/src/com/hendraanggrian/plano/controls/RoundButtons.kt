@@ -9,7 +9,6 @@ import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
 import javafx.scene.control.TextField
 import javafx.scene.shape.Circle
-import javafx.scene.text.FontWeight
 import ktfx.bindings.asString
 import ktfx.controls.SIDE_RIGHT
 import ktfx.coroutines.onShowing
@@ -21,7 +20,6 @@ import ktfx.layouts.menuItem
 import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.tooltip
 import ktfx.listeners.onAction
-import ktfx.text.fontOf
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -108,7 +106,7 @@ open class RoundMorePaperButton(
             series.forEach { paperSize ->
                 menuItem(paperSize.dimension) {
                     graphic = label(paperSize.name) {
-                        font = fontOf("Roboto", FontWeight.BLACK)
+                        id = R.style.label_context_graphic
                     }
                     onAction {
                         widthField.text = paperSize.width.toString()
