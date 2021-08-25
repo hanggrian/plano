@@ -20,9 +20,18 @@ data class RecentMediaSize(
 
 @Dao
 interface RecentMediaSizes {
-    @Query("SELECT * FROM recent_media_sizes") suspend fun all(): List<RecentMediaSize>
-    @Insert suspend fun insertAll(vararg sizes: RecentMediaSize)
-    @Delete suspend fun delete(user: RecentMediaSize)
+
+    @Query("SELECT * FROM recent_media_sizes")
+    suspend fun all(): List<RecentMediaSize>
+
+    @Insert
+    suspend fun insertAll(vararg sizes: RecentMediaSize)
+
+    @Delete
+    suspend fun delete(user: RecentMediaSize)
+
+    @Query("DELETE FROM recent_media_sizes")
+    suspend fun deleteAll()
 
     suspend fun contains(width: Float, height: Float): Boolean =
         all().any { it.width == width && it.height == height }
@@ -41,9 +50,18 @@ data class RecentTrimSize(
 
 @Dao
 interface RecentTrimSizes {
-    @Query("SELECT * FROM recent_trim_sizes") suspend fun all(): List<RecentTrimSize>
-    @Insert suspend fun insertAll(vararg sizes: RecentTrimSize)
-    @Delete suspend fun delete(user: RecentTrimSize)
+
+    @Query("SELECT * FROM recent_trim_sizes")
+    suspend fun all(): List<RecentTrimSize>
+
+    @Insert
+    suspend fun insertAll(vararg sizes: RecentTrimSize)
+
+    @Delete
+    suspend fun delete(user: RecentTrimSize)
+
+    @Query("DELETE FROM recent_trim_sizes")
+    suspend fun deleteAll()
 
     suspend fun contains(width: Float, height: Float): Boolean =
         all().any { it.width == width && it.height == height }

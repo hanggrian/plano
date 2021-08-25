@@ -6,16 +6,14 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
-import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.hendraanggrian.auto.bundles.BindState
@@ -43,6 +41,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var recyclerAdapter: MainAdapter
     private lateinit var saver: PreferencesSaver
+    private lateinit var mediaPopupMenu: PopupMenu
+    private lateinit var trimPopupMenu: PopupMenu
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
 
         db = PlanoDatabase.getInstance(this)
         saver = bindPreferences()
@@ -84,10 +85,9 @@ class MainActivity : AppCompatActivity() {
         trimWidthEdit.addTextChangedListener(textWatcher); trimHeightEdit.addTextChangedListener(textWatcher)
         gapHorizontalEdit.addTextChangedListener(textWatcher); gapVerticalEdit.addTextChangedListener(textWatcher)
 
-        toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
-        mediaToolbar.prepare()
-        trimToolbar.prepare()
-        ensureToolbars()
+        mediaPopupMenu = PopupMenu(this@MainActivity, mediaMoreButton).prepare(mediaWidthEdit, mediaHeightEdit)
+        trimPopupMenu = PopupMenu(this@MainActivity, trimMoreButton).prepare(trimWidthEdit, trimHeightEdit)
+        updatePaperSizes()
 
         mediaWidthEdit.setText(mediaWidth.clean()); mediaHeightEdit.setText(mediaHeight.clean())
         trimWidthEdit.setText(trimWidth.clean()); trimHeightEdit.setText(trimHeight.clean())
@@ -163,6 +163,13 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.backgroundItem -> viewModel.fillData.value = !isFill
             R.id.borderItem -> viewModel.thickData.value = !isThick
+            R.id.clearRecentSizesItem -> {
+                GlobalScope.launch(Dispatchers.IO) {
+                    db.recentMedia().deleteAll()
+                    db.recentTrim().deleteAll()
+                }
+                updatePaperSizes()
+            }
             R.id.themeSystemItem, R.id.themeLightItem, R.id.themeDarkItem -> {
                 theme2 = when (item.itemId) {
                     R.id.themeSystemItem -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
@@ -177,10 +184,9 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun moreSizes(v: View) {
-    }
+    fun moreSizes(view: View) = (if (view == mediaMoreButton) mediaPopupMenu else trimPopupMenu).show()
 
-    fun calculate(v: View) {
+    fun calculate(view: View) {
         adjust()
         getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(fab.applicationWindowToken, 0)
         val mediaSize = MediaSize(mediaWidth, mediaHeight)
@@ -190,7 +196,7 @@ class MainActivity : AppCompatActivity() {
         runBlocking {
             GlobalScope.launch(Dispatchers.IO) { saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight) }
                 .join()
-            ensureToolbars()
+            updatePaperSizes()
         }
     }
 
@@ -202,16 +208,16 @@ class MainActivity : AppCompatActivity() {
         allowFlipColumn = allowFlipRightCheck.isChecked; allowFlipRow = allowFlipBottomCheck.isChecked
     }
 
-    private fun ensureToolbars() {
+    private fun updatePaperSizes() {
         val history = GlobalScope.async(Dispatchers.IO) { db.recentMedia().all() to db.recentTrim().all() }
         runBlocking {
             val (mediaSizes, trimSizes) = history.await()
-            mediaToolbar.updatePaperSizes { mediaSizes }
-            trimToolbar.updatePaperSizes { trimSizes }
+            mediaPopupMenu.updatePaperSizes { mediaSizes }
+            trimPopupMenu.updatePaperSizes { trimSizes }
         }
     }
 
-    private fun Toolbar.updatePaperSizes(historyProvider: () -> Iterable<Size>) {
+    private fun PopupMenu.updatePaperSizes(historyProvider: () -> Iterable<Size>) {
         menu.clear()
         // history
         historyProvider().reversed().forEach { menu.add(it.dimension) }
@@ -222,25 +228,18 @@ class MainActivity : AppCompatActivity() {
         menu.addSubMenu(getString(R.string.f_series)).run { StandardSize.SERIES_F.forEach { add(it.extendedTitle) } }
     }
 
-    private fun Toolbar.prepare() {
+    private fun PopupMenu.prepare(widthEdit: EditText, heightEdit: EditText): PopupMenu {
         // messy custom implementation
         setOnMenuItemClickListener { menu ->
             if (menu.title.none { it.isDigit() }) {
                 return@setOnMenuItemClickListener false
             }
             val s = menu.title.toString()
-            (children.first() as ViewGroup).children
-                .filterIsInstance<EditText>()
-                .forEachIndexed { index, t ->
-                    t.setText(
-                        when (index) {
-                            0 -> s.substring(s.indexOf('\t') + 1, s.indexOf(" x "))
-                            else -> s.substringAfter(" x ")
-                        }
-                    )
-                }
+            widthEdit.setText(s.substring(s.indexOf('\t') + 1, s.indexOf(" x ")))
+            heightEdit.setText(s.substringAfter(" x "))
             true
         }
+        return this
     }
 
     private val TextView.value: Float get() = text?.toString()?.toFloatOrNull() ?: 0f

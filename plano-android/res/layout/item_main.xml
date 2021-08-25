@@ -12,6 +12,7 @@
         android:layout_marginTop="@dimen/small"
         android:layout_marginEnd="@dimen/medium"
         android:layout_marginBottom="@dimen/small"
+        android:clickable="true"
         android:foreground="?selectableItemBackground"
         app:cardElevation="@dimen/elevation">
 

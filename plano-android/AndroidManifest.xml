@@ -10,10 +10,9 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Plano"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
-        android:theme="@style/Theme.Plano"
-        tools:ignore="GoogleAppIndexingWarning"
-        tools:targetApi="m">
+        android:theme="@style/Theme.Plano">
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -63,6 +63,7 @@
                     app:layout_row="0" />
 
                 <ImageButton
+                    android:id="@+id/mediaMoreButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackgroundBorderless"
@@ -105,6 +106,7 @@
                     app:layout_row="1" />
 
                 <ImageButton
+                    android:id="@+id/trimMoreButton"
                     android:layout_width="wrap_content"
                     android:layout_height="55dp"
                     android:background="?selectableItemBackgroundBorderless"
@@ -179,25 +181,6 @@
                         android:text="@string/bottom" />
                 </LinearLayout>
             </androidx.gridlayout.widget.GridLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingTop="?actionBarSize"
-                android:paddingBottom="@dimen/medium"
-                android:visibility="gone">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/mediaToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/trimToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"

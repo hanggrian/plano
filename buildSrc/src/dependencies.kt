@@ -19,7 +19,7 @@ const val VERSION_JAVAFX_PLUGIN = "0.0.10"
 val Dependencies.javafx get() = "org.openjfx:javafx-plugin:$VERSION_JAVAFX_PLUGIN"
 val Plugins.javafx get() = id("org.openjfx.javafxplugin")
 
-const val VERSION_KOTLIN = "1.5.21"
+const val VERSION_KOTLIN = "1.5.30"
 const val VERSION_COROUTINES = "1.5.1"
 const val VERSION_EXPOSED = "0.33.1"
 val Dependencies.dokka get() = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
@@ -31,7 +31,7 @@ fun Dependencies.exposed(module: String) = "org.jetbrains.exposed:exposed-$modul
 val Dependencies.`git-publish` get() = "org.ajoberstar:gradle-git-publish:3.0.0"
 val Plugins.`git-publish` get() = id("org.ajoberstar.git-publish")
 
-const val VERSION_MAVEN = "3.6.3"
+const val VERSION_MAVEN = "3.8.2"
 const val VERSION_COMMONS_MATH = "3.6.1"
 fun Dependencies.apache(module: String, version: String): String {
     require('-' in module) { "Module must contain `-` (e.g.: commons-lang, commons-math)." }

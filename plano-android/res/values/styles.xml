@@ -25,9 +25,9 @@
     </style>
 
     <style name="Widget.Plano.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="layout_gravity">fill</item>
+        <item name="layout_gravity">fill_horizontal</item>
         <item name="layout_columnWeight">1</item>
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
