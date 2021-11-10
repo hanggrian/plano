@@ -31,10 +31,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.recycler
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var db: PlanoDatabase
@@ -164,7 +163,7 @@ class MainActivity : AppCompatActivity() {
             R.id.backgroundItem -> viewModel.fillData.value = !isFill
             R.id.borderItem -> viewModel.thickData.value = !isThick
             R.id.clearRecentSizesItem -> {
-                GlobalScope.launch(Dispatchers.IO) {
+                runBlocking(Dispatchers.IO) {
                     db.recentMedia().deleteAll()
                     db.recentTrim().deleteAll()
                 }
@@ -194,8 +193,7 @@ class MainActivity : AppCompatActivity() {
         recyclerAdapter.put(mediaSize)
 
         runBlocking {
-            GlobalScope.launch(Dispatchers.IO) { saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight) }
-                .join()
+            launch(Dispatchers.IO) { saveRecentSizes(mediaWidth, mediaHeight, trimWidth, trimHeight) }.join()
             updatePaperSizes()
         }
     }
@@ -209,9 +207,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updatePaperSizes() {
-        val history = GlobalScope.async(Dispatchers.IO) { db.recentMedia().all() to db.recentTrim().all() }
         runBlocking {
-            val (mediaSizes, trimSizes) = history.await()
+            val history = withContext(Dispatchers.IO) { db.recentMedia().all() to db.recentTrim().all() }
+            val (mediaSizes, trimSizes) = history
             mediaPopupMenu.updatePaperSizes { mediaSizes }
             trimPopupMenu.updatePaperSizes { trimSizes }
         }

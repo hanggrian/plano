@@ -9,7 +9,7 @@ const val VERSION_ANDROIDX_TEST = "1.4.0"
 const val VERSION_ANDROIDX_JUNIT = "1.1.3"
 const val VERSION_ANDROIDX_TRUTH = "1.4.0"
 const val VERSION_ESPRESSO = "3.4.0"
-val Dependencies.android get() = "com.android.tools.build:gradle:7.0.1"
+val Dependencies.android get() = "com.android.tools.build:gradle:7.0.3"
 fun Plugins.android(submodule: String) = id("com.android.$submodule")
 fun Dependencies.material(version: String = VERSION_ANDROIDX) = "com.google.android.material:material:$version"
 fun Dependencies.androidx(repository: String, module: String = repository, version: String = VERSION_ANDROIDX) =
@@ -19,10 +19,10 @@ const val VERSION_JAVAFX_PLUGIN = "0.0.10"
 val Dependencies.javafx get() = "org.openjfx:javafx-plugin:$VERSION_JAVAFX_PLUGIN"
 val Plugins.javafx get() = id("org.openjfx.javafxplugin")
 
-const val VERSION_KOTLIN = "1.5.30"
-const val VERSION_COROUTINES = "1.5.1"
-const val VERSION_EXPOSED = "0.33.1"
-val Dependencies.dokka get() = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
+const val VERSION_KOTLIN = "1.5.31"
+const val VERSION_COROUTINES = "1.5.2"
+const val VERSION_EXPOSED = "0.36.2"
+val Dependencies.dokka get() = "org.jetbrains.dokka:dokka-gradle-plugin:$VERSION_KOTLIN"
 val Plugins.dokka get() = id("org.jetbrains.dokka")
 fun Dependencies.kotlinx(module: String, version: String? = null) =
     "org.jetbrains.kotlinx:kotlinx-$module${version?.let { ":$it" }.orEmpty()}"
@@ -31,7 +31,7 @@ fun Dependencies.exposed(module: String) = "org.jetbrains.exposed:exposed-$modul
 val Dependencies.`git-publish` get() = "org.ajoberstar:gradle-git-publish:3.0.0"
 val Plugins.`git-publish` get() = id("org.ajoberstar.git-publish")
 
-const val VERSION_MAVEN = "3.8.2"
+const val VERSION_MAVEN = "3.8.3"
 const val VERSION_COMMONS_MATH = "3.6.1"
 fun Dependencies.apache(module: String, version: String): String {
     require('-' in module) { "Module must contain `-` (e.g.: commons-lang, commons-math)." }
@@ -53,14 +53,10 @@ fun Dependencies.hendraanggrian(repo: String, module: String, version: String) =
     "com.hendraanggrian.$repo:$module:$version"
 fun Plugins.hendraanggrian(module: String) = id("com.hendraanggrian.$module")
 
-private const val VERSION_LEAKCANARY = "2.7"
-fun Dependencies.leakCanary() = "com.squareup.leakcanary:leakcanary-android:$VERSION_LEAKCANARY"
+fun Dependencies.leakCanary() = "com.squareup.leakcanary:leakcanary-android:2.7"
 
-private const val VERSION_PROCESSPHOENIX = "2.1.2"
-fun Dependencies.processPhoenix() = "com.jakewharton:process-phoenix:$VERSION_PROCESSPHOENIX"
+fun Dependencies.processPhoenix() = "com.jakewharton:process-phoenix:2.1.2"
 
-private const val VERSION_SQLITE = "3.31.1"
-fun Dependencies.sqliteJDBC() = "org.xerial:sqlite-jdbc:$VERSION_SQLITE"
+fun Dependencies.sqliteJDBC() = "org.xerial:sqlite-jdbc:3.36.0.3"
 
-private const val VERSION_KTOR = "1.6.2"
-fun Dependencies.ktor(module: String) = "io.ktor:ktor-$module:$VERSION_KTOR"
+fun Dependencies.ktor(module: String) = "io.ktor:ktor-$module:1.6.5"

@@ -14,8 +14,7 @@ import com.hendraanggrian.plano.R
 import com.hendraanggrian.plano.util.longSnackbar
 import com.hendraanggrian.plano.util.openUrl
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class AboutAdapter(private val onCheck: () -> View) : RecyclerView.Adapter<AboutAdapter.ViewHolder>() {
@@ -35,7 +34,7 @@ class AboutAdapter(private val onCheck: () -> View) : RecyclerView.Adapter<About
                 holder.text.setText(R.string.check_for_update)
                 holder.itemView.setOnClickListener {
                     val snackbarRoot = onCheck()
-                    GlobalScope.launch(Dispatchers.Main) {
+                    runBlocking(Dispatchers.Main) {
                         val release = withContext(Dispatchers.IO) { GitHubApi.getRelease(".apk") }
                         when {
                             release.isNewerThan(BuildConfig.VERSION_NAME) ->

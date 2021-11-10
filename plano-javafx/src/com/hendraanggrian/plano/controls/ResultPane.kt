@@ -15,7 +15,6 @@ import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.FlowPane
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
@@ -126,7 +125,7 @@ class ResultPane(
                     }
                     val file = ResultFile()
                     this@ResultPane.capture { ImageIO.write(it.image.toSwingImage(), "png", file) }
-                    GlobalScope.launch(Dispatchers.JavaFx) {
+                    launch(Dispatchers.JavaFx) {
                         delay(500)
                         if (isDarkTheme) {
                             mediaLabel.id = null
