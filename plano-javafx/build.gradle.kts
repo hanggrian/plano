@@ -12,16 +12,40 @@ plugins {
 }
 
 javafx {
-    sdk = System.getenv("JAVAFX_HOME")
+    sdk = "/Users/hendraanggrian/Library/JavaFX/javafx-sdk-17.0.2"
     modules("javafx.controls", "javafx.swing")
 }
 
 application {
+    applicationName = "Plano"
     mainClass.set("$RELEASE_GROUP.plano.PlanoApp")
     applicationDefaultJvmArgs = listOf(
-        "--module-path=${System.getenv("JAVAFX_HOME")}/lib",
-        "--add-modules=javafx.controls,javafx.swing"
+        "--module-path=/Users/hendraanggrian/Library/JavaFX/javafx-sdk-17.0.2/lib",
+        "--add-modules=javafx.controls,javafx.swing",
+        "--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+        "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+        "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+        "--add-opens=javafx.controls/javafx.scene.control.skin=com.jfoenix",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=com.jfoenix"
     )
+}
+
+packaging {
+    modulePaths.add(File("/Users/hendraanggrian/Library/JavaFX/javafx-jmods-17.0.2"))
+    modules.addAll("javafx.controls", "javafx.swing", "java.sql")
+    javaArgs.addAll(
+        "--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED",
+        "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED",
+        "--add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED",
+        "--add-opens=javafx.controls/javafx.scene.control.skin=com.jfoenix",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=com.jfoenix"
+    )
+    verbose.set(true)
+    mac {
+        icon.set(rootDir.resolve("arts/logo_mac.icns"))
+    }
 }
 
 sourceSets {
@@ -55,38 +79,16 @@ tasks {
     generateR {
         packageName.set("$RELEASE_GROUP.$RELEASE_ARTIFACT")
         resourcesDirectory.set(projectDir.resolve("res"))
-        configureCss()
-        properties { isWriteResourceBundle = true }
+        enableCss()
+        properties {
+            writeResourceBundle.set(true)
+        }
     }
     generateBuildConfig {
         packageName.set("$RELEASE_GROUP.$RELEASE_ARTIFACT")
         appName.set("Plano")
-        artifactId.set(RELEASE_ARTIFACT)
         debug.set(RELEASE_DEBUG)
         addField("USER", "hendraanggrian")
         addField("WEB", RELEASE_GITHUB)
     }
-
-    packMacOS {
-        appName.set("$RELEASE_ARTIFACT-$RELEASE_VERSION/Plano.app")
-        icon.set(rootProject.projectDir.resolve("art/$RELEASE_ARTIFACT.icns"))
-        bundleId.set(RELEASE_GROUP)
-    }
-    packWindows32 {
-        appName.set("$RELEASE_ARTIFACT-$RELEASE_VERSION-x86/Plano")
-        jdk.set("/Volumes/Media/Windows JDK/jdk1.8.0_271-x86")
-    }
-    packWindows64 {
-        appName.set("$RELEASE_ARTIFACT-$RELEASE_VERSION-x64/Plano")
-        jdk.set("/Volumes/Media/Windows JDK/jdk1.8.0_271-x64")
-    }
-    withType<com.hendraanggrian.packaging.PackTask> {
-        dependsOn("installDist")
-    }
-}
-
-packaging {
-    minimizeJre.set("hard")
-    verbose.set(true)
-    autoOpen.set(true)
 }

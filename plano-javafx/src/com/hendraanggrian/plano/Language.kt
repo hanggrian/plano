@@ -17,7 +17,8 @@ enum class Language(private val nativeLocale: Locale) {
 
     fun toLocale(): Locale = nativeLocale
 
-    fun toResourcesBundle(): ResourceBundle = ResourceBundle.getBundle("string_$code")
+    fun toResourcesBundle(): ResourceBundle =
+        ResourceBundle.getBundle(if (nativeLocale == Locale.ENGLISH) "string" else "string_$code")
 
     companion object {
 

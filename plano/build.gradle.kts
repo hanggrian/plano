@@ -36,11 +36,10 @@ dependencies {
 tasks {
     localizeJvm {
         resourceName.set("string")
-        outputDirectory.set(projectDir.resolve("../$RELEASE_ARTIFACT-javafx/res"))
+        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-javafx/res"))
     }
     localizeAndroid {
-        defaultLocale.set(Locale.ENGLISH)
-        outputDirectory.set(projectDir.resolve("../$RELEASE_ARTIFACT-android/res"))
+        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-android/res"))
     }
 }
 
