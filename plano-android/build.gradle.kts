@@ -14,7 +14,7 @@ android {
         applicationId = "$RELEASE_GROUP.$RELEASE_ARTIFACT"
         buildConfigField("String", "VERSION_NAME", "\"$RELEASE_VERSION\"")
         buildConfigField("String", "NAME", "\"Plano\"")
-        buildConfigField("String", "WEB", "\"$RELEASE_GITHUB\"")
+        buildConfigField("String", "WEB", "\"$RELEASE_URL\"")
     }
     sourceSets {
         named("main") {
@@ -39,8 +39,8 @@ android {
 ktlint()
 
 dependencies {
-    api(project(":$RELEASE_ARTIFACT"))
-    api(kotlinx("coroutines-android", VERSION_COROUTINES))
+    implementation(project(":$RELEASE_ARTIFACT"))
+    implementation(kotlinx("coroutines-android", VERSION_COROUTINES))
     implementation(hendraanggrian("auto", "prefs-android", VERSION_PREFS))
     kapt(hendraanggrian("auto", "prefs-compiler", VERSION_PREFS))
     implementation(hendraanggrian("auto", "bundles", VERSION_BUNDLES))

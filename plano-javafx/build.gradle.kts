@@ -58,13 +58,13 @@ sourceSets {
 ktlint()
 
 dependencies {
-    api(project(":$RELEASE_ARTIFACT"))
-    api(kotlin("reflect", VERSION_KOTLIN))
-    api(kotlinx("coroutines-javafx", VERSION_COROUTINES))
-    api(exposed("core"))
-    api(exposed("dao"))
-    api(exposed("jdbc"))
-    api(sqliteJDBC())
+    implementation(project(":$RELEASE_ARTIFACT"))
+    implementation(kotlin("reflect", VERSION_KOTLIN))
+    implementation(kotlinx("coroutines-javafx", VERSION_COROUTINES))
+    implementation(exposed("core"))
+    implementation(exposed("dao"))
+    implementation(exposed("jdbc"))
+    implementation(sqliteJDBC())
     implementation(hendraanggrian("ktfx", "ktfx", VERSION_KTFX))
     implementation(hendraanggrian("ktfx", "jfoenix", VERSION_KTFX))
     implementation(hendraanggrian("auto", "prefs-jvm", VERSION_PREFS))
@@ -89,6 +89,6 @@ tasks {
         appName.set("Plano")
         debug.set(RELEASE_DEBUG)
         addField("USER", "hendraanggrian")
-        addField("WEB", RELEASE_GITHUB)
+        addField("WEB", RELEASE_URL)
     }
 }

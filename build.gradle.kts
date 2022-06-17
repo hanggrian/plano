@@ -1,7 +1,7 @@
 buildscript {
     repositories {
-        mavenCentral()
         gradlePluginPortal()
+        mavenCentral()
         google()
         maven(REPOSITORIES_OSSRH_SNAPSHOTS)
         maven("https://oss.sonatype.org/content/repositories/snapshots/")

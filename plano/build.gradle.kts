@@ -23,12 +23,12 @@ sourceSets {
 ktlint()
 
 dependencies {
-    api(kotlin("stdlib", VERSION_KOTLIN))
-    api(kotlinx("coroutines-core", VERSION_COROUTINES))
-    api(ktor("client-okhttp"))
-    api(ktor("client-gson"))
-    api(apache("maven-artifact", VERSION_MAVEN))
-    api(apache("commons-math3", VERSION_COMMONS_MATH))
+    implementation(kotlin("stdlib", VERSION_KOTLIN))
+    implementation(kotlinx("coroutines-core", VERSION_COROUTINES))
+    implementation(ktor("client-okhttp"))
+    implementation(ktor("client-gson"))
+    implementation(apache("maven-artifact", VERSION_MAVEN))
+    implementation(apache("commons-math3", VERSION_COMMONS_MATH))
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
     testImplementation(google("truth", "truth", VERSION_TRUTH))
 }
