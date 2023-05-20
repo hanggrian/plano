@@ -1,48 +1,32 @@
 import java.util.Locale
 
-group = RELEASE_GROUP
-version = RELEASE_VERSION
-
 plugins {
     `java-library`
-    kotlin("jvm")
-    hendraanggrian("localization")
+    kotlin("jvm") version libs.versions.kotlin
+    alias(libs.plugins.localization)
 }
-
-sourceSets {
-    main {
-        java.srcDir("src")
-        resources.srcDir("res")
-    }
-    test {
-        java.srcDir("tests/src")
-        resources.srcDir("tests/res")
-    }
-}
-
-ktlint()
 
 dependencies {
-    implementation(kotlin("stdlib", VERSION_KOTLIN))
-    implementation(kotlinx("coroutines-core", VERSION_COROUTINES))
-    implementation(ktor("client-okhttp"))
-    implementation(ktor("client-gson"))
-    implementation(apache("maven-artifact", VERSION_MAVEN))
-    implementation(apache("commons-math3", VERSION_COMMONS_MATH))
-    testImplementation(kotlin("test-junit", VERSION_KOTLIN))
-    testImplementation(google("truth", "truth", VERSION_TRUTH))
+    ktlint(libs.ktlint, ::configureKtlint)
+    ktlint(libs.rulebook.ktlint)
+    implementation(libs.bundles.ktor.client)
+    implementation(libs.maven.artifact)
+    implementation(libs.commons.math3)
+    testImplementation(kotlin("test-junit", libs.versions.kotlin.get()))
+    testImplementation(libs.truth)
 }
 
 tasks {
     localizeJvm {
         resourceName.set("string")
-        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-javafx/res"))
+        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-javafx/src/main/resources"))
     }
     localizeAndroid {
-        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-android/res"))
+        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-android/src/main/res"))
     }
 }
 
 localization {
-    importCSV(projectDir.resolve("locale.csv"))
+    defaultLocale.set(Locale.ENGLISH)
+    importCsv(projectDir.resolve("locale.csv"))
 }
