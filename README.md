@@ -10,8 +10,8 @@ available as desktop and Android app.
 
 Thanks to [belajarcoreldraw.co](http://www.belajarcoreldraw.co/2013/08/software-portable-untuk-menghitung.html) for the idea.
 
-![JavaFX screenshot](images/screenshot_javafx.png)
-![Android screenshot](images/screenshot_android.png)
+![JavaFX screenshot](https://github.com/hendraanggrian/plano/raw/assets/preview_javafx.png)
+![Android screenshot](https://github.com/hendraanggrian/plano/raw/assets/preview_android.png)
 
 ## Download
 
