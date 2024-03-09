@@ -1,21 +1,25 @@
 [versions]
 jdk = "17" # min for jpackage
-kotlin = "1.7.20"
+kotlin = "1.8.21"
+ktlint = "1.0.1"
 ktor = "1.6.8"
 exposed = "0.37.2"
 ktfx = "0.1-SNAPSHOT"
 prefs = "0.1-SNAPSHOT"
-android-plugin = "7.3.1"
-android-jdk = "8"
-android-min = "14"
-android-target = "32"
-androidx = "1.5.0"
+bundler = "0.1-SNAPSHOT"
+sdk-min = "14"
+sdk-target = "33"
+android-plugin = "8.1.0"
+androidx = "1.6.0"
+androidx-lifecycle = "2.6.1"
+androidx-room = "2.5.1"
 androidx-test = "1.4.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-plugin" }
-kotlinx-kover = "org.jetbrains.kotlinx.kover:0.6.1"
-git-publish = "org.ajoberstar.git-publish:4.1.1"
+kotlinx-kover = "org.jetbrains.kotlinx.kover:0.7.4"
+ktlint = "org.jlleitschuh.gradle.ktlint:11.6.1"
+git-publish = "org.ajoberstar.git-publish:4.2.0"
 localization = "com.hendraanggrian.localization:0.2"
 generating = "com.hendraanggrian.generating:0.2"
 packaging = "com.hendraanggrian.packaging:0.2"
@@ -23,10 +27,11 @@ pages = "com.hendraanggrian.pages:0.1"
 
 [libraries]
 # lint
-ktlint = "com.pinterest:ktlint:0.48.1"
-rulebook-ktlint = "com.hendraanggrian.rulebook:rulebook-ktlint:0.2-SNAPSHOT"
+rulebook-ktlint = "com.hendraanggrian.rulebook:rulebook-ktlint:0.4"
 # main
+core-assembler = "org.burningwave:core:12.62.6"
 kotlinx-coroutines-javafx = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.6.4"
+kotlinx-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-gson = { module = "io.ktor:ktor-client-gson", version.ref = "ktor" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
@@ -37,13 +42,27 @@ ktfx-jfoenix = { module = "com.hendraanggrian.ktfx:jfoenix", version.ref = "ktfx
 prefs-jvm = { module = "com.hendraanggrian.auto:prefs-jvm", version.ref = "prefs" }
 prefs-android = { module = "com.hendraanggrian.auto:prefs-android", version.ref = "prefs" }
 prefs-compiler = { module = "com.hendraanggrian.auto:prefs-compiler", version.ref = "prefs" }
+bundler-android = { module = "com.hendraanggrian.auto:bundler", version.ref = "bundler" }
+bundler-compiler = { module = "com.hendraanggrian.auto:bundler-compiler", version.ref = "bundler" }
 sqlite-jdbc = "org.xerial:sqlite-jdbc:3.41.2.2"
 maven-artifact = "org.apache.maven:maven-artifact:3.9.2"
 commons-math3 = "org.apache.commons:commons-math3:3.6.1"
+commons-lang3 = "org.apache.commons:commons-lang3:3.12.0"
 material = { module = "com.google.android.material:material", version.ref = "androidx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx" }
 androidx-multidex = "androidx.multidex:multidex:2.0.1"
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
+androidx-coordinatorlayout = "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
+androidx-gridlayout = "androidx.gridlayout:gridlayout:1.0.0"
+androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.0"
+androidx-preference-ktx = "androidx.preference:preference-ktx:1.2.0"
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+process-phoenix = "com.jakewharton:process-phoenix:2.1.2"
+leak-canary = "com.squareup.leakcanary:leakcanary-android:2.11"
 # test
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
@@ -55,4 +74,10 @@ truth = "com.google.truth:truth:1.1.3"
 ktor-client = ["ktor-client-okhttp", "ktor-client-gson"]
 exposed = ["exposed-core", "exposed-dao", "exposed-jdbc"]
 ktfx = ["ktfx-main", "ktfx-jfoenix"]
+androidx = [
+  "androidx-appcompat", "androidx-core-ktx", "androidx-multidex",
+  "androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-extensions",
+  "androidx-coordinatorlayout", "androidx-gridlayout", "androidx-recyclerview", "androidx-preference-ktx",
+  "androidx-room-ktx"
+]
 androidx-test = ["androidx-test-core", "androidx-test-runner", "androidx-test-junit", "robolectric", "truth"]

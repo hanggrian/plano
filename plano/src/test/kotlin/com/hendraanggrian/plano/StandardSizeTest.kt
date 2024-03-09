@@ -18,8 +18,8 @@ class StandardSizeTest {
     @Test
     fun fSeries() = StandardSize.SERIES_F.testSeries()
 
-    private fun List<StandardSize>.testSeries() = filterIndexed { i, _ -> i != lastIndex }
-        .forEachIndexed { i, (_, width, _) ->
+    private fun List<StandardSize>.testSeries() =
+        filterIndexed { i, _ -> i != lastIndex }.forEachIndexed { i, (_, width, _) ->
             val next = get(i + 1)
             assertEquals(next.height, round(width / 2, 1, BigDecimal.ROUND_HALF_DOWN))
         }

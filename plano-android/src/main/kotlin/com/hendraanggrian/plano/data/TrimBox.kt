@@ -8,7 +8,13 @@ import com.hendraanggrian.plano.Size
 
 @Entity(
     tableName = "trim_boxes",
-    foreignKeys = [ForeignKey(entity = MediaBox::class, parentColumns = ["id"], childColumns = ["media_box_id"])]
+    foreignKeys = [
+        ForeignKey(
+            entity = MediaBox::class,
+            parentColumns = ["id"],
+            childColumns = ["media_box_id"]
+        )
+    ]
 )
 data class TrimBox(
     val x: Float,

@@ -1,173 +1,174 @@
 .root {
-    -color-border: #e6e6e6;
-    -color-button-hover: rgba(0, 0, 0, 0.27);
-    -color-dialog-overlay: rgba(0, 0, 0, 0.54);
+  -color-border: #e6e6e6;
+  -color-button-hover: rgba(0, 0, 0, 0.27);
+  -color-dialog-overlay: rgba(0, 0, 0, 0.54);
 
-    -amber-500: #ffc107;
-    -amber-500-light: #fff350;
-    -red-500: #f44336;
-    -red-500-light: #ff7961;
+  -amber-500: #ffc107;
+  -amber-500-light: #fff350;
+  -red-500: #f44336;
+  -red-500-light: #ff7961;
 
-    -fx-base: white;
-    -fx-accent: -amber-500;
-    -fx-font-family: 'Roboto';
+  -fx-base: white;
+  -fx-accent: -amber-500;
+  -fx-font-family: 'Roboto';
 }
 
 .jfx-text-field {
-    -jfx-focus-color: -fx-accent;
+  -jfx-focus-color: -fx-accent;
 }
 
 .jfx-toggle-node {
-    -jfx-toggle-color: rgba(0, 0, 0, 0.27);
+  -jfx-toggle-color: rgba(0, 0, 0, 0.27);
 }
 .jfx-toggle-node .jfx-rippler {
-    -jfx-rippler-fill: -fx-accent;
+  -jfx-rippler-fill: -fx-accent;
 }
 
 .jfx-snackbar-content {
-    -fx-background-color: derive(black, 26.4%);
+  -fx-background-color: derive(black, 26.4%);
 }
 .jfx-snackbar-toast {
-    -fx-text-fill: white;
+  -fx-text-fill: white;
 }
 .jfx-snackbar-action {
-    -fx-text-fill: -fx-accent;
-    -fx-font-family: 'Roboto Bold';
+  -fx-text-fill: -fx-accent;
+  -fx-font-family: 'Roboto Bold';
 }
 
 .scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-width: 0 0 0 1;
-    -fx-border-color: -color-border;
+  -fx-background-color: transparent;
+  -fx-border-width: 0 0 0 1;
+  -fx-border-color: -color-border;
 }
 
 .jfx-tool-bar {
-    -fx-min-height: 64;
-    -fx-pref-height: 64;
-    -fx-max-height: 64;
-    -fx-padding: 0 20 0 20;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: -color-border;
+  -fx-min-height: 64;
+  -fx-pref-height: 64;
+  -fx-max-height: 64;
+  -fx-padding: 0 20 0 20;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: -color-border;
 }
 .jfx-tool-bar HBox {
-    -fx-alignment: center;
+  -fx-alignment: center;
 }
 
 .button {
-    -fx-text-fill: -fx-accent;
-    -fx-font-family: 'Roboto Bold';
+  -fx-text-fill: -fx-accent;
+  -fx-font-family: 'Roboto Bold';
 }
 .button:hover {
-    -fx-background-color: -color-button-hover;
+  -fx-background-color: -color-button-hover;
 }
 .jfx-button .jfx-rippler {
-    -jfx-rippler-fill: -fx-accent;
+  -jfx-rippler-fill: -fx-accent;
 }
 
 .jfx-dialog-overlay-pane > StackPane {
-    -fx-background-color: -fx-background;
+  -fx-background-color: -fx-background;
 }
 .jfx-dialog-overlay-pane {
-    -fx-background-color: -color-dialog-overlay;
+  -fx-background-color: -color-dialog-overlay;
 }
 
 .jfx-check-box {
-    -jfx-checked-color: -fx-accent;
+  -jfx-checked-color: -fx-accent;
 }
 .jfx-check-box .mark {
-    -fx-border-color: -fx-background;
+  -fx-border-color: -fx-background;
 }
 
 .box-media-background {
-    -fx-background-color: -amber-500-light;
+  -fx-background-color: -amber-500-light;
 }
 .box-media-border {
-    -fx-border-color: -amber-500;
-    -fx-border-width: 2;
+  -fx-border-color: -amber-500;
+  -fx-border-width: 2;
 }
 .box-media-border-thick {
-    -fx-border-width: 4;
+  -fx-border-width: 4;
 }
 .box-trim-background {
-    -fx-background-color: -red-500-light;
+  -fx-background-color: -red-500-light;
 }
 .box-trim-border {
-    -fx-border-color: -red-500;
-    -fx-border-width: 2;
+  -fx-border-color: -red-500;
+  -fx-border-width: 2;
 }
 .box-trim-border-thick {
-    -fx-border-width: 4;
+  -fx-border-width: 4;
 }
 
 /* ID */
+
 #circle-amber {
-    -fx-fill: -fx-accent;
+  -fx-fill: -fx-accent;
 }
 #circle-red {
-    -fx-fill: -red-500;
+  -fx-fill: -red-500;
 }
 #label-title {
-    -fx-font-family: 'Roboto';
-    -fx-font-size: 26;
+  -fx-font-family: 'Roboto';
+  -fx-font-size: 26;
 }
 #label-dialog-title {
-    -fx-font-family: 'Roboto Medium';
-    -fx-font-size: 22;
+  -fx-font-family: 'Roboto Medium';
+  -fx-font-size: 22;
 }
 #label-context-graphic {
-    -fx-font-family: 'Roboto Black';
+  -fx-font-family: 'Roboto Black';
 }
 #label-info {
-    -fx-font-family: 'Roboto Condensed';
+  -fx-font-family: 'Roboto Condensed';
 }
 #label-red { // displaying trim boxes count
-    -fx-font-family: 'Roboto Condensed Bold';
-    -fx-text-fill: -red-500;
+  -fx-font-family: 'Roboto Condensed Bold';
+  -fx-text-fill: -red-500;
 }
 #label-black { // saving result
-    -fx-text-fill: black;
+  -fx-text-fill: black;
 }
 #menu-close {
-    -fx-graphic: url('../image/menu_close.png');
+  -fx-graphic: url('../image/menu_close.png');
 }
 #menu-more {
-    -fx-graphic: url('../image/menu_more.png');
+  -fx-graphic: url('../image/menu_more.png');
 }
 #menu-link-on {
-    -fx-graphic: url('../image/menu_link_on.png');
+  -fx-graphic: url('../image/menu_link_on.png');
 }
 #menu-link-off {
-    -fx-graphic: url('../image/menu_link_off.png');
+  -fx-graphic: url('../image/menu_link_off.png');
 }
 #btn-calculate {
-    -jfx-button-type: RAISED;
-    -fx-background-color: -fx-accent;
-    -fx-graphic: url('../image/btn_send.png');
+  -jfx-button-type: RAISED;
+  -fx-background-color: -fx-accent;
+  -fx-graphic: url('../image/btn_send.png');
 }
 #btn-calculate:hover {
-    -fx-background-color: derive(-fx-accent, 50%);
+  -fx-background-color: derive(-fx-accent, 50%);
 }
 #btn-calculate:pressed {
-    -fx-background-color: derive(-fx-accent, -50%);
+  -fx-background-color: derive(-fx-accent, -50%);
 }
 #btn-close {
-    -fx-graphic: url('../image/btn_close.png');
+  -fx-graphic: url('../image/btn_close.png');
 }
 #btn-scale-expand {
-    -fx-graphic: url('../image/btn_scale_expand.png');
+  -fx-graphic: url('../image/btn_scale_expand.png');
 }
 #btn-scale-shrink {
-    -fx-graphic: url('../image/btn_scale_shrink.png');
+  -fx-graphic: url('../image/btn_scale_shrink.png');
 }
 #btn-background-fill {
-    -fx-graphic: url('../image/btn_background_fill.png');
+  -fx-graphic: url('../image/btn_background_fill.png');
 }
 #btn-background-unfill {
-    -fx-graphic: url('../image/btn_background_unfill.png');
+  -fx-graphic: url('../image/btn_background_unfill.png');
 }
 #btn-border-thick {
-    -fx-graphic: url('../image/btn_border_thick.png');
+  -fx-graphic: url('../image/btn_border_thick.png');
 }
 #btn-border-thin {
-    -fx-graphic: url('../image/btn_border_thin.png');
+  -fx-graphic: url('../image/btn_border_thin.png');
 }

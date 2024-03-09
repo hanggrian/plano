@@ -1,14 +1,17 @@
 import java.util.Locale
 
+val releaseArtifact: String by project
+
 plugins {
     `java-library`
     kotlin("jvm") version libs.versions.kotlin
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.localization)
 }
 
 dependencies {
-    ktlint(libs.ktlint, ::configureKtlint)
-    ktlint(libs.rulebook.ktlint)
+    ktlintRuleset(libs.rulebook.ktlint)
+
     implementation(libs.bundles.ktor.client)
     implementation(libs.maven.artifact)
     implementation(libs.commons.math3)
@@ -19,10 +22,10 @@ dependencies {
 tasks {
     localizeJvm {
         resourceName.set("string")
-        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-javafx/src/main/resources"))
+        outputDirectory.set(rootDir.resolve("$releaseArtifact-javafx/src/main/resources"))
     }
     localizeAndroid {
-        outputDirectory.set(rootDir.resolve("$RELEASE_ARTIFACT-android/src/main/res"))
+        outputDirectory.set(rootDir.resolve("$releaseArtifact-android/src/main/res"))
     }
 }
 

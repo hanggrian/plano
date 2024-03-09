@@ -54,9 +54,8 @@ class ResultPane(
     allowFlipRow: Boolean,
     private val scaleProperty: DoubleProperty,
     private val fillProperty: BooleanProperty,
-    private val thickProperty: BooleanProperty
+    private val thickProperty: BooleanProperty,
 ) : KtfxGridPane(), Resources by app {
-
     private val mediaLabel: Label
     private val trimSizeLabel: Label
     private val trimLabel: Label
@@ -68,86 +67,100 @@ class ResultPane(
     init {
         padding = insetsOf(10)
         val mediaBox = MediaSize(mediaWidth, mediaHeight)
-        mediaBox.populate(trimWidth, trimHeight, gapHorizontal, gapVertical, allowFlipColumn, allowFlipRow)
+        mediaBox.populate(
+            trimWidth,
+            trimHeight,
+            gapHorizontal,
+            gapVertical,
+            allowFlipColumn,
+            allowFlipRow,
+        )
 
-        infoFlowPane = flowPane {
-            hgap = 10.0
-            hbox {
-                alignment = LEFT
-                styledCircle(radius = 4.0, id = R.style.circle_amber)
-                pane { minWidth = 5.0 }
-                mediaLabel = styledLabel(id = R.style.label_info)
-            }
-            hbox {
-                alignment = LEFT
-                styledCircle(radius = 4.0, id = R.style.circle_red)
-                trimSizeLabel = styledLabel(id = R.style.label_red)
-                pane { minWidth = 5.0 }
-                trimLabel = styledLabel(id = R.style.label_info)
-            }
-        }.grid(0, 0).fillHeight(false)
-        closeButton = addChild(
-            RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close).apply {
-                id = R.style.menu_close
-                onAction { close() }
-            }
-        ).grid(0, 1)
+        infoFlowPane =
+            flowPane {
+                hgap = 10.0
+                hbox {
+                    alignment = LEFT
+                    styledCircle(radius = 4.0, id = R.style.circle_amber)
+                    pane { minWidth = 5.0 }
+                    mediaLabel = styledLabel(id = R.style.label_info)
+                }
+                hbox {
+                    alignment = LEFT
+                    styledCircle(radius = 4.0, id = R.style.circle_red)
+                    trimSizeLabel = styledLabel(id = R.style.label_red)
+                    pane { minWidth = 5.0 }
+                    trimLabel = styledLabel(id = R.style.label_info)
+                }
+            }.grid(0, 0).fillHeight(false)
+        closeButton =
+            addChild(
+                RoundButton(app, RoundButton.RADIUS_SMALL, R.string.close).apply {
+                    id = R.style.menu_close
+                    onAction { close() }
+                },
+            ).grid(0, 1)
         boxPaneContainer = anchorPane().grid(1, 0 to 2)
 
-        contextMenu = contextMenu {
-            menuItem(getString(R.string.rotate)) {
-                onAction {
-                    mediaBox.rotate()
-                    populate(mediaBox)
-                }
-            }
-            checkMenuItem(getString(R.string.allow_flip_right)) {
-                isSelected = mediaBox.allowFlipRight
-                onAction {
-                    mediaBox.allowFlipRight = !mediaBox.allowFlipRight
-                    populate(mediaBox)
-                }
-            }
-            checkMenuItem(getString(R.string.allow_flip_bottom)) {
-                isSelected = mediaBox.allowFlipBottom
-                onAction {
-                    mediaBox.allowFlipBottom = !mediaBox.allowFlipBottom
-                    populate(mediaBox)
-                }
-            }
-            separatorMenuItem()
-            menuItem(getString(R.string.save)) {
-                onAction {
-                    val isDarkTheme = getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
-                    if (isDarkTheme) {
-                        mediaLabel.id = R.style.label_black
-                        trimLabel.id = R.style.label_black
+        contextMenu =
+            contextMenu {
+                menuItem(getString(R.string.rotate)) {
+                    onAction {
+                        mediaBox.rotate()
+                        populate(mediaBox)
                     }
-                    val file = ResultFile()
-                    this@ResultPane.capture { ImageIO.write(it.image.toSwingImage(), "png", file) }
-                    launch(Dispatchers.JavaFx) {
-                        delay(500)
+                }
+                checkMenuItem(getString(R.string.allow_flip_right)) {
+                    isSelected = mediaBox.allowFlipRight
+                    onAction {
+                        mediaBox.allowFlipRight = !mediaBox.allowFlipRight
+                        populate(mediaBox)
+                    }
+                }
+                checkMenuItem(getString(R.string.allow_flip_bottom)) {
+                    isSelected = mediaBox.allowFlipBottom
+                    onAction {
+                        mediaBox.allowFlipBottom = !mediaBox.allowFlipBottom
+                        populate(mediaBox)
+                    }
+                }
+                separatorMenuItem()
+                menuItem(getString(R.string.save)) {
+                    onAction {
+                        val isDarkTheme =
+                            getResource(R.style._plano_dark) in this@ResultPane.scene.stylesheets
                         if (isDarkTheme) {
-                            mediaLabel.id = null
-                            trimLabel.id = null
+                            mediaLabel.id = R.style.label_black
+                            trimLabel.id = R.style.label_black
                         }
-                        app.rootPane.jfxSnackbar(
-                            getString(R.string._save).format(file.name),
-                            PlanoApp.DURATION_SHORT,
-                            getString(R.string.btn_show_directory)
-                        ) {
-                            app.hostServices.showDocument(file.parentFile.toURI().toString())
+                        val file = ResultFile()
+                        this@ResultPane.capture {
+                            ImageIO.write(it.image.toSwingImage(), "png", file)
+                        }
+                        launch(Dispatchers.JavaFx) {
+                            delay(500)
+                            if (isDarkTheme) {
+                                mediaLabel.id = null
+                                trimLabel.id = null
+                            }
+                            app.rootPane.jfxSnackbar(
+                                getString(R.string._save).format(file.name),
+                                PlanoApp.DURATION_SHORT,
+                                getString(R.string.btn_show_directory),
+                            ) {
+                                app.hostServices.showDocument(file.parentFile.toURI().toString())
+                            }
                         }
                     }
                 }
             }
-        }
         onContextMenuRequested {
             contextMenu.moveTo(it)
             contextMenu.show(scene.window)
         }
 
-        closeButton.visibleProperty().bind(this@ResultPane.hoverProperty() or contextMenu.showingProperty())
+        closeButton.visibleProperty()
+            .bind(this@ResultPane.hoverProperty() or contextMenu.showingProperty())
         populate(mediaBox)
     }
 
@@ -155,10 +168,25 @@ class ResultPane(
         mediaLabel.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
         trimSizeLabel.text = " ${mediaBox.size}"
         trimLabel.text = "${trimWidth.clean()} x ${trimHeight.clean()}"
-        infoFlowPane.prefWrapLengthProperty().bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
+        infoFlowPane.prefWrapLengthProperty()
+            .bind(scaleProperty * mediaBox.width - 12.0 * 2) // minus close button
         boxPaneContainer.children.clear()
-        boxPaneContainer.children += MediaSizePane(mediaBox, scaleProperty, fillProperty, thickProperty)
-        mediaBox.forEach { boxPaneContainer.children += TrimSizePane(it, scaleProperty, fillProperty, thickProperty) }
+        boxPaneContainer.children +=
+            MediaSizePane(
+                mediaBox,
+                scaleProperty,
+                fillProperty,
+                thickProperty,
+            )
+        mediaBox.forEach {
+            boxPaneContainer.children +=
+                TrimSizePane(
+                    it,
+                    scaleProperty,
+                    fillProperty,
+                    thickProperty,
+                )
+        }
     }
 
     private fun close() {

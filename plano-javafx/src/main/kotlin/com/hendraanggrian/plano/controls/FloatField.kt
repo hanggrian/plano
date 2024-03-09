@@ -15,12 +15,13 @@ class FloatField : JFXTextField() {
     init {
         prefWidth = 50.0
         alignment = CENTER
-        textFormatter = TextFormatter<TextFormatter.Change?> { change ->
-            when {
-                PATTERN_DOUBLE.matcher(change!!.controlNewText).matches() -> change
-                else -> null
+        textFormatter =
+            TextFormatter<TextFormatter.Change?> { change ->
+                when {
+                    PATTERN_DOUBLE.matcher(change!!.controlNewText).matches() -> change
+                    else -> null
+                }
             }
-        }
         focusedProperty().listener { _, _, focused ->
             if (focused && text?.isNotEmpty() == true) {
                 selectAll()

@@ -1,63 +1,63 @@
+val releaseGroup: String by project
+val releaseArtifact: String by project
+val releaseVersion: String by project
+
 plugins {
-    android("application")
-    kotlin("android")
-    kotlin("android.extensions")
-    kotlin("kapt")
+    alias(libs.plugins.android.application)
+    kotlin("android") version libs.versions.kotlin
+    kotlin("kapt") version libs.versions.kotlin
+    alias(libs.plugins.ktlint)
 }
 
 android {
-    compileSdk = SDK_TARGET
+    namespace = "$releaseGroup.$releaseArtifact"
+    testNamespace = "$namespace.test"
+    compileSdk = libs.versions.sdk.target.get().toInt()
     defaultConfig {
-        minSdk = SDK_MIN
-        targetSdk = SDK_TARGET
+        minSdk = libs.versions.sdk.min.get().toInt()
+        targetSdk = libs.versions.sdk.target.get().toInt()
+        version = releaseVersion
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
-        applicationId = "$RELEASE_GROUP.$RELEASE_ARTIFACT"
-        buildConfigField("String", "VERSION_NAME", "\"$RELEASE_VERSION\"")
+        applicationId = namespace
+
+        // custom fields
+        buildConfigField("String", "VERSION_NAME", "\"$releaseVersion\"")
         buildConfigField("String", "NAME", "\"Plano\"")
-        buildConfigField("String", "WEB", "\"$RELEASE_URL\"")
+        buildConfigField("String", "WEB", "\"$releaseVersion\"")
     }
-    sourceSets {
-        named("main") {
-            manifest.srcFile("AndroidManifest.xml")
-            java.srcDir("src")
-            res.srcDir("res")
-            resources.srcDir("src")
-        }
+    compileOptions {
+        targetCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.toVersion(libs.versions.jdk.get()).toString()
     }
     buildTypes {
         debug {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            enableAndroidTestCoverage = true
         }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
+    buildFeatures.buildConfig = true
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
-ktlint()
-
 dependencies {
-    implementation(project(":$RELEASE_ARTIFACT"))
-    implementation(kotlinx("coroutines-android", VERSION_COROUTINES))
-    implementation(hendraanggrian("auto", "prefs-android", VERSION_PREFS))
-    kapt(hendraanggrian("auto", "prefs-compiler", VERSION_PREFS))
-    implementation(hendraanggrian("auto", "bundles", VERSION_BUNDLES))
-    kapt(hendraanggrian("auto", "bundles-compiler", VERSION_BUNDLES))
-    implementation(androidx("multidex", version = VERSION_MULTIDEX))
-    implementation(androidx("lifecycle", "lifecycle-extensions", VERSION_LIFECYCLE))
-    implementation(androidx("lifecycle", "lifecycle-viewmodel-ktx", VERSION_LIFECYCLE))
-    implementation(androidx("lifecycle", "lifecycle-livedata-ktx", VERSION_LIFECYCLE))
-    implementation(androidx("core", "core-ktx"))
-    implementation(androidx("appcompat"))
-    implementation(androidx("gridlayout", "gridlayout", version = "1.0.0"))
-    implementation(androidx("preference", "preference-ktx", version = "1.1.1"))
-    implementation(androidx("coordinatorlayout", version = "1.1.0"))
-    implementation(androidx("recyclerview", version = "1.2.1"))
-    implementation(androidx("room", "room-ktx", VERSION_ROOM))
-    kapt(androidx("room", "room-compiler", VERSION_ROOM))
-    implementation(material())
-    implementation(processPhoenix())
-    debugImplementation(leakCanary())
+    ktlintRuleset(libs.rulebook.ktlint)
+
+    implementation(project(":$releaseArtifact"))
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.prefs.android)
+    kapt(libs.prefs.compiler)
+    implementation(libs.bundler.android)
+    kapt(libs.bundler.compiler)
+    implementation(libs.material)
+    implementation(libs.bundles.androidx)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.process.phoenix)
+    debugImplementation(libs.leak.canary)
 }

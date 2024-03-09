@@ -1,14 +1,19 @@
+val releaseGroup: String by project
+val releaseArtifact: String by project
+val releaseUrl: String by project
+
 plugins {
     kotlin("jvm") version libs.versions.kotlin
     kotlin("kapt") version libs.versions.kotlin
     application
     alias(libs.plugins.generating)
     alias(libs.plugins.packaging)
+    alias(libs.plugins.ktlint)
 }
 
 application {
     applicationName = "Plano"
-    mainClass.set("$RELEASE_GROUP.plano.PlanoApp")
+    mainClass.set("$releaseGroup.plano.PlanoApp")
 }
 
 packaging {
@@ -17,13 +22,15 @@ packaging {
 }
 
 dependencies {
-    ktlint(libs.ktlint, ::configureKtlint)
-    ktlint(libs.rulebook.ktlint)
-    implementation(project(":$RELEASE_ARTIFACT"))
+    ktlintRuleset(libs.rulebook.ktlint)
+
+    implementation(libs.core.assembler)
+    implementation(project(":$releaseArtifact"))
     implementation(kotlin("reflect", libs.versions.kotlin.get()))
     implementation(libs.kotlinx.coroutines.javafx)
     implementation(libs.bundles.exposed)
     implementation(libs.sqlite.jdbc)
+    implementation(libs.commons.lang3)
     implementation(libs.bundles.ktfx)
     implementation(libs.prefs.jvm)
     kapt(libs.prefs.compiler)
@@ -31,17 +38,16 @@ dependencies {
 
 tasks {
     generateR {
-        packageName.set("$RELEASE_GROUP.$RELEASE_ARTIFACT")
-        resourcesDirectory.set(projectDir.resolve("res"))
+        packageName.set("$releaseGroup.$releaseArtifact")
+        resourcesDirectory.set(projectDir.resolve("src/main/resources"))
         css()
-        // properties {
-        //     writeResourceBundle.set(true)
-        // }
+        this.properties {
+            writeResourceBundle = true
+        }
     }
     generateBuildConfig {
-        packageName.set("$RELEASE_GROUP.$RELEASE_ARTIFACT")
-        addField("DEBUG", RELEASE_DEBUG)
-        addField("USER", "hendraanggrian")
-        addField("WEB", RELEASE_URL)
+        packageName.set("$releaseGroup.$releaseArtifact")
+        addField(String::class, "USER", "hendraanggrian")
+        addField(String::class, "WEB", releaseUrl)
     }
 }

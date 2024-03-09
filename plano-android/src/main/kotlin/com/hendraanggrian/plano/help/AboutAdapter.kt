@@ -17,7 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class AboutAdapter(private val onCheck: () -> View) : RecyclerView.Adapter<AboutAdapter.ViewHolder>() {
+class AboutAdapter(private val onCheck: () -> View) :
+    RecyclerView.Adapter<AboutAdapter.ViewHolder>() {
+
     private lateinit var context: Context
 
     override fun getItemCount(): Int = 3
@@ -39,12 +41,19 @@ class AboutAdapter(private val onCheck: () -> View) : RecyclerView.Adapter<About
                         when {
                             release.isNewerThan(BuildConfig.VERSION_NAME) ->
                                 snackbarRoot.longSnackbar(
-                                    context.getString(R.string._update_available).format(release.name),
+                                    context.getString(R.string._update_available)
+                                        .format(release.name),
                                     context.getString(R.string.btn_download)
                                 ) {
-                                    context.openUrl(release.assets.first { it.name.endsWith("apk") }.downloadUrl)
+                                    context.openUrl(
+                                        release.assets.first {
+                                            it.name.endsWith("apk")
+                                        }.downloadUrl
+                                    )
                                 }
-                            else -> snackbarRoot.longSnackbar(context.getString(R.string._update_unavailable))
+                            else ->
+                                snackbarRoot
+                                    .longSnackbar(context.getString(R.string._update_unavailable))
                         }
                     }
                 }

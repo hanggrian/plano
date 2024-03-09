@@ -14,27 +14,27 @@ import ktfx.layouts.label
 import ktfx.layouts.vbox
 import ktfx.listeners.onAction
 
-abstract class BaseDialog(app: PlanoApp, title: String) :
+abstract class Dialog(app: PlanoApp, title: String) :
     JFXDialog(app.rootPane, null, DialogTransition.CENTER), NodeManager, Resources by app {
-
     private val contentPane: VBox
 
     override fun <T : Node> addChild(child: T): T = child.also { contentPane.children += it }
 
     init {
-        content = ktfx.layouts.vbox(20.0) {
-            padding = insetsOf(20)
-            label(title) {
-                id = R.style.label_dialog_title
-            }
-            contentPane = vbox()
-            buttonBar {
-                onButtons()
-                jfxButton(getString(R.string.btn_close)) {
-                    onAction { close() }
+        content =
+            ktfx.layouts.vbox(20.0) {
+                padding = insetsOf(20)
+                label(title) {
+                    id = R.style.label_dialog_title
+                }
+                contentPane = vbox()
+                buttonBar {
+                    onButtons()
+                    jfxButton(getString(R.string.btn_close)) {
+                        onAction { close() }
+                    }
                 }
             }
-        }
     }
 
     open fun NodeManager.onButtons() {

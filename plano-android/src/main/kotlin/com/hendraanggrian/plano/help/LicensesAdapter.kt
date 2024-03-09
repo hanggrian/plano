@@ -14,9 +14,11 @@ class LicensesAdapter : RecyclerView.Adapter<LicensesAdapter.ViewHolder>() {
     private lateinit var context: Context
     private val licenses: List<License> = License.listAll(
         "Android Jetpack"
-            to "https://android.googlesource.com/platform/frameworks/support/+/androidx-master-dev/LICENSE.txt",
+            to "https://android.googlesource.com/platform/frameworks/support/+/" +
+            "androidx-master-dev/LICENSE.txt",
         "Android Material Components"
-            to "https://github.com/material-components/material-components-android/blob/master/LICENSE",
+            to "https://github.com/material-components/material-components-android/blob/master/" +
+            "LICENSE",
         "Bundles"
             to "https://github.com/hendraanggrian/bundles/blob/master/LICENSE",
         "Process Phoenix"
@@ -27,7 +29,9 @@ class LicensesAdapter : RecyclerView.Adapter<LicensesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_license, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.item_license, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

@@ -1,54 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="AlwaysShowAction">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:ignore="AlwaysShowAction">
 
-    <item
-        android:id="@+id/closeAllItem"
-        android:icon="@drawable/btn_close"
-        android:title="@string/close_all"
-        android:visible="false"
-        app:showAsAction="always" />
+  <item
+    android:id="@+id/item_close_all"
+    android:icon="@drawable/btn_close"
+    android:title="@string/close_all"
+    android:visible="false"
+    app:showAsAction="always" />
 
-    <item
-        android:id="@+id/backgroundItem"
-        android:icon="@drawable/btn_background_fill"
-        android:title="@string/toggle_background"
-        app:showAsAction="always" />
+  <item
+    android:id="@+id/item_background"
+    android:icon="@drawable/btn_background_fill"
+    android:title="@string/toggle_background"
+    app:showAsAction="always" />
 
-    <item
-        android:id="@+id/borderItem"
-        android:icon="@drawable/btn_border_thin"
-        android:title="@string/toggle_border"
-        app:showAsAction="always" />
+  <item
+    android:id="@+id/item_border"
+    android:icon="@drawable/btn_border_thin"
+    android:title="@string/toggle_border"
+    app:showAsAction="always" />
 
-    <item
-        android:id="@+id/clearRecentSizesItem"
-        android:title="@string/clear_recent_sizes"
-        app:showAsAction="never" />
+  <item
+    android:id="@+id/item_clear_recent_sizes"
+    android:title="@string/clear_recent_sizes"
+    app:showAsAction="never" />
 
-    <item android:title="@string/theme">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/themeSystemItem"
-                    android:title="@string/system_default"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/themeLightItem"
-                    android:title="@string/light"
-                    app:showAsAction="never" />
-                <item
-                    android:id="@+id/themeDarkItem"
-                    android:title="@string/dark"
-                    app:showAsAction="never" />
-            </group>
-        </menu>
-    </item>
+  <item android:title="@string/theme">
+    <menu>
+      <group android:checkableBehavior="single">
+        <item
+          android:id="@+id/item_theme_system"
+          android:title="@string/system_default"
+          app:showAsAction="never" />
+        <item
+          android:id="@+id/item_theme_light"
+          android:title="@string/light"
+          app:showAsAction="never" />
+        <item
+          android:id="@+id/item_theme_dark"
+          android:title="@string/dark"
+          app:showAsAction="never" />
+      </group>
+    </menu>
+  </item>
 
-    <item
-        android:id="@+id/aboutItem"
-        android:title="@string/about"
-        app:showAsAction="never" />
+  <item
+    android:id="@+id/item_about"
+    android:title="@string/about"
+    app:showAsAction="never" />
 </menu>

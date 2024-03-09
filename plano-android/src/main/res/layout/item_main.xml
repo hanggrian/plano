@@ -1,84 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
+  <com.google.android.material.card.MaterialCardView
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/medium"
+    android:layout_marginTop="@dimen/small"
+    android:layout_marginEnd="@dimen/medium"
+    android:layout_marginBottom="@dimen/small"
+    android:clickable="true"
+    android:foreground="?selectableItemBackground"
+    app:cardElevation="@dimen/elevation">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium"
-        android:layout_marginTop="@dimen/small"
-        android:layout_marginEnd="@dimen/medium"
-        android:layout_marginBottom="@dimen/small"
-        android:clickable="true"
-        android:foreground="?selectableItemBackground"
-        app:cardElevation="@dimen/elevation">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/medium"
+        android:paddingLeft="@dimen/medium"
+        android:paddingTop="@dimen/small"
+        android:paddingEnd="@dimen/medium"
+        android:paddingRight="@dimen/medium"
+        android:paddingBottom="@dimen/small">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ci_media"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/medium"
-                android:paddingLeft="@dimen/medium"
-                android:paddingTop="@dimen/small"
-                android:paddingEnd="@dimen/medium"
-                android:paddingRight="@dimen/medium"
-                android:paddingBottom="@dimen/small">
+        <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/text_media"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/small"
+          android:layout_marginLeft="@dimen/small"
+          android:text="90x120"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ci_media" />
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/medium"
+          android:layout_marginLeft="@dimen/medium"
+          android:src="@drawable/ci_trim"/>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/mediaText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small"
-                    android:layout_marginLeft="@dimen/small"
-                    android:text="90x120"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/text_trim_count"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/small"
+          android:layout_marginLeft="@dimen/small"
+          android:text="4"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+          android:textColor="@color/red_500"
+          android:textStyle="bold"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/medium"
-                    android:layout_marginLeft="@dimen/medium"
-                    android:src="@drawable/ci_trim" />
+        <com.google.android.material.textview.MaterialTextView
+          android:id="@+id/text_trim"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/small"
+          android:layout_marginLeft="@dimen/small"
+          android:text="90x120"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+      </LinearLayout>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/trimCountText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small"
-                    android:layout_marginLeft="@dimen/small"
-                    android:text="4"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                    android:textColor="@color/red_500"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/trimText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/small"
-                    android:layout_marginLeft="@dimen/small"
-                    android:text="90x120"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
-            </LinearLayout>
-
-            <FrameLayout
-                android:id="@+id/mediaContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+      <FrameLayout
+        android:id="@+id/container_media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+  </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

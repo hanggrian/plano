@@ -18,7 +18,7 @@ sealed class SizePane(
     thickProperty: BooleanProperty,
     backgroundStyleClass: String,
     borderStyleClass: String,
-    borderThickStyleClass: String
+    borderThickStyleClass: String,
 ) : Pane() {
     init {
         prefWidthProperty().bind(size.width * scaleProperty)
@@ -47,31 +47,31 @@ class MediaSizePane(
     size: MediaSize,
     scaleProperty: DoubleProperty,
     fillProperty: BooleanProperty,
-    thickProperty: BooleanProperty
+    thickProperty: BooleanProperty,
 ) : SizePane(
-    size,
-    scaleProperty,
-    fillProperty,
-    thickProperty,
-    R.style.box_media_background,
-    R.style.box_media_border,
-    R.style.box_media_border_thick
-)
+        size,
+        scaleProperty,
+        fillProperty,
+        thickProperty,
+        R.style.box_media_background,
+        R.style.box_media_border,
+        R.style.box_media_border_thick,
+    )
 
 class TrimSizePane(
     size: TrimSize,
     scaleProperty: DoubleProperty,
     fillProperty: BooleanProperty,
-    thickProperty: BooleanProperty
+    thickProperty: BooleanProperty,
 ) : SizePane(
-    size,
-    scaleProperty,
-    fillProperty,
-    thickProperty,
-    R.style.box_trim_background,
-    R.style.box_trim_border,
-    R.style.box_trim_border_thick
-) {
+        size,
+        scaleProperty,
+        fillProperty,
+        thickProperty,
+        R.style.box_trim_background,
+        R.style.box_trim_border,
+        R.style.box_trim_border_thick,
+    ) {
     init {
         userData = size.x to size.y
         AnchorPane.setLeftAnchor(this, size.x * scaleProperty.value)

@@ -5,9 +5,8 @@ import java.io.Serializable
 class MediaSize(
     override var width: Float,
     override var height: Float,
-    private val trimBoxes: MutableList<TrimSize> = mutableListOf()
+    private val trimBoxes: MutableList<TrimSize> = mutableListOf(),
 ) : Size, List<TrimSize> by trimBoxes, Serializable {
-
     private var _trimWidth: Float? = null
     private var _trimHeight: Float? = null
     private var _gapHorizontal: Float? = null
@@ -51,11 +50,14 @@ class MediaSize(
         gapHorizontal: Float,
         gapVertical: Float,
         allowFlipRight: Boolean,
-        allowFlipBottom: Boolean
+        allowFlipBottom: Boolean,
     ) {
-        _trimWidth = trimWidth; _trimHeight = trimHeight
-        _gapHorizontal = gapHorizontal; _gapVertical = gapVertical
-        _allowFlipRight = allowFlipRight; _allowFlipBottom = allowFlipBottom
+        _trimWidth = trimWidth
+        _trimHeight = trimHeight
+        _gapHorizontal = gapHorizontal
+        _gapVertical = gapVertical
+        _allowFlipRight = allowFlipRight
+        _allowFlipBottom = allowFlipBottom
         trimBoxes.clear()
         trimBoxes.addAll(
             mutableListOf<List<TrimSize>>().apply {
@@ -68,8 +70,8 @@ class MediaSize(
                         gapHorizontal,
                         gapVertical,
                         allowFlipRight,
-                        allowFlipBottom
-                    )
+                        allowFlipBottom,
+                    ),
                 )
                 add(
                     traditional(
@@ -80,8 +82,8 @@ class MediaSize(
                         gapHorizontal,
                         gapVertical,
                         allowFlipRight,
-                        allowFlipBottom
-                    )
+                        allowFlipBottom,
+                    ),
                 )
                 if (allowFlipRight) {
                     add(
@@ -92,8 +94,8 @@ class MediaSize(
                             trimHeight,
                             gapHorizontal,
                             gapVertical,
-                            allowFlipBottom
-                        )
+                            allowFlipBottom,
+                        ),
                     )
                     add(
                         alwaysFlipRight(
@@ -103,8 +105,8 @@ class MediaSize(
                             trimWidth,
                             gapHorizontal,
                             gapVertical,
-                            allowFlipBottom
-                        )
+                            allowFlipBottom,
+                        ),
                     )
                 }
                 if (allowFlipBottom) {
@@ -116,8 +118,8 @@ class MediaSize(
                             trimHeight,
                             gapHorizontal,
                             gapVertical,
-                            allowFlipRight
-                        )
+                            allowFlipRight,
+                        ),
                     )
                     add(
                         alwaysFlipBottom(
@@ -127,11 +129,11 @@ class MediaSize(
                             trimWidth,
                             gapHorizontal,
                             gapVertical,
-                            allowFlipRight
-                        )
+                            allowFlipRight,
+                        ),
                     )
                 }
-            }.maxByOrNull { it.size }!!
+            }.maxByOrNull { it.size }!!,
         )
     }
 
@@ -144,14 +146,12 @@ class MediaSize(
         horizontalGap: Float,
         verticalGap: Float,
         flipRight: Boolean,
-        flipBottom: Boolean
+        flipBottom: Boolean,
     ): List<TrimSize> {
-        if (Plano.DEBUG) {
-            println(
-                "Calculating traditionally ${mediaWidth}x$mediaHeight - " +
-                    "${trimWidth}x$trimHeight:"
-            )
-        }
+        println(
+            "Calculating traditionally ${mediaWidth}x$mediaHeight - " +
+                "${trimWidth}x$trimHeight:",
+        )
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
@@ -159,15 +159,16 @@ class MediaSize(
         val rows = (mediaHeight / finalTrimHeight).toInt()
         sizes.populate(columns, rows, trimWidth, trimHeight, horizontalGap, verticalGap)
         if (flipRight) {
-            val flippedRights = measureFlippedRights(
-                columns,
-                mediaWidth,
-                mediaHeight,
-                trimWidth,
-                trimHeight,
-                horizontalGap,
-                verticalGap
-            )
+            val flippedRights =
+                measureFlippedRights(
+                    columns,
+                    mediaWidth,
+                    mediaHeight,
+                    trimWidth,
+                    trimHeight,
+                    horizontalGap,
+                    verticalGap,
+                )
             if (flippedRights.first > 0) {
                 sizes.populateFlippedRights(
                     columns,
@@ -175,7 +176,7 @@ class MediaSize(
                     trimWidth,
                     trimHeight,
                     horizontalGap,
-                    verticalGap
+                    verticalGap,
                 )
             }
         }
@@ -188,7 +189,7 @@ class MediaSize(
                     trimWidth,
                     trimHeight,
                     horizontalGap,
-                    verticalGap
+                    verticalGap,
                 )
             if (flippedBottoms.second > 0) {
                 sizes.populateFlippedBottoms(
@@ -197,7 +198,7 @@ class MediaSize(
                     trimWidth,
                     trimHeight,
                     horizontalGap,
-                    verticalGap
+                    verticalGap,
                 )
             }
         }
@@ -212,14 +213,12 @@ class MediaSize(
         trimHeight: Float,
         horizontalGap: Float,
         verticalGap: Float,
-        flipBottom: Boolean
+        flipBottom: Boolean,
     ): List<TrimSize> {
-        if (Plano.DEBUG) {
-            println(
-                "Calculating radical column ${mediaWidth}x$mediaHeight - " +
-                    "${trimWidth}x$trimHeight:"
-            )
-        }
+        println(
+            "Calculating radical column ${mediaWidth}x$mediaHeight - " +
+                "${trimWidth}x$trimHeight:",
+        )
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
@@ -234,7 +233,7 @@ class MediaSize(
                 trimWidth,
                 trimHeight,
                 horizontalGap,
-                verticalGap
+                verticalGap,
             )
         sizes.populateFlippedRights(
             columns,
@@ -242,18 +241,19 @@ class MediaSize(
             trimWidth,
             trimHeight,
             horizontalGap,
-            verticalGap
+            verticalGap,
         )
         if (flipBottom) {
-            val flippedBottoms = measureFlippedBottoms(
-                rows,
-                mediaWidth - trimHeight,
-                mediaHeight,
-                trimWidth,
-                trimHeight,
-                horizontalGap,
-                verticalGap
-            )
+            val flippedBottoms =
+                measureFlippedBottoms(
+                    rows,
+                    mediaWidth - trimHeight,
+                    mediaHeight,
+                    trimWidth,
+                    trimHeight,
+                    horizontalGap,
+                    verticalGap,
+                )
             if (flippedBottoms.second > 0) {
                 sizes.populateFlippedBottoms(
                     rows,
@@ -261,7 +261,7 @@ class MediaSize(
                     trimWidth,
                     trimHeight,
                     horizontalGap,
-                    verticalGap
+                    verticalGap,
                 )
             }
         }
@@ -276,14 +276,12 @@ class MediaSize(
         trimHeight: Float,
         horizontalGap: Float,
         verticalGap: Float,
-        flipRight: Boolean
+        flipRight: Boolean,
     ): List<TrimSize> {
-        if (Plano.DEBUG) {
-            println(
-                "Calculating radical row ${mediaWidth}x$mediaHeight - " +
-                    "${trimWidth}x$trimHeight:"
-            )
-        }
+        println(
+            "Calculating radical row ${mediaWidth}x$mediaHeight - " +
+                "${trimWidth}x$trimHeight:",
+        )
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
@@ -298,7 +296,7 @@ class MediaSize(
                 trimWidth,
                 trimHeight,
                 horizontalGap,
-                verticalGap
+                verticalGap,
             )
         sizes.populateFlippedBottoms(
             rows,
@@ -306,18 +304,19 @@ class MediaSize(
             trimWidth,
             trimHeight,
             horizontalGap,
-            verticalGap
+            verticalGap,
         )
         if (flipRight) {
-            val flippedRights = measureFlippedRights(
-                columns,
-                mediaWidth,
-                mediaHeight - trimWidth,
-                trimWidth,
-                trimHeight,
-                horizontalGap,
-                verticalGap
-            )
+            val flippedRights =
+                measureFlippedRights(
+                    columns,
+                    mediaWidth,
+                    mediaHeight - trimWidth,
+                    trimWidth,
+                    trimHeight,
+                    horizontalGap,
+                    verticalGap,
+                )
             if (flippedRights.first > 0) {
                 sizes.populateFlippedRights(
                     columns,
@@ -325,7 +324,7 @@ class MediaSize(
                     trimWidth,
                     trimHeight,
                     horizontalGap,
-                    verticalGap
+                    verticalGap,
                 )
             }
         }
@@ -338,12 +337,10 @@ class MediaSize(
         trimWidth: Float,
         trimHeight: Float,
         horizontalGap: Float,
-        verticalGap: Float
+        verticalGap: Float,
     ) {
-        if (Plano.DEBUG) {
-            println("* columns: $columns")
-            println("* rows: $rows")
-        }
+        println("* columns: $columns")
+        println("* rows: $rows")
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         for (column in 0 until columns) {
@@ -362,7 +359,7 @@ class MediaSize(
         trimWidth: Float,
         trimHeight: Float,
         horizontalGap: Float,
-        verticalGap: Float
+        verticalGap: Float,
     ): Pair<Int, Int> {
         var flippedRightColumns = 0
         var flippedRightRows = 0
@@ -375,10 +372,8 @@ class MediaSize(
                 flippedRightRows = (mediaHeight / finalTrimWidth).toInt()
             }
         }
-        if (Plano.DEBUG) {
-            println("* flippedRightRows: $flippedRightRows")
-            println("* flippedRightColumns: $flippedRightColumns")
-        }
+        println("* flippedRightRows: $flippedRightRows")
+        println("* flippedRightColumns: $flippedRightColumns")
         return flippedRightColumns to flippedRightRows
     }
 
@@ -389,7 +384,7 @@ class MediaSize(
         trimWidth: Float,
         trimHeight: Float,
         horizontalGap: Float,
-        verticalGap: Float
+        verticalGap: Float,
     ): Pair<Int, Int> {
         var flippedBottomColumns = 0
         var flippedBottomRows = 0
@@ -401,10 +396,8 @@ class MediaSize(
                 flippedBottomColumns = (mediaWidth / finalTrimHeight).toInt()
             }
         }
-        if (Plano.DEBUG) {
-            println("* flippedBottomRows: $flippedBottomRows")
-            println("* flippedBottomColumns: $flippedBottomColumns")
-        }
+        println("* flippedBottomRows: $flippedBottomRows")
+        println("* flippedBottomColumns: $flippedBottomColumns")
         return flippedBottomColumns to flippedBottomRows
     }
 
@@ -414,7 +407,7 @@ class MediaSize(
         trimWidth: Float,
         trimHeight: Float,
         horizontalGap: Float,
-        verticalGap: Float
+        verticalGap: Float,
     ) {
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
@@ -434,7 +427,7 @@ class MediaSize(
         trimWidth: Float,
         trimHeight: Float,
         horizontalGap: Float,
-        verticalGap: Float
+        verticalGap: Float,
     ) {
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <item name="appbar" type="id"/>
+  <item name="toolbar" type="id"/>
+  <item name="recycler" type="id"/>
+  <item name="action" type="id"/>
+</resources>

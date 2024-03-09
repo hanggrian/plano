@@ -6,5 +6,5 @@ class TrimSize(
     val x: Float,
     val y: Float,
     override val width: Float,
-    override val height: Float
+    override val height: Float,
 ) : Size, Serializable

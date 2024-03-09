@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <plurals name="items">
+    <item quantity="other">%d barang</item>
+  </plurals>
+</resources>

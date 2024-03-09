@@ -48,7 +48,8 @@ enum class StandardSize(override val width: Float, override val height: Float) :
     F7(10.5f, 8.2f),
     F8(8.2f, 5.2f),
     F9(5.2f, 4.1f),
-    F10(4.1f, 2.6f);
+    F10(4.1f, 2.6f),
+    ;
 
     companion object {
         val SERIES_A: List<StandardSize> = listOf(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)
@@ -65,6 +66,8 @@ enum class StandardSize(override val width: Float, override val height: Float) :
         }
 
     operator fun component1(): String = name
+
     operator fun component2(): Float = width
+
     operator fun component3(): Float = height
 }

@@ -26,7 +26,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 open class RoundButton(
     resources: Resources,
     radius: Double,
-    tooltipId: String
+    tooltipId: String,
 ) : JFXButton(), Resources by resources {
     companion object {
         const val RADIUS_SMALL = 12.0
@@ -40,7 +40,8 @@ open class RoundButton(
             setMinSize(it, it)
             setMaxSize(it, it)
         }
-        @Suppress("LeakingThis") tooltip(getString(tooltipId))
+        @Suppress("LeakingThis")
+        tooltip(getString(tooltipId))
     }
 }
 
@@ -49,9 +50,8 @@ open class AdaptableRoundButton(
     radius: Double,
     tooltipId: String,
     dependency: ObservableBooleanValue,
-    id: Pair<String, String>
+    id: Pair<String, String>,
 ) : RoundButton(resources, radius, tooltipId) {
-
     init {
         idProperty().bind(dependency.asString { if (it) id.first else id.second })
     }
@@ -61,38 +61,38 @@ open class RoundMorePaperButton(
     resources: Resources,
     private val widthField: TextField,
     private val heightField: TextField,
-    historyProvider: Transaction.() -> Iterable<Size>
+    historyProvider: Transaction.() -> Iterable<Size>,
 ) : RoundButton(resources, RADIUS_MEDIUM, R.string.more) {
-
     internal companion object {
         const val PERSISTENT = "PERSISTENT"
     }
 
     init {
         id = R.style.menu_more
-        val contextMenu = contextMenu {
-            onShowing {
-                items.removeAll(items.filter { it.userData != PERSISTENT })
-                transaction {
-                    historyProvider().forEach { size ->
-                        items.add(
-                            0,
-                            ktfx.layouts.menuItem(size.dimension) {
-                                onAction {
-                                    widthField.text = size.width.clean()
-                                    heightField.text = size.height.clean()
-                                }
-                            }
-                        )
+        val contextMenu =
+            contextMenu {
+                onShowing {
+                    items.removeAll(items.filter { it.userData != PERSISTENT })
+                    transaction {
+                        historyProvider().forEach { size ->
+                            items.add(
+                                0,
+                                ktfx.layouts.menuItem(size.dimension) {
+                                    onAction {
+                                        widthField.text = size.width.clean()
+                                        heightField.text = size.height.clean()
+                                    }
+                                },
+                            )
+                        }
                     }
                 }
+                separatorMenuItem { userData = PERSISTENT }
+                standardPaperSizesMenu(R.string.a_series, StandardSize.SERIES_A)
+                standardPaperSizesMenu(R.string.b_series, StandardSize.SERIES_B)
+                standardPaperSizesMenu(R.string.c_series, StandardSize.SERIES_C)
+                standardPaperSizesMenu(R.string.f_series, StandardSize.SERIES_F)
             }
-            separatorMenuItem { userData = PERSISTENT }
-            standardPaperSizesMenu(R.string.a_series, StandardSize.SERIES_A)
-            standardPaperSizesMenu(R.string.b_series, StandardSize.SERIES_B)
-            standardPaperSizesMenu(R.string.c_series, StandardSize.SERIES_C)
-            standardPaperSizesMenu(R.string.f_series, StandardSize.SERIES_F)
-        }
         onAction {
             if (!contextMenu.isShowing) {
                 contextMenu.show(this@RoundMorePaperButton, SIDE_RIGHT, 0.0, 0.0)
@@ -105,9 +105,10 @@ open class RoundMorePaperButton(
             userData = PERSISTENT
             series.forEach { paperSize ->
                 menuItem(paperSize.dimension) {
-                    graphic = label(paperSize.name) {
-                        id = R.style.label_context_graphic
-                    }
+                    graphic =
+                        label(paperSize.name) {
+                            id = R.style.label_context_graphic
+                        }
                     onAction {
                         widthField.text = paperSize.width.toString()
                         heightField.text = paperSize.height.toString()

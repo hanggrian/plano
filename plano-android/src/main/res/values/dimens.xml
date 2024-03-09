@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <dimen name="elevation">4dp</dimen>
-    <dimen name="small">8dp</dimen>
-    <dimen name="medium">16dp</dimen>
-    <dimen name="large">24dp</dimen>
+  <dimen name="elevation">4dp</dimen>
+  <dimen name="small">8dp</dimen>
+  <dimen name="medium">16dp</dimen>
+  <dimen name="large">24dp</dimen>
 
-    <dimen name="edittext_width">72dp</dimen>
+  <dimen name="edittext_width">72dp</dimen>
 </resources>

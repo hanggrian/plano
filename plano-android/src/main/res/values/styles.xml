@@ -1,50 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Plano" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/toolbar_color</item>
-        <item name="android:colorBackground">@android:color/white</item>
-        <item name="colorSurface">@android:color/white</item>
-        <item name="colorAccent">@color/amber_500</item>
-        <item name="colorPrimary">@color/amber_500</item>
-    </style>
+  <style name="Theme.Plano" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+    <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    <item name="android:statusBarColor" tools:targetApi="lollipop">@color/toolbar_color</item>
+    <item name="android:colorBackground">@android:color/white</item>
+    <item name="colorSurface">@android:color/white</item>
+    <item name="colorAccent">@color/amber_500</item>
+    <item name="colorPrimary">@color/amber_500</item>
+  </style>
 
-    <style name="Widget.Plano.Circle" parent="Widget.AppCompat.TextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="layout_gravity">center_vertical</item>
-    </style>
+  <style name="Widget.Plano.Circle" parent="Widget.AppCompat.TextView">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="layout_gravity">center_vertical</item>
+  </style>
 
-    <style name="Widget.Plano.TextView" parent="Widget.MaterialComponents.TextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="layout_gravity">center_vertical</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
-        </item>
-    </style>
+  <style name="Widget.Plano.TextView" parent="Widget.MaterialComponents.TextView">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="layout_gravity">center_vertical</item>
+    <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+    </item>
+  </style>
 
-    <style name="Widget.Plano.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="layout_gravity">fill_horizontal</item>
-        <item name="layout_columnWeight">1</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
-        </item>
-        <item name="android:inputType">numberDecimal</item>
-        <item name="android:imeOptions">actionNext</item>
-        <item name="android:selectAllOnFocus">true</item>
-    </style>
+  <style name="Widget.Plano.EditText" parent="Widget.AppCompat.EditText">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="layout_gravity">fill_horizontal</item>
+    <item name="layout_columnWeight">1</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+    </item>
+    <item name="android:inputType">numberDecimal</item>
+    <item name="android:imeOptions">actionNext</item>
+    <item name="android:selectAllOnFocus">true</item>
+  </style>
 
-    <style name="Widget.Plano.EditText.Landscape" parent="Widget.AppCompat.EditText">
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
-        </item>
-        <item name="android:inputType">numberDecimal</item>
-        <item name="android:imeOptions">actionNext</item>
-        <item name="android:selectAllOnFocus">true</item>
-    </style>
+  <style name="Widget.Plano.EditText.Landscape" parent="Widget.AppCompat.EditText">
+    <item name="android:layout_width">100dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Subtitle1
+    </item>
+    <item name="android:inputType">numberDecimal</item>
+    <item name="android:imeOptions">actionNext</item>
+    <item name="android:selectAllOnFocus">true</item>
+  </style>
 </resources>

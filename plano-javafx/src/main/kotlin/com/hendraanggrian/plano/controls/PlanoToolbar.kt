@@ -17,9 +17,8 @@ class PlanoToolbar(
     resources: Resources,
     expandProperty: BooleanProperty,
     fillProperty: BooleanProperty,
-    thickProperty: BooleanProperty
+    thickProperty: BooleanProperty,
 ) : KtfxJFXToolbar(), Resources by resources {
-
     val closeAllButton: Button
     val expandButton: Button
     val fillButton: Button
@@ -33,38 +32,42 @@ class PlanoToolbar(
             label(BuildConfig.NAME) { id = R.style.label_title }
         }
         rightItems {
-            closeAllButton = addChild(
-                RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all).apply {
-                    id = R.style.btn_close
-                }
-            )
-            expandButton = addChild(
-                AdaptableRoundButton(
-                    resources,
-                    RoundButton.RADIUS_LARGE,
-                    R.string.toggle_expand,
-                    expandProperty,
-                    R.style.btn_scale_shrink to R.style.btn_scale_expand
+            closeAllButton =
+                addChild(
+                    RoundButton(resources, RoundButton.RADIUS_LARGE, R.string.close_all).apply {
+                        id = R.style.btn_close
+                    },
                 )
-            )
-            fillButton = addChild(
-                AdaptableRoundButton(
-                    resources,
-                    RoundButton.RADIUS_LARGE,
-                    R.string.toggle_background,
-                    fillProperty,
-                    R.style.btn_background_unfill to R.style.btn_background_fill
+            expandButton =
+                addChild(
+                    AdaptableRoundButton(
+                        resources,
+                        RoundButton.RADIUS_LARGE,
+                        R.string.toggle_expand,
+                        expandProperty,
+                        R.style.btn_scale_shrink to R.style.btn_scale_expand,
+                    ),
                 )
-            )
-            thickButton = addChild(
-                AdaptableRoundButton(
-                    resources,
-                    RoundButton.RADIUS_LARGE,
-                    R.string.toggle_border,
-                    thickProperty,
-                    R.style.btn_border_thin to R.style.btn_border_thick
+            fillButton =
+                addChild(
+                    AdaptableRoundButton(
+                        resources,
+                        RoundButton.RADIUS_LARGE,
+                        R.string.toggle_background,
+                        fillProperty,
+                        R.style.btn_background_unfill to R.style.btn_background_fill,
+                    ),
                 )
-            )
+            thickButton =
+                addChild(
+                    AdaptableRoundButton(
+                        resources,
+                        RoundButton.RADIUS_LARGE,
+                        R.string.toggle_border,
+                        thickProperty,
+                        R.style.btn_border_thin to R.style.btn_border_thick,
+                    ),
+                )
         }
     }
 }

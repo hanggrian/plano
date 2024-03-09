@@ -22,7 +22,8 @@ class RecentMediaSize(id: EntityID<Int>) : IntEntity(id), Size {
             !find { RecentMediaSizes.width.eq(width) and RecentMediaSizes.height.eq(height) }
                 .empty()
 
-        fun limitSize() = all().reversed().drop(10).forEach { RecentMediaSize[it.id].delete() }
+        fun limitSize(): Unit =
+            all().reversed().drop(10).forEach { RecentMediaSize[it.id].delete() }
     }
 }
 
@@ -40,18 +41,24 @@ class RecentTrimSize(id: EntityID<Int>) : IntEntity(id), Size {
             !find { RecentTrimSizes.width.eq(width) and RecentTrimSizes.height.eq(height) }
                 .empty()
 
-        fun limitSize() = all().reversed().drop(10).forEach { RecentTrimSize[it.id].delete() }
+        fun limitSize(): Unit = all().reversed().drop(10).forEach { RecentTrimSize[it.id].delete() }
     }
 }
 
 fun saveRecentSizes(mediaWidth: Float, mediaHeight: Float, trimWidth: Float, trimHeight: Float) {
     transaction {
         if (!RecentMediaSize.contains(mediaWidth, mediaHeight)) {
-            RecentMediaSize.new { width = mediaWidth; height = mediaHeight }
+            RecentMediaSize.new {
+                width = mediaWidth
+                height = mediaHeight
+            }
             RecentMediaSize.limitSize()
         }
         if (!RecentTrimSize.contains(trimWidth, trimHeight)) {
-            RecentTrimSize.new { width = trimWidth; height = trimHeight }
+            RecentTrimSize.new {
+                width = trimWidth
+                height = trimHeight
+            }
             RecentTrimSize.limitSize()
         }
     }

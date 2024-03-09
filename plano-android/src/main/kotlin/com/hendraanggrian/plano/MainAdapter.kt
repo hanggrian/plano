@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter(private val viewModel: MainViewModel, private val items: MutableList<MediaSize>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>(), MutableList<MediaSize> by items {
+
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,8 +34,15 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
         if (holder.mediaContainer.isNotEmpty()) holder.mediaContainer.removeAllViews()
         holder.populate(mediaBox)
         holder.card.setOnCreateContextMenuListener { menu, v, _ ->
-            val itemCount = ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
-            menu.setHeaderTitle(context.resources.getQuantityString(R.plurals.items, itemCount, itemCount))
+            val itemCount =
+                ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
+            menu.setHeaderTitle(
+                context.resources.getQuantityString(
+                    R.plurals.items,
+                    itemCount,
+                    itemCount
+                )
+            )
             menu.add(Menu.NONE, 0, 0, R.string.allow_flip_right).run {
                 isCheckable = true
                 isChecked = mediaBox.allowFlipRight
@@ -112,13 +120,17 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
                 ViewCompat.setBackground(media, ContextCompat.getDrawable(context, mediaBackground))
                 media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 media.post {
-                    media.layoutParams.height = (media.width * mediaBox.height / mediaBox.width).toInt()
+                    media.layoutParams.height =
+                        (media.width * mediaBox.height / mediaBox.width).toInt()
                     media.requestLayout()
                     media.post {
                         mediaBox.forEach { trimBox ->
                             media.addView(
                                 View(context).also { trim ->
-                                    ViewCompat.setBackground(trim, ContextCompat.getDrawable(context, trimBackground))
+                                    ViewCompat.setBackground(
+                                        trim,
+                                        ContextCompat.getDrawable(context, trimBackground)
+                                    )
                                     val widthRatio = media.width / mediaBox.width
                                     val heightRatio = media.height / mediaBox.height
                                     trim.layoutParams = RelativeLayout.LayoutParams(
@@ -141,25 +153,31 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
 
     private val mediaBackground: Int
         get() = when {
-            viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_media_fill_thick
-            !viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_media_unfill_thick
-            viewModel.fillData.value!! && !viewModel.thickData.value!! -> R.drawable.bg_media_fill_thin
+            viewModel.fillData.value!! &&
+                viewModel.thickData.value!! -> R.drawable.bg_media_fill_thick
+            !viewModel.fillData.value!! &&
+                viewModel.thickData.value!! -> R.drawable.bg_media_unfill_thick
+            viewModel.fillData.value!! &&
+                !viewModel.thickData.value!! -> R.drawable.bg_media_fill_thin
             else -> R.drawable.bg_media_unfill_thin
         }
 
     private val trimBackground: Int
         get() = when {
-            viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_trim_fill_thick
-            !viewModel.fillData.value!! && viewModel.thickData.value!! -> R.drawable.bg_trim_unfill_thick
-            viewModel.fillData.value!! && !viewModel.thickData.value!! -> R.drawable.bg_trim_fill_thin
+            viewModel.fillData.value!! &&
+                viewModel.thickData.value!! -> R.drawable.bg_trim_fill_thick
+            !viewModel.fillData.value!! &&
+                viewModel.thickData.value!! -> R.drawable.bg_trim_unfill_thick
+            viewModel.fillData.value!! &&
+                !viewModel.thickData.value!! -> R.drawable.bg_trim_fill_thin
             else -> R.drawable.bg_trim_unfill_thin
         }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val card = itemView.findViewById<CardView>(R.id.card)!!
-        val mediaContainer = itemView.findViewById<ViewGroup>(R.id.mediaContainer)!!
-        val mediaText = itemView.findViewById<TextView>(R.id.mediaText)!!
-        val trimCountText = itemView.findViewById<TextView>(R.id.trimCountText)!!
-        val trimText = itemView.findViewById<TextView>(R.id.trimText)!!
+        val mediaContainer = itemView.findViewById<ViewGroup>(R.id.container_media)!!
+        val mediaText = itemView.findViewById<TextView>(R.id.text_media)!!
+        val trimCountText = itemView.findViewById<TextView>(R.id.text_trim_count)!!
+        val trimText = itemView.findViewById<TextView>(R.id.text_trim)!!
     }
 }
