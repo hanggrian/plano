@@ -1,0 +1,16 @@
+package com.hanggrian.plano.prefs
+
+public const val LANGUAGE: String = "language"
+public const val THEME: String = "theme"
+public const val IS_EXPAND: String = "is_expand"
+public const val IS_FILL: String = "is_fill"
+public const val IS_THICK: String = "is_thick"
+public const val MEDIA_WIDTH: String = "media_width"
+public const val MEDIA_HEIGHT: String = "media_height"
+public const val TRIM_WIDTH: String = "trim_width"
+public const val TRIM_HEIGHT: String = "trim_height"
+public const val GAP_HORIZONTAL: String = "gap_horizontal"
+public const val GAP_VERTICAL: String = "gap_vertical"
+public const val GAP_LINK: String = "gap_link"
+public const val ALLOW_FLIP_COLUMN: String = "allow_flip_column"
+public const val ALLOW_FLIP_ROW: String = "allow_flip_row"

@@ -1,53 +1,48 @@
 [versions]
-jdk = "17" # min for jpackage
-kotlin = "1.8.21"
-ktlint = "1.0.1"
+jdk = "17"
+kotlin = "1.9.20"
+ktlint = "1.3.1"
 ktor = "1.6.8"
 exposed = "0.37.2"
-ktfx = "0.1-SNAPSHOT"
-prefs = "0.1-SNAPSHOT"
-bundler = "0.1-SNAPSHOT"
+ktfx = "0.1"
 sdk-min = "14"
-sdk-target = "33"
-android-plugin = "8.1.0"
+sdk-target = "34"
+android-plugin = "8.5.1"
 androidx = "1.6.0"
 androidx-lifecycle = "2.6.1"
-androidx-room = "2.5.1"
+androidx-room = "2.6.1"
 androidx-test = "1.4.0"
 
 [plugins]
+javafx = "org.openjfx.javafxplugin:0.1.0"
 android-application = { id = "com.android.application", version.ref = "android-plugin" }
-kotlinx-kover = "org.jetbrains.kotlinx.kover:0.7.4"
-ktlint = "org.jlleitschuh.gradle.ktlint:11.6.1"
-git-publish = "org.ajoberstar.git-publish:4.2.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
+git-publish = "org.ajoberstar.git-publish:4.2.2"
+buildconfig = "com.github.gmazzo.buildconfig:5.4.0"
 localization = "com.hendraanggrian.localization:0.2"
-generating = "com.hendraanggrian.generating:0.2"
 packaging = "com.hendraanggrian.packaging:0.2"
-pages = "com.hendraanggrian.pages:0.1"
 
 [libraries]
+# script
+ph-css = "com.helger:ph-css:7.0.0"
 # lint
-rulebook-ktlint = "com.hendraanggrian.rulebook:rulebook-ktlint:0.4"
+rulebook-ktlint = "com.hanggrian.rulebook:rulebook-ktlint:0.1"
 # main
 core-assembler = "org.burningwave:core:12.62.6"
-kotlinx-coroutines-javafx = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.6.4"
-kotlinx-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+kotlinx-coroutines-javafx = "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:1.8.1"
+kotlinx-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-gson = { module = "io.ktor:ktor-client-gson", version.ref = "ktor" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
-ktfx-main = { module = "com.hendraanggrian.ktfx:ktfx", version.ref = "ktfx" }
-ktfx-jfoenix = { module = "com.hendraanggrian.ktfx:jfoenix", version.ref = "ktfx" }
-prefs-jvm = { module = "com.hendraanggrian.auto:prefs-jvm", version.ref = "prefs" }
-prefs-android = { module = "com.hendraanggrian.auto:prefs-android", version.ref = "prefs" }
-prefs-compiler = { module = "com.hendraanggrian.auto:prefs-compiler", version.ref = "prefs" }
-bundler-android = { module = "com.hendraanggrian.auto:bundler", version.ref = "bundler" }
-bundler-compiler = { module = "com.hendraanggrian.auto:bundler-compiler", version.ref = "bundler" }
+ktfx = { module = "com.hanggrian.ktfx:ktfx", version.ref = "ktfx" }
+ktfx-jfoenix = { module = "com.hanggrian.ktfx:ktfx-jfoenix", version.ref = "ktfx" }
+jfoenix = "com.jfoenix:jfoenix:9.0.10"
 sqlite-jdbc = "org.xerial:sqlite-jdbc:3.41.2.2"
 maven-artifact = "org.apache.maven:maven-artifact:3.9.2"
 commons-math3 = "org.apache.commons:commons-math3:3.6.1"
-commons-lang3 = "org.apache.commons:commons-lang3:3.12.0"
+commons-lang3 = "org.apache.commons:commons-lang3:3.13.0"
 material = { module = "com.google.android.material:material", version.ref = "androidx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx" }
@@ -68,12 +63,12 @@ androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-te
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 androidx-test-junit = "androidx.test.ext:junit:1.1.3"
 robolectric = "org.robolectric:robolectric:4.8.2"
-truth = "com.google.truth:truth:1.1.3"
+truth = "com.google.truth:truth:1.4.4"
 
 [bundles]
 ktor-client = ["ktor-client-okhttp", "ktor-client-gson"]
 exposed = ["exposed-core", "exposed-dao", "exposed-jdbc"]
-ktfx = ["ktfx-main", "ktfx-jfoenix"]
+ktfx = ["ktfx", "ktfx-jfoenix", "jfoenix"]
 androidx = [
   "androidx-appcompat", "androidx-core-ktx", "androidx-multidex",
   "androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-extensions",

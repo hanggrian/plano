@@ -51,10 +51,6 @@ dependencies {
 
     implementation(project(":$releaseArtifact"))
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.prefs.android)
-    kapt(libs.prefs.compiler)
-    implementation(libs.bundler.android)
-    kapt(libs.bundler.compiler)
     implementation(libs.material)
     implementation(libs.bundles.androidx)
     kapt(libs.androidx.room.compiler)

@@ -13,7 +13,6 @@ plugins {
     kotlin("android.extensions") version libs.versions.kotlin apply false
     kotlin("jvm") version libs.versions.kotlin apply false
     kotlin("kapt") version libs.versions.kotlin apply false
-    alias(libs.plugins.generating) apply false
     alias(libs.plugins.ktlint) apply false
 }
 
@@ -29,7 +28,8 @@ subprojects {
     }
     plugins.withType<org.jlleitschuh.gradle.ktlint.KtlintPlugin>().configureEach {
         the<org.jlleitschuh.gradle.ktlint.KtlintExtension>()
-            .version.set(libs.versions.ktlint.get())
+            .version
+            .set(libs.versions.ktlint.get())
     }
 }
 

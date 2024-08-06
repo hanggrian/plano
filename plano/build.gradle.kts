@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.localization)
 }
 
+kotlin.explicitApi()
+
 dependencies {
     ktlintRuleset(libs.rulebook.ktlint)
 
