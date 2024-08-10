@@ -32,14 +32,12 @@ open class RoundButton(resources: Resources, radius: Double, tooltipId: String) 
             setMinSize(it, it)
             setMaxSize(it, it)
         }
-        @Suppress("LeakingThis")
         tooltip(getString(tooltipId))
     }
 
     companion object {
-        const val RADIUS_SMALL = 12.0
-        const val RADIUS_MEDIUM = 16.0
-        const val RADIUS_LARGE = 24.0
+        const val RADIUS_BTN = 20.0
+        const val RADIUS_IC = 24.0
     }
 }
 
@@ -60,9 +58,9 @@ open class RoundMorePaperButton(
     private val widthField: TextField,
     private val heightField: TextField,
     historyProvider: Transaction.() -> Iterable<Size>,
-) : RoundButton(resources, RADIUS_MEDIUM, R.string_more) {
+) : RoundButton(resources, RADIUS_BTN, R.string_more) {
     init {
-        id = R.style_menu_more
+        id = R.style_btn_more
         @Suppress("ktlint:rulebook:qualifier-consistency")
         val contextMenu =
             contextMenu {

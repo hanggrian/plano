@@ -1,6 +1,5 @@
 package com.hanggrian.plano
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -20,8 +19,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.core.view.MenuCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -109,10 +110,10 @@ class MainActivity : AppCompatActivity() {
         action = findViewById(R.id.action)
 
         setSupportActionBar(toolbar)
-        toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.btn_overflow)
+        toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.ic_overflow)
 
         db = PlanoDatabase.getInstance(this)
-        prefs = getPreferences(Context.MODE_PRIVATE)
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
         viewModel = ViewModelProvider(this).get()
         viewModel.fillData.value = prefs.getBoolean(IS_FILL, false)
         viewModel.thickData.value = prefs.getBoolean(IS_THICK, false)
@@ -128,6 +129,8 @@ class MainActivity : AppCompatActivity() {
             PopupMenu(this@MainActivity, mediaMoreButton).prepare(mediaWidthEdit, mediaHeightEdit)
         trimPopupMenu =
             PopupMenu(this@MainActivity, trimMoreButton).prepare(trimWidthEdit, trimHeightEdit)
+        MenuCompat.setGroupDividerEnabled(mediaPopupMenu.menu, true)
+        MenuCompat.setGroupDividerEnabled(trimPopupMenu.menu, true)
         updatePaperSizes()
 
         mediaWidthEdit.setText(prefs.getFloat(MEDIA_WIDTH, 0f).clean())
@@ -155,8 +158,8 @@ class MainActivity : AppCompatActivity() {
             putFloat(TRIM_HEIGHT, trimHeightEdit.value)
             putFloat(GAP_HORIZONTAL, gapHorizontalEdit.value)
             putFloat(GAP_VERTICAL, gapVerticalEdit.value)
-            putBoolean(ALLOW_FLIP_COLUMN, allowFlipRightCheck.isSelected)
-            putBoolean(ALLOW_FLIP_ROW, allowFlipBottomCheck.isSelected)
+            putBoolean(ALLOW_FLIP_COLUMN, allowFlipRightCheck.isChecked)
+            putBoolean(ALLOW_FLIP_ROW, allowFlipBottomCheck.isChecked)
         }
     }
 
@@ -172,6 +175,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.activity_main, menu)
+        MenuCompat.setGroupDividerEnabled(menu, true)
+
         val closeAllItem = menu.findItem(R.id.item_close_all)
         val backgroundItem = menu.findItem(R.id.item_background)
         val borderItem = menu.findItem(R.id.item_border)
@@ -191,8 +196,8 @@ class MainActivity : AppCompatActivity() {
             prefs.edit { putBoolean(IS_FILL, it) }
             backgroundItem.setIcon(
                 when {
-                    it -> R.drawable.btn_background_unfill
-                    else -> R.drawable.btn_background_fill
+                    it -> R.drawable.ic_background_unfill
+                    else -> R.drawable.ic_background_fill
                 },
             )
             recycler.adapter!!.notifyDataSetChanged()
@@ -201,8 +206,8 @@ class MainActivity : AppCompatActivity() {
             prefs.edit { putBoolean(IS_THICK, it) }
             borderItem.setIcon(
                 when {
-                    it -> R.drawable.btn_border_thin
-                    else -> R.drawable.btn_border_thick
+                    it -> R.drawable.ic_border_thin
+                    else -> R.drawable.ic_border_thick
                 },
             )
             recycler.adapter!!.notifyDataSetChanged()
@@ -299,19 +304,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun PopupMenu.updatePaperSizes(historyProvider: () -> Iterable<Size>) {
         menu.clear()
+
         // history
-        historyProvider().reversed().forEach { menu.add(it.dimension) }
+        historyProvider().reversed().forEach { menu.add(Menu.FIRST, 0, 0, it.dimension) }
         // standard paper sizes
-        menu.addSubMenu(getString(R.string.a_series)).run {
+        menu.addSubMenu(Menu.NONE, 0, 0, getString(R.string.a_series)).run {
             StandardSize.Companion.SERIES_A.forEach { add(it.extendedTitle) }
         }
-        menu.addSubMenu(getString(R.string.b_series)).run {
+        menu.addSubMenu(Menu.NONE, 0, 0, getString(R.string.b_series)).run {
             StandardSize.Companion.SERIES_B.forEach { add(it.extendedTitle) }
         }
-        menu.addSubMenu(getString(R.string.c_series)).run {
+        menu.addSubMenu(Menu.NONE, 0, 0, getString(R.string.c_series)).run {
             StandardSize.Companion.SERIES_C.forEach { add(it.extendedTitle) }
         }
-        menu.addSubMenu(getString(R.string.f_series)).run {
+        menu.addSubMenu(Menu.NONE, 0, 0, getString(R.string.f_series)).run {
             StandardSize.Companion.SERIES_F.forEach { add(it.extendedTitle) }
         }
     }

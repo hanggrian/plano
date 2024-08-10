@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:padding="@dimen/medium"
+  android:useDefaultMargins="true">
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_main_width1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="0"
+    android:layout_column="0"
+    android:layout_gravity="end"
+    android:text="@string/main_width"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_main_width2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="0"
+    android:layout_column="1"
+    android:layout_gravity="start"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_main_height1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="1"
+    android:layout_column="0"
+    android:layout_gravity="end"
+    android:text="@string/main_height"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_main_height2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="1"
+    android:layout_column="1"
+    android:layout_gravity="start"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_remaining_width1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="2"
+    android:layout_column="0"
+    android:layout_gravity="end"
+    android:text="@string/remaining_width"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_remaining_width2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="2"
+    android:layout_column="1"
+    android:layout_gravity="start"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_remaining_height1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="3"
+    android:layout_column="0"
+    android:layout_gravity="end"
+    android:text="@string/remaining_height"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/text_remaining_height2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_row="3"
+    android:layout_column="1"
+    android:layout_gravity="start"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+</GridLayout>

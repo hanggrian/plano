@@ -28,45 +28,45 @@ class PlanoToolbar(
     init {
         depth = 0
         leftItems {
-            imageView(R.image_ic_toolbar)
+            imageView(R.image_lo_toolbar)
             region { prefWidth = 10.0 }
             label(BuildConfig.NAME) { id = R.style_label_title }
         }
         rightItems {
             closeAllButton =
                 addChild(
-                    RoundButton(resources, RoundButton.RADIUS_LARGE, R.string_close_all).apply {
-                        id = R.style_btn_close
+                    RoundButton(resources, RoundButton.RADIUS_IC, R.string_close_all).apply {
+                        id = R.style_ic_close
                     },
                 )
             expandButton =
                 addChild(
                     AdaptableRoundButton(
                         resources,
-                        RoundButton.RADIUS_LARGE,
+                        RoundButton.RADIUS_IC,
                         R.string_toggle_expand,
                         expandProperty,
-                        R.style_btn_scale_shrink to R.style_btn_scale_expand,
+                        R.style_ic_scale_shrink to R.style_ic_scale_expand,
                     ),
                 )
             fillButton =
                 addChild(
                     AdaptableRoundButton(
                         resources,
-                        RoundButton.RADIUS_LARGE,
+                        RoundButton.RADIUS_IC,
                         R.string_toggle_background,
                         fillProperty,
-                        R.style_btn_background_unfill to R.style_btn_background_fill,
+                        R.style_ic_background_unfill to R.style_ic_background_fill,
                     ),
                 )
             thickButton =
                 addChild(
                     AdaptableRoundButton(
                         resources,
-                        RoundButton.RADIUS_LARGE,
+                        RoundButton.RADIUS_IC,
                         R.string_toggle_border,
                         thickProperty,
-                        R.style_btn_border_thin to R.style_btn_border_thick,
+                        R.style_ic_border_thin to R.style_ic_border_thick,
                     ),
                 )
         }

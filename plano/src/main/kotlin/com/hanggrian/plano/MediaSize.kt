@@ -5,9 +5,9 @@ import java.io.Serializable
 public class MediaSize(
     override var width: Float,
     override var height: Float,
-    private val trimBoxes: MutableList<TrimSize> = mutableListOf(),
+    private val trimSizes: MutableList<TrimSize> = mutableListOf(),
 ) : Size,
-    List<TrimSize> by trimBoxes,
+    List<TrimSize> by trimSizes,
     Serializable {
     private var _trimWidth: Float? = null
     private var _trimHeight: Float? = null
@@ -42,6 +42,20 @@ public class MediaSize(
             populate(trimWidth, trimHeight, gapHorizontal, gapVertical, isAllowFlipRight, value)
         }
 
+    public val coverage: Float
+        get() =
+            (trimSizes.sumOf { (it.width.toDouble() * it.height) }.toFloat()) *
+                100 /
+                (width * height)
+
+    public val mainWidth: Float get() = maxOf { it.x + it.width }
+
+    public val mainHeight: Float get() = maxOf { it.y + it.height }
+
+    public val remainingWidth: Float get() = width - mainWidth
+
+    public val remainingHeight: Float get() = height - mainHeight
+
     public fun rotate() {
         width = height.also { height = width }
         populate(
@@ -69,8 +83,8 @@ public class MediaSize(
         _gapVertical = gapVertical
         _isAllowFlipRight = allowFlipRight
         _isAllowFlipBottom = allowFlipBottom
-        trimBoxes.clear()
-        trimBoxes.addAll(
+        trimSizes.clear()
+        trimSizes.addAll(
             buildList {
                 add(
                     traditional(

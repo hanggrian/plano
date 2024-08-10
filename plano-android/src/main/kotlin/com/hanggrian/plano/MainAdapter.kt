@@ -1,7 +1,8 @@
 package com.hanggrian.plano
 
+import android.app.Dialog
 import android.content.Context
-import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -10,11 +11,13 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.get
 import androidx.core.view.isNotEmpty
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter(private val viewModel: MainViewModel, private val items: MutableList<MediaSize>) :
@@ -33,16 +36,36 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
         val mediaBox = get(position)
         if (holder.mediaContainer.isNotEmpty()) holder.mediaContainer.removeAllViews()
         holder.populate(mediaBox)
-        holder.card.setOnCreateContextMenuListener { menu, v, _ ->
-            val itemCount =
-                ((((v as ViewGroup)[0] as ViewGroup)[1] as ViewGroup)[0] as ViewGroup).childCount
-            menu.setHeaderTitle(
-                context.resources.getQuantityString(
-                    R.plurals.items,
-                    itemCount,
-                    itemCount,
-                ),
-            )
+        holder.card.setOnCreateContextMenuListener { menu, _, _ ->
+            MenuCompat.setGroupDividerEnabled(menu, true)
+
+            menu.add(Menu.FIRST, 0, 0, R.string.view_sizes).setOnMenuItemClickListener {
+                SizesDialogFragment()
+                    .apply {
+                        arguments =
+                            Bundle().apply {
+                                putFloat(SizesDialogFragment.MAIN_WIDTH, mediaBox.mainWidth)
+                                putFloat(SizesDialogFragment.MAIN_HEIGHT, mediaBox.mainHeight)
+                                putFloat(
+                                    SizesDialogFragment.REMAINING_WIDTH,
+                                    mediaBox.remainingWidth,
+                                )
+                                putFloat(
+                                    SizesDialogFragment.REMAINING_HEIGHT,
+                                    mediaBox.remainingHeight,
+                                )
+                            }
+                    }.show(
+                        (context as MainActivity).supportFragmentManager,
+                        SizesDialogFragment.TAG,
+                    )
+                false
+            }
+            menu.add(Menu.NONE, 0, 0, R.string.rotate).setOnMenuItemClickListener {
+                mediaBox.rotate()
+                holder.populate(mediaBox)
+                false
+            }
             menu.add(Menu.NONE, 0, 0, R.string.allow_flip_right).run {
                 isCheckable = true
                 isChecked = mediaBox.isAllowFlipRight
@@ -61,17 +84,9 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
                     false
                 }
             }
-            menu.add(Menu.NONE, 0, 0, R.string.rotate).setOnMenuItemClickListener {
-                mediaBox.rotate()
-                holder.populate(mediaBox)
-                false
-            }
-            menu.add(Menu.FIRST, 1, 1, R.string.close).setOnMenuItemClickListener {
+            menu.add(Menu.FIRST, 0, 0, R.string.close).setOnMenuItemClickListener {
                 delete(mediaBox)
                 false
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                menu.setGroupDividerEnabled(true)
             }
         }
     }
@@ -110,9 +125,10 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
     }
 
     private fun ViewHolder.populate(mediaBox: MediaSize) {
-        mediaText.text = "${mediaBox.width.clean()} x ${mediaBox.height.clean()}"
-        trimCountText.text = mediaBox.size.toString()
-        trimText.text = "${mediaBox.trimWidth.clean()} x ${mediaBox.trimHeight.clean()}"
+        mediaText.text = "${mediaBox.width.clean()} \u00D7 ${mediaBox.height.clean()}"
+        trimText.text = "${mediaBox.trimWidth.clean()} \u00D7 ${mediaBox.trimHeight.clean()}"
+        countText.text = "${mediaBox.size} pcs"
+        coverageText.text = "${mediaBox.coverage.clean()}%"
 
         if (isNotEmpty()) mediaContainer.removeAllViews()
         mediaContainer.addView(
@@ -178,10 +194,59 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
             }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val card = itemView.findViewById<CardView>(R.id.card)!!
-        val mediaContainer = itemView.findViewById<ViewGroup>(R.id.container_media)!!
-        val mediaText = itemView.findViewById<TextView>(R.id.text_media)!!
-        val trimCountText = itemView.findViewById<TextView>(R.id.text_trim_count)!!
-        val trimText = itemView.findViewById<TextView>(R.id.text_trim)!!
+        val card: CardView = itemView.findViewById(R.id.card)
+        val mediaContainer: ViewGroup = itemView.findViewById(R.id.container_media)
+        val mediaText: TextView = itemView.findViewById(R.id.text_media)
+        val trimText: TextView = itemView.findViewById(R.id.text_trim)
+        val countText: TextView = itemView.findViewById(R.id.text_count)
+        val coverageText: TextView = itemView.findViewById(R.id.text_coverage)
+    }
+
+    class SizesDialogFragment : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            val layout = layoutInflater.inflate(R.layout.fragment_sizes, null)
+            val bundle = requireArguments()
+
+            layout
+                .findViewById<TextView>(R.id.text_main_width1)
+                .text = "${getString(R.string.main_width)}:"
+            layout
+                .findViewById<TextView>(R.id.text_main_width2)
+                .text = bundle.getFloat(MAIN_WIDTH).clean()
+            layout
+                .findViewById<TextView>(R.id.text_main_height1)
+                .text = "${getString(R.string.main_height)}:"
+            layout
+                .findViewById<TextView>(R.id.text_main_height2)
+                .text = bundle.getFloat(MAIN_HEIGHT).clean()
+            layout
+                .findViewById<TextView>(R.id.text_remaining_width1)
+                .text = "${getString(R.string.remaining_width)}:"
+            layout
+                .findViewById<TextView>(R.id.text_remaining_width2)
+                .text = bundle.getFloat(REMAINING_WIDTH).clean()
+            layout
+                .findViewById<TextView>(R.id.text_remaining_height1)
+                .text = "${getString(R.string.remaining_height)}:"
+            layout
+                .findViewById<TextView>(R.id.text_remaining_height2)
+                .text = bundle.getFloat(REMAINING_HEIGHT).clean()
+
+            return AlertDialog
+                .Builder(requireContext())
+                .setView(layout)
+                .setTitle(R.string.sizes)
+                .setNegativeButton(android.R.string.ok) { _, _ -> }
+                .create()
+        }
+
+        companion object {
+            const val TAG = "SizesDialogFragment"
+
+            const val MAIN_WIDTH = "media_width"
+            const val MAIN_HEIGHT = "media_height"
+            const val REMAINING_WIDTH = "remaining_width"
+            const val REMAINING_HEIGHT = "remaining_height"
+        }
     }
 }

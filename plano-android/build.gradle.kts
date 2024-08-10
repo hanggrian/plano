@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":$releaseArtifact"))
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.material)
+    implementation(libs.flexbox)
     implementation(libs.bundles.androidx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.process.phoenix)

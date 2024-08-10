@@ -1,3 +1,4 @@
+[![CircleCI](https://img.shields.io/circleci/build/gh/hanggrian/plano)](https://app.circleci.com/pipelines/github/hanggrian/plano/)
 [![GitHub Releases](https://img.shields.io/github/release/hanggrian/plano)](https://github.com/hanggrian/plano/releases/)
 [![OpenJDK](https://img.shields.io/badge/jdk-17%2B-informational)](https://openjdk.org/projects/jdk/17/)
 [![Android SDK](https://img.shields.io/badge/sdk-14%2B-informational)](https://developer.android.com/studio/releases/platforms/#4.0)

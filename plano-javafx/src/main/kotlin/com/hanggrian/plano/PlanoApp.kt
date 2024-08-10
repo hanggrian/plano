@@ -112,7 +112,6 @@ class PlanoApp :
                     val resultPane = pane.children.first() as ResultPane
                     val anchorPane = resultPane.children.last() as AnchorPane
                     anchorPane.children.forEachIndexed { index, node ->
-                        @Suppress("UNCHECKED_CAST")
                         when (index) {
                             0 -> {
                                 pane.prefWidth = resultPane.prefWidth
@@ -148,7 +147,7 @@ class PlanoApp :
             idProperty().bind(
                 this@jfxToggleNode
                     .selectedProperty()
-                    .asAny { if (it) R.style_menu_link_on else R.style_menu_link_off },
+                    .asAny { if (it) R.style_btn_link_on else R.style_btn_link_off },
             )
             selectedProperty().listener {
                 when {
@@ -267,7 +266,7 @@ class PlanoApp :
                                                     TextDialog(
                                                         this@PlanoApp,
                                                         R.string_please_restart,
-                                                        R.string_please_restart,
+                                                        R.string__please_restart,
                                                     ).apply { setOnDialogClosed { stage.close() } }
                                                         .show()
                                                 }
@@ -356,7 +355,7 @@ class PlanoApp :
 
                                 label(getString(R.string__desc)) {
                                     isWrapText = true
-                                    maxWidth = 250.0
+                                    maxWidth = 260.0
                                 }.grid(row++, 0 to 7)
 
                                 styledCircle(radius = 6.0, id = R.style_circle_amber) {
@@ -371,7 +370,8 @@ class PlanoApp :
                                         value = prefs.getFloat(MEDIA_WIDTH, 0f)
                                     },
                                 ).grid(row, 3)
-                                label("×") { tooltip(getString(R.string__media_size)) }.grid(row, 4)
+                                label("×") { tooltip(getString(R.string__media_size)) }
+                                    .grid(row, 4)
                                 addChild(
                                     mediaHeightField.apply {
                                         tooltip(getString(R.string__media_size))
@@ -400,7 +400,8 @@ class PlanoApp :
                                         value = prefs.getFloat(TRIM_WIDTH, 0f)
                                     },
                                 ).grid(row, 3)
-                                label("×") { tooltip(getString(R.string__trim_size)) }.grid(row, 4)
+                                label("×") { tooltip(getString(R.string__trim_size)) }
+                                    .grid(row, 4)
                                 addChild(
                                     trimHeightField.apply {
                                         tooltip(getString(R.string__trim_size))
@@ -428,7 +429,8 @@ class PlanoApp :
                                         value = prefs.getFloat(GAP_HORIZONTAL, 0f)
                                     },
                                 ).grid(row, 3)
-                                label("↕︎") { tooltip(getString(R.string__gap)) }.grid(row, 4)
+                                label("↕︎") { tooltip(getString(R.string__gap)) }
+                                    .grid(row, 4)
                                 addChild(
                                     gapVerticalField.apply {
                                         tooltip(getString(R.string__gap))
@@ -464,10 +466,10 @@ class PlanoApp :
                                     addChild(
                                         RoundButton(
                                             this@PlanoApp,
-                                            RoundButton.RADIUS_LARGE,
+                                            RoundButton.RADIUS_IC,
                                             R.string_calculate,
                                         ).apply {
-                                            id = R.style_btn_calculate
+                                            id = R.style_ic_calculate
                                             disableProperty().bind(
                                                 booleanBindingOf(
                                                     mediaWidthField.textProperty(),
@@ -515,9 +517,11 @@ class PlanoApp :
                                                 )
                                             }
                                         },
-                                    ).grid(row, 0 to 7).halign(H_RIGHT)
+                                    ).grid(row, 0 to 7)
+                                        .halign(H_RIGHT)
 
-                                // avoid left pane being pushed out when right pane has a lot of contents
+                                // avoid left pane being pushed out when right pane has a lot of
+                                // contents
                                 runLater { minWidth = width }
                             }
                             anchorPane {

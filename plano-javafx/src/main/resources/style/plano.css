@@ -121,54 +121,57 @@
 #label-info {
   -fx-font-family: 'Roboto Condensed';
 }
-#label-red { // displaying trim boxes count
-  -fx-font-family: 'Roboto Condensed Bold';
-  -fx-text-fill: -red-500;
-}
-#label-black { // saving result
+#label-info-black {
+  -fx-font-family: 'Roboto Condensed';
   -fx-text-fill: black;
-}
-#menu-close {
-  -fx-graphic: url('../image/menu_close.png');
-}
-#menu-more {
-  -fx-graphic: url('../image/menu_more.png');
-}
-#menu-link-on {
-  -fx-graphic: url('../image/menu_link_on.png');
-}
-#menu-link-off {
-  -fx-graphic: url('../image/menu_link_off.png');
-}
-#btn-calculate {
-  -jfx-button-type: RAISED;
-  -fx-background-color: -fx-accent;
-  -fx-graphic: url('../image/btn_send.png');
-}
-#btn-calculate:hover {
-  -fx-background-color: derive(-fx-accent, 50%);
-}
-#btn-calculate:pressed {
-  -fx-background-color: derive(-fx-accent, -50%);
 }
 #btn-close {
   -fx-graphic: url('../image/btn_close.png');
 }
-#btn-scale-expand {
-  -fx-graphic: url('../image/btn_scale_expand.png');
+#btn-more {
+  -fx-graphic: url('../image/btn_more.png');
 }
-#btn-scale-shrink {
-  -fx-graphic: url('../image/btn_scale_shrink.png');
+#btn-link-on {
+  -fx-graphic: url('../image/btn_link_on.png');
 }
-#btn-background-fill {
-  -fx-graphic: url('../image/btn_background_fill.png');
+#btn-link-off {
+  -fx-graphic: url('../image/btn_link_off.png');
 }
-#btn-background-unfill {
-  -fx-graphic: url('../image/btn_background_unfill.png');
+#in-quantity {
+  -fx-image: url('../image/in_quantity.png');
 }
-#btn-border-thick {
-  -fx-graphic: url('../image/btn_border_thick.png');
+#in-coverage {
+  -fx-image: url('../image/in_coverage.png');
 }
-#btn-border-thin {
-  -fx-graphic: url('../image/btn_border_thin.png');
+#ic-calculate {
+  -jfx-button-type: RAISED;
+  -fx-background-color: -fx-accent;
+  -fx-graphic: url('../image/ic_send.png');
+}
+#ic-calculate:hover {
+  -fx-background-color: derive(-fx-accent, 50%);
+}
+#ic-calculate:pressed {
+  -fx-background-color: derive(-fx-accent, -50%);
+}
+#ic-close {
+  -fx-graphic: url('../image/ic_close.png');
+}
+#ic-scale-expand {
+  -fx-graphic: url('../image/ic_scale_expand.png');
+}
+#ic-scale-shrink {
+  -fx-graphic: url('../image/ic_scale_shrink.png');
+}
+#ic-background-fill {
+  -fx-graphic: url('../image/ic_background_fill.png');
+}
+#ic-background-unfill {
+  -fx-graphic: url('../image/ic_background_unfill.png');
+}
+#ic-border-thick {
+  -fx-graphic: url('../image/ic_border_thick.png');
+}
+#ic-border-thin {
+  -fx-graphic: url('../image/ic_border_thin.png');
 }

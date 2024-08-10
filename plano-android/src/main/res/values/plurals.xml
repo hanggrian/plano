@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<resources>
-  <plurals name="items">
-    <item quantity="zero">No item</item>
-    <item quantity="one">One item</item>
-    <item quantity="other">%d items</item>
-  </plurals>
-</resources>

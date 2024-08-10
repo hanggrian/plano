@@ -70,7 +70,7 @@
           android:background="?selectableItemBackgroundBorderless"
           android:onClick="moreSizes"
           android:padding="@dimen/small"
-          android:src="@drawable/ic_more"
+          android:src="@drawable/btn_more"
           app:layout_column="6"
           app:layout_row="0"/>
 
@@ -110,11 +110,11 @@
         <ImageButton
           android:id="@+id/button_trim_more"
           android:layout_width="wrap_content"
-          android:layout_height="55dp"
+          android:layout_height="wrap_content"
           android:background="?selectableItemBackgroundBorderless"
           android:onClick="moreSizes"
           android:padding="@dimen/small"
-          android:src="@drawable/ic_more"
+          android:src="@drawable/btn_more"
           app:layout_column="6"
           app:layout_row="1"/>
 
@@ -226,7 +226,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/medium"
     android:onClick="calculate"
-    android:src="@drawable/btn_send"
+    android:src="@drawable/ic_send"
     app:backgroundTint="?colorAccent"
     app:fabSize="normal"
     app:layout_anchor="@id/appbar"

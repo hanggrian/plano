@@ -21,7 +21,7 @@ buildscript {
 
 javafx {
     version = "${libs.versions.jdk.get()}.0.9"
-    modules("javafx.controls", "javafx.web")
+    modules("javafx.controls", "javafx.swing", "javafx.web")
 }
 
 application {
