@@ -7,7 +7,7 @@
   tools:context=".MainActivity">
 
   <com.google.android.material.appbar.AppBarLayout
-    android:id="@id/appbar"
+    android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/toolbar_color">
@@ -52,7 +52,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="×"
+          android:text="&#xD7;"
           app:layout_column="4"
           app:layout_row="0"
           tools:ignore="HardcodedText"/>
@@ -96,7 +96,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="×"
+          android:text="&#xD7;"
           app:layout_column="4"
           app:layout_row="1"
           tools:ignore="HardcodedText"/>
@@ -127,7 +127,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="↔︎︎"
+          android:text="&#x2194;︎"
           app:layout_column="2"
           app:layout_gravity="center_vertical|end"
           app:layout_row="2"
@@ -141,7 +141,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="↕︎"
+          android:text="&#x2195;"
           app:layout_column="4"
           app:layout_row="2"
           tools:ignore="HardcodedText"/>
@@ -187,7 +187,7 @@
       </androidx.gridlayout.widget.GridLayout>
 
       <com.google.android.material.appbar.MaterialToolbar
-        android:id="@id/toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@drawable/bg_toolbar_gradient"
@@ -206,10 +206,10 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal|top"
       android:layout_marginTop="200dp"
-      android:text="@string/no_content"/>
+      android:text="@string/_no_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
-      android:id="@id/recycler"
+      android:id="@+id/recycler"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:clipToPadding="false"
@@ -221,7 +221,7 @@
   </FrameLayout>
 
   <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@id/action"
+    android:id="@+id/action"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/medium"

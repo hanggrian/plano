@@ -14,6 +14,9 @@ class LicensesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_licenses)
+        toolbar = findViewById(R.id.toolbar)
+        recycler = findViewById(R.id.recycler)
+
         setSupportActionBar(toolbar)
         recycler.adapter = LicensesAdapter()
     }

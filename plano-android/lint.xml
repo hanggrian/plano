@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+  <issue id="AlwaysShowAction" severity="ignore"/>
   <issue id="UsingOnClickInXml" severity="ignore"/>
+  <issue id="ContentDescription" severity="ignore"/>
+  <issue id="Autofill" severity="ignore"/>
+  <issue id="LabelFor" severity="ignore"/>
 </lint>

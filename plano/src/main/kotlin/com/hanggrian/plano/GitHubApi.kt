@@ -2,38 +2,36 @@ package com.hanggrian.plano
 
 import com.google.gson.annotations.SerializedName
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.features.json.GsonSerializer
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.http.takeFrom
+import io.ktor.serialization.gson.gson
 import org.apache.maven.artifact.versioning.ComparableVersion
 
 public object GitHubApi {
     private const val ENDPOINT = "https://api.github.com"
     private val client: HttpClient =
         HttpClient(OkHttp) {
-            install(JsonFeature) {
-                serializer = GsonSerializer()
+            install(ContentNegotiation) {
+                gson()
+            }
+            install(DefaultRequest) {
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+                header(HttpHeaders.CacheControl, "no-cache")
             }
         }
 
     public suspend fun getRelease(extension: String): Release =
         client
-            .get<List<Release>> { apiUrl("repos/hanggrian/plano/releases") }
+            .get("$ENDPOINT/repos/hanggrian/plano/releases")
+            .body<List<Release>>()
             .firstOrNull { release -> release.assets.any { it.name.endsWith(extension) } }
             ?: Release.NOT_FOUND
-
-    private fun HttpRequestBuilder.apiUrl(path: String) {
-        header(HttpHeaders.CacheControl, "no-cache")
-        url {
-            takeFrom(ENDPOINT)
-            encodedPath = path
-        }
-    }
 
     public data class Asset(
         @SerializedName("browser_download_url") val downloadUrl: String,

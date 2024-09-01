@@ -7,7 +7,7 @@ import ktfx.controls.CENTER
 import ktfx.coroutines.listener
 import java.util.regex.Pattern
 
-class FloatField : JFXTextField() {
+class FloatField : JFXTextField("") {
     init {
         prefWidth = 50.0
         alignment = CENTER

@@ -1,11 +1,11 @@
 package com.hanggrian.plano.controls
 
+import com.hanggrian.plano.HOME_DOCUMENTS
 import com.hanggrian.plano.MediaSize
 import com.hanggrian.plano.PlanoApp
 import com.hanggrian.plano.Resources
 import com.hanggrian.plano.ResultFile
 import com.hanggrian.plano.clean
-import com.hanggrian.plano.dialogs.Dialog
 import com.hanggrian.plano.util.getResource
 import com.hanggrian.plano_javafx.R
 import javafx.beans.property.BooleanProperty
@@ -31,7 +31,10 @@ import ktfx.coroutines.capture
 import ktfx.coroutines.onAction
 import ktfx.coroutines.onContextMenuRequested
 import ktfx.jfoenix.controls.jfxSnackbar
+import ktfx.jfoenix.controls.show
+import ktfx.jfoenix.dialogs.showSingle
 import ktfx.layouts.KtfxGridPane
+import ktfx.layouts.NodeContainer
 import ktfx.layouts.anchorPane
 import ktfx.layouts.checkMenuItem
 import ktfx.layouts.contextMenu
@@ -45,6 +48,7 @@ import ktfx.layouts.separatorMenuItem
 import ktfx.layouts.styledCircle
 import ktfx.layouts.styledImageView
 import ktfx.layouts.styledLabel
+import ktfx.runLater
 import ktfx.windows.moveTo
 import javax.imageio.ImageIO
 
@@ -124,12 +128,6 @@ class ResultPane(
 
         contextMenu =
             contextMenu {
-                menuItem(getString(R.string_view_sizes)) {
-                    onAction {
-                        SizesDialog(app, mediaSize).show()
-                    }
-                }
-                separatorMenuItem()
                 menuItem(getString(R.string_rotate)) {
                     onAction {
                         mediaSize.rotate()
@@ -151,7 +149,12 @@ class ResultPane(
                     }
                 }
                 separatorMenuItem()
-                menuItem(getString(R.string_save)) {
+                menuItem(getString(R.string_view_sizes)) {
+                    onAction {
+                        SizesDialog(app, mediaSize).showSingle()
+                    }
+                }
+                menuItem(getString(R.string_save_image)) {
                     onAction {
                         val isDarkTheme =
                             getResource(R.style_plano_dark) in this@ResultPane.scene.stylesheets
@@ -163,10 +166,10 @@ class ResultPane(
 
                             countImage.id = null
                             coverageImage.id = null
-                            countImage.image = Image(R.image_in_quantity)
-                            coverageImage.image = Image(R.image_in_coverage)
+                            countImage.image = Image(R.image_inf_quantity)
+                            coverageImage.image = Image(R.image_inf_coverage)
                         }
-                        val file = ResultFile()
+                        val file = ResultFile(ResultFile.HOME_DOCUMENTS)
                         this@ResultPane.capture {
                             ImageIO.write(it.image.toSwingImage(), "png", file)
                         }
@@ -180,15 +183,20 @@ class ResultPane(
                                 countImage.id = R.style_in_quantity
                                 coverageImage.id = R.style_in_coverage
                             }
-                            app.rootPane.jfxSnackbar(
-                                getString(R.string__save).format(file.name),
+                            app.rootPane.jfxSnackbar.show(
+                                getString(R.string__save_image).format(file.name),
                                 PlanoApp.DURATION_SHORT,
                                 getString(R.string_btn_show_directory),
                             ) {
-                                app.hostServices.showDocument(file.parentFile.toURI().toString())
+                                app.hostServices
+                                    .showDocument(ResultFile.HOME_DOCUMENTS.toURI().toString())
                             }
                         }
                     }
+                }
+                separatorMenuItem()
+                menuItem(getString(R.string_close)) {
+                    onActionProperty().bind(closeButton.onActionProperty())
                 }
             }
         onContextMenuRequested {
@@ -234,37 +242,39 @@ class ResultPane(
         app.rootPane.requestFocus()
     }
 
-    private class SizesDialog(app: PlanoApp, mediaSize: MediaSize) :
+    private class SizesDialog(app: PlanoApp, private val mediaSize: MediaSize) :
         Dialog(app, app.getString(R.string_sizes)) {
-        init {
-            gridPane {
-                hgap = 10.0
-                vgap = 10.0
+        override fun NodeContainer.onItems() {
+            runLater {
+                gridPane {
+                    hgap = 10.0
+                    vgap = 10.0
 
-                label("${getString(R.string_main_width)}:")
-                    .grid(0, 0)
-                    .hgrow()
-                    .halign(HPos.RIGHT)
-                label(mediaSize.mainWidth.clean())
-                    .grid(0, 1)
-                label("${getString(R.string_main_height)}:")
-                    .grid(1, 0)
-                    .hgrow()
-                    .halign(HPos.RIGHT)
-                label(mediaSize.mainHeight.clean())
-                    .grid(1, 1)
-                label("${getString(R.string_remaining_width)}:")
-                    .grid(2, 0)
-                    .hgrow()
-                    .halign(HPos.RIGHT)
-                label(mediaSize.remainingWidth.clean())
-                    .grid(2, 1)
-                label("${getString(R.string_remaining_height)}:")
-                    .grid(3, 0)
-                    .hgrow()
-                    .halign(HPos.RIGHT)
-                label(mediaSize.remainingHeight.clean())
-                    .grid(3, 1)
+                    label("${getString(R.string_main_width)}:")
+                        .grid(0, 0)
+                        .hgrow()
+                        .halign(HPos.RIGHT)
+                    label(mediaSize.mainWidth.clean())
+                        .grid(0, 1)
+                    label("${getString(R.string_main_height)}:")
+                        .grid(1, 0)
+                        .hgrow()
+                        .halign(HPos.RIGHT)
+                    label(mediaSize.mainHeight.clean())
+                        .grid(1, 1)
+                    label("${getString(R.string_remaining_width)}:")
+                        .grid(2, 0)
+                        .hgrow()
+                        .halign(HPos.RIGHT)
+                    label(mediaSize.remainingWidth.clean())
+                        .grid(2, 1)
+                    label("${getString(R.string_remaining_height)}:")
+                        .grid(3, 0)
+                        .hgrow()
+                        .halign(HPos.RIGHT)
+                    label(mediaSize.remainingHeight.clean())
+                        .grid(3, 1)
+                }
             }
         }
     }

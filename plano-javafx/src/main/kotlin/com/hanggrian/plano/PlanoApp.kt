@@ -10,7 +10,6 @@ import com.hanggrian.plano.data.RecentMediaSizes
 import com.hanggrian.plano.data.RecentTrimSize
 import com.hanggrian.plano.data.RecentTrimSizes
 import com.hanggrian.plano.data.saveRecentSizes
-import com.hanggrian.plano.dialogs.TextDialog
 import com.hanggrian.plano.help.AboutDialog
 import com.hanggrian.plano.help.LicensesDialog
 import com.hanggrian.plano.prefs.ALLOW_FLIP_COLUMN
@@ -50,12 +49,11 @@ import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.withContext
-import ktfx.bindings.asAny
+import ktfx.bindings.bindingBy
 import ktfx.bindings.booleanBindingOf
+import ktfx.bindings.emptyBinding
 import ktfx.bindings.eq
-import ktfx.bindings.isEmpty
 import ktfx.bindings.minus
 import ktfx.booleanPropertyOf
 import ktfx.controls.H_RIGHT
@@ -66,6 +64,8 @@ import ktfx.coroutines.onAction
 import ktfx.doublePropertyOf
 import ktfx.inputs.plus
 import ktfx.jfoenix.controls.jfxSnackbar
+import ktfx.jfoenix.controls.show
+import ktfx.jfoenix.dialogs.showSingle
 import ktfx.jfoenix.layouts.jfxToggleNode
 import ktfx.launchApplication
 import ktfx.layouts.anchorPane
@@ -90,11 +90,11 @@ import ktfx.runLater
 import ktfx.time.s
 import ktfx.windows.minSize
 import org.apache.commons.lang3.SystemUtils
-import org.burningwave.core.assembler.StaticComponentContainer
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.slf4j.LoggerFactory
 import java.util.ResourceBundle
 import java.util.prefs.Preferences
 
@@ -147,7 +147,7 @@ class PlanoApp :
             idProperty().bind(
                 this@jfxToggleNode
                     .selectedProperty()
-                    .asAny { if (it) R.style_btn_link_on else R.style_btn_link_off },
+                    .bindingBy { if (it) R.style_btn_link_on else R.style_btn_link_off },
             )
             selectedProperty().listener {
                 when {
@@ -176,17 +176,9 @@ class PlanoApp :
     override lateinit var resourceBundle: ResourceBundle
 
     override fun init() {
-        StaticComponentContainer.Modules.exportAllToAll()
-        ClassLoader
-            .getPlatformClassLoader()
-            .javaClass
-            .getDeclaredConstructor(
-                Class.forName("jdk.internal.loader.ClassLoaders\$BootClassLoader"),
-            ).setAccessible(true)
-        Class
-            .forName("jdk.internal.loader.ClassLoaders")
-            .getDeclaredMethod("bootLoader")
-            .setAccessible(true)
+        if (BuildConfig2.DEBUG) {
+            logger.info("DEBUG mode on")
+        }
 
         prefs = Preferences.userRoot().node(BuildConfig.GROUP.replace('.', '/'))
         resourceBundle =
@@ -202,7 +194,7 @@ class PlanoApp :
         stage.title = BuildConfig.NAME
         stage.minSize = 750 to 500
         stage.scene {
-            stylesheets.addAll(getResource(R.style_plano), getResource(R.style_plano_font))
+            stylesheets.addAll(getResource(R.style_plano), getResource(R.style_plano_fonts))
             if (isDarkTheme(prefs.get(THEME, THEME_SYSTEM))) {
                 stylesheets += getResource(R.style_plano_dark)
             }
@@ -222,7 +214,9 @@ class PlanoApp :
                             "Edit" {
                                 menuItem(getString(R.string_close_all)) {
                                     onAction { closeAll() }
-                                    runLater { disableProperty().bind(outputPane.children.isEmpty) }
+                                    runLater {
+                                        disableProperty().bind(outputPane.children.emptyBinding)
+                                    }
                                 }
                                 menuItem(getString(R.string_clear_recent_sizes)) {
                                     onAction {
@@ -263,12 +257,7 @@ class PlanoApp :
                                                     prefs.get(LANGUAGE, Language.ENGLISH.code)
                                                 onAction {
                                                     prefs.put(LANGUAGE, lang.code)
-                                                    TextDialog(
-                                                        this@PlanoApp,
-                                                        R.string_please_restart,
-                                                        R.string__please_restart,
-                                                    ).apply { setOnDialogClosed { stage.close() } }
-                                                        .show()
+                                                    PleaseRestartDialog(this@PlanoApp).show()
                                                 }
                                             }
                                         }
@@ -311,17 +300,17 @@ class PlanoApp :
                             }
                             "Help" {
                                 menuItem(getString(R.string_check_for_update)) {
-                                    onAction(Dispatchers.JavaFx) { checkForUpdate() }
+                                    onAction { checkForUpdate() }
                                 }
                                 menuItem(getString(R.string_view_on_github)) {
                                     onAction { hostServices.showDocument(BuildConfig.WEB) }
                                 }
                                 menuItem(getString(R.string_open_source_licenses)) {
-                                    onAction { LicensesDialog(this@PlanoApp).show() }
+                                    onAction { LicensesDialog(this@PlanoApp).showSingle() }
                                 }
                                 separatorMenuItem()
                                 menuItem(getString(R.string_about)) {
-                                    onAction { AboutDialog(this@PlanoApp).show() }
+                                    onAction { AboutDialog(this@PlanoApp).showSingle() }
                                 }
                             }
                         }
@@ -334,7 +323,7 @@ class PlanoApp :
                             ).apply {
                                 closeAllButton.onAction { closeAll() }
                                 closeAllButton.runLater {
-                                    disableProperty().bind(outputPane.children.isEmpty)
+                                    disableProperty().bind(outputPane.children.emptyBinding)
                                 }
                                 expandButton.onAction { toggleExpand() }
                                 fillButton.onAction { toggleFill() }
@@ -370,7 +359,7 @@ class PlanoApp :
                                         value = prefs.getFloat(MEDIA_WIDTH, 0f)
                                     },
                                 ).grid(row, 3)
-                                label("×") { tooltip(getString(R.string__media_size)) }
+                                label("\u00D7") { tooltip(getString(R.string__media_size)) }
                                     .grid(row, 4)
                                 addChild(
                                     mediaHeightField.apply {
@@ -400,7 +389,7 @@ class PlanoApp :
                                         value = prefs.getFloat(TRIM_WIDTH, 0f)
                                     },
                                 ).grid(row, 3)
-                                label("×") { tooltip(getString(R.string__trim_size)) }
+                                label("\u00D7") { tooltip(getString(R.string__trim_size)) }
                                     .grid(row, 4)
                                 addChild(
                                     trimHeightField.apply {
@@ -420,7 +409,7 @@ class PlanoApp :
 
                                 label(getString(R.string_gap)) { tooltip(getString(R.string__gap)) }
                                     .grid(row, 1)
-                                label("↔︎︎") { tooltip(getString(R.string__gap)) }
+                                label("\u2194︎") { tooltip(getString(R.string__gap)) }
                                     .grid(row, 2)
                                     .halign(H_RIGHT)
                                 addChild(
@@ -429,7 +418,7 @@ class PlanoApp :
                                         value = prefs.getFloat(GAP_HORIZONTAL, 0f)
                                     },
                                 ).grid(row, 3)
-                                label("↕︎") { tooltip(getString(R.string__gap)) }
+                                label("\u2195") { tooltip(getString(R.string__gap)) }
                                     .grid(row, 4)
                                 addChild(
                                     gapVerticalField.apply {
@@ -537,9 +526,9 @@ class PlanoApp :
                                         }
                                 }.anchor(0)
                                 borderPane {
-                                    label(getString(R.string_no_content))
-                                    visibleProperty().bind(outputPane.children.isEmpty)
-                                    managedProperty().bind(outputPane.children.isEmpty)
+                                    label(getString(R.string__no_content))
+                                    visibleProperty().bind(outputPane.children.emptyBinding)
+                                    managedProperty().bind(outputPane.children.emptyBinding)
                                 }.anchor(0)
                             }.hgrow()
                         }.vgrow()
@@ -572,7 +561,7 @@ class PlanoApp :
     fun closeAll() {
         val children = outputPane.children.toList()
         outputPane.children.clear()
-        rootPane.jfxSnackbar(
+        rootPane.jfxSnackbar.show(
             getString(R.string__boxes_cleared),
             DURATION_SHORT,
             getString(R.string_btn_undo),
@@ -614,12 +603,13 @@ class PlanoApp :
         val release = withContext(Dispatchers.IO) { GitHubApi.getRelease("jar") }
         when {
             release.isNewerThan(BuildConfig.VERSION) ->
-                rootPane.jfxSnackbar(
+                rootPane.jfxSnackbar.show(
                     getString(R.string__update_available).format(release.name),
                     DURATION_LONG,
                     getString(R.string_btn_download),
                 ) { hostServices.showDocument(release.htmlUrl) }
-            else -> rootPane.jfxSnackbar(getString(R.string__update_unavailable), DURATION_LONG)
+            else ->
+                rootPane.jfxSnackbar.show(getString(R.string__update_unavailable), DURATION_LONG)
         }
     }
 
@@ -628,6 +618,8 @@ class PlanoApp :
         val DURATION_LONG = 6.s
         const val SCALE_SMALL = 2.0
         const val SCALE_BIG = 4.0
+
+        private val logger = LoggerFactory.getLogger(PlanoApp::class.java)
 
         @JvmStatic
         fun main(args: Array<String>): Unit = launchApplication<PlanoApp>(*args)

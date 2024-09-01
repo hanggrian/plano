@@ -2,6 +2,8 @@ val releaseGroup: String by project
 val releaseArtifact: String by project
 val releaseVersion: String by project
 
+val jreVersion = JavaLanguageVersion.of(libs.versions.jre.get())
+
 plugins {
     alias(libs.plugins.android.application)
     kotlin("android") version libs.versions.kotlin
@@ -27,11 +29,11 @@ android {
         buildConfigField("String", "WEB", "\"$releaseVersion\"")
     }
     compileOptions {
-        targetCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
-        sourceCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
+        sourceCompatibility = JavaVersion.toVersion(jreVersion)
+        targetCompatibility = JavaVersion.toVersion(jreVersion)
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.toVersion(libs.versions.jdk.get()).toString()
+        jvmTarget = JavaVersion.toVersion(jreVersion).toString()
     }
     buildTypes {
         debug {
@@ -55,6 +57,7 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.bundles.androidx)
     kapt(libs.androidx.room.compiler)
+
     implementation(libs.process.phoenix)
     debugImplementation(libs.leak.canary)
 }

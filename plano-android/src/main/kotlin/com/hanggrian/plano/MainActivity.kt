@@ -14,9 +14,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.MenuCompat
@@ -42,6 +42,7 @@ import com.hanggrian.plano.prefs.TRIM_HEIGHT
 import com.hanggrian.plano.prefs.TRIM_WIDTH
 import com.hanggrian.plano.util.snackbar
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -92,7 +93,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         toolbar = findViewById(R.id.toolbar)
         appBar = findViewById(R.id.appbar)
         mediaWidthEdit = findViewById(R.id.edit_media_width)
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         action = findViewById(R.id.action)
 
         setSupportActionBar(toolbar)
-        toolbar.overflowIcon = ContextCompat.getDrawable(this, R.drawable.ic_overflow)
+        toolbar.overflowIcon = AppCompatResources.getDrawable(this, R.drawable.ic_overflow)
 
         db = PlanoDatabase.getInstance(this)
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -279,7 +279,7 @@ class MainActivity : AppCompatActivity() {
         )
         recyclerAdapter.put(mediaSize)
 
-        runBlocking {
+        GlobalScope.launch(Dispatchers.Main) {
             launch(Dispatchers.IO) {
                 saveRecentSizes(
                     mediaWidthEdit.value,

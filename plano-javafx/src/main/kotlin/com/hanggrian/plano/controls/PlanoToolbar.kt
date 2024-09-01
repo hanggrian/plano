@@ -28,7 +28,7 @@ class PlanoToolbar(
     init {
         depth = 0
         leftItems {
-            imageView(R.image_lo_toolbar)
+            imageView(R.image_logo_toolbar)
             region { prefWidth = 10.0 }
             label(BuildConfig.NAME) { id = R.style_label_title }
         }

@@ -1,7 +1,9 @@
 package com.hanggrian.plano
 
 import android.app.Dialog
-import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,22 +14,25 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.MenuCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import java.io.FileOutputStream
 
 class MainAdapter(private val viewModel: MainViewModel, private val items: MutableList<MediaSize>) :
     RecyclerView.Adapter<MainAdapter.ViewHolder>(),
     MutableList<MediaSize> by items {
-    private lateinit var context: Context
+    private lateinit var activity: AppCompatActivity
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        context = parent.context
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_main, parent, false))
+        activity = parent.context as MainActivity
+        return ViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_main, parent, false))
     }
 
     override fun getItemCount(): Int = size
@@ -39,7 +44,31 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
         holder.card.setOnCreateContextMenuListener { menu, _, _ ->
             MenuCompat.setGroupDividerEnabled(menu, true)
 
-            menu.add(Menu.FIRST, 0, 0, R.string.view_sizes).setOnMenuItemClickListener {
+            menu.add(Menu.FIRST, 0, 0, R.string.rotate).setOnMenuItemClickListener {
+                mediaBox.rotate()
+                holder.populate(mediaBox)
+                false
+            }
+            menu.add(Menu.FIRST, 0, 0, R.string.allow_flip_right).run {
+                isCheckable = true
+                isChecked = mediaBox.isAllowFlipRight
+                setOnMenuItemClickListener {
+                    mediaBox.isAllowFlipRight = !mediaBox.isAllowFlipRight
+                    holder.populate(mediaBox)
+                    false
+                }
+            }
+            menu.add(Menu.FIRST, 0, 0, R.string.allow_flip_bottom).run {
+                isCheckable = true
+                isChecked = mediaBox.isAllowFlipBottom
+                setOnMenuItemClickListener {
+                    mediaBox.isAllowFlipBottom = !mediaBox.isAllowFlipBottom
+                    holder.populate(mediaBox)
+                    false
+                }
+            }
+
+            menu.add(Menu.NONE, 0, 0, R.string.view_sizes).setOnMenuItemClickListener {
                 SizesDialogFragment()
                     .apply {
                         arguments =
@@ -56,34 +85,46 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
                                 )
                             }
                     }.show(
-                        (context as MainActivity).supportFragmentManager,
+                        activity.supportFragmentManager,
                         SizesDialogFragment.TAG,
                     )
                 false
             }
-            menu.add(Menu.NONE, 0, 0, R.string.rotate).setOnMenuItemClickListener {
-                mediaBox.rotate()
-                holder.populate(mediaBox)
+            menu.add(Menu.NONE, 0, 0, R.string.save_image).setOnMenuItemClickListener {
+                val bitmap =
+                    Bitmap.createBitmap(
+                        holder.card.width,
+                        holder.card.height,
+                        Bitmap.Config.ARGB_8888,
+                    )
+                holder.card.draw(Canvas(bitmap))
+                val file = ResultFile(ResultFile.DEVICE_DOCUMENTS)
+                FileOutputStream(file)
+                    .use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+
+                Snackbar
+                    .make(
+                        holder.card,
+                        activity.getString(R.string._save_image).format(file.name),
+                        Snackbar.LENGTH_SHORT,
+                    ).setAction(R.string.btn_show_image) {
+                        activity.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                FileProvider
+                                    .getUriForFile(
+                                        activity,
+                                        "${BuildConfig.APPLICATION_ID}.provider",
+                                        file,
+                                    ),
+                            ).apply {
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            },
+                        )
+                    }.show()
                 false
             }
-            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_right).run {
-                isCheckable = true
-                isChecked = mediaBox.isAllowFlipRight
-                setOnMenuItemClickListener {
-                    mediaBox.isAllowFlipRight = !mediaBox.isAllowFlipRight
-                    holder.populate(mediaBox)
-                    false
-                }
-            }
-            menu.add(Menu.NONE, 0, 0, R.string.allow_flip_bottom).run {
-                isCheckable = true
-                isChecked = mediaBox.isAllowFlipBottom
-                setOnMenuItemClickListener {
-                    mediaBox.isAllowFlipBottom = !mediaBox.isAllowFlipBottom
-                    holder.populate(mediaBox)
-                    false
-                }
-            }
+
             menu.add(Menu.FIRST, 0, 0, R.string.close).setOnMenuItemClickListener {
                 delete(mediaBox)
                 false
@@ -132,8 +173,8 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
 
         if (isNotEmpty()) mediaContainer.removeAllViews()
         mediaContainer.addView(
-            RelativeLayout(context).also { media ->
-                ViewCompat.setBackground(media, ContextCompat.getDrawable(context, mediaBackground))
+            RelativeLayout(activity).also { media ->
+                media.background = AppCompatResources.getDrawable(activity, mediaBackground)
                 media.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 media.post {
                     media.layoutParams.height =
@@ -142,11 +183,9 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
                     media.post {
                         mediaBox.forEach { trimBox ->
                             media.addView(
-                                View(context).also { trim ->
-                                    ViewCompat.setBackground(
-                                        trim,
-                                        ContextCompat.getDrawable(context, trimBackground),
-                                    )
+                                View(activity).also { trim ->
+                                    trim.background =
+                                        AppCompatResources.getDrawable(activity, trimBackground)
                                     val widthRatio = media.width / mediaBox.width
                                     val heightRatio = media.height / mediaBox.height
                                     trim.layoutParams =

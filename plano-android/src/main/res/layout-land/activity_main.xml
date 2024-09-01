@@ -53,7 +53,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="×"
+          android:text="&#xD7;"
           app:layout_column="4"
           app:layout_row="0"
           tools:ignore="HardcodedText"/>
@@ -97,7 +97,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="×"
+          android:text="&#xD7;"
           app:layout_column="4"
           app:layout_row="1"
           tools:ignore="HardcodedText"/>
@@ -128,7 +128,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="↔︎︎"
+          android:text="&#x2194;︎︎"
           app:layout_column="2"
           app:layout_gravity="center_vertical|end"
           app:layout_row="2"
@@ -142,7 +142,7 @@
 
         <com.google.android.material.textview.MaterialTextView
           style="@style/Widget.Plano.TextView"
-          android:text="↕︎"
+          android:text="&#x2195;︎"
           app:layout_column="4"
           app:layout_row="2"
           tools:ignore="HardcodedText"/>
@@ -207,7 +207,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal|top"
       android:layout_marginTop="200dp"
-      android:text="@string/no_content" />
+      android:text="@string/_no_content" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@id/recycler"

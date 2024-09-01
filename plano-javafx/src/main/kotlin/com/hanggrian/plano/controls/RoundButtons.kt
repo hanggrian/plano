@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:rulebook:qualifier-consistency")
+
 package com.hanggrian.plano.controls
 
 import com.hanggrian.plano.Resources
@@ -9,7 +11,7 @@ import com.jfoenix.controls.JFXButton
 import javafx.beans.value.ObservableBooleanValue
 import javafx.scene.control.TextField
 import javafx.scene.shape.Circle
-import ktfx.bindings.asString
+import ktfx.bindings.stringBindingBy
 import ktfx.controls.SIDE_RIGHT
 import ktfx.coroutines.onAction
 import ktfx.coroutines.onShowing
@@ -49,7 +51,7 @@ open class AdaptableRoundButton(
     id: Pair<String, String>,
 ) : RoundButton(resources, radius, tooltipId) {
     init {
-        idProperty().bind(dependency.asString { if (it) id.first else id.second })
+        idProperty().bind(dependency.stringBindingBy { if (it) id.first else id.second })
     }
 }
 
@@ -61,7 +63,6 @@ open class RoundMorePaperButton(
 ) : RoundButton(resources, RADIUS_BTN, R.string_more) {
     init {
         id = R.style_btn_more
-        @Suppress("ktlint:rulebook:qualifier-consistency")
         val contextMenu =
             contextMenu {
                 onShowing {

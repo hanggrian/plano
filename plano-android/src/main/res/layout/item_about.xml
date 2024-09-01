@@ -20,6 +20,6 @@
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Open-source licenses"
+    android:text="@string/open_source_licenses"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"/>
 </LinearLayout>

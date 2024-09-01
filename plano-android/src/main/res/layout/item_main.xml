@@ -50,7 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small"
             android:layout_marginLeft="@dimen/small"
-            android:text="90x120"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
         </LinearLayout>
 
@@ -74,7 +73,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small"
             android:layout_marginLeft="@dimen/small"
-            android:text="90x120"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
         </LinearLayout>
 
@@ -89,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium"
             android:layout_marginLeft="@dimen/medium"
-            android:src="@drawable/in_quantity"
+            android:src="@drawable/inf_quantity"
             app:layout_alignSelf="center"/>
 
           <com.google.android.material.textview.MaterialTextView
@@ -98,7 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small"
             android:layout_marginLeft="@dimen/small"
-            android:text="90 pcs"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
         </LinearLayout>
 
@@ -113,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium"
             android:layout_marginLeft="@dimen/medium"
-            android:src="@drawable/in_coverage"
+            android:src="@drawable/inf_coverage"
             app:layout_alignSelf="center"/>
 
           <com.google.android.material.textview.MaterialTextView
@@ -122,7 +119,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small"
             android:layout_marginLeft="@dimen/small"
-            android:text="90 pcs"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
         </LinearLayout>
       </com.google.android.flexbox.FlexboxLayout>

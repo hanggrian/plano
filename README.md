@@ -1,7 +1,7 @@
 [![CircleCI](https://img.shields.io/circleci/build/gh/hanggrian/plano)](https://app.circleci.com/pipelines/github/hanggrian/plano/)
 [![GitHub Releases](https://img.shields.io/github/release/hanggrian/plano)](https://github.com/hanggrian/plano/releases/)
-[![OpenJDK](https://img.shields.io/badge/jdk-17%2B-informational)](https://openjdk.org/projects/jdk/17/)
-[![Android SDK](https://img.shields.io/badge/sdk-14%2B-informational)](https://developer.android.com/studio/releases/platforms/#4.0)
+[![Java](https://img.shields.io/badge/java-11+-informational)](https://docs.oracle.com/javase/11/)
+[![Android](https://img.shields.io/badge/android-30+-informational)](https://developer.android.com/studio/releases/platforms/#11)
 
 # Plano
 
@@ -22,8 +22,8 @@ for the idea.
 Go to [releases](https://github.com/hanggrian/plano/releases/) to download
 Plano in several options:
 
-- **apk** - Android debug app, go to Setting > Security > check `Unknown sources`
-  to install.
-- **exe** - Windows archive, unpack in `Program Files` directory.
-- **dmg** - macOS app, mount and move it to `Applications` directory.
-- **jar** - standalone Java app.
+- **apk** - Android debug app, go to Setting > Security > check
+  `Unknown sources` to install.
+- **exe** - Windows x64 installer.
+- **dmg** - macOS bundle for Apple Silicon, mount and move it to `Applications`
+  directory.

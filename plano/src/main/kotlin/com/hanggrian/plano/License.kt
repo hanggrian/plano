@@ -19,7 +19,7 @@ public data class License(val name: String, val url: String) {
                     ),
                     License(
                         "Apache Commons Math",
-                        "https://github.com/apache/commons-math/blob/master/LICENSE.txt",
+                        "https://github.com/apache/commons-math/blob/master/LICENSE",
                     ),
                 )
             licenses += additionalLicenses.map { License(it.first, it.second) }

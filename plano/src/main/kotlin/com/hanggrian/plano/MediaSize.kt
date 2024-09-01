@@ -1,5 +1,6 @@
 package com.hanggrian.plano
 
+import org.slf4j.LoggerFactory
 import java.io.Serializable
 
 public class MediaSize(
@@ -174,10 +175,12 @@ public class MediaSize(
         flipRight: Boolean,
         flipBottom: Boolean,
     ): List<TrimSize> {
-        println(
-            "Calculating traditionally ${mediaWidth}x$mediaHeight - " +
-                "${trimWidth}x$trimHeight:",
-        )
+        if (BuildConfig2.DEBUG) {
+            logger.info(
+                "Calculating traditionally ${mediaWidth}x$mediaHeight - " +
+                    "${trimWidth}x$trimHeight:",
+            )
+        }
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
@@ -241,10 +244,12 @@ public class MediaSize(
         verticalGap: Float,
         flipBottom: Boolean,
     ): List<TrimSize> {
-        println(
-            "Calculating radical column ${mediaWidth}x$mediaHeight - " +
-                "${trimWidth}x$trimHeight:",
-        )
+        if (BuildConfig2.DEBUG) {
+            logger.info(
+                "Calculating radical column ${mediaWidth}x$mediaHeight - " +
+                    "${trimWidth}x$trimHeight:",
+            )
+        }
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
@@ -304,10 +309,12 @@ public class MediaSize(
         verticalGap: Float,
         flipRight: Boolean,
     ): List<TrimSize> {
-        println(
-            "Calculating radical row ${mediaWidth}x$mediaHeight - " +
-                "${trimWidth}x$trimHeight:",
-        )
+        if (BuildConfig2.DEBUG) {
+            logger.info(
+                "Calculating radical row ${mediaWidth}x$mediaHeight - " +
+                    "${trimWidth}x$trimHeight:",
+            )
+        }
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         val sizes = mutableListOf<TrimSize>()
@@ -365,8 +372,10 @@ public class MediaSize(
         horizontalGap: Float,
         verticalGap: Float,
     ) {
-        println("* columns: $columns")
-        println("* rows: $rows")
+        if (BuildConfig2.DEBUG) {
+            logger.info("* columns: $columns")
+            logger.info("* rows: $rows")
+        }
         val finalTrimWidth = trimWidth + horizontalGap
         val finalTrimHeight = trimHeight + verticalGap
         for (column in 0 until columns) {
@@ -398,8 +407,10 @@ public class MediaSize(
                 flippedRightRows = (mediaHeight / finalTrimWidth).toInt()
             }
         }
-        println("* flippedRightRows: $flippedRightRows")
-        println("* flippedRightColumns: $flippedRightColumns")
+        if (BuildConfig2.DEBUG) {
+            logger.info("* flippedRightRows: $flippedRightRows")
+            logger.info("* flippedRightColumns: $flippedRightColumns")
+        }
         return flippedRightColumns to flippedRightRows
     }
 
@@ -422,8 +433,10 @@ public class MediaSize(
                 flippedBottomColumns = (mediaWidth / finalTrimHeight).toInt()
             }
         }
-        println("* flippedBottomRows: $flippedBottomRows")
-        println("* flippedBottomColumns: $flippedBottomColumns")
+        if (BuildConfig2.DEBUG) {
+            logger.info("* flippedBottomRows: $flippedBottomRows")
+            logger.info("* flippedBottomColumns: $flippedBottomColumns")
+        }
         return flippedBottomColumns to flippedBottomRows
     }
 
@@ -465,5 +478,9 @@ public class MediaSize(
                 this += TrimSize(x, y, trimHeight, trimWidth)
             }
         }
+    }
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(MediaSize::class.java)
     }
 }

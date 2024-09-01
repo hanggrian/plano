@@ -11,7 +11,7 @@ import java.util.ResourceBundle
  */
 enum class Language(private val nativeLocale: Locale) {
     ENGLISH(Locale.ENGLISH),
-    INDONESIAN(Locale("id")),
+    INDONESIAN(Locale.forLanguageTag("id")),
     ;
 
     val code: String get() = nativeLocale.language
