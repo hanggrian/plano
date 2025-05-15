@@ -10,13 +10,15 @@
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/toolbar_color">
+    android:background="@color/toolbar_color"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.CollapsingToolbarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:contentScrim="@color/toolbar_color"
       app:layout_scrollFlags="scroll|exitUntilCollapsed"
+      app:statusBarScrim="@color/toolbar_color"
       app:titleEnabled="false">
 
       <androidx.gridlayout.widget.GridLayout

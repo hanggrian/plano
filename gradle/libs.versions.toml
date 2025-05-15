@@ -9,8 +9,8 @@ exposed = "0.53.0"
 ktfx = "0.3"
 slf4j = "2.0.16"
 sdk-min = "30"
-sdk-target = "34"
-android-plugin = "8.5.2"
+sdk-target = "35"
+android-plugin = "8.10.0"
 androidx = "1.7.0"
 androidx-lifecycle = "2.8.4"
 androidx-room = "2.6.1"
@@ -19,8 +19,8 @@ androidx-test = "1.6.1"
 [plugins]
 javafx = "org.openjfx.javafxplugin:0.1.0"
 android-application = { id = "com.android.application", version.ref = "android-plugin" }
-ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
-git-publish = "org.ajoberstar.git-publish:4.2.2"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.2.0"
+git-publish = "org.ajoberstar.git-publish:5.1.1"
 buildconfig = "com.github.gmazzo.buildconfig:5.4.0"
 localization = "com.hanggrian.localization:0.1"
 packaging = "com.hanggrian.packaging:0.1"
@@ -48,7 +48,7 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 commons-math3 = "org.apache.commons:commons-math3:3.6.1"
 commons-lang3 = "org.apache.commons:commons-lang3:3.14.0"
-material = { module = "com.google.android.material:material", version.ref = "androidx" }
+material = "com.google.android.material:material:1.12.0"
 flexbox = "com.google.android.flexbox:flexbox:3.0.0"
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx" }

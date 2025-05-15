@@ -10,7 +10,7 @@ jobs:
     executor: linux
     steps:
       - checkout
-      - run: ./gradlew test
+      - run: ./gradlew check
 
 workflows:
   build:

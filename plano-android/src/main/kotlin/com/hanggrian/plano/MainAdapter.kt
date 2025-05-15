@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
+import androidx.core.graphics.createBitmap
 import androidx.core.view.MenuCompat
 import androidx.core.view.isNotEmpty
 import androidx.fragment.app.DialogFragment
@@ -92,7 +93,7 @@ class MainAdapter(private val viewModel: MainViewModel, private val items: Mutab
             }
             menu.add(Menu.NONE, 0, 0, R.string.save_image).setOnMenuItemClickListener {
                 val bitmap =
-                    Bitmap.createBitmap(
+                    createBitmap(
                         holder.card.width,
                         holder.card.height,
                         Bitmap.Config.ARGB_8888,
